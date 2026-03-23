@@ -1,7 +1,10 @@
 #include "Menu.h"
 
+Menu menu;
+
 void LoadMenu(void)
 {
+
 }
 
 void PollEventMenu(sfRenderWindow* _renderWindow)

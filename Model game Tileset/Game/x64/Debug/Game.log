@@ -1,6 +1,10 @@
-﻿  main.c
+﻿  Game.c
+  GameOver.c
+  GameState.c
+  main.c
   Map.c
+  Menu.c
   Génération de code en cours...
-  Game.vcxproj -> C:\Users\Etudiant1\Desktop\Model game\x64\Debug\Game.exe
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
   'pwsh.exe' n'est pas reconnu en tant que commande interne
   ou externe, un programme exécutable ou un fichier de commandes.
