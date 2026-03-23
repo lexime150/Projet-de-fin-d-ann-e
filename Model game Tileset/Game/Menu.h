@@ -14,10 +14,15 @@ typedef struct Menu
 	char buffer[32];
 	sfSprite* backgroundSprite;
 	sfTexture* backgroundTexture;
+
+
+	sfFloatRect playTextBound;
+	sfFloatRect quitTextBound;
+	sfFloatRect settingTextBound;
 }Menu;
 void LoadMenu(void);
 void PollEventMenu(sfRenderWindow* _renderWindow);
-void UpdateMenu(float _dt);
+void UpdateMenu(sfRenderWindow* _renderWindow, float _dt);
 void DrawMenu(sfRenderWindow* _renderWindow);
 void CleanupMenu(void);
 

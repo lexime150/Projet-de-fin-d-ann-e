@@ -68,7 +68,7 @@ void Update(MainData _mainData)
 	switch (GetGameState())
 	{
 	case MENU:
-		UpdateMenu(dt);
+		UpdateMenu(_mainData.renderWindow,dt);
 		break;
 	case GAME:
 		UpdateGame(dt);
@@ -126,7 +126,7 @@ void Cleanup(MainData* _mainData)
 void LoadMainData(MainData* _mainData)
 {
 	sfVideoMode videoMode = { SCREEN_WIDTH, SCREEN_HEIGHT, BPP };
-	_mainData->renderWindow = sfRenderWindow_create(videoMode, "Game loop", sfDefaultStyle, NULL);
+	_mainData->renderWindow = sfRenderWindow_create(videoMode, "Game loop", sfFullscreen, NULL);
 
 	_mainData->clock = sfClock_create();
 }
