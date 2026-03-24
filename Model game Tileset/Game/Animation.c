@@ -55,3 +55,11 @@ void UpdateAnimation(Animation* _animation, float _dt)
     sfSprite_setTextureRect(_animation->sprite, frame);
 
 }
+
+void LoadAnimation(Animation* _animation)
+{
+    _animation->timer = 0.f;
+    _animation->isPlaying = sfTrue;
+    _animation->currentFrame = 0;
+
+}
