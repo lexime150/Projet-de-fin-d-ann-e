@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "Common.h"
+#include "Map.h"
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
