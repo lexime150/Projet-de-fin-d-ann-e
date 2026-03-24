@@ -18,7 +18,7 @@ typedef struct Animation
 }Animation;
 
 
-Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _frameSpeed, float _timer, sfBool _isPlaying, sfBool _isLooping);
+Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _frameSpeed, sfBool _isPlaying, sfBool _isLooping, sfIntRect _firstFrame);
 void UpdateAnimation(Animation* _animation, float _dt);
 
 

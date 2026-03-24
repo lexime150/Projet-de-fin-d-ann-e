@@ -1,15 +1,15 @@
 #include "Animation.h"
 
-Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _frameSpeed, float _timer, sfBool _isPlaying, sfBool _isLooping)
+Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _frameSpeed, sfBool _isPlaying, sfBool _isLooping, sfIntRect _firstFrame)
 {
     Animation createAnim = { 0 };
 
     createAnim.sprite = _sprite;
     createAnim.frameCount = _frameCount;
     createAnim.frameSpeed = _frameSpeed;
-    createAnim.timer = _timer;
     createAnim.isPlaying = _isPlaying;
     createAnim.isLooping = _isLooping;
+    createAnim.firstFrame = _firstFrame;
 
     return createAnim;
 }
@@ -18,13 +18,14 @@ Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _fra
 
 void UpdateAnimation(Animation* _animation, float _dt)
 {
+   // _animation->isPlaying = sfTrue;
     if (_animation->isPlaying)
     {
         _animation->timer += _dt;
 
         if (_animation->timer > 1.f / _animation->frameSpeed)
         {
-            _animation->timer -= (1.f / _animation->frameSpeed);
+            _animation->timer -= 1.f / _animation->frameSpeed;
             _animation->currentFrame++;
 
             if (_animation->currentFrame == _animation->frameCount)
@@ -32,11 +33,12 @@ void UpdateAnimation(Animation* _animation, float _dt)
                 if (_animation->isLooping)
                 {
                     _animation->currentFrame = 0;
+                    _animation->firstFrame.left = 0;
                 }
                 else
                 {
-                    _animation->isPlaying = sfFalse;
                     _animation->currentFrame--;
+                    _animation->isPlaying = sfFalse;
                 }
 
 
@@ -48,7 +50,8 @@ void UpdateAnimation(Animation* _animation, float _dt)
 
     }
 
-    sfFloatRect frame = sfSprite_getGlobalBounds(_animation->sprite);
-    frame.left = frame.width * _animation->currentFrame;
-    sfSprite_setTextureRect(_animation->sprite, (sfIntRect) { frame.left, frame.width, frame.top, frame.height});
+    sfIntRect frame = _animation->firstFrame;
+    frame.left = frame.left + _animation->currentFrame *  frame.width;
+    sfSprite_setTextureRect(_animation->sprite, frame);
+
 }
