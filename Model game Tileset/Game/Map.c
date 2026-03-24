@@ -116,7 +116,11 @@ void LoadCollisionAndTrigger(void)
 					collisionTab = collisionTabTemp;
 
 					// Add the collision in the array
-					collisionTab[collisionTabSize] = (sfFloatRect){ object->x, object->y, object->width, object->height };
+					collisionTab[collisionTabSize] = (sfFloatRect){
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE,
+						object->width * GAME_SCALE,
+						object->height * GAME_SCALE };
 					collisionTabSize++;
 				}
 				else if (strcmp(layer->name.ptr, "Trigger") == 0)
@@ -131,10 +135,10 @@ void LoadCollisionAndTrigger(void)
 
 					// Add the collision in the array
 					strcpy_s(triggerTab[triggerTabSize].name, FILENAME_MAX, object->name.ptr);
-					triggerTab[triggerTabSize].left = object->x;
-					triggerTab[triggerTabSize].top = object->y;
-					triggerTab[triggerTabSize].width = object->width;
-					triggerTab[triggerTabSize].height = object->height;
+					triggerTab[triggerTabSize].left = object->x * GAME_SCALE;
+					triggerTab[triggerTabSize].top = object->y * GAME_SCALE;
+					triggerTab[triggerTabSize].width = object->width * GAME_SCALE;
+					triggerTab[triggerTabSize].height = object->height * GAME_SCALE;
 					triggerTabSize++;
 				}
 			}
@@ -180,8 +184,8 @@ void DrawObjectGroup(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer)
 		if (object->ellipse == 0 && object->point == 0 && object->vertices == 0)
 		{
 			sfRectangleShape* rectangle = sfRectangleShape_create();
-			sfRectangleShape_setPosition(rectangle, (sfVector2f) { object->x, object->y });
-			sfRectangleShape_setSize(rectangle, (sfVector2f) { object->width, object->height });
+			sfRectangleShape_setPosition(rectangle, (sfVector2f) { object->x* GAME_SCALE, object->y* GAME_SCALE});
+			sfRectangleShape_setSize(rectangle, (sfVector2f) { object->width* GAME_SCALE, object->height* GAME_SCALE});
 			sfRectangleShape_setFillColor(rectangle, sfTransparent);
 
 			if (strcmp(_layer->name.ptr, "Collision") == 0)
@@ -235,3 +239,4 @@ Trigger GetMapTrigger(unsigned int _index)
 		return (Trigger) { "NoName", 0, 0, 0, 0 };
 	}
 }
+

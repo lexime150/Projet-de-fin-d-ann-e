@@ -19,6 +19,12 @@
     <Filter Include="Fichiers sources\Tools">
       <UniqueIdentifier>{9f044d30-45cd-4fe1-8c7f-6905a8e27cde}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Entities">
+      <UniqueIdentifier>{29b3d584-7d7c-4b25-b831-39a7427aeb4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Entities">
+      <UniqueIdentifier>{8b03bb73-684d-4112-af4f-439945fd81f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -41,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="Animation.c">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.c">
+      <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

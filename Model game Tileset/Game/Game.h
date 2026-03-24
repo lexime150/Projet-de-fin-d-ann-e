@@ -5,6 +5,7 @@
 #include "GameState.h"
 
 #include "Map.h"
+#include "Player.h"
 
 typedef struct Game
 {
