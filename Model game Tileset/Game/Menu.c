@@ -67,6 +67,8 @@ void CleanupMenu(void)
 
 void LoadText(void)
 {
+	menu.hoverSelected = sfFalse;
+
 	menu.playText = sfText_create();
 	menu.font = sfFont_createFromFile("Assets/Fonts/Arcade.ttf");
 	sfText_setFont(menu.playText, menu.font);
@@ -95,10 +97,25 @@ void LoadText(void)
 	menu.quitTextBound = sfText_getGlobalBounds(menu.quitText);
 	sfText_setPosition(menu.quitText, (sfVector2f) { (SCREEN_WIDTH - menu.quitTextBound.width) / 2, (SCREEN_HEIGHT / 2 - menu.quitTextBound.height) + 200 });
 
+	menu.hoverSelectionLeftText = sfText_create();
+	sfText_setFont(menu.hoverSelectionLeftText, menu.font);
+	sfText_setCharacterSize(menu.hoverSelectionLeftText, 48);
+	sfText_setOutlineColor(menu.hoverSelectionLeftText, sfBlack);
+	sfText_setOutlineThickness(menu.hoverSelectionLeftText, 2);
+	sfText_setString(menu.hoverSelectionLeftText, "[");
+
+	menu.hoverSelectionRightText = sfText_create();
+	sfText_setFont(menu.hoverSelectionRightText, menu.font);
+	sfText_setCharacterSize(menu.hoverSelectionRightText, 48);
+	sfText_setOutlineColor(menu.hoverSelectionRightText, sfBlack);
+	sfText_setOutlineThickness(menu.hoverSelectionRightText, 2);
+	sfText_setString(menu.hoverSelectionRightText, "]");
 
 	menu.settingTextBound = sfText_getGlobalBounds(menu.settingText);
 	menu.quitTextBound = sfText_getGlobalBounds(menu.quitText);
 	menu.playTextBound = sfText_getGlobalBounds(menu.playText);
+	menu.hoverSelectionLeftTextBound = sfText_getGlobalBounds(menu.hoverSelectionLeftText);
+	menu.hoverSelectionRightTextBound = sfText_getGlobalBounds(menu.hoverSelectionRightText);
 
 }
 
@@ -107,6 +124,12 @@ void DrawText(sfRenderWindow* _renderWindow)
 	sfRenderWindow_drawText(_renderWindow, menu.playText, NULL);
 	sfRenderWindow_drawText(_renderWindow, menu.settingText, NULL);
 	sfRenderWindow_drawText(_renderWindow, menu.quitText, NULL);
+	if (menu.hoverSelected)
+	{
+		sfRenderWindow_drawText(_renderWindow, menu.hoverSelectionLeftText, NULL);
+		sfRenderWindow_drawText(_renderWindow, menu.hoverSelectionRightText, NULL);
+
+	}
 }
 
 void CleanupText(void)
@@ -114,38 +137,36 @@ void CleanupText(void)
 	sfText_destroy(menu.playText);
 	sfText_destroy(menu.settingText);
 	sfText_destroy(menu.quitText);
+	sfText_destroy(menu.hoverSelectionLeftText);
+	sfText_destroy(menu.hoverSelectionRightText);
 }
 
 void CheckMouseHoverMenu(sfRenderWindow* _renderWindow)
 {
+	menu.hoverSelected = sfFalse;
 	sfVector2i mousePos = sfMouse_getPositionRenderWindow(_renderWindow);
 	if (sfFloatRect_contains(&menu.playTextBound, (float)mousePos.x, (float)mousePos.y))
 	{
-		sfText_setFillColor(menu.playText, sfRed);
+		menu.hoverSelected = sfTrue;
+
+		sfText_setPosition(menu.hoverSelectionLeftText, (sfVector2f) { menu.playTextBound.left - 30, menu.playTextBound.top - menu.hoverSelectionLeftTextBound.height / 2 + 10 });
+		sfText_setPosition(menu.hoverSelectionRightText, (sfVector2f) { menu.playTextBound.left + menu.playTextBound.width + 10, menu.playTextBound.top - menu.hoverSelectionRightTextBound.height / 2 + 10 });
 	}
-	else
+	else if (sfFloatRect_contains(&menu.settingTextBound, (float)mousePos.x, (float)mousePos.y))
 	{
-		sfText_setFillColor(menu.playText, sfWhite);
+		menu.hoverSelected = sfTrue;
+		sfText_setPosition(menu.hoverSelectionLeftText, (sfVector2f) { menu.settingTextBound.left - 30, menu.settingTextBound.top - menu.hoverSelectionLeftTextBound.height / 2 + 10 });
+		sfText_setPosition(menu.hoverSelectionRightText, (sfVector2f) { menu.settingTextBound.left + menu.settingTextBound.width + 10, menu.settingTextBound.top - menu.hoverSelectionRightTextBound.height / 2 + 10 });
 
 	}
-
-	if (sfFloatRect_contains(&menu.settingTextBound, (float)mousePos.x, (float)mousePos.y))
+	else if (sfFloatRect_contains(&menu.quitTextBound, (float)mousePos.x, (float)mousePos.y))
 	{
-		sfText_setFillColor(menu.settingText, sfRed);
-	}
-	else
-	{
-		sfText_setFillColor(menu.settingText, sfWhite);
+		menu.hoverSelected = sfTrue;
+		sfText_setPosition(menu.hoverSelectionLeftText, (sfVector2f) { menu.quitTextBound.left - 30, menu.quitTextBound.top - menu.hoverSelectionLeftTextBound.height / 2 + 10 });
+		sfText_setPosition(menu.hoverSelectionRightText, (sfVector2f) { menu.quitTextBound.left + menu.quitTextBound.width + 10, menu.quitTextBound.top - menu.hoverSelectionRightTextBound.height / 2 + 10 });
 	}
 
-	if (sfFloatRect_contains(&menu.quitTextBound, (float)mousePos.x, (float)mousePos.y))
-	{
-		sfText_setFillColor(menu.quitText, sfRed);
-	}
-	else
-	{
-		sfText_setFillColor(menu.quitText, sfWhite);
-	}
+
 }
 
 void CheckMouseClickMenu(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouseButtonEvent)

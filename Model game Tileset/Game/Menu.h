@@ -7,17 +7,27 @@
 
 typedef struct Menu
 {
-	sfText* playText;
 	sfFont* font;
+
+	sfText* playText;
+	sfFloatRect playTextBound;
+
 	sfText* quitText;
+	sfFloatRect quitTextBound;
+
 	sfText* settingText;
+
+	sfText* hoverSelectionLeftText;
+	sfText* hoverSelectionRightText;
+	sfBool hoverSelected;
 	char buffer[32];
 	sfSprite* backgroundSprite;
 	sfTexture* backgroundTexture;
 
 
-	sfFloatRect playTextBound;
-	sfFloatRect quitTextBound;
+	sfFloatRect hoverSelectionLeftTextBound;
+	sfFloatRect hoverSelectionRightTextBound;
+
 	sfFloatRect settingTextBound;
 }Menu;
 void LoadMenu(void);
