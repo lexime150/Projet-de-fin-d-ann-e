@@ -4,7 +4,7 @@
 #include "Common.h"
 #include "Map.h"
 
-#define PLAYER_WIDTH 32
+#define PLAYER_WIDTH 22
 #define PLAYER_HEIGHT 32
 
 typedef struct Player
@@ -16,6 +16,8 @@ typedef struct Player
 	sfVector2f velocity;
 	sfVector2f position;
 	sfFloatRect playerRect;
+
+	sfBool isGrounded;
 } Player;
 
 void LoadPlayer(void);

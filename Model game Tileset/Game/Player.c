@@ -22,10 +22,15 @@ void MovePlayer(float _dt)
 	{
 		player.velocity.x = player.speed;
 	}
-	else if (sfKeyboard_isKeyPressed(sfKeyQ))
+	if (sfKeyboard_isKeyPressed(sfKeyQ))
 	{
 		player.velocity.x = -player.speed;
 	}
+	if (sfKeyboard_isKeyPressed(sfKeySpace) && player.isGrounded)
+	{
+		player.velocity.y = -500;
+	}
+
 }
 void LoadPlayer(void)
 {
@@ -35,8 +40,11 @@ void LoadPlayer(void)
 	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfSprite_setPosition(player.sprite, (sfVector2f) { 0, 0 });
 	player.speed = 350.f;
+
 	player.velocity.x = 0;
 	player.velocity.y = 0;
+
+	player.isGrounded = sfFalse;
 }
 
 void UpdatePlayer(float _dt)
@@ -58,6 +66,7 @@ void CleanUpPlayer(void)
 
 void CollisionPlayerPlatformsY()
 {
+	player.isGrounded = sfFalse;
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		sfFloatRect platformRect = GetMapCollision(i);
@@ -67,6 +76,7 @@ void CollisionPlayerPlatformsY()
 			if (player.velocity.y > 0)
 			{
 				player.playerRect.top = platformRect.top - player.playerRect.height;
+				player.isGrounded = sfTrue;
 			}
 			else if (player.velocity.y < 0)
 			{
