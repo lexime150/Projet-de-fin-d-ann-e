@@ -25,21 +25,15 @@
     <Filter Include="Fichiers d%27en-tête\Entities">
       <UniqueIdentifier>{8b03bb73-684d-4112-af4f-439945fd81f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Scenes">
+      <UniqueIdentifier>{7ae33e0a-fb70-4e87-a378-6a66b7690dcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Scenes">
+      <UniqueIdentifier>{f2e4b595-a161-4342-92dc-4041963fda04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOver.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameState.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Map.c">
@@ -51,18 +45,24 @@
     <ClCompile Include="Animation.c">
       <Filter>Fichiers sources\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.c">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.c">
+      <Filter>Fichiers sources\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.c">
+      <Filter>Fichiers sources\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.c">
+      <Filter>Fichiers sources\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.c">
+      <Filter>Fichiers sources\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOver.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="GameState.h">
@@ -79,6 +79,18 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Fichiers d%27en-tête\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>Fichiers d%27en-tête\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Fichiers d%27en-tête\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
