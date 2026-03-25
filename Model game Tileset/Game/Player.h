@@ -40,7 +40,7 @@ typedef struct Player
 
 	sfBool isGrounded;
 
-
+	short lastDirection;
 	sfRectangleShape* collisionShape;
 	sfFloatRect collisionRect;
 } Player;
