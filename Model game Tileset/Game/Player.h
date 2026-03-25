@@ -39,6 +39,10 @@ typedef struct Player
 	Animation* currentAnimation;
 
 	sfBool isGrounded;
+
+
+	sfRectangleShape* collisionShape;
+	sfFloatRect collisionRect;
 } Player;
 
 void LoadPlayer(void);

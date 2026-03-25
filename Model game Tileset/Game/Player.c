@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 
 void CollisionPlayerPlatformsX();
 void CollisionPlayerPlatformsY();
@@ -7,7 +7,11 @@ Player player;
 
 void ApplyPhysic(float _dt)
 {
-	player.velocity.y += GRAVITY * _dt;
+	if (!player.isGrounded)
+	{
+		player.velocity.y += GRAVITY * _dt;
+
+	}
 }
 
 void ApplyMovement(float _dt)
@@ -38,8 +42,17 @@ void LoadPlayer(void)
 	player.texture = sfTexture_createFromFile("Assets/Sprites/IDLE.png", NULL);
 	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
 	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-	sfSprite_setPosition(player.sprite, (sfVector2f) { 0, 0 });
+	sfSprite_setPosition(player.sprite, (sfVector2f) { 100, 0 });
 	player.speed = 350.f;
+
+	player.collisionShape = sfRectangleShape_create();
+	sfRectangleShape_setSize(player.collisionShape, (sfVector2f) { PLAYER_WIDTH* GAME_SCALE, PLAYER_HEIGHT* GAME_SCALE });
+
+	sfVector2f spritePos = sfSprite_getPosition(player.sprite);
+
+	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { spritePos.x - (PLAYER_WIDTH * GAME_SCALE) / 2, spritePos.y - (PLAYER_HEIGHT * GAME_SCALE) });
+	sfRectangleShape_setOutlineColor(player.collisionShape, sfRed);
+	sfRectangleShape_setFillColor(player.collisionShape, sfTransparent);
 
 	player.velocity.x = 0;
 	player.velocity.y = 0;
@@ -49,13 +62,13 @@ void LoadPlayer(void)
 	player.animationPlayer[IDLE] = CreateAnimation(player.sprite, 5, 8, sfTrue, sfTrue, firstFrame);
 	firstFrame = (sfIntRect){ 0, RUN * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 10, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){6 * PLAYER_WIDTH, TURN * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT};
+	firstFrame = (sfIntRect){ 6 * PLAYER_WIDTH, TURN * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[TURN] = CreateAnimation(player.sprite, 4, 6, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){0, JUMP * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT};
+	firstFrame = (sfIntRect){ 0, JUMP * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){3 * PLAYER_WIDTH, FALL * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT};
+	firstFrame = (sfIntRect){ 3 * PLAYER_WIDTH, FALL * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[FALL] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){6 * PLAYER_WIDTH, D_JUMP * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT};
+	firstFrame = (sfIntRect){ 6 * PLAYER_WIDTH, D_JUMP * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[D_JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
 
 
@@ -83,25 +96,29 @@ void CleanUpPlayer(void)
 void CollisionPlayerPlatformsY()
 {
 	player.isGrounded = sfFalse;
+
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		sfFloatRect platformRect = GetMapCollision(i);
 
-		if (sfFloatRect_intersects(&player.playerRect, &platformRect, NULL))
+		if (sfFloatRect_intersects(&player.collisionRect, &platformRect, NULL))
 		{
+			sfVector2f pos = sfRectangleShape_getPosition(player.collisionShape);
+
 			if (player.velocity.y > 0)
 			{
-				player.playerRect.top = platformRect.top - player.playerRect.height;
+				pos.y = platformRect.top - player.collisionRect.height;
 				player.isGrounded = sfTrue;
 			}
 			else if (player.velocity.y < 0)
 			{
-				player.playerRect.top = platformRect.top + platformRect.height;
+				pos.y = platformRect.top + platformRect.height;
 			}
 
 			player.velocity.y = 0;
 
-			sfSprite_setPosition(player.sprite, (sfVector2f) { player.playerRect.left, player.playerRect.top });
+			sfRectangleShape_setPosition(player.collisionShape, pos);
+			player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 		}
 	}
 }
@@ -111,39 +128,45 @@ void CollisionPlayerPlatformsX()
 	{
 		sfFloatRect platformRect = GetMapCollision(i);
 
-		if (sfFloatRect_intersects(&player.playerRect, &platformRect, NULL))
+		if (sfFloatRect_intersects(&player.collisionRect, &platformRect, NULL))
 		{
+			sfVector2f pos = sfRectangleShape_getPosition(player.collisionShape);
+
 			if (player.velocity.x > 0)
 			{
-				player.playerRect.left = platformRect.left - player.playerRect.width;
+				pos.x = platformRect.left - player.collisionRect.width;
 			}
 			else if (player.velocity.x < 0)
 			{
-				player.playerRect.left = platformRect.left + platformRect.width;
+				pos.x = platformRect.left + platformRect.width;
 			}
 
 			player.velocity.x = 0;
 
-			sfSprite_setPosition(player.sprite, (sfVector2f) { player.playerRect.left, player.playerRect.top });
+			sfRectangleShape_setPosition(player.collisionShape, pos);
+			player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 		}
 	}
 }
 void CheckCollisionPlayerPlatforms(float _dt)
 {
-
-	sfVector2f pos = sfSprite_getPosition(player.sprite);
+	sfVector2f pos = sfRectangleShape_getPosition(player.collisionShape);
 
 	pos.x += player.velocity.x * _dt;
+	sfRectangleShape_setPosition(player.collisionShape, pos);
 
-	sfSprite_setPosition(player.sprite, pos);
-	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
+	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	CollisionPlayerPlatformsX();
 
-	pos = sfSprite_getPosition(player.sprite);
+	pos = sfRectangleShape_getPosition(player.collisionShape);
 	pos.y += player.velocity.y * _dt;
-	sfSprite_setPosition(player.sprite, pos);
-	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
-	CollisionPlayerPlatformsY();
 
+	sfRectangleShape_setPosition(player.collisionShape, pos);
+	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
+
+	CollisionPlayerPlatformsY();
+	sfVector2f hitboxPos = sfRectangleShape_getPosition(player.collisionShape);
+	sfFloatRect hitboxRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
+	sfSprite_setPosition(player.sprite, (sfVector2f) { hitboxRect.left, hitboxRect.top });
 	player.position = sfSprite_getPosition(player.sprite);
 }

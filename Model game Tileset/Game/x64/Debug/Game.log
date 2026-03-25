@@ -1,5 +1,6 @@
-﻿  Camera.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Camera.c(35,12): warning C4553: '==' : résultat de l'expression non utilisé ; souhaitiez-vous utiliser '=' ?
+﻿  Player.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(75,26): warning C4047: '=' : les niveaux d'indirection de 'Animation *' et de 'Animation (*)[7]' sont différents
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(168,13): warning C4101: 'hitboxPos' : variable locale non référencée
   Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
   'pwsh.exe' n'est pas reconnu en tant que commande interne
   ou externe, un programme exécutable ou un fichier de commandes.
