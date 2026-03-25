@@ -11,18 +11,18 @@ typedef enum PlayerState
 {
 	IDLE,
 	RUN,
-	TURN = RUN,
+	TURN,
 	JUMP,
-	FALL = JUMP,
-	D_JUMP = FALL,
+	FALL,
+	D_JUMP,
 	DASH_GROUND,
-	DASH_UP = 3,
-	DASH_DIAGONAL = 3,
+	DASH_UP,
+	DASH_DIAGONAL,
 	SLIDE,
 	CLIMB_WALL,
-	LADDER = CLIMB_WALL,
+	LADDER,
 	WALL_GRIP_FALL,
-	WALL_JUMP = WALL_GRIP_FALL,
+	WALL_JUMP,
 	STATE_NUMBER
 
 }PlayerState;
@@ -37,11 +37,17 @@ typedef struct Player
 	sfVector2f position;
 	sfFloatRect playerRect;
 
-	Animation animationPlayer[STATE_NUMBER];
+	Animation animationPlayer[14];
 	Animation* currentAnimation;
 
 	sfBool isGrounded;
-} Player;
+
+	short lastDirection;
+
+	sfBool isMoving;
+
+
+}Player;
 
 void LoadPlayer(void);
 void UpdatePlayer(float _dt);

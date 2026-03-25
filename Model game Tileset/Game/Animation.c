@@ -1,65 +1,60 @@
-#include "Animation.h"
-
-Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _frameSpeed, sfBool _isPlaying, sfBool _isLooping, sfIntRect _firstFrame)
-{
-    Animation createAnim = { 0 };
-
-    createAnim.sprite = _sprite;
-    createAnim.frameCount = _frameCount;
-    createAnim.frameSpeed = _frameSpeed;
-    createAnim.isPlaying = _isPlaying;
-    createAnim.isLooping = _isLooping;
-    createAnim.firstFrame = _firstFrame;
-
-    return createAnim;
-}
-
-
-
-void UpdateAnimation(Animation* _animation, float _dt)
-{
-    // _animation->isPlaying = sfTrue;
-    if (_animation->isPlaying)
-    {
-        _animation->timer += _dt;
-
-        if (_animation->timer > 1.f / _animation->frameSpeed)
-        {
-            _animation->timer -= 1.f / _animation->frameSpeed;
-            _animation->currentFrame++;
-
-            if (_animation->currentFrame == _animation->frameCount)
-            {
-                if (_animation->isLooping)
-                {
-                    _animation->currentFrame = 0;
-                  //  _animation->firstFrame.left = 0;
-                }
-                else
-                {
-                    _animation->currentFrame--;
-                    _animation->isPlaying = sfFalse;
-                }
-
-
-            }
-
-
-        }
-
-
-    }
-
-    sfIntRect frame = _animation->firstFrame;
-    frame.left = frame.left + _animation->currentFrame * frame.width;
-    sfSprite_setTextureRect(_animation->sprite, frame);
-
-}
-
-void LoadAnimation(Animation* _animation)
-{
-    _animation->timer = 0.f;
-    _animation->isPlaying = sfTrue;
-    _animation->currentFrame = 0;
-
-}
+//#include "Animation.h"
+//
+//Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _frameRate, sfIntRect _firstFrame, sfBool _isLooping)
+//{
+//	Animation newAnimation = { 0 };
+//
+//	newAnimation.sprite = _sprite;
+//	newAnimation.frameCount = _frameCount;
+//	newAnimation.frameRate = _frameRate;
+//	newAnimation.firstFrame = _firstFrame;
+//	newAnimation.isLooping = _isLooping;
+//
+//	return newAnimation;
+//}
+//
+//void UpdateAnimation(Animation* const _animation, float _dt)
+//{
+//	if (!_animation->isFinished)
+//	{
+//		// Update the frame
+//		_animation->timer += _dt;
+//		if (_animation->timer > 1.f / _animation->frameRate)
+//		{
+//			_animation->timer -= 1.f / _animation->frameRate;
+//			_animation->frameNumber++;
+//
+//			// End of the animation
+//			if (_animation->frameNumber == _animation->frameCount)
+//			{
+//				// Animation is looping
+//				if (_animation->isLooping)
+//				{
+//					_animation->frameNumber = 0;
+//				}
+//				else
+//				{
+//					_animation->frameNumber--;
+//					_animation->isFinished = sfTrue;
+//				}
+//			}
+//		}
+//
+//		// Select a frame
+//		sfIntRect selectedFrame = _animation->firstFrame;
+//		selectedFrame.left += _animation->frameNumber * selectedFrame.width;
+//		sfSprite_setTextureRect(_animation->sprite, selectedFrame);
+//	}
+//}
+//
+//void LoadAnimation(Animation* const _animation)
+//{
+//	_animation->frameNumber = 0;
+//	_animation->timer = 0.f;
+//	_animation->isFinished = sfFalse;
+//}
+//
+//sfBool AnimationIsFinished(const Animation* const _animation)
+//{
+//	return _animation->isFinished;
+//}

@@ -6,6 +6,10 @@ void CheckCollisionPlayerPlatforms(float _dt);
 
 void LoadAnimationPlayer(void);
 
+
+
+
+
 void SetAnimation(PlayerState _state);
 
 Player player;
@@ -22,19 +26,41 @@ void ApplyMovement(float _dt)
 void MovePlayer(float _dt)
 {
 	player.velocity.x = 0;
+	player.isMoving = sfFalse;
 
 	if (sfKeyboard_isKeyPressed(sfKeyD))
 	{
 		player.velocity.x = player.speed;
+		player.lastDirection = 1;
+
+		if (!player.isMoving)
+		{
+			SetAnimation(RUN);
+			player.isMoving = sfTrue;
+		}
+
+
 	}
 	if (sfKeyboard_isKeyPressed(sfKeyQ))
 	{
 		player.velocity.x = -player.speed;
+		player.lastDirection = -1;
+
+		if (!player.isMoving)
+		{
+			SetAnimation(RUN);
+			player.isMoving = sfTrue;
+		}
+	
+	
 	}
 	if (sfKeyboard_isKeyPressed(sfKeySpace) && player.isGrounded)
 	{
 		player.velocity.y = -500;
+		SetAnimation(FALL);
 	}
+
+	sfSprite_setScale(player.sprite, (sfVector2f){player.lastDirection * GAME_SCALE, GAME_SCALE});
 
 }
 void LoadPlayer(void)
@@ -48,8 +74,10 @@ void LoadPlayer(void)
 
 	player.velocity.x = 0;
 	player.velocity.y = 0;
+	player.lastDirection = 1;
 
 	player.isGrounded = sfFalse;
+	player.isMoving = sfFalse;
 
 	LoadAnimationPlayer();
 
@@ -57,38 +85,50 @@ void LoadPlayer(void)
 
 void LoadAnimationPlayer(void)
 {
-	sfIntRect firstFrame = { 0,IDLE * PLAYER_HEIGHT , PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[IDLE] = CreateAnimation(player.sprite, 5, 8, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 0, RUN * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 10, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 6 * PLAYER_WIDTH, TURN * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[TURN] = CreateAnimation(player.sprite, 4, 6, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 0, JUMP * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	sfIntRect firstFrame = { 0, 0 * PLAYER_HEIGHT , PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[IDLE] = CreateAnimation(player.sprite, 5, 7, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 9, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[TURN] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 3 * PLAYER_WIDTH, FALL * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+
+	firstFrame = (sfIntRect){0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[FALL] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 6 * PLAYER_WIDTH, D_JUMP * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+
+	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[D_JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 0, PLAYER_HEIGHT * DASH_GROUND , PLAYER_WIDTH, PLAYER_HEIGHT };
+
+	firstFrame = (sfIntRect){ 0, PLAYER_HEIGHT * 3 , PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[DASH_GROUND] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 4 * PLAYER_WIDTH, DASH_UP * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+
+	firstFrame = (sfIntRect){ 4 * PLAYER_WIDTH, 3 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[DASH_UP] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 8 * PLAYER_WIDTH, DASH_DIAGONAL * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+
+	firstFrame = (sfIntRect){ 8 * PLAYER_WIDTH, 3 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[DASH_DIAGONAL] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 0, SLIDE * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+
+	firstFrame = (sfIntRect){ 0, 4 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[SLIDE] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 0, CLIMB_WALL * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+
+	firstFrame = (sfIntRect){ 0, 5 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[CLIMB_WALL] = CreateAnimation(player.sprite, 6, 9, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 6 * PLAYER_WIDTH, LADDER * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[LADDER] = CreateAnimation(player.sprite, 6, 9, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 0, WALL_GRIP_FALL * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+
+	firstFrame = (sfIntRect){ 6 * PLAYER_WIDTH, 5 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[LADDER] = CreateAnimation(player.sprite, 6, 7, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 6 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[WALL_GRIP_FALL] = CreateAnimation(player.sprite, 2, 4, sfTrue, sfTrue, firstFrame);
-	firstFrame = (sfIntRect){ 2 * PLAYER_WIDTH, WALL_JUMP * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[WALL_JUMP] = CreateAnimation(player.sprite, 3, 5, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 2 * PLAYER_WIDTH, 6 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[WALL_JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
 
 
-
-	SetAnimation(JUMP);
+	SetAnimation(IDLE);
 
 
 }
@@ -137,11 +177,16 @@ void CollisionPlayerPlatformsY()
 			else if (player.velocity.y < 0)
 			{
 				player.playerRect.top = platformRect.top + platformRect.height;
+				
 			}
 
 			player.velocity.y = 0;
 
 			sfSprite_setPosition(player.sprite, (sfVector2f) { player.playerRect.left, player.playerRect.top });
+			if (!player.isMoving)
+			{
+				SetAnimation(IDLE);
+			}
 		}
 	}
 }
@@ -163,7 +208,7 @@ void CollisionPlayerPlatformsX()
 			}
 
 			player.velocity.x = 0;
-
+			
 			sfSprite_setPosition(player.sprite, (sfVector2f) { player.playerRect.left, player.playerRect.top });
 		}
 	}
