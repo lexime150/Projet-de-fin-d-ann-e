@@ -45,8 +45,19 @@ void LoadPlayer(void)
 	player.velocity.y = 0;
 
 	player.isGrounded = sfFalse;
-	sfIntRect firstFrame = { 0,0,PLAYER_WIDTH,PLAYER_HEIGHT };
-	player.animationPlayer = CreateAnimation(player.sprite, 5, 5, sfTrue, sfTrue, firstFrame);
+	sfIntRect firstFrame = { 0,IDLE * PLAYER_HEIGHT , PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[IDLE] = CreateAnimation(player.sprite, 5, 8, sfTrue, sfTrue, firstFrame);
+	firstFrame = (sfIntRect){ 0, RUN * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 10, sfTrue, sfTrue, firstFrame);
+	firstFrame = (sfIntRect){6 * PLAYER_WIDTH, TURN * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT};
+	player.animationPlayer[TURN] = CreateAnimation(player.sprite, 4, 6, sfTrue, sfTrue, firstFrame);
+	firstFrame = (sfIntRect){0, JUMP * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT};
+	player.animationPlayer[JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
+	firstFrame = (sfIntRect){3 * PLAYER_WIDTH, FALL * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT};
+	player.animationPlayer[FALL] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
+	firstFrame = (sfIntRect){6 * PLAYER_WIDTH, D_JUMP * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT};
+	player.animationPlayer[D_JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
+
 
 	player.currentAnimation = &player.animationPlayer;
 }
