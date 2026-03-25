@@ -8,6 +8,7 @@ void LoadGame(void)
 {
 	LoadMap("Map");
 	LoadPlayer();
+	LoadCamera();
 }
 
 
@@ -50,11 +51,13 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
 void UpdateGame(float _dt)
 {
 	UpdatePlayer(_dt);
+	UpdateCamera(_dt);
 }
 
 void DrawGame(sfRenderWindow* _renderWindow)
 {
 
+	DrawCamera(_renderWindow);
 	DrawMap(_renderWindow);
 	DrawPlayer(_renderWindow);
 }
@@ -63,4 +66,5 @@ void CleanupGame(void)
 {
 	CleanupMap();
 	CleanUpPlayer();
+	CleanUpCamera();
 }

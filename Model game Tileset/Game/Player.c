@@ -133,4 +133,6 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	sfSprite_setPosition(player.sprite, pos);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 	CollisionPlayerPlatformsY();
+
+	player.position = sfSprite_getPosition(player.sprite);
 }

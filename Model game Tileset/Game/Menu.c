@@ -57,6 +57,7 @@ void UpdateMenu(sfRenderWindow* _renderWindow, float _dt)
 
 void DrawMenu(sfRenderWindow* _renderWindow)
 {
+	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawText(_renderWindow);
 }
 
