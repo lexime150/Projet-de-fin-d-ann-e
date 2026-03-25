@@ -32,7 +32,7 @@ void CenterCamera()
 
 	if (camPos.y > SCREEN_HEIGHT / 2)
 	{
-		camPos.y == SCREEN_HEIGHT / 2;
+		camPos.y = SCREEN_HEIGHT / 2;
 	}
 	sfView_setCenter(camera.cameraView, camPos);
 }

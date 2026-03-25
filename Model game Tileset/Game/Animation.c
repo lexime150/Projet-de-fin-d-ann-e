@@ -33,7 +33,7 @@ void UpdateAnimation(Animation* _animation, float _dt)
                 if (_animation->isLooping)
                 {
                     _animation->currentFrame = 0;
-                    _animation->firstFrame.left = 0;
+                  //  _animation->firstFrame.left = 0;
                 }
                 else
                 {
