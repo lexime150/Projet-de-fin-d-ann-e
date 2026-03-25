@@ -7,7 +7,7 @@ void CheckCollisionPlayerPlatforms(float _dt);
 void LoadAnimationPlayer(void);
 
 
-
+void StateMachine(PlayerState _state);
 
 
 void SetAnimation(PlayerState _state);
@@ -25,49 +25,52 @@ void ApplyPhysic(float _dt)
 
 void ApplyMovement(float _dt)
 {
-	sfSprite_move(player.sprite, (sfVector2f) { player.velocity.x* _dt, player.velocity.y* _dt });
+	sfSprite_move(player.sprite, (sfVector2f) { player.velocity.x* player.lastDirection * player.speed* _dt, player.velocity.y* _dt });
 }
 void MovePlayer(float _dt)
 {
 	player.velocity.x = 0;
-	player.isMoving = sfFalse;
+	//player.isMoving = sfFalse;
 
-	if (sfKeyboard_isKeyPressed(sfKeyD))
-	{
-		player.velocity.x = player.speed;
-		player.lastDirection = 1;
+	
 
-
-		if (!player.isMoving)
+		if (sfKeyboard_isKeyPressed(sfKeyD))
 		{
-			SetAnimation(RUN);
+			player.velocity.x = player.speed;
+			player.lastDirection = 1;
 			player.isMoving = sfTrue;
+			if (player.isGrounded)
+			{
+				StateMachine(RUN);
+			}
 		}
-	}
-
-
-
-	if (sfKeyboard_isKeyPressed(sfKeyQ))
-	{
-		player.velocity.x = -player.speed;
-		player.lastDirection = -1;
-
-		if (!player.isMoving)
+		if (sfKeyboard_isKeyPressed(sfKeyQ))
 		{
-			SetAnimation(RUN);
+			player.velocity.x = -player.speed;
+			player.lastDirection = -1;
 			player.isMoving = sfTrue;
+			
+			if (player.isGrounded)
+			{
+				StateMachine(RUN);
+			}
+
+		}
+		if (sfKeyboard_isKeyPressed(sfKeySpace) && player.isGrounded)
+		{
+			player.velocity.y = -500;
+
+		}
+		sfSprite_setScale(player.sprite, (sfVector2f) { player.lastDirection* GAME_SCALE, GAME_SCALE });
+	
+	
+		if (!sfKeyboard_isKeyPressed(sfKeyD) && !sfKeyboard_isKeyPressed(sfKeyQ) && !sfKeyboard_isKeyPressed(sfKeySpace) && player.state != IDLE && player.isGrounded)
+		{
+			StateMachine(IDLE);
 		}
 
-	}
 
 
-
-	if (sfKeyboard_isKeyPressed(sfKeySpace) && player.isGrounded)
-	{
-		player.velocity.y = -500;
-
-	}
-	sfSprite_setScale(player.sprite, (sfVector2f) { player.lastDirection* GAME_SCALE, GAME_SCALE });
 }
 void LoadPlayer(void)
 {
@@ -86,6 +89,7 @@ void LoadPlayer(void)
 	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { spritePos.x - (PLAYER_WIDTH * GAME_SCALE) / 2, spritePos.y - (PLAYER_HEIGHT * GAME_SCALE) });
 	sfRectangleShape_setOutlineColor(player.collisionShape, sfRed);
 	sfRectangleShape_setFillColor(player.collisionShape, sfColor_fromRGBA(255, 255, 255, 50));
+
 
 	player.velocity.x = 0;
 	player.velocity.y = 0;
@@ -114,7 +118,7 @@ void LoadAnimationPlayer(void)
 	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
 
-	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	firstFrame = (sfIntRect){ 3 * PLAYER_WIDTH, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[FALL] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
@@ -156,16 +160,67 @@ void SetAnimation(PlayerState _state)
 	player.currentAnimation->timer = 0.f;
 	player.currentAnimation->isPlaying = sfTrue;
 	player.currentAnimation->currentFrame = 0;
+	player.state = _state;
 }
 
 
 void UpdatePlayer(float _dt)
 {
+	ApplyMovement(_dt);
 	ApplyPhysic(_dt);
 	MovePlayer(_dt);
 	CheckCollisionPlayerPlatforms(_dt);
 	UpdateAnimation(player.currentAnimation, _dt);
+
+	if (player.velocity.y < 0)
+	{
+		StateMachine(JUMP);
+	}
+	if (player.velocity.y > 0)
+	{
+		StateMachine(FALL);
+	}
 }
+
+void StateMachine(PlayerState _state)
+{
+
+	switch (_state)
+	{
+	case IDLE:
+		if (player.state != _state)
+		{
+			player.state = _state;
+			SetAnimation(IDLE);
+		}
+		break;
+	case RUN :
+		if (player.state != _state)
+		{
+			player.state = _state;
+			SetAnimation(RUN);
+		}
+		break;
+	case JUMP:
+		if (player.state != _state)
+		{
+			player.state = _state;
+			SetAnimation(JUMP);
+		}
+		break;
+	case FALL:
+		if (player.state != _state)
+		{
+			player.state = _state;
+			SetAnimation(FALL);
+		}
+		break;
+	default :
+		break;
+	}
+
+}
+
 
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
@@ -203,17 +258,23 @@ void CollisionPlayerPlatformsY()
 
 			}
 
-			player.velocity.y = 0;
+			
+			 player.velocity.y = 0;
 
 			sfRectangleShape_setPosition(player.collisionShape, pos);
 			player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 
 			sfSprite_setPosition(player.sprite, (sfVector2f) { player.playerRect.left, player.playerRect.top });
-			if (!player.isMoving)
+			
+			printf("%f\n", player.velocity.y);
+	/*		if (player.velocity.y > 0)
 			{
-				SetAnimation(IDLE);
+				StateMachine(FALL);
 			}
-
+			if (player.velocity.y < 0)
+			{
+				StateMachine(FALL);
+			}*/
 		}
 	}
 }
@@ -267,4 +328,7 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	sfFloatRect hitboxRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	sfSprite_setPosition(player.sprite, (sfVector2f) { hitboxRect.left + hitboxRect.width / 2, hitboxRect.top + hitboxRect.height });
 	player.position = sfSprite_getPosition(player.sprite);
+
+
+	
 }

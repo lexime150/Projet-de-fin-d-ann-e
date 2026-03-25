@@ -50,6 +50,8 @@ typedef struct Player
 
 	sfBool isMoving;
 
+	PlayerState state;
+
 
 }Player;
 
