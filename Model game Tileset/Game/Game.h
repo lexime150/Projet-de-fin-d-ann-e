@@ -3,6 +3,7 @@
 
 #include "Common.h"
 #include "GameState.h"
+#include "Animation.h"
 
 #include "Map.h"
 #include "Player.h"
@@ -11,6 +12,16 @@ typedef struct Game
 {
 	int test;
 }Game;
+
+typedef struct player
+{
+	sfTexture* texture;
+	sfSprite* sprite;
+
+	Animation animation;
+	Animation* currentAnimation;
+
+}Player;
 
 
 void LoadGame(void);
