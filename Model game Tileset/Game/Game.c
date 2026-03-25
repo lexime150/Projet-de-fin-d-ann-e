@@ -4,8 +4,6 @@
 Game game;
 Player player;
 
-void CollisionPlayerPlatforms();
-
 void LoadGame(void)
 {
 	LoadMap("Map");

@@ -9,6 +9,7 @@
 #include <math.h>
 #include "SFML/Graphics.h"
 #include "SFML/Audio.h"
+#include "Animation.h"
 
 #define GAME_SCALE 4
 #define SCREEN_WIDTH 1920

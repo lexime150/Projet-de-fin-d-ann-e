@@ -18,7 +18,7 @@ Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _fra
 
 void UpdateAnimation(Animation* _animation, float _dt)
 {
-   // _animation->isPlaying = sfTrue;
+    // _animation->isPlaying = sfTrue;
     if (_animation->isPlaying)
     {
         _animation->timer += _dt;
@@ -51,7 +51,7 @@ void UpdateAnimation(Animation* _animation, float _dt)
     }
 
     sfIntRect frame = _animation->firstFrame;
-    frame.left = frame.left + _animation->currentFrame *  frame.width;
+    frame.left = frame.left + _animation->currentFrame * frame.width;
     sfSprite_setTextureRect(_animation->sprite, frame);
 
 }

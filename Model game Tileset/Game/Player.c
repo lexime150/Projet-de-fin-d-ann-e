@@ -35,7 +35,7 @@ void MovePlayer(float _dt)
 void LoadPlayer(void)
 {
 	player.sprite = sfSprite_create();
-	player.texture = sfTexture_createFromFile("Assets/Sprites/Player.png", NULL);
+	player.texture = sfTexture_createFromFile("Assets/Sprites/IDLE.png", NULL);
 	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
 	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfSprite_setPosition(player.sprite, (sfVector2f) { 0, 0 });
@@ -45,6 +45,10 @@ void LoadPlayer(void)
 	player.velocity.y = 0;
 
 	player.isGrounded = sfFalse;
+	sfIntRect firstFrame = { 0,0,PLAYER_WIDTH,PLAYER_HEIGHT };
+	player.animationPlayer = CreateAnimation(player.sprite, 5, 5, sfTrue, sfTrue, firstFrame);
+
+	player.currentAnimation = &player.animationPlayer;
 }
 
 void UpdatePlayer(float _dt)
@@ -52,6 +56,7 @@ void UpdatePlayer(float _dt)
 	ApplyPhysic(_dt);
 	MovePlayer(_dt);
 	CheckCollisionPlayerPlatforms(_dt);
+	UpdateAnimation(player.currentAnimation, _dt);
 }
 
 void DrawPlayer(sfRenderWindow* _renderWindow)
