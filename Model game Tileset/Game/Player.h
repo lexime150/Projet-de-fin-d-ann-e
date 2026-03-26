@@ -15,6 +15,8 @@
 #define SLIDE_DURATION 0.4f
 #define SLIDE_COOLDOWN 0.4f
 
+#define MIN_SLIDE_JUMP_SPEED 375.f
+
 typedef enum PlayerState
 {
 	IDLE,
@@ -82,4 +84,4 @@ void UpdatePlayer(float _dt);
 void DrawPlayer(sfRenderWindow* _renderWindow);
 void CleanUpPlayer(void);
 
-#endif // !PLAYER_H
+#endif

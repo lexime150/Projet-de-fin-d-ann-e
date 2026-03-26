@@ -31,7 +31,7 @@ void LoadPlayer(void)
 
 	player.velocity.x = 0;
 	player.velocity.y = 0;
-
+	player.slideVelocityX = 0;
 	player.lastDirection = 1;
 	player.isSliding = sfFalse;
 	player.lastState = IDLE;
@@ -82,13 +82,13 @@ void MovePlayer(float _dt)
 		float sign = (player.slideVelocityX > 0) ? 1.f : -1.f;
 		player.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
 
-		if (sign > 0 && player.slideVelocityX < 0)
+		if (sign > 0 && player.slideVelocityX < MIN_SLIDE_JUMP_SPEED)
 		{
-			player.slideVelocityX = 0;
+			player.slideVelocityX = MIN_SLIDE_JUMP_SPEED;
 		}
-		if (sign < 0 && player.slideVelocityX > 0)
+		if (sign < 0 && player.slideVelocityX > -MIN_SLIDE_JUMP_SPEED)
 		{
-			player.slideVelocityX = 0;
+			player.slideVelocityX = -MIN_SLIDE_JUMP_SPEED;
 		}
 
 		float inputVelocity = 0;
@@ -274,6 +274,7 @@ void SetAnimation(PlayerState _state)
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
+	//sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
 }
 
 void CleanUpPlayer(void)
@@ -323,6 +324,7 @@ void CollisionPlayerPlatformsX(float _dx)
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
+
 
 void CollisionPlayerPlatformsY(float _dy)
 {
@@ -381,7 +383,11 @@ void CheckCollisionPlayerPlatforms(float _dt)
 void StateMachine(PlayerState _state)
 {
 	if (player.currentState == _state)
+	{
 		return;
+	}
+	SetAnimation(_state);
+}
 
 
 
