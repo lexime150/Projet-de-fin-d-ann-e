@@ -53,7 +53,6 @@ typedef struct Player
 	Animation animationPlayer[17];
 	Animation* currentAnimation;
 
-	sfBool isGrounded;
 
 	short lastDirection;
 
@@ -61,20 +60,25 @@ typedef struct Player
 	sfFloatRect collisionRect;
 
 
+	sfBool isGrounded;
 	sfBool isMoving;
+	sfBool isSliding;
+	sfBool isSlideJumping;
+	sfBool isTouchingRightWall;
+	sfBool isTouchingLeftWall;
+	sfBool isAttacking;
+	sfBool isTouchingWall;
+
 
 	PlayerState currentState;
 	PlayerState lastState;
 
-
+	float lastWallTouched;
+	float currentWallTouched;
 	float slideTimer;
 	float slideVelocityX;
-	sfBool isSliding;
-	sfBool isSlideJumping;
 	float slideCooldownTimer;
 
-	sfBool isAttacking;
-	sfBool isTouchingWall;
 
 }Player;
 

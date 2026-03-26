@@ -1,6 +1,8 @@
 ﻿#include "Player.h"
 Player player;
 void CollisionPlayerPlatformsX(float _dx);
+sfBool CheckCollisionPlayerPlatformsX(float _dx);
+
 void CollisionPlayerPlatformsY(float _dy);
 void CheckCollisionPlayerPlatforms(float _dt);
 
@@ -37,6 +39,10 @@ void LoadPlayer(void)
 	player.lastState = IDLE;
 	player.isAttacking = sfFalse;
 
+	player.isTouchingLeftWall = sfFalse;
+	player.isTouchingRightWall = sfFalse;
+	player.lastWallTouched = 0;
+
 	sfSprite_setOrigin(player.sprite, (sfVector2f) { PLAYER_WIDTH / 2.f, PLAYER_HEIGHT });
 	player.isGrounded = sfFalse;
 	player.isMoving = sfFalse;
@@ -68,6 +74,7 @@ void MovePlayer(float _dt)
 	sfBool movingRight = sfKeyboard_isKeyPressed(sfKeyD);
 	sfBool slideKey = sfKeyboard_isKeyPressed(sfKeyLControl) || sfKeyboard_isKeyPressed(sfKeyRControl);
 	sfBool jumpKey = sfKeyboard_isKeyPressed(sfKeySpace);
+
 
 	static sfBool jumpPressed = sfFalse;
 
@@ -187,6 +194,7 @@ void MovePlayer(float _dt)
 	if (jumpKey && !jumpPressed)
 	{
 		jumpPressed = sfTrue;
+
 		if (player.isGrounded || player.isSliding)
 		{
 			if (player.isSliding)
@@ -201,10 +209,40 @@ void MovePlayer(float _dt)
 			player.isGrounded = sfFalse;
 			StateMachine(JUMP);
 		}
+		else
+		{
+			float dx = player.velocity.x * _dt;
+			if (CheckCollisionPlayerPlatformsX(dx))
+			{
+				float WALL_JUMP_HX = 800.f;
+				player.velocity.y = -JUMP_FORCE * 1.30f;
+
+
+				//if (player.isTouchingLeftWall)
+				if(player.lastWallTouched == -1 && player.isTouchingRightWall)
+				{
+					player.position.x += 50;
+				}
+				else if (player.lastWallTouched == 1 && player.isTouchingLeftWall)
+				{
+					player.position.x -= 50;
+					sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+				}
+
+
+
+
+				player.isGrounded = sfFalse;
+				player.isSlideJumping = sfFalse;
+				StateMachine(WALL_JUMP);
+			}
+		}
 	}
+
 	if (!jumpKey)
 	{
 		jumpPressed = sfFalse;
+
 	}
 
 
@@ -295,6 +333,9 @@ void CleanUpPlayer(void)
 
 void CollisionPlayerPlatformsX(float _dx)
 {
+	player.isTouchingLeftWall = sfFalse;
+	player.isTouchingRightWall = sfFalse;
+
 	float playerHalfWidth = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
 	float playerWidth = PLAYER_WIDTH * GAME_SCALE;
 	float playerHeight = PLAYER_HEIGHT * GAME_SCALE;
@@ -309,13 +350,12 @@ void CollisionPlayerPlatformsX(float _dx)
 			if (player.velocity.x > 0)
 			{
 				hitbox.left = platform.left - hitbox.width;
-				printf("côté droit du joueur\n");
+
 			}
 			else if (player.velocity.x < 0)
 			{
 
 				hitbox.left = platform.left + platform.width;
-				printf("côté gauche du joueur\n");
 			}
 
 			player.velocity.x = 0;
@@ -334,6 +374,9 @@ void CollisionPlayerPlatformsX(float _dx)
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
+
+
+
 
 
 void CollisionPlayerPlatformsY(float _dy)
@@ -461,3 +504,39 @@ void LoadAnimationPlayer(void)
 
 }
 
+sfBool CheckCollisionPlayerPlatformsX(float _dx)
+{
+	player.isTouchingLeftWall = sfFalse;
+	player.isTouchingRightWall = sfFalse;
+
+	float playerHalfWidth = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
+	float playerWidth = PLAYER_WIDTH * GAME_SCALE;
+	float playerHeight = PLAYER_HEIGHT * GAME_SCALE;
+
+	sfFloatRect hitbox = { player.position.x - playerHalfWidth + _dx, player.position.y - playerHeight, playerWidth, playerHeight };
+
+	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
+	{
+		sfFloatRect platform = GetMapCollision(i);
+		if (sfFloatRect_intersects(&hitbox, &platform, NULL))
+		{
+			float playerCenterX = player.position.x;
+			float platformCenterX = platform.left + platform.width * 0.5f;
+
+			if (playerCenterX < platformCenterX && player.lastWallTouched != 1)
+			{
+				player.isTouchingRightWall = sfTrue;
+				player.lastWallTouched = 1;
+			}
+			else
+			{
+				player.lastWallTouched = -1;
+				player.isTouchingLeftWall = sfTrue;
+
+			}
+
+			return sfTrue;
+		}
+	}
+	return sfFalse;
+}
