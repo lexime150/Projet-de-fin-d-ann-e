@@ -392,7 +392,7 @@ void StateMachine(PlayerState _state)
 	{
 		return;
 	}
-	SetAnimation(_state);
+	SetAnimation(_state);	
 }
 
 
