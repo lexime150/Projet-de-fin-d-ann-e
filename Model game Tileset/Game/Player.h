@@ -17,6 +17,9 @@
 
 #define MIN_SLIDE_JUMP_SPEED 375.f
 
+#define WALL_JUMP_FRICTION 750.f
+#define MIN_WALL_JUMP_SPEED 375.f
+
 typedef enum PlayerState
 {
 	IDLE,
@@ -48,12 +51,12 @@ typedef struct Player
 	float speed;
 	sfVector2f velocity;
 	sfVector2f position;
+	float wallJumpVelocityX;
 	sfFloatRect playerRect;
 
 	Animation animationPlayer[17];
 	Animation* currentAnimation;
 
-	sfBool isGrounded;
 
 	short lastDirection;
 
@@ -61,19 +64,30 @@ typedef struct Player
 	sfFloatRect collisionRect;
 
 
+	sfBool isGrounded;
 	sfBool isMoving;
+
+	sfBool isSliding;
+	sfBool isSlideJumping;
+
+	sfBool isTouchingRightWall;
+	sfBool isTouchingLeftWall;
+	sfBool isTouchingWall;
+	sfBool isWallJumping;
+
+
+	sfBool isAttacking;
+
+	sfBool justWallJumped;
 
 	PlayerState currentState;
 	PlayerState lastState;
 
-
+	float lastWallTouched;
+	float currentWallTouched;
 	float slideTimer;
 	float slideVelocityX;
-	sfBool isSliding;
-	sfBool isSlideJumping;
 	float slideCooldownTimer;
-
-	sfBool isAttacking;
 
 
 }Player;
