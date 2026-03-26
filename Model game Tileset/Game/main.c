@@ -127,7 +127,7 @@ void LoadMainData(MainData* _mainData)
 {
 	sfVideoMode videoMode = { SCREEN_WIDTH, SCREEN_HEIGHT, BPP };
 	_mainData->renderWindow = sfRenderWindow_create(videoMode, "Game loop", sfFullscreen, NULL);
-
+	sfRenderWindow_setFramerateLimit(_mainData->renderWindow, 60);
 	_mainData->clock = sfClock_create();
 }
 

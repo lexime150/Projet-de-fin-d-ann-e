@@ -9,105 +9,9 @@ void LoadAnimationPlayer(void);
 void StateMachine(PlayerState _state);
 void SetAnimation(PlayerState _state);
 void ApplyPhysic(float _dt);
-
-void ApplyPhysic(float _dt)
-{
-	if (!player.isGrounded)
-	{
-		player.velocity.y += GRAVITY * _dt;
-	}
-}
+void MovePlayer(float _dt);
 
 
-void MovePlayer(float _dt)
-{
-	player.velocity.x = 0;
-	player.isSliding = sfFalse;
-
-	if (sfKeyboard_isKeyPressed(sfKeyD))
-	{
-		if (player.lastDirection != 1)
-		{
-			player.lastDirection = 1;
-			StateMachine(TURN);
-		}
-		if (player.velocity.x == 0.f)
-		{
-			player.velocity.x = player.speed;
-
-		}
-
-		player.isMoving = sfTrue;
-
-		if (player.isGrounded && sfKeyboard_isKeyPressed(sfKeyLControl))
-		{
-			player.isSliding = sfTrue;
-			player.velocity.x = player.speed * 5.f;
-			StateMachine(SLIDE);
-		}
-
-		if (player.isGrounded && !player.isSliding)
-		{
-
-			StateMachine(RUN);
-		}
-	}
-	if (sfKeyboard_isKeyPressed(sfKeyQ))
-	{
-		player.lastDirection = -1;
-		player.isMoving = sfTrue;
-
-		if (player.velocity.x == 0.f)
-		{
-			player.velocity.x = -player.speed;
-
-		}
-
-		if (player.isGrounded && sfKeyboard_isKeyPressed(sfKeyLControl))
-		{
-			player.isSliding = sfTrue;
-			player.velocity.x = -player.speed * 5.f;
-			StateMachine(SLIDE);
-		}
-
-		if (player.isGrounded && !player.isSliding)
-		{
-
-			StateMachine(RUN);
-		}
-	}
-	if (sfKeyboard_isKeyPressed(sfKeySpace) && player.isGrounded)
-	{
-		player.velocity.y = -500;
-	}
-	sfSprite_setScale(player.sprite, (sfVector2f) { (float)player.lastDirection* GAME_SCALE, GAME_SCALE });
-
-	if (!sfKeyboard_isKeyPressed(sfKeyD) && !sfKeyboard_isKeyPressed(sfKeyQ) && !sfKeyboard_isKeyPressed(sfKeySpace) && player.currentState != IDLE && player.isGrounded)
-	{
-		StateMachine(IDLE);
-
-	}
-
-	if (player.lastState == SLIDE && player.currentState == RUN)
-	{
-		if (player.velocity.x > player.speed)
-		{
-			player.velocity.x -= 0.02f;
-
-		}
-	}
-	if (player.velocity.y < 0)
-	{
-		StateMachine(JUMP);
-
-	}
-	if (player.velocity.y > 0)
-	{
-		StateMachine(FALL);
-	}
-	ApplyPhysic(_dt);
-	CheckCollisionPlayerPlatforms(_dt);
-}
 
 void LoadPlayer(void)
 {
@@ -128,6 +32,7 @@ void LoadPlayer(void)
 
 	player.velocity.x = 0;
 	player.velocity.y = 0;
+
 	player.lastDirection = 1;
 	player.isSliding = sfFalse;
 	player.lastState = IDLE;
@@ -139,9 +44,11 @@ void LoadPlayer(void)
 	player.position = sfSprite_getPosition(player.sprite);
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
+	player.slideCooldownTimer = 0.f;
 
 	LoadAnimationPlayer();
 }
+
 
 void LoadAnimationPlayer(void)
 {
@@ -151,8 +58,8 @@ void LoadAnimationPlayer(void)
 	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 9, sfTrue, sfTrue, firstFrame);
 
-	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[TURN] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
+	firstFrame = (sfIntRect){ 6 * PLAYER_WIDTH, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[TURN] = CreateAnimation(player.sprite, 4, 14, sfTrue, sfTrue, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
@@ -190,76 +97,225 @@ void LoadAnimationPlayer(void)
 	SetAnimation(IDLE);
 }
 
+
+
+void UpdatePlayer(float _dt)
+{
+	ApplyPhysic(_dt);
+	MovePlayer(_dt);
+	CheckCollisionPlayerPlatforms(_dt);
+	UpdateAnimation(player.currentAnimation, _dt);
+}
+
+
+void MovePlayer(float _dt)
+{
+	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
+	sfBool movingRight = sfKeyboard_isKeyPressed(sfKeyD);
+	sfBool slideKey = sfKeyboard_isKeyPressed(sfKeyLControl) || sfKeyboard_isKeyPressed(sfKeyRControl);
+	sfBool jumpKey = sfKeyboard_isKeyPressed(sfKeySpace);
+
+	static sfBool jumpPressed = sfFalse;
+
+	if (player.slideCooldownTimer > 0.f)
+	{
+		player.slideCooldownTimer -= _dt;
+
+	}
+
+	if (player.isSlideJumping)
+	{
+		float sign = (player.slideVelocityX > 0) ? 1.f : -1.f;
+		player.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
+
+		if (sign > 0 && player.slideVelocityX < 0)
+		{
+			player.slideVelocityX = 0;
+		}
+		if (sign < 0 && player.slideVelocityX > 0)
+		{
+			player.slideVelocityX = 0;
+		}
+
+		float inputVelocity = 0;
+		if (movingRight)
+		{
+			inputVelocity = player.speed;
+		}
+		if (movingLeft)
+		{
+			inputVelocity = -player.speed;
+		}
+
+		player.velocity.x = player.slideVelocityX + inputVelocity * 0.4f;
+
+		if (player.isGrounded)
+		{
+			player.isSlideJumping = sfFalse;
+		}
+	}
+
+
+	else if (player.isSliding)
+	{
+		player.slideTimer -= _dt;
+
+		float sign = (player.lastDirection > 0) ? 1.f : -1.f;
+		player.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
+
+		if (sign > 0 && player.slideVelocityX < 0) player.slideVelocityX = 0;
+		if (sign < 0 && player.slideVelocityX > 0) player.slideVelocityX = 0;
+
+		float inputVelocity = 0;
+		if (movingRight)
+		{
+			inputVelocity = player.speed;
+			player.lastDirection = 1;
+			sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+		}
+		else if (movingLeft)
+		{
+			inputVelocity = -player.speed;
+			player.lastDirection = -1;
+			sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+		}
+
+		player.velocity.x = player.slideVelocityX + inputVelocity * 0.5f;
+
+		if (player.slideTimer <= 0 || !slideKey)
+		{
+			player.isSliding = sfFalse;
+			player.slideVelocityX = 0;
+			player.slideCooldownTimer = SLIDE_COOLDOWN;
+			StateMachine(player.isMoving ? RUN : IDLE);
+		}
+	}
+	// DEPLACEMENT GAUCHE DROITE
+	else
+	{
+		if (movingRight)
+		{
+			player.velocity.x = player.speed;
+			player.lastDirection = 1;
+			sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+			player.isMoving = sfTrue;
+		}
+		else if (movingLeft)
+		{
+			player.velocity.x = -player.speed;
+			player.lastDirection = -1;
+			sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+			player.isMoving = sfTrue;
+		}
+		else
+		{
+			player.velocity.x = 0;
+			player.isMoving = sfFalse;
+		}
+
+		// SLIDE
+		if (slideKey && player.isGrounded && !player.isSliding && player.slideCooldownTimer <= 0.f)
+		{
+			player.isSliding = sfTrue;
+			player.slideTimer = SLIDE_DURATION;
+			player.slideVelocityX = player.lastDirection * SLIDE_SPEED;
+			StateMachine(SLIDE);
+		}
+	}
+
+	// JUMP
+	if (jumpKey && !jumpPressed)
+	{
+		jumpPressed = sfTrue;
+		if (player.isGrounded || player.isSliding)
+		{
+			if (player.isSliding)
+			{
+				player.isSlideJumping = sfTrue;
+				player.slideVelocityX = player.velocity.x;
+				player.isSliding = sfFalse;
+				player.slideCooldownTimer = SLIDE_COOLDOWN;
+			}
+
+			player.velocity.y = -JUMP_FORCE;
+			player.isGrounded = sfFalse;
+			StateMachine(JUMP);
+		}
+	}
+	if (!jumpKey) jumpPressed = sfFalse;
+
+
+
+
+	// ANIMATION
+	if (player.isGrounded && !player.isSliding)
+	{
+		if (player.currentState != TURN)
+		{
+			if (player.isMoving)
+			{
+				StateMachine(RUN);
+			}
+			else
+			{
+				StateMachine(IDLE);
+			}
+		}
+		if (player.currentState == TURN &&
+			player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
+		{
+			if (player.isMoving)
+			{
+				StateMachine(RUN);
+			}
+			else
+			{
+				StateMachine(IDLE);
+
+			}
+		}
+	}
+	else if (!player.isGrounded)
+	{
+		if (player.velocity.y < 0)
+		{
+			if (player.currentState != JUMP)
+			{
+
+				StateMachine(JUMP);
+			}
+		}
+		else
+		{
+			StateMachine(FALL);
+		}
+	}
+}
+
+
+
+void ApplyPhysic(float _dt)
+{
+	if (!player.isGrounded)
+	{
+		player.velocity.y += GRAVITY * _dt;
+	}
+	else
+	{
+		player.velocity.y = 50.f;
+	}
+}
 void SetAnimation(PlayerState _state)
 {
 	player.lastState = player.currentState;
-	printf("%d\n", player.currentState);
 	player.currentAnimation = &player.animationPlayer[_state];
 	player.currentAnimation->timer = 0.f;
 	player.currentAnimation->isPlaying = sfTrue;
 	player.currentAnimation->currentFrame = 0;
 	player.currentState = _state;
-	printf("%d\n", player.currentState);
-}
-
-void UpdatePlayer(float _dt)
-{
-	MovePlayer(_dt);
-	UpdateAnimation(player.currentAnimation, _dt);
-
 
 }
 
-void StateMachine(PlayerState _state)
-{
-	switch (_state)
-	{
-	case IDLE:
-		if (player.currentState != _state)
-		{
-			player.currentState = _state;
-			SetAnimation(IDLE);
-		}
-		break;
-	case RUN:
-		if (player.currentState != _state)
-		{
-			player.currentState = _state;
-			SetAnimation(RUN);
-		}
-		break;
-	case JUMP:
-		if (player.currentState != _state)
-		{
-			player.currentState = _state;
-			SetAnimation(JUMP);
-		}
-		break;
-	case FALL:
-		if (player.currentState != _state)
-		{
-			player.currentState = _state;
-			SetAnimation(FALL);
-		}
-		break;
-	case TURN:
-		if (player.currentState != _state)
-		{
-			player.currentState = _state;
-			SetAnimation(TURN);
-		}
-		break;
-	case SLIDE:
-		if (player.currentState != _state)
-		{
-			player.currentState = _state;
-			SetAnimation(SLIDE);
-		}
-		break;
-	default:
-		break;
-	}
-}
 
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
@@ -367,3 +423,11 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
+void StateMachine(PlayerState _state)
+{
+	if (player.currentState == _state)
+		return;
+
+	SetAnimation(_state);
+}
+

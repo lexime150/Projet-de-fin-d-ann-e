@@ -1,4 +1,5 @@
-﻿  Game.c
+﻿  Camera.c
+  Game.c
   GameOver.c
   GameState.c
   Menu.c

@@ -6,6 +6,14 @@
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
+#define JUMP_FORCE 600.f
+
+#define SLIDE_SPEED 600.f
+
+#define SLIDE_FRICTION 800.f
+
+#define SLIDE_DURATION 0.4f
+#define SLIDE_COOLDOWN 0.4f
 
 typedef enum PlayerState
 {
@@ -41,7 +49,6 @@ typedef struct Player
 	Animation* currentAnimation;
 
 	sfBool isGrounded;
-	sfBool isSliding;
 
 	short lastDirection;
 
@@ -53,6 +60,12 @@ typedef struct Player
 
 	PlayerState currentState;
 	PlayerState lastState;
+
+	float slideTimer;
+	float slideVelocityX;
+	sfBool isSliding;
+	sfBool isSlideJumping;
+	float slideCooldownTimer;
 
 }Player;
 
