@@ -83,8 +83,40 @@ void MovePlayer(float _dt)
 		player.slideCooldownTimer -= _dt;
 
 	}
+	if (player.isWallJumping)
+	{
+		float sign = (player.wallJumpVelocityX > 0) ? 1.f : -1.f;
+		player.wallJumpVelocityX -= (player.wallJumpVelocityX > 0 ? 1.f : -1.f) * WALL_JUMP_FRICTION * _dt;
+		if (sign > 0 && player.wallJumpVelocityX < MIN_WALL_JUMP_SPEED)
+		{
+			player.wallJumpVelocityX = MIN_WALL_JUMP_SPEED;
 
-	if (player.isSlideJumping)
+		}
+		if (sign < 0 && player.wallJumpVelocityX > -MIN_WALL_JUMP_SPEED)
+		{
+			player.wallJumpVelocityX = -MIN_WALL_JUMP_SPEED;
+
+		}
+		float inputVelocity = 0;
+		if (movingRight)
+		{
+			inputVelocity = player.speed;
+		}
+		if (movingLeft)
+		{
+			inputVelocity = -player.speed;
+		}
+
+		player.velocity.x = player.wallJumpVelocityX + inputVelocity * 0.3f;
+
+		if (player.isGrounded)
+		{
+
+			player.isWallJumping = sfFalse;
+		}
+	}
+
+	else if (player.isSlideJumping)
 	{
 		float sign = (player.slideVelocityX > 0) ? 1.f : -1.f;
 		player.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
@@ -197,6 +229,7 @@ void MovePlayer(float _dt)
 
 		if (player.isGrounded || player.isSliding)
 		{
+			player.lastWallTouched = 0;
 			if (player.isSliding)
 			{
 				player.isSlideJumping = sfTrue;
@@ -214,27 +247,39 @@ void MovePlayer(float _dt)
 			float dx = player.velocity.x * _dt;
 			if (CheckCollisionPlayerPlatformsX(dx))
 			{
-				float WALL_JUMP_HX = 800.f;
-				player.velocity.y = -JUMP_FORCE * 1.30f;
-
-
-				//if (player.isTouchingLeftWall)
-				if(player.lastWallTouched == -1 && player.isTouchingRightWall)
+				player.currentWallTouched = (float)player.isTouchingRightWall ? 1 : -1;
+				if (player.lastWallTouched == player.currentWallTouched)
 				{
-					player.position.x += 50;
+					return;
 				}
-				else if (player.lastWallTouched == 1 && player.isTouchingLeftWall)
+
+				player.lastWallTouched = player.currentWallTouched;
+
+				float wallJumpHX = 800.f;
+				player.velocity.y = -JUMP_FORCE * 1.10f;
+
+				if (player.isTouchingRightWall)
 				{
-					player.position.x -= 50;
+					player.isWallJumping = sfTrue;
+					player.justWallJumped = sfTrue;
+					player.wallJumpVelocityX = -wallJumpHX;
+					player.lastDirection = -1;
 					sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+
 				}
-
-
-
+				else if (player.isTouchingLeftWall)
+				{
+					player.isWallJumping = sfTrue;
+					player.justWallJumped = sfTrue;
+					player.wallJumpVelocityX = wallJumpHX;
+					player.lastDirection = 1;
+					sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+				}
 
 				player.isGrounded = sfFalse;
 				player.isSlideJumping = sfFalse;
 				StateMachine(WALL_JUMP);
+
 			}
 		}
 	}
@@ -280,7 +325,7 @@ void MovePlayer(float _dt)
 	{
 		if (player.velocity.y < 0)
 		{
-			if (player.currentState != JUMP)
+			if (player.currentState != JUMP && player.currentState != WALL_JUMP)
 			{
 
 				StateMachine(JUMP);
@@ -358,8 +403,12 @@ void CollisionPlayerPlatformsX(float _dx)
 				hitbox.left = platform.left + platform.width;
 			}
 
-			player.velocity.x = 0;
-			player.position.x = hitbox.left + hitbox.width / 2.f;
+			if (!player.justWallJumped)
+			{
+				player.velocity.x = 0;
+				player.position.x = hitbox.left + hitbox.width / 2.f;
+			}
+
 			sfSprite_setPosition(player.sprite, player.position);
 			sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { hitbox.left, hitbox.top });
 			player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
@@ -367,15 +416,49 @@ void CollisionPlayerPlatformsX(float _dx)
 			return;
 		}
 	}
-
+	player.justWallJumped = sfFalse;
 	player.position.x += _dx;
 	sfSprite_setPosition(player.sprite, player.position);
 	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { player.position.x - playerHalfWidth, player.position.y - playerHeight });
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
+sfBool CheckCollisionPlayerPlatformsX(float _dx)
+{
+	player.isTouchingLeftWall = sfFalse;
+	player.isTouchingRightWall = sfFalse;
 
+	float playerHalfWidth = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
+	float playerWidth = PLAYER_WIDTH * GAME_SCALE;
+	float playerHeight = PLAYER_HEIGHT * GAME_SCALE;
 
+	sfFloatRect hitbox = { player.position.x - playerHalfWidth + _dx, player.position.y - playerHeight, playerWidth, playerHeight };
+
+	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
+	{
+		sfFloatRect platform = GetMapCollision(i);
+		if (sfFloatRect_intersects(&hitbox, &platform, NULL))
+		{
+			float playerCenterX = player.position.x;
+			float platformCenterX = platform.left + platform.width * 0.5f;
+
+			if (playerCenterX < platformCenterX)
+			{
+				player.isTouchingRightWall = sfTrue;
+
+			}
+			else
+			{
+
+				player.isTouchingLeftWall = sfTrue;
+
+			}
+
+			return sfTrue;
+		}
+	}
+	return sfFalse;
+}
 
 
 
@@ -444,9 +527,6 @@ void StateMachine(PlayerState _state)
 
 
 
-
-
-
 void LoadAnimationPlayer(void)
 {
 	sfIntRect firstFrame = { 0, 0 * PLAYER_HEIGHT , PLAYER_WIDTH, PLAYER_HEIGHT };
@@ -489,7 +569,7 @@ void LoadAnimationPlayer(void)
 	player.animationPlayer[WALL_GRIP_FALL] = CreateAnimation(player.sprite, 2, 4, sfTrue, sfTrue, firstFrame);
 
 	firstFrame = (sfIntRect){ 2 * PLAYER_WIDTH, 6 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[WALL_JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
+	player.animationPlayer[WALL_JUMP] = CreateAnimation(player.sprite, 3, 9, sfTrue, sfFalse, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, 7 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[AXE] = CreateAnimation(player.sprite, 10, 15, sfTrue, sfFalse, firstFrame);
@@ -504,39 +584,3 @@ void LoadAnimationPlayer(void)
 
 }
 
-sfBool CheckCollisionPlayerPlatformsX(float _dx)
-{
-	player.isTouchingLeftWall = sfFalse;
-	player.isTouchingRightWall = sfFalse;
-
-	float playerHalfWidth = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
-	float playerWidth = PLAYER_WIDTH * GAME_SCALE;
-	float playerHeight = PLAYER_HEIGHT * GAME_SCALE;
-
-	sfFloatRect hitbox = { player.position.x - playerHalfWidth + _dx, player.position.y - playerHeight, playerWidth, playerHeight };
-
-	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
-	{
-		sfFloatRect platform = GetMapCollision(i);
-		if (sfFloatRect_intersects(&hitbox, &platform, NULL))
-		{
-			float playerCenterX = player.position.x;
-			float platformCenterX = platform.left + platform.width * 0.5f;
-
-			if (playerCenterX < platformCenterX && player.lastWallTouched != 1)
-			{
-				player.isTouchingRightWall = sfTrue;
-				player.lastWallTouched = 1;
-			}
-			else
-			{
-				player.lastWallTouched = -1;
-				player.isTouchingLeftWall = sfTrue;
-
-			}
-
-			return sfTrue;
-		}
-	}
-	return sfFalse;
-}
