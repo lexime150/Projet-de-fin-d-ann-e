@@ -309,12 +309,13 @@ void CollisionPlayerPlatformsX(float _dx)
 			if (player.velocity.x > 0)
 			{
 				hitbox.left = platform.left - hitbox.width;
-
+				printf("côté droit du joueur\n");
 			}
 			else if (player.velocity.x < 0)
 			{
 
 				hitbox.left = platform.left + platform.width;
+				printf("côté gauche du joueur\n");
 			}
 
 			player.velocity.x = 0;

@@ -74,7 +74,7 @@ typedef struct Player
 	float slideCooldownTimer;
 
 	sfBool isAttacking;
-
+	sfBool isTouchingWall;
 
 }Player;
 
