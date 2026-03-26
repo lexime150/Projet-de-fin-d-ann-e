@@ -117,8 +117,14 @@ void MovePlayer(float _dt)
 		float sign = (player.lastDirection > 0) ? 1.f : -1.f;
 		player.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
 
-		if (sign > 0 && player.slideVelocityX < 0) player.slideVelocityX = 0;
-		if (sign < 0 && player.slideVelocityX > 0) player.slideVelocityX = 0;
+		if (sign > 0 && player.slideVelocityX < 0)
+		{
+			player.slideVelocityX = 0;
+		}
+		if (sign < 0 && player.slideVelocityX > 0)
+		{
+			player.slideVelocityX = 0;
+		}
 
 		float inputVelocity = 0;
 		if (movingRight)
