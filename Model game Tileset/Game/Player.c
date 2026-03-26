@@ -25,36 +25,66 @@ void ApplyPhysic(float _dt)
 
 void ApplyMovement(float _dt)
 {
-	sfSprite_move(player.sprite, (sfVector2f) { player.velocity.x* player.lastDirection * player.speed* _dt, player.velocity.y* _dt });
+	sfSprite_move(player.sprite, (sfVector2f) { player.velocity.x* player.lastDirection* _dt, player.velocity.y* _dt });
 }
 void MovePlayer(float _dt)
 {
 	player.velocity.x = 0;
 	//player.isMoving = sfFalse;
-
-	
+	player.isSliding = sfFalse;
 
 		if (sfKeyboard_isKeyPressed(sfKeyD))
 		{
-			player.velocity.x = player.speed;
-			player.lastDirection = 1;
+			if (player.lastDirection != 1)
+			{
+				
+				player.lastDirection = 1;
+				StateMachine(TURN);
+			}
+			if (player.velocity.x == 0.f)
+			{
+				player.velocity.x = player.speed;
+			}
+			
 			player.isMoving = sfTrue;
-			if (player.isGrounded)
+
+			 if (player.isGrounded && sfKeyboard_isKeyPressed(sfKeyLControl))
+			{
+				player.isSliding = sfTrue;
+				player.velocity.x = player.speed * 5.f;
+				StateMachine(SLIDE);
+			}
+
+			if (player.isGrounded && !player.isSliding)
 			{
 				StateMachine(RUN);
+
 			}
 		}
 		if (sfKeyboard_isKeyPressed(sfKeyQ))
 		{
-			player.velocity.x = -player.speed;
+			//player.velocity.x = -player.speed;
 			player.lastDirection = -1;
 			player.isMoving = sfTrue;
-			
-			if (player.isGrounded)
+
+			if (player.velocity.x == 0.f)
 			{
-				StateMachine(RUN);
+				player.velocity.x = -player.speed;
+			}
+			
+			if (player.isGrounded && sfKeyboard_isKeyPressed(sfKeyLControl))
+			{
+				player.isSliding = sfTrue;
+				player.velocity.x = -player.speed * 5.f;
+				StateMachine(SLIDE);
 			}
 
+
+			if (player.isGrounded && !player.isSliding)
+			{
+				StateMachine(RUN);
+
+			}
 		}
 		if (sfKeyboard_isKeyPressed(sfKeySpace) && player.isGrounded)
 		{
@@ -64,12 +94,18 @@ void MovePlayer(float _dt)
 		sfSprite_setScale(player.sprite, (sfVector2f) { player.lastDirection* GAME_SCALE, GAME_SCALE });
 	
 	
-		if (!sfKeyboard_isKeyPressed(sfKeyD) && !sfKeyboard_isKeyPressed(sfKeyQ) && !sfKeyboard_isKeyPressed(sfKeySpace) && player.state != IDLE && player.isGrounded)
+		if (!sfKeyboard_isKeyPressed(sfKeyD) && !sfKeyboard_isKeyPressed(sfKeyQ) && !sfKeyboard_isKeyPressed(sfKeySpace) && player.currentState != IDLE && player.isGrounded)
 		{
 			StateMachine(IDLE);
 		}
 
-
+		if (player.lastState == SLIDE && player.currentState == RUN)
+		{
+			if (player.velocity.x > player.speed)
+			{
+				player.velocity.x -= 0.02f;
+			}
+		}
 
 }
 void LoadPlayer(void)
@@ -94,6 +130,8 @@ void LoadPlayer(void)
 	player.velocity.x = 0;
 	player.velocity.y = 0;
 	player.lastDirection = 1;
+	player.isSliding = sfFalse;
+	player.lastState = IDLE;
 
 
 	sfSprite_setOrigin(player.sprite, (sfVector2f) { PLAYER_WIDTH / 2, PLAYER_HEIGHT });
@@ -156,19 +194,22 @@ void LoadAnimationPlayer(void)
 
 void SetAnimation(PlayerState _state)
 {
+	player.lastState = player.currentState;
+	printf("%d\n", player.currentState);
 	player.currentAnimation = &player.animationPlayer[_state];
 	player.currentAnimation->timer = 0.f;
 	player.currentAnimation->isPlaying = sfTrue;
 	player.currentAnimation->currentFrame = 0;
-	player.state = _state;
+	player.currentState = _state;
+	printf("%d\n", player.currentState);
 }
 
 
 void UpdatePlayer(float _dt)
 {
-	ApplyMovement(_dt);
 	ApplyPhysic(_dt);
 	MovePlayer(_dt);
+	ApplyMovement(_dt);
 	CheckCollisionPlayerPlatforms(_dt);
 	UpdateAnimation(player.currentAnimation, _dt);
 
@@ -188,31 +229,45 @@ void StateMachine(PlayerState _state)
 	switch (_state)
 	{
 	case IDLE:
-		if (player.state != _state)
+		if (player.currentState != _state)
 		{
-			player.state = _state;
+			player.currentState = _state;
 			SetAnimation(IDLE);
 		}
 		break;
 	case RUN :
-		if (player.state != _state)
+		if (player.currentState != _state)
 		{
-			player.state = _state;
+			player.currentState = _state;
 			SetAnimation(RUN);
 		}
 		break;
 	case JUMP:
-		if (player.state != _state)
+		if (player.currentState != _state)
 		{
-			player.state = _state;
+			player.currentState = _state;
 			SetAnimation(JUMP);
 		}
 		break;
 	case FALL:
-		if (player.state != _state)
+		if (player.currentState != _state)
 		{
-			player.state = _state;
+			player.currentState = _state;
 			SetAnimation(FALL);
+		}
+		break;
+	case TURN:
+		if (player.currentState != _state)
+		{
+			player.currentState = _state;
+			SetAnimation(TURN);
+		}
+		break;
+	case SLIDE:
+		if (player.currentState != _state)
+		{
+			player.currentState = _state;
+			SetAnimation(SLIDE); 
 		}
 		break;
 	default :
@@ -266,18 +321,12 @@ void CollisionPlayerPlatformsY()
 
 			sfSprite_setPosition(player.sprite, (sfVector2f) { player.playerRect.left, player.playerRect.top });
 			
-			printf("%f\n", player.velocity.y);
-	/*		if (player.velocity.y > 0)
-			{
-				StateMachine(FALL);
-			}
-			if (player.velocity.y < 0)
-			{
-				StateMachine(FALL);
-			}*/
+				
 		}
 	}
 }
+
+
 void CollisionPlayerPlatformsX()
 {
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)

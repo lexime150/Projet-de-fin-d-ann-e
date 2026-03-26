@@ -41,6 +41,7 @@ typedef struct Player
 	Animation* currentAnimation;
 
 	sfBool isGrounded;
+	sfBool isSliding;
 
 	short lastDirection;
 
@@ -50,8 +51,8 @@ typedef struct Player
 
 	sfBool isMoving;
 
-	PlayerState state;
-
+	PlayerState currentState;
+	PlayerState lastState;
 
 }Player;
 
