@@ -202,7 +202,10 @@ void MovePlayer(float _dt)
 			StateMachine(JUMP);
 		}
 	}
-	if (!jumpKey) jumpPressed = sfFalse;
+	if (!jumpKey)
+	{
+		jumpPressed = sfFalse;
+	}
 
 
 
