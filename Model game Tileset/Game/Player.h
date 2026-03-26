@@ -31,6 +31,9 @@ typedef enum PlayerState
 	LADDER,
 	WALL_GRIP_FALL,
 	WALL_JUMP,
+	AXE,
+	SWORD,
+	DASH,
 	STATE_NUMBER
 
 }PlayerState;
@@ -45,7 +48,7 @@ typedef struct Player
 	sfVector2f position;
 	sfFloatRect playerRect;
 
-	Animation animationPlayer[14];
+	Animation animationPlayer[17];
 	Animation* currentAnimation;
 
 	sfBool isGrounded;
@@ -61,11 +64,15 @@ typedef struct Player
 	PlayerState currentState;
 	PlayerState lastState;
 
+
 	float slideTimer;
 	float slideVelocityX;
 	sfBool isSliding;
 	sfBool isSlideJumping;
 	float slideCooldownTimer;
+
+	sfBool isAttacking;
+
 
 }Player;
 
