@@ -42,9 +42,6 @@
     <ClCompile Include="Player.c">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationVersionMe.c">
-      <Filter>Fichiers sources\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.c">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
@@ -61,7 +58,7 @@
       <Filter>Fichiers sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Animation.c">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationVersionMe.h">
-      <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>

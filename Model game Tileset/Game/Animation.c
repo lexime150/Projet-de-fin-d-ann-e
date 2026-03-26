@@ -1,4 +1,4 @@
-#include "AnimationVersionMe.h"
+#include "Animation.h"
 
 Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _frameSpeed, sfBool _isPlaying, sfBool _isLooping, sfIntRect _firstFrame)
 {
@@ -33,7 +33,7 @@ void UpdateAnimation(Animation* _animation, float _dt)
                 if (_animation->isLooping)
                 {
                     _animation->currentFrame = 0;
-                  //  _animation->firstFrame.left = 0;
+                    //  _animation->firstFrame.left = 0;
                 }
                 else
                 {

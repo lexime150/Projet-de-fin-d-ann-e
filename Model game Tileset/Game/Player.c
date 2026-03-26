@@ -18,6 +18,7 @@ void ApplyPhysic(float _dt)
 	}
 }
 
+
 void MovePlayer(float _dt)
 {
 	player.velocity.x = 0;
@@ -31,7 +32,10 @@ void MovePlayer(float _dt)
 			StateMachine(TURN);
 		}
 		if (player.velocity.x == 0.f)
+		{
 			player.velocity.x = player.speed;
+
+		}
 
 		player.isMoving = sfTrue;
 
@@ -43,7 +47,10 @@ void MovePlayer(float _dt)
 		}
 
 		if (player.isGrounded && !player.isSliding)
+		{
+
 			StateMachine(RUN);
+		}
 	}
 	if (sfKeyboard_isKeyPressed(sfKeyQ))
 	{
@@ -51,7 +58,10 @@ void MovePlayer(float _dt)
 		player.isMoving = sfTrue;
 
 		if (player.velocity.x == 0.f)
+		{
 			player.velocity.x = -player.speed;
+
+		}
 
 		if (player.isGrounded && sfKeyboard_isKeyPressed(sfKeyLControl))
 		{
@@ -61,7 +71,10 @@ void MovePlayer(float _dt)
 		}
 
 		if (player.isGrounded && !player.isSliding)
+		{
+
 			StateMachine(RUN);
+		}
 	}
 	if (sfKeyboard_isKeyPressed(sfKeySpace) && player.isGrounded)
 	{
@@ -70,14 +83,28 @@ void MovePlayer(float _dt)
 	sfSprite_setScale(player.sprite, (sfVector2f) { (float)player.lastDirection* GAME_SCALE, GAME_SCALE });
 
 	if (!sfKeyboard_isKeyPressed(sfKeyD) && !sfKeyboard_isKeyPressed(sfKeyQ) && !sfKeyboard_isKeyPressed(sfKeySpace) && player.currentState != IDLE && player.isGrounded)
+	{
 		StateMachine(IDLE);
+
+	}
 
 	if (player.lastState == SLIDE && player.currentState == RUN)
 	{
 		if (player.velocity.x > player.speed)
+		{
 			player.velocity.x -= 0.02f;
-	}
 
+		}
+	}
+	if (player.velocity.y < 0)
+	{
+		StateMachine(JUMP);
+
+	}
+	if (player.velocity.y > 0)
+	{
+		StateMachine(FALL);
+	}
 	ApplyPhysic(_dt);
 	CheckCollisionPlayerPlatforms(_dt);
 }
@@ -180,10 +207,7 @@ void UpdatePlayer(float _dt)
 	MovePlayer(_dt);
 	UpdateAnimation(player.currentAnimation, _dt);
 
-	if (player.velocity.y < 0)
-		StateMachine(JUMP);
-	if (player.velocity.y > 0)
-		StateMachine(FALL);
+
 }
 
 void StateMachine(PlayerState _state)
@@ -251,11 +275,11 @@ void CleanUpPlayer(void)
 
 void CollisionPlayerPlatformsX(float _dx)
 {
-	float hw = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
-	float w = PLAYER_WIDTH * GAME_SCALE;
-	float h = PLAYER_HEIGHT * GAME_SCALE;
+	float playerHalfWidth = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
+	float playerWidth = PLAYER_WIDTH * GAME_SCALE;
+	float playerHeight = PLAYER_HEIGHT * GAME_SCALE;
 
-	sfFloatRect hitbox = { player.position.x - hw + _dx, player.position.y - h, w, h };
+	sfFloatRect hitbox = { player.position.x - playerHalfWidth + _dx, player.position.y - playerHeight, playerWidth, playerHeight };
 
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
@@ -263,9 +287,15 @@ void CollisionPlayerPlatformsX(float _dx)
 		if (sfFloatRect_intersects(&hitbox, &platform, NULL))
 		{
 			if (player.velocity.x > 0)
+			{
 				hitbox.left = platform.left - hitbox.width;
+
+			}
 			else if (player.velocity.x < 0)
+			{
+
 				hitbox.left = platform.left + platform.width;
+			}
 
 			player.velocity.x = 0;
 			player.position.x = hitbox.left + hitbox.width / 2.f;
@@ -279,18 +309,18 @@ void CollisionPlayerPlatformsX(float _dx)
 
 	player.position.x += _dx;
 	sfSprite_setPosition(player.sprite, player.position);
-	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { player.position.x - hw, player.position.y - h });
+	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { player.position.x - playerHalfWidth, player.position.y - playerHeight });
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
 
 void CollisionPlayerPlatformsY(float _dy)
 {
-	float hw = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
-	float w = PLAYER_WIDTH * GAME_SCALE;
-	float h = PLAYER_HEIGHT * GAME_SCALE;
+	float playerHalfWidth = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
+	float playerWidth = PLAYER_WIDTH * GAME_SCALE;
+	float playerHeight = PLAYER_HEIGHT * GAME_SCALE;
 
-	sfFloatRect hitbox = { player.position.x - hw, player.position.y - h + _dy, w, h };
+	sfFloatRect hitbox = { player.position.x - playerHalfWidth, player.position.y - playerHeight + _dy, playerWidth, playerHeight };
 	player.isGrounded = sfFalse;
 
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
@@ -320,7 +350,7 @@ void CollisionPlayerPlatformsY(float _dy)
 
 	player.position.y += _dy;
 	sfSprite_setPosition(player.sprite, player.position);
-	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { player.position.x - hw, player.position.y - h });
+	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { player.position.x - playerHalfWidth, player.position.y - playerHeight });
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }

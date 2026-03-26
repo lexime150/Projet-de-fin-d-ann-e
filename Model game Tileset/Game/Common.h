@@ -9,7 +9,7 @@
 #include <math.h>
 #include "SFML/Graphics.h"
 #include "SFML/Audio.h"
-#include "AnimationVersionMe.h"
+#include "Animation.h"
 //#include "Animation.h"
 
 #define GAME_SCALE 4

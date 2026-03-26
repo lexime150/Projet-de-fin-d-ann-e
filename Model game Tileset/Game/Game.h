@@ -4,8 +4,6 @@
 #include "Common.h"
 #include "GameState.h"
 
-#include "AnimationVersionMe.h"
-
 #include "Map.h"
 #include "Player.h"
 #include "Camera.h"
