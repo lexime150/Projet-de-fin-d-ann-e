@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Camera.h"
+#include "Mob.h"
 
 typedef struct Game
 {
