@@ -370,6 +370,10 @@ void ApplyPhysic(float _dt)
 	if (!player.isGrounded)
 	{
 		player.velocity.y += GRAVITY * _dt;
+		if (player.velocity.y >= GRAVITY* 100 * _dt)
+		{
+			player.velocity.y = GRAVITY * 100 * _dt;
+		}
 	}
 	else
 	{
