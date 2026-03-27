@@ -340,7 +340,25 @@ void MovePlayer(float _dt)
 		}
 		else
 		{
-			StateMachine(FALL);
+			float dx = player.velocity.x * _dt;
+			CheckCollisionPlayerPlatformsX(dx);
+			if (movingLeft && player.isTouchingLeftWall)
+			{
+				StateMachine(WALL_GRIP_FALL);
+				player.velocity.y -= 10;
+
+			}
+			else if (movingRight && player.isTouchingRightWall)
+			{
+				StateMachine(WALL_GRIP_FALL);
+				player.velocity.y -= 10;
+			}
+			else
+			{
+				StateMachine(FALL);
+
+			}
+
 		}
 	}
 }
@@ -373,7 +391,7 @@ void SetAnimation(PlayerState _state)
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
-	sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
+	//sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
 }
 
 void CleanUpPlayer(void)
@@ -529,7 +547,7 @@ void StateMachine(PlayerState _state)
 	{
 		return;
 	}
-	SetAnimation(_state);	
+	SetAnimation(_state);
 }
 
 
