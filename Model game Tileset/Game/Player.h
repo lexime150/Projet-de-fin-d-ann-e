@@ -17,8 +17,8 @@
 
 #define MIN_SLIDE_JUMP_SPEED 375.f
 
-#define WALL_JUMP_FRICTION 750.f
-#define MIN_WALL_JUMP_SPEED 375.f
+#define WALL_JUMP_FRICTION 300.f
+#define MIN_WALL_JUMP_SPEED 150.f
 
 typedef enum PlayerState
 {

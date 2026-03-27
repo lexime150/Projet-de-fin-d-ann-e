@@ -35,17 +35,24 @@ void LoadPlayer(void)
 	player.velocity.y = 0;
 	player.slideVelocityX = 0;
 	player.lastDirection = 1;
-	player.isSliding = sfFalse;
-	player.lastState = IDLE;
-	player.isAttacking = sfFalse;
 
-	player.isTouchingLeftWall = sfFalse;
-	player.isTouchingRightWall = sfFalse;
+	player.lastState = IDLE;
+
+
 	player.lastWallTouched = 0;
 
 	sfSprite_setOrigin(player.sprite, (sfVector2f) { PLAYER_WIDTH / 2.f, PLAYER_HEIGHT });
+
+
+	player.isAttacking = sfFalse;
 	player.isGrounded = sfFalse;
 	player.isMoving = sfFalse;
+	player.isSlideJumping = sfFalse;
+	player.isSliding = sfFalse;
+	player.isTouchingLeftWall = sfFalse;
+	player.isTouchingRightWall = sfFalse;
+	player.isTouchingWall = sfFalse;
+	player.isWallJumping = sfFalse;
 
 	player.position = sfSprite_getPosition(player.sprite);
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
@@ -222,7 +229,7 @@ void MovePlayer(float _dt)
 		}
 	}
 
-	// JUMP
+
 	if (jumpKey && !jumpPressed)
 	{
 		jumpPressed = sfTrue;
@@ -255,8 +262,8 @@ void MovePlayer(float _dt)
 
 				player.lastWallTouched = player.currentWallTouched;
 
-				float wallJumpHX = 800.f;
-				player.velocity.y = -JUMP_FORCE * 1.10f;
+				float wallJumpHX = 550.f;
+				player.velocity.y = -JUMP_FORCE * 0.75;
 
 				if (player.isTouchingRightWall)
 				{
@@ -366,7 +373,7 @@ void SetAnimation(PlayerState _state)
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
-	//sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
+	sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
 }
 
 void CleanUpPlayer(void)
@@ -467,7 +474,7 @@ void CollisionPlayerPlatformsY(float _dy)
 	float playerHalfWidth = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
 	float playerWidth = PLAYER_WIDTH * GAME_SCALE;
 	float playerHeight = PLAYER_HEIGHT * GAME_SCALE;
-
+	player.lastWallTouched = 0;
 	sfFloatRect hitbox = { player.position.x - playerHalfWidth, player.position.y - playerHeight + _dy, playerWidth, playerHeight };
 	player.isGrounded = sfFalse;
 
