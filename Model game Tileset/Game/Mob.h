@@ -3,14 +3,15 @@
 
 #include "Common.h"
 
-#define MUSHROOM_SIZE 150
+
+#define MUSHROOM_SIZE 45
 
 
 typedef enum MobState
 {
 	IDLE_MOB,
 	RUN_MOB,
-	ATTACKÁMOB,
+	ATTACK_MOB,
 	TAKE_IT,
 	DEATH,
 	STATE_MOB_NUMBER

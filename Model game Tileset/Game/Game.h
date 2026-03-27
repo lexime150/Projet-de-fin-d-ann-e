@@ -24,4 +24,6 @@ void CleanupGame(void);
 
 void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent);
 
+
+
 #endif // !GAME_H
