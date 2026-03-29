@@ -1,16 +1,3 @@
-﻿  Game.c
-  GameOver.c
-  GameState.c
-  Menu.c
-  Mob.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(87,20): warning C4018: '<' : incompatibilité signed/unsigned
-  main.c
-  Génération de code en cours...
-Mob.obj : warning LNK4020: un enregistrement de type dans 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\x64\debug\vc143.pdb' est endommagé ; certains symboles et types ne sont peut-être pas accessibles à partir du débogueur
-Map.obj : warning LNK4020: un enregistrement de type dans 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\x64\debug\vc143.pdb' est endommagé ; certains symboles et types ne sont peut-être pas accessibles à partir du débogueur
-Menu.obj : warning LNK4020: un enregistrement de type dans 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\x64\debug\vc143.pdb' est endommagé ; certains symboles et types ne sont peut-être pas accessibles à partir du débogueur
-GameState.obj : warning LNK4020: un enregistrement de type dans 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\x64\debug\vc143.pdb' est endommagé ; certains symboles et types ne sont peut-être pas accessibles à partir du débogueur
-Game.obj : warning LNK4020: un enregistrement de type dans 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\x64\debug\vc143.pdb' est endommagé ; certains symboles et types ne sont peut-être pas accessibles à partir du débogueur
-GameOver.obj : warning LNK4020: un enregistrement de type dans 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\x64\debug\vc143.pdb' est endommagé ; certains symboles et types ne sont peut-être pas accessibles à partir du débogueur
-main.obj : warning LNK4020: un enregistrement de type dans 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\x64\debug\vc143.pdb' est endommagé ; certains symboles et types ne sont peut-être pas accessibles à partir du débogueur
-  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+﻿  Mob.c
+C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(93,20): warning C4018: '<' : incompatibilité signed/unsigned
+  Game.vcxproj -> C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe

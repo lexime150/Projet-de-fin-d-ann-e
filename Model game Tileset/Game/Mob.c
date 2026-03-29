@@ -92,7 +92,8 @@ void CheckCollisionMobPlat(Mob _mob)
 
 	for (int i = 0; i < GetCollisionTabSize(); i++)
 	{
-		sfFloatRect hitPlat = GetMapCollision(0);
+		sfFloatRect hitPlat = GetMapCollision(i);
+		Trigger hitTest = GetMapTrigger(2);
 
 		if (hitMob.top + hitMob.height > hitPlat.top)
 		{
@@ -100,7 +101,16 @@ void CheckCollisionMobPlat(Mob _mob)
 
 		}
 
+		if (hitMob.left < hitTest.left && mushroom.speed < 0)
+		{
+			sfSprite_setPosition(mushroom.sprite, (sfVector2f){hitTest.left, sfSprite_getPosition(mushroom.sprite).y});
+		}
 		
+		if ((hitMob.left + hitMob.width) > (hitTest.left + hitTest.width) && mushroom.speed > 0)
+		{
+			
+			sfSprite_setPosition(mushroom.sprite, (sfVector2f){hitTest.left + 700.f, sfSprite_getPosition(mushroom.sprite).y});
+		}
 
 	}
 }
