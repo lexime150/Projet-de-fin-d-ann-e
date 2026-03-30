@@ -23,14 +23,18 @@ void LoadMob(void)
 	
 	 mushroom.sprite = sfSprite_create();
 	 sfSprite_setTexture(mushroom.sprite, textureMushroom, sfTrue);
-	 sfSprite_setScale(mushroom.sprite, (sfVector2f){GAME_SCALE, GAME_SCALE});
 	 sfSprite_setOrigin(mushroom.sprite, (sfVector2f) { (MUSHROOM_SIZE / 2), MUSHROOM_SIZE});
+	 sfSprite_setScale(mushroom.sprite, (sfVector2f){GAME_SCALE, GAME_SCALE});
 	 sfSprite_setPosition(mushroom.sprite, (sfVector2f){600, -300});
 
 	 mushroom.speed = 0;
 	 mushroom.velocity = (sfVector2f){0, 0};
 	 mushroom.isGroundedMob = sfFalse;
 	 
+	 mushroom.hitRect = sfRectangleShape_create();
+	 sfRectangleShape_setSize(mushroom.hitRect, (sfVector2f){HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT});
+	 sfRectangleShape_setOrigin(mushroom.hitRect, (sfVector2f){HITBOX_MUSHROOM_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT});
+
 	 LoadMobAnimation();
 }
 
@@ -193,6 +197,8 @@ void DrawMob(sfRenderWindow* _renderWindow)
 
 void CleanupMob(void)
 {
+	sfSprite_destroy(mushroom.sprite);
+	mushroom = (Mob){ NULL };
 }
 
 
