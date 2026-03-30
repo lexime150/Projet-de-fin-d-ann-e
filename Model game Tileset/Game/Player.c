@@ -92,8 +92,8 @@ void MovePlayer(float _dt)
 	if (sfMouse_isButtonPressed(sfMouseLeft) && player.attackCooldownTimer >= 1.2f && player.isGrounded)
 	{
 		player.isAttacking = sfTrue;
-		player.velocity.x = 0;
 		player.attackCooldownTimer = 0.f;
+		player.velocity.x = 0;
 		StateMachine(AXE);
 	}
 
@@ -117,7 +117,6 @@ void MovePlayer(float _dt)
 	if (sfMouse_isButtonPressed(sfMouseRight) && player.attackCooldownTimer >= 1.2f && player.isGrounded)
 	{
 		player.isAttacking = sfTrue;
-		player.velocity.x = 0;
 		player.attackCooldownTimer = 0.f;
 		StateMachine(SWORD);
 	}
@@ -455,7 +454,7 @@ void SetAnimation(PlayerState _state)
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
-	//sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
+	sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
 }
 
 void CleanUpPlayer(void)
