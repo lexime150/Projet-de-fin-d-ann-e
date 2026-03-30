@@ -23,6 +23,7 @@ void LoadMob(void)
 	 if (!mushroom)
 	 {
 		 fprintf(stderr, "MALLOC FAILURE");
+		 return;
 	 }
 	 mushroom[0].sprite = sfSprite_create();
 	 sfSprite_setTexture(mushroom[0].sprite, textureMushroom, sfTrue);
@@ -100,6 +101,12 @@ void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 	mushroom[0].hitRect = sfRectangleShape_getGlobalBounds(mushroom[0].rect);
 	sfSprite_move(mushroom[0].sprite, (sfVector2f) { mushroom[0].velocity.x* _dt, mushroom[0].velocity.y* _dt });
 	sfRectangleShape_setPosition(mushroom[0].rect, sfSprite_getPosition(mushroom[0].sprite));
+
+	if (!mushroom[0].currentMobAnimation->isPlaying)
+	{
+		StateMobMachine(&mushroom[0], IDLE_MOB);
+	}
+
 #pragma endregion
 
 	CheckVelocityY(_dt);
@@ -176,8 +183,9 @@ void CheckDistanceMobPlayer(Mob* _mob, float _dt)
 				mushroom[0].velocity.x = 100.f;
 			}
 		}
-		else //if(distX < 100.f && distX > -100.f)
+		else 
 		{
+			
 			StateMobMachine(_mob, ATTACK_MOB);
 			mushroom[0].velocity.x = 0;
 		}
