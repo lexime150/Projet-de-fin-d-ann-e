@@ -100,7 +100,7 @@ void CheckCollisionMobPlat(float _dt)
 {
 	mushroom.isGroundedMob = sfFalse;
 
-	for (int i = 0; i < GetCollisionTabSize(); i++)
+	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		sfFloatRect hitPlat = GetMapCollision(i);
 		
@@ -164,27 +164,6 @@ void CheckDistanceMobPlayer(Mob _mob, float _dt)
 	}
 }
 
-float GetDistPlatMob(unsigned _index)
-{
-	return sqrtf(GetDistPlatMobX(_index) * GetDistPlatMobX(_index) - GetDistPlatMobY(_index) * GetDistPlatMobY(_index));
-}
-
-float GetDistPlatMobX(unsigned _index)
-{
-	float posMob = sfSprite_getPosition(mushroom.sprite).x;
-	float posPlat = GetMapCollision(_index).left;
-
-	return posMob - posPlat;
-}
-
-float GetDistPlatMobY(_index)
-{
-	float posMob = sfSprite_getPosition(mushroom.sprite).y;
-	float posPlat = GetMapCollision(_index).top;
-
-	return posMob - posPlat;
-}
-
 
 void DrawMob(sfRenderWindow* _renderWindow)
 {
@@ -206,6 +185,5 @@ void CheckVelocityY(float _dt)
 			mushroom.velocity.y = GRAVITY * 100.f * _dt;
 		}
 	}
-
 
 }
