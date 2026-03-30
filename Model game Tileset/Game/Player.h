@@ -82,6 +82,7 @@ typedef struct Player
 
 
 	sfBool isAttacking;
+	float attackCooldownTimer;
 
 	sfBool justWallJumped;
 
