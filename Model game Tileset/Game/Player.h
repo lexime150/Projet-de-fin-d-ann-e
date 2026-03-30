@@ -19,6 +19,11 @@
 
 #define WALL_JUMP_FRICTION 300.f
 #define MIN_WALL_JUMP_SPEED 150.f
+#define MIN_WALL_GRIP_DISTANCE 75.f
+
+#define PLAYER_HITBOX_WIDTH  20
+#define PLAYER_HITBOX_HEIGHT 40
+
 
 typedef enum PlayerState
 {
@@ -88,6 +93,8 @@ typedef struct Player
 	float slideTimer;
 	float slideVelocityX;
 	float slideCooldownTimer;
+
+	float jumpStartPosition;
 
 
 }Player;

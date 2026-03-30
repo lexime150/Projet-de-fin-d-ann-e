@@ -53,6 +53,7 @@ void LoadPlayer(void)
 	player.isTouchingRightWall = sfFalse;
 	player.isTouchingWall = sfFalse;
 	player.isWallJumping = sfFalse;
+	player.jumpStartPosition = 0;
 
 	player.position = sfSprite_getPosition(player.sprite);
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
@@ -233,6 +234,8 @@ void MovePlayer(float _dt)
 	if (jumpKey && !jumpPressed)
 	{
 		jumpPressed = sfTrue;
+		player.jumpStartPosition = player.position.y;
+
 
 		if (player.isGrounded || player.isSliding)
 		{
@@ -254,7 +257,8 @@ void MovePlayer(float _dt)
 			float dx = player.velocity.x * _dt;
 			if (CheckCollisionPlayerPlatformsX(dx))
 			{
-				player.currentWallTouched = (float)player.isTouchingRightWall ? 1 : -1;
+
+				player.currentWallTouched = player.isTouchingRightWall ? 1 : -1;
 				if (player.lastWallTouched == player.currentWallTouched)
 				{
 					return;
@@ -277,7 +281,7 @@ void MovePlayer(float _dt)
 				else if (player.isTouchingLeftWall)
 				{
 					player.isWallJumping = sfTrue;
-					player.justWallJumped = sfTrue;
+					player.justWallJumped = sfTrue; 
 					player.wallJumpVelocityX = wallJumpHX;
 					player.lastDirection = 1;
 					sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
@@ -288,6 +292,7 @@ void MovePlayer(float _dt)
 				StateMachine(WALL_JUMP);
 
 			}
+
 		}
 	}
 
@@ -337,13 +342,23 @@ void MovePlayer(float _dt)
 
 			if (movingLeft && player.isTouchingLeftWall && player.currentState == JUMP)
 			{
-				player.velocity.y = 0;
-				StateMachine(WALL_GRIP_FALL);
+				float fallenDistance = player.position.y - player.jumpStartPosition;
+
+				if (-fallenDistance > MIN_WALL_GRIP_DISTANCE)
+				{
+					player.velocity.y = 0;
+					StateMachine(WALL_GRIP_FALL);
+				}
 			}
 			else if (movingRight && player.isTouchingRightWall && player.currentState == JUMP)
 			{
-				player.velocity.y = 0;
-				StateMachine(WALL_GRIP_FALL);
+				//Check la distance verticale du saut avant de grip le wall pour ne pas rester coincé sur le sol si on se colle à un mur et qu'on saute
+				float fallenDistance = player.position.y - player.jumpStartPosition;
+				if (-fallenDistance > MIN_WALL_GRIP_DISTANCE)
+				{
+					player.velocity.y = 0;
+					StateMachine(WALL_GRIP_FALL);
+				}
 			}
 			if (player.currentState != JUMP && player.currentState != WALL_JUMP)
 			{
@@ -384,7 +399,7 @@ void ApplyPhysic(float _dt)
 	if (!player.isGrounded)
 	{
 		player.velocity.y += GRAVITY * _dt;
-		if (player.velocity.y >= GRAVITY* 100 * _dt)
+		if (player.velocity.y >= GRAVITY * 100 * _dt)
 		{
 			player.velocity.y = GRAVITY * 100 * _dt;
 		}
