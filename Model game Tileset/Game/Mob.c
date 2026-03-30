@@ -196,7 +196,7 @@ void MoveMob(Mob* _mob, float _dt)
 void AttackMob(Mob* _mob, float _dt)
 {
 	mushroom[0].timerState += _dt;
-	if ((GetDistancePlayerMob(&player, &mushroom[0]) < ((player.playerRect.left + player.playerRect.width) - _mob->hitRect.left) && GetDistancePlayerMob(&player, &mushroom[0]) > player.collisionRect.left - (_mob->hitRect.left + _mob->hitRect.width)  && mushroom[0].timerState > 2.5f))
+	if ((GetDistancePlayerMob(&player, &mushroom[0]) < ((player.playerRect.left + player.playerRect.width) - _mob->hitRect.left) && GetDistancePlayerMob(&player, &mushroom[0]) > player.collisionRect.left - (_mob->hitRect.left + _mob->hitRect.width)) && mushroom[0].timerState > 1.75f)
 	{
 		_mob->velocity.x = 0;
 		_mob->timerState = 0.f;
