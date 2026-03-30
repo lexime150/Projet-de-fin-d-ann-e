@@ -424,7 +424,7 @@ void SetAnimation(PlayerState _state)
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
-	//sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
+	sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
 }
 
 void CleanUpPlayer(void)
