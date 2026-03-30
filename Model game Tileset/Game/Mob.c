@@ -8,7 +8,6 @@ Player player;
 
 void SetAnimationMushroom(MobState _state);
 void StateMobMachine(MobState _state);
-//void CheckCollisionMobPlat(Mob _mob);
 void CheckCollisionMobPlat(float _dt);
 void CheckDistanceMobPlayer(Mob _mob, float _dt);
 
@@ -25,15 +24,23 @@ void LoadMob(void)
 	 sfSprite_setTexture(mushroom.sprite, textureMushroom, sfTrue);
 	 sfSprite_setOrigin(mushroom.sprite, (sfVector2f) { (MUSHROOM_SIZE / 2), MUSHROOM_SIZE});
 	 sfSprite_setScale(mushroom.sprite, (sfVector2f){GAME_SCALE, GAME_SCALE});
-	 sfSprite_setPosition(mushroom.sprite, (sfVector2f){600, -300});
+	 sfSprite_setPosition(mushroom.sprite, (sfVector2f){600, 125});
 
 	 mushroom.speed = 0;
 	 mushroom.velocity = (sfVector2f){0, 0};
 	 mushroom.isGroundedMob = sfFalse;
 	 
-	 mushroom.hitRect = sfRectangleShape_create();
-	 sfRectangleShape_setSize(mushroom.hitRect, (sfVector2f){HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT});
-	 sfRectangleShape_setOrigin(mushroom.hitRect, (sfVector2f){HITBOX_MUSHROOM_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT});
+	 mushroom.rect = sfRectangleShape_create();
+	 sfRectangleShape_setSize(mushroom.rect, (sfVector2f){HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT});
+	 sfRectangleShape_setOrigin(mushroom.rect, (sfVector2f){HITBOX_MUSHROOM_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT});
+	 sfRectangleShape_setScale(mushroom.rect, (sfVector2f){GAME_SCALE, GAME_SCALE});
+	 sfRectangleShape_setFillColor(mushroom.rect, sfTransparent);
+	 sfRectangleShape_setOutlineColor(mushroom.rect, sfMagenta);
+	 sfRectangleShape_setOutlineThickness(mushroom.rect, 1.f);
+	 sfRectangleShape_setPosition(mushroom.rect, sfSprite_getPosition(mushroom.sprite));
+
+	 mushroom.hitRect = sfSprite_getGlobalBounds(mushroom.rect);
+
 
 	 LoadMobAnimation();
 }
@@ -85,16 +92,15 @@ void StateMobMachine(MobState _state)
 
 void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 {
+
+#pragma region function indi
+	mushroom.hitRect = sfRectangleShape_getGlobalBounds(mushroom.rect);
+	sfSprite_move(mushroom.sprite, (sfVector2f) { mushroom.velocity.x* _dt, mushroom.velocity.y* _dt });
+	sfRectangleShape_setPosition(mushroom.rect, sfSprite_getPosition(mushroom.sprite));
+#pragma endregion
+
 	CheckVelocityY(_dt);
 	CheckCollisionMobPlat(_dt);
-	
-	mushroom.hitbox = sfSprite_getGlobalBounds(mushroom.sprite);
-
-	sfSprite_move(mushroom.sprite, (sfVector2f) { mushroom.velocity.x * _dt, mushroom.velocity.y * _dt });
-
-
-
-
 
 	UpdateAnimation(mushroom.currentMobAnimation, _dt);
 }
@@ -107,13 +113,14 @@ void CheckCollisionMobPlat(float _dt)
 	for (int i = 0; i < GetCollisionTabSize(); i++)
 	{
 		sfFloatRect hitPlat = GetMapCollision(i);
+		mushroom.hitbox = sfSprite_getGlobalBounds(mushroom.sprite);
 		
 		if (sfFloatRect_intersects(&hitPlat, &mushroom.hitbox, NULL))
 		{
 			if (mushroom.velocity.y > 0)
 			{
 				mushroom.isGroundedMob = sfTrue;
-				mushroom.hitbox.top = hitPlat.top - hitPlat.height;
+				mushroom.hitbox.top = hitPlat.top - (hitPlat.height);
 				mushroom.velocity.y = 0;
 			}
 			else if (mushroom.velocity.y < 0)
@@ -125,15 +132,18 @@ void CheckCollisionMobPlat(float _dt)
 			{
 				CheckDistanceMobPlayer(mushroom, _dt);
 			}	
-			else if (mushroom.hitbox.left < hitPlat.left)
+			else if (mushroom.hitRect.left < hitPlat.left)
 			{
-				sfSprite_setPosition(mushroom.sprite, (sfVector2f){hitPlat.left + (mushroom.hitbox.width / 2), sfSprite_getPosition(mushroom.sprite).y});
+				sfSprite_setPosition(mushroom.sprite, (sfVector2f){hitPlat.left + (mushroom.hitRect.width / 2), sfSprite_getPosition(mushroom.sprite).y});
+				mushroom.velocity.x = 0;
+				
 			}
-			else if ((mushroom.hitbox.left + mushroom.hitbox.width) > (hitPlat.left + hitPlat.width))
+			else if ((mushroom.hitRect.left + mushroom.hitRect.width) > (hitPlat.left + hitPlat.width))
 			{
-				sfSprite_setPosition(mushroom.sprite, (sfVector2f){(hitPlat.left + hitPlat.width) - (mushroom.hitbox.width / 2), sfSprite_getPosition(mushroom.sprite).y});
+				sfSprite_setPosition(mushroom.sprite, (sfVector2f){(hitPlat.left + hitPlat.width) - (mushroom.hitRect.width / 2), sfSprite_getPosition(mushroom.sprite).y});
+				mushroom.velocity.x = 0;
+				
 			}
-
 
 		}
 	}
@@ -148,18 +158,31 @@ void CheckDistanceMobPlayer(Mob _mob, float _dt)
 	float distX = posPlayer.x - posMob.x;
 	if (distX < 400.f && distX > -400.f)
 	{
-		StateMobMachine(RUN_MOB);
+		if (distX > 100.f || distX < -100.f)
+		{
+			StateMobMachine(RUN_MOB);
 
-		if (distX < 0)
-		{
-			sfSprite_setScale(mushroom.sprite, (sfVector2f){-GAME_SCALE, GAME_SCALE});
-			mushroom.velocity.x = -100.f;
+			if (distX < 0)
+			{
+				sfSprite_setScale(mushroom.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+				mushroom.velocity.x = -100.f;
+			}
+			else
+			{
+				sfSprite_setScale(mushroom.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+				mushroom.velocity.x = 100.f;
+			}
 		}
-		else
+		else //if(distX < 100.f && distX > -100.f)
 		{
-			sfSprite_setScale(mushroom.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-			mushroom.velocity.x = 100.f;
+			StateMobMachine(ATTACK_MOB);
+			mushroom.velocity.x = 0;
 		}
+	}
+	else if (distX < 100.f && distX > -100.f)
+	{
+		StateMobMachine(ATTACK_MOB);
+
 	}
 	else
 	{
@@ -192,13 +215,14 @@ float GetDistPlatMobY(_index)
 
 void DrawMob(sfRenderWindow* _renderWindow)
 {
+	//sfRenderWindow_drawRectangleShape(_renderWindow, mushroom.rect, NULL);
 	sfRenderWindow_drawSprite(_renderWindow, mushroom.sprite, NULL);
 }
 
 void CleanupMob(void)
 {
 	sfSprite_destroy(mushroom.sprite);
-	mushroom = (Mob){ NULL };
+	mushroom = (Mob){NULL};
 }
 
 
