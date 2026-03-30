@@ -45,6 +45,10 @@ typedef struct Mob
 	MobState lastState;
 	MobState currentState;
 
+	sfFloatRect hitbox;
+
+	sfBool isGroundedMob;
+
 }Mob;
 
 

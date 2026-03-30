@@ -1,3 +1,9 @@
 ﻿  Mob.c
-C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(93,20): warning C4018: '<' : incompatibilité signed/unsigned
-  Game.vcxproj -> C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(102,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(168,15): warning C4013: 'GetDistPlatMobX' non défini(e) ; extern retournant int pris par défaut
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(168,67): warning C4013: 'GetDistPlatMobY' non défini(e) ; extern retournant int pris par défaut
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(168,65): warning C4244: 'fonction' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(171,7): warning C4142: 'GetDistPlatMobX' : redéfinition bénigne du type
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(179,7): warning C4142: 'GetDistPlatMobY' : redéfinition bénigne du type
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(184,16): warning C4244: 'return' : conversion de 'float' en 'int', perte possible de données
+  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
