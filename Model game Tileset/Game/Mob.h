@@ -8,6 +8,8 @@
 #define HITBOX_MUSHROOM_WIDTH 24
 #define HITBOX_MUSHROOM_HEIGHT 37
 
+#define DIST_ATTACK 150.f
+
 typedef enum MobState
 {
 	IDLE_MOB,
@@ -53,7 +55,7 @@ typedef struct Mob
 	sfRectangleShape* rect;
 	sfFloatRect hitRect;
 
-
+	float timerState;
 }Mob;
 
 
