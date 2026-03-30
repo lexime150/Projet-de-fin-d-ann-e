@@ -5,8 +5,8 @@
 
 
 #define MUSHROOM_SIZE 45
-#define HITBOX_MUSHROOM_WIDTH 37
-#define HITBOX_MUSHROOM_HEIGHT 42 
+#define HITBOX_MUSHROOM_WIDTH 24
+#define HITBOX_MUSHROOM_HEIGHT 37
 
 typedef enum MobState
 {
@@ -50,7 +50,9 @@ typedef struct Mob
 
 	sfBool isGroundedMob;
 
-	sfRectangleShape* hitRect;
+	sfRectangleShape* rect;
+	sfFloatRect hitRect;
+
 
 }Mob;
 
