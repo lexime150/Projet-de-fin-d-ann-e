@@ -12,11 +12,6 @@ void CheckCollisionMobPlat(Mob _mob);
 void CheckDistanceMobPlayer(Mob _mob, float _dt);
 
 
-float GetDistPlatMob();
-float GetDistPlatMobX();
-float GetDistPlatMobY();
-
-
 void LoadMob(void)
 {
 	 textureMushroom = sfTexture_createFromFile("Assets/Sprites/Champignon du Mordhor.png", NULL);

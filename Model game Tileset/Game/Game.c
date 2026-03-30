@@ -9,7 +9,7 @@ void LoadGame(void)
 	LoadMap("Map");
 	LoadPlayer();
 	LoadCamera();
-	LoadMob();
+	//LoadMob();
 }
 
 
@@ -53,7 +53,7 @@ void UpdateGame(float _dt)
 {
 	UpdatePlayer(_dt);
 	UpdateCamera(_dt);
-	UpdateMob(NULL, _dt);
+	//UpdateMob(NULL, _dt);
 }
 
 void DrawGame(sfRenderWindow* _renderWindow)
@@ -61,7 +61,7 @@ void DrawGame(sfRenderWindow* _renderWindow)
 
 	DrawCamera(_renderWindow);
 	DrawMap(_renderWindow);
-	DrawMob(_renderWindow);
+	//DrawMob(_renderWindow);
 	DrawPlayer(_renderWindow);
 }
 

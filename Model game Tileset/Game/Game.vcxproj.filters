@@ -61,7 +61,7 @@
       <Filter>Fichiers sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Mob.c">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

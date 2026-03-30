@@ -332,11 +332,25 @@ void MovePlayer(float _dt)
 	{
 		if (player.velocity.y < 0)
 		{
+			float dx = player.velocity.x * _dt;
+			CheckCollisionPlayerPlatformsX(dx);
+
+			if (movingLeft && player.isTouchingLeftWall && player.currentState == JUMP)
+			{
+				player.velocity.y = 0;
+				StateMachine(WALL_GRIP_FALL);
+			}
+			else if (movingRight && player.isTouchingRightWall && player.currentState == JUMP)
+			{
+				player.velocity.y = 0;
+				StateMachine(WALL_GRIP_FALL);
+			}
 			if (player.currentState != JUMP && player.currentState != WALL_JUMP)
 			{
 
 				StateMachine(JUMP);
 			}
+
 		}
 		else
 		{
