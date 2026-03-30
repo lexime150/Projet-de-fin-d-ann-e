@@ -24,10 +24,10 @@ void LoadPlayer(void)
 	player.speed = 350.f;
 
 	player.collisionShape = sfRectangleShape_create();
-	sfRectangleShape_setSize(player.collisionShape, (sfVector2f) { PLAYER_WIDTH* GAME_SCALE, PLAYER_HEIGHT* GAME_SCALE });
+	sfRectangleShape_setSize(player.collisionShape, (sfVector2f) { PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE });
 
 	sfVector2f spritePos = sfSprite_getPosition(player.sprite);
-	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { spritePos.x - (PLAYER_WIDTH * GAME_SCALE) / 2.f, spritePos.y - (PLAYER_HEIGHT * GAME_SCALE) });
+	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { spritePos.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f, spritePos.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE) });
 	sfRectangleShape_setOutlineColor(player.collisionShape, sfRed);
 	sfRectangleShape_setFillColor(player.collisionShape, sfColor_fromRGBA(255, 255, 255, 50));
 
@@ -38,11 +38,9 @@ void LoadPlayer(void)
 
 	player.lastState = IDLE;
 
-
 	player.lastWallTouched = 0;
 
 	sfSprite_setOrigin(player.sprite, (sfVector2f) { PLAYER_WIDTH / 2.f, PLAYER_HEIGHT });
-
 
 	player.isAttacking = sfFalse;
 	player.isGrounded = sfFalse;
@@ -64,9 +62,6 @@ void LoadPlayer(void)
 }
 
 
-
-
-
 void UpdatePlayer(float _dt)
 {
 	ApplyPhysic(_dt);
@@ -83,14 +78,13 @@ void MovePlayer(float _dt)
 	sfBool slideKey = sfKeyboard_isKeyPressed(sfKeyLControl) || sfKeyboard_isKeyPressed(sfKeyRControl);
 	sfBool jumpKey = sfKeyboard_isKeyPressed(sfKeySpace);
 
-
 	static sfBool jumpPressed = sfFalse;
 
 	if (player.slideCooldownTimer > 0.f)
 	{
 		player.slideCooldownTimer -= _dt;
-
 	}
+
 	if (player.isWallJumping)
 	{
 		float sign = (player.wallJumpVelocityX > 0) ? 1.f : -1.f;
@@ -98,13 +92,12 @@ void MovePlayer(float _dt)
 		if (sign > 0 && player.wallJumpVelocityX < MIN_WALL_JUMP_SPEED)
 		{
 			player.wallJumpVelocityX = MIN_WALL_JUMP_SPEED;
-
 		}
 		if (sign < 0 && player.wallJumpVelocityX > -MIN_WALL_JUMP_SPEED)
 		{
 			player.wallJumpVelocityX = -MIN_WALL_JUMP_SPEED;
-
 		}
+
 		float inputVelocity = 0;
 		if (movingRight)
 		{
@@ -119,7 +112,6 @@ void MovePlayer(float _dt)
 
 		if (player.isGrounded)
 		{
-
 			player.isWallJumping = sfFalse;
 		}
 	}
@@ -155,7 +147,6 @@ void MovePlayer(float _dt)
 			player.isSlideJumping = sfFalse;
 		}
 	}
-
 
 	else if (player.isSliding)
 	{
@@ -236,7 +227,6 @@ void MovePlayer(float _dt)
 		jumpPressed = sfTrue;
 		player.jumpStartPosition = player.position.y;
 
-
 		if (player.isGrounded || player.isSliding)
 		{
 			player.lastWallTouched = 0;
@@ -257,7 +247,6 @@ void MovePlayer(float _dt)
 			float dx = player.velocity.x * _dt;
 			if (CheckCollisionPlayerPlatformsX(dx))
 			{
-
 				player.currentWallTouched = player.isTouchingRightWall ? 1 : -1;
 				if (player.lastWallTouched == player.currentWallTouched)
 				{
@@ -276,12 +265,11 @@ void MovePlayer(float _dt)
 					player.wallJumpVelocityX = -wallJumpHX;
 					player.lastDirection = -1;
 					sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
-
 				}
 				else if (player.isTouchingLeftWall)
 				{
 					player.isWallJumping = sfTrue;
-					player.justWallJumped = sfTrue; 
+					player.justWallJumped = sfTrue;
 					player.wallJumpVelocityX = wallJumpHX;
 					player.lastDirection = 1;
 					sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
@@ -290,19 +278,14 @@ void MovePlayer(float _dt)
 				player.isGrounded = sfFalse;
 				player.isSlideJumping = sfFalse;
 				StateMachine(WALL_JUMP);
-
 			}
-
 		}
 	}
 
 	if (!jumpKey)
 	{
 		jumpPressed = sfFalse;
-
 	}
-
-
 
 
 	// ANIMATION
@@ -329,7 +312,6 @@ void MovePlayer(float _dt)
 			else
 			{
 				StateMachine(IDLE);
-
 			}
 		}
 	}
@@ -342,8 +324,10 @@ void MovePlayer(float _dt)
 
 			if (movingLeft && player.isTouchingLeftWall && player.currentState == JUMP)
 			{
+				// Verifie la distance verticale du saut avant de grip le wall
+				// pour ne pas rester coincé au sol si on se colle à un mur et qu'on saute
+				//cheh Damien mon code marche mieux que toi :)
 				float fallenDistance = player.position.y - player.jumpStartPosition;
-
 				if (-fallenDistance > MIN_WALL_GRIP_DISTANCE)
 				{
 					player.velocity.y = 0;
@@ -352,7 +336,6 @@ void MovePlayer(float _dt)
 			}
 			else if (movingRight && player.isTouchingRightWall && player.currentState == JUMP)
 			{
-				//Check la distance verticale du saut avant de grip le wall pour ne pas rester coincé sur le sol si on se colle à un mur et qu'on saute
 				float fallenDistance = player.position.y - player.jumpStartPosition;
 				if (-fallenDistance > MIN_WALL_GRIP_DISTANCE)
 				{
@@ -360,12 +343,11 @@ void MovePlayer(float _dt)
 					StateMachine(WALL_GRIP_FALL);
 				}
 			}
+
 			if (player.currentState != JUMP && player.currentState != WALL_JUMP)
 			{
-
 				StateMachine(JUMP);
 			}
-
 		}
 		else
 		{
@@ -375,7 +357,6 @@ void MovePlayer(float _dt)
 			{
 				StateMachine(WALL_GRIP_FALL);
 				player.velocity.y -= 10;
-
 			}
 			else if (movingRight && player.isTouchingRightWall)
 			{
@@ -385,13 +366,10 @@ void MovePlayer(float _dt)
 			else
 			{
 				StateMachine(FALL);
-
 			}
-
 		}
 	}
 }
-
 
 
 void ApplyPhysic(float _dt)
@@ -409,6 +387,7 @@ void ApplyPhysic(float _dt)
 		player.velocity.y = 50.f;
 	}
 }
+
 void SetAnimation(PlayerState _state)
 {
 	player.lastState = player.currentState;
@@ -417,14 +396,13 @@ void SetAnimation(PlayerState _state)
 	player.currentAnimation->isPlaying = sfTrue;
 	player.currentAnimation->currentFrame = 0;
 	player.currentState = _state;
-
 }
 
 
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
-	//sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
+	sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
 }
 
 void CleanUpPlayer(void)
@@ -439,9 +417,9 @@ void CollisionPlayerPlatformsX(float _dx)
 	player.isTouchingLeftWall = sfFalse;
 	player.isTouchingRightWall = sfFalse;
 
-	float playerHalfWidth = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
-	float playerWidth = PLAYER_WIDTH * GAME_SCALE;
-	float playerHeight = PLAYER_HEIGHT * GAME_SCALE;
+	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
+	float playerWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
+	float playerHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
 
 	sfFloatRect hitbox = { player.position.x - playerHalfWidth + _dx, player.position.y - playerHeight, playerWidth, playerHeight };
 
@@ -453,11 +431,9 @@ void CollisionPlayerPlatformsX(float _dx)
 			if (player.velocity.x > 0)
 			{
 				hitbox.left = platform.left - hitbox.width;
-
 			}
 			else if (player.velocity.x < 0)
 			{
-
 				hitbox.left = platform.left + platform.width;
 			}
 
@@ -474,6 +450,7 @@ void CollisionPlayerPlatformsX(float _dx)
 			return;
 		}
 	}
+
 	player.justWallJumped = sfFalse;
 	player.position.x += _dx;
 	sfSprite_setPosition(player.sprite, player.position);
@@ -481,14 +458,15 @@ void CollisionPlayerPlatformsX(float _dx)
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
+
 sfBool CheckCollisionPlayerPlatformsX(float _dx)
 {
 	player.isTouchingLeftWall = sfFalse;
 	player.isTouchingRightWall = sfFalse;
 
-	float playerHalfWidth = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
-	float playerWidth = PLAYER_WIDTH * GAME_SCALE;
-	float playerHeight = PLAYER_HEIGHT * GAME_SCALE;
+	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
+	float playerWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
+	float playerHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
 
 	sfFloatRect hitbox = { player.position.x - playerHalfWidth + _dx, player.position.y - playerHeight, playerWidth, playerHeight };
 
@@ -503,13 +481,10 @@ sfBool CheckCollisionPlayerPlatformsX(float _dx)
 			if (playerCenterX < platformCenterX)
 			{
 				player.isTouchingRightWall = sfTrue;
-
 			}
 			else
 			{
-
 				player.isTouchingLeftWall = sfTrue;
-
 			}
 
 			return sfTrue;
@@ -519,12 +494,12 @@ sfBool CheckCollisionPlayerPlatformsX(float _dx)
 }
 
 
-
 void CollisionPlayerPlatformsY(float _dy)
 {
-	float playerHalfWidth = (PLAYER_WIDTH * GAME_SCALE) / 2.f;
-	float playerWidth = PLAYER_WIDTH * GAME_SCALE;
-	float playerHeight = PLAYER_HEIGHT * GAME_SCALE;
+	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
+	float playerWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
+	float playerHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
+
 	player.lastWallTouched = 0;
 	sfFloatRect hitbox = { player.position.x - playerHalfWidth, player.position.y - playerHeight + _dy, playerWidth, playerHeight };
 	player.isGrounded = sfFalse;
@@ -569,7 +544,7 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	float dy = player.velocity.y * _dt;
 	CollisionPlayerPlatformsY(dy);
 
-	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { player.position.x - (PLAYER_WIDTH * GAME_SCALE) / 2.f, player.position.y - (PLAYER_HEIGHT * GAME_SCALE) });
+	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { player.position.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f, player.position.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE) });
 	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
@@ -582,7 +557,6 @@ void StateMachine(PlayerState _state)
 	}
 	SetAnimation(_state);
 }
-
 
 
 void LoadAnimationPlayer(void)
@@ -639,6 +613,4 @@ void LoadAnimationPlayer(void)
 	player.animationPlayer[DASH] = CreateAnimation(player.sprite, 2, 7, sfTrue, sfFalse, firstFrame);
 
 	SetAnimation(IDLE);
-
 }
-

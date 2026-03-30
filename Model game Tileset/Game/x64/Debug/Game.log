@@ -1,10 +1,5 @@
-﻿  Mob.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(42,55): warning C4133: 'fonction' : types incompatibles - de 'sfRectangleShape *' à 'const sfSprite *'
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(113,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(196,15): warning C4013: 'GetDistPlatMobX' non défini(e) ; extern retournant int pris par défaut
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(196,67): warning C4013: 'GetDistPlatMobY' non défini(e) ; extern retournant int pris par défaut
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(196,65): warning C4244: 'fonction' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(199,7): warning C4142: 'GetDistPlatMobX' : redéfinition bénigne du type
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(207,7): warning C4142: 'GetDistPlatMobY' : redéfinition bénigne du type
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(212,16): warning C4244: 'return' : conversion de 'float' en 'int', perte possible de données
-  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+﻿  Player.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(250,60): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.

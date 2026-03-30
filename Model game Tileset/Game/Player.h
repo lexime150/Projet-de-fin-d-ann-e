@@ -22,7 +22,7 @@
 #define MIN_WALL_GRIP_DISTANCE 75.f
 
 #define PLAYER_HITBOX_WIDTH  20
-#define PLAYER_HITBOX_HEIGHT 40
+#define PLAYER_HITBOX_HEIGHT 28
 
 
 typedef enum PlayerState
