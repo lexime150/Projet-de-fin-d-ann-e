@@ -58,6 +58,8 @@ void LoadPlayer(void)
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 	player.slideCooldownTimer = 0.f;
 
+	player.attackCooldownTimer = 2.f;
+
 	LoadAnimationPlayer();
 }
 
@@ -80,9 +82,60 @@ void MovePlayer(float _dt)
 
 	static sfBool jumpPressed = sfFalse;
 
+	player.attackCooldownTimer += _dt;
+
 	if (player.slideCooldownTimer > 0.f)
 	{
 		player.slideCooldownTimer -= _dt;
+	}
+
+	if (sfMouse_isButtonPressed(sfMouseLeft) && player.attackCooldownTimer >= 1.2f && player.isGrounded)
+	{
+		player.isAttacking = sfTrue;
+		player.velocity.x = 0;
+		player.attackCooldownTimer = 0.f;
+		StateMachine(AXE);
+	}
+
+	if (player.isAttacking && player.currentState == AXE)
+	{
+		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
+		{
+			player.isAttacking = sfFalse;
+			if (player.isGrounded)
+			{
+				StateMachine(player.isMoving ? RUN : IDLE);
+			}
+			else
+			{
+				StateMachine(FALL);
+			}
+		}
+		return;
+	}
+
+	if (sfMouse_isButtonPressed(sfMouseRight) && player.attackCooldownTimer >= 1.2f && player.isGrounded)
+	{
+		player.isAttacking = sfTrue;
+		player.velocity.x = 0;
+		player.attackCooldownTimer = 0.f;
+		StateMachine(SWORD);
+	}
+	if (player.isAttacking && player.currentState == SWORD)
+	{
+		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
+		{
+			player.isAttacking = sfFalse;
+			if (player.isGrounded)
+			{
+				StateMachine(player.isMoving ? RUN : IDLE);
+			}
+			else
+			{
+				StateMachine(FALL);
+			}
+		}
+		return;
 	}
 
 	if (player.isWallJumping)
@@ -402,7 +455,7 @@ void SetAnimation(PlayerState _state)
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
-	sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
+	//sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
 }
 
 void CleanUpPlayer(void)
@@ -603,11 +656,11 @@ void LoadAnimationPlayer(void)
 	firstFrame = (sfIntRect){ 2 * PLAYER_WIDTH, 6 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[WALL_JUMP] = CreateAnimation(player.sprite, 3, 9, sfTrue, sfFalse, firstFrame);
 
-	firstFrame = (sfIntRect){ 0, 7 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	firstFrame = (sfIntRect){ 0, 7 * PLAYER_HEIGHT, 48, PLAYER_HEIGHT };
 	player.animationPlayer[AXE] = CreateAnimation(player.sprite, 10, 15, sfTrue, sfFalse, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, 8 * PLAYER_HEIGHT, 48, PLAYER_HEIGHT };
-	player.animationPlayer[SWORD] = CreateAnimation(player.sprite, 4, 18, sfTrue, sfTrue, firstFrame);
+	player.animationPlayer[SWORD] = CreateAnimation(player.sprite, 4, 18, sfTrue, sfFalse, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, 9 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[DASH] = CreateAnimation(player.sprite, 2, 7, sfTrue, sfFalse, firstFrame);
