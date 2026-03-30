@@ -1,2 +1,7 @@
 ﻿  Mob.c
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(33,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(39,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(108,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(231,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(240,20): warning C4018: '<' : incompatibilité signed/unsigned
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
