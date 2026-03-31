@@ -66,7 +66,7 @@ typedef struct Mob
 
 
 void LoadMob(void);
-void LoadMobAnimation(void);
+void LoadMobAnimation(unsigned _i);
 void UpdateMob(sfRenderWindow* _renderWindow, float _dt);
 void DrawMob(sfRenderWindow* _renderWindow);
 void CleanupMob(void);

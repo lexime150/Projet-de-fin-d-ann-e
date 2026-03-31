@@ -41,9 +41,6 @@ void LoadMob(void)
 
 	AddMob(MUSHROOM, 450, 125);
 	AddMob(SKELETON, 600, 125);
-
-
-
 }
 
 void AddMob(TypeMob _type, float _x, float _y)
@@ -94,37 +91,48 @@ void AddMob(TypeMob _type, float _x, float _y)
 	mob[mobCount] = newMob;
 	mobCount++;
 
-	LoadMobAnimation();
+	LoadMobAnimation(mobCount - 1);
 }
 
 
 
-void LoadMobAnimation()
+void LoadMobAnimation(unsigned _i)
 {
 	sfIntRect firstFrame = { 0 };
-	switch (mob[mobCount - 1].mobType)
+	switch (mob[_i].mobType)
 	{
 	case MUSHROOM:
 		firstFrame = (sfIntRect){ 0, 0, MUSHROOM_SIZE, MUSHROOM_SIZE };
-		mob[mobCount - 1].mobAnimation[IDLE_MOB] = CreateAnimation(mob[mobCount - 1].sprite, 4, 7, sfTrue, sfTrue, firstFrame);
+		mob[_i].mobAnimation[IDLE_MOB] = CreateAnimation(mob[_i].sprite, 4, 7, sfTrue, sfTrue, firstFrame);
 
 		firstFrame.top += MUSHROOM_SIZE;
-		mob[mobCount - 1].mobAnimation[RUN_MOB] = CreateAnimation(mob[mobCount - 1].sprite, 8, 10, sfTrue, sfTrue, firstFrame);
+		mob[_i].mobAnimation[RUN_MOB] = CreateAnimation(mob[_i].sprite, 8, 10, sfTrue, sfTrue, firstFrame);
 
 		firstFrame.top += MUSHROOM_SIZE;
-		mob[mobCount - 1].mobAnimation[ATTACK_MOB] = CreateAnimation(mob[mobCount - 1].sprite, 8, 10, sfTrue, sfFalse, firstFrame);
+		mob[_i].mobAnimation[ATTACK_MOB] = CreateAnimation(mob[_i].sprite, 8, 10, sfTrue, sfFalse, firstFrame);
 
 		firstFrame.top += MUSHROOM_SIZE;
-		mob[mobCount - 1].mobAnimation[TAKE_IT] = CreateAnimation(mob[mobCount - 1].sprite, 3, 9, sfTrue, sfFalse, firstFrame);
+		mob[_i].mobAnimation[TAKE_IT] = CreateAnimation(mob[_i].sprite, 3, 9, sfTrue, sfFalse, firstFrame);
 
 		firstFrame.top += MUSHROOM_SIZE;
-		mob[mobCount - 1].mobAnimation[DEATH] = CreateAnimation(mob[mobCount - 1].sprite, 4, 7, sfTrue, sfFalse, firstFrame);
+		mob[_i].mobAnimation[DEATH] = CreateAnimation(mob[_i].sprite, 4, 7, sfTrue, sfFalse, firstFrame);
 		break;
 	case SKELETON:
 		firstFrame = (sfIntRect){0, 0, HITBOX_SKELETON, HITBOX_SKELETON};
-		mob[mobCount - 1].mobAnimation[IDLE_MOB] = CreateAnimation(mob[mobCount - 1].sprite, 3, 6, sfTrue, sfTrue, firstFrame);
+		mob[_i].mobAnimation[IDLE_MOB] = CreateAnimation(mob[_i].sprite, 3, 6, sfTrue, sfTrue, firstFrame);
 
+		firstFrame.top += HITBOX_SKELETON;
+		mob[_i].mobAnimation[RUN_MOB] = CreateAnimation(mob[_i].sprite, 4, 11, sfTrue, sfTrue, firstFrame);
 
+		firstFrame.top += HITBOX_SKELETON; firstFrame.width = HITBOX_ATTACK_SKELETON_WIDTH;
+		mob[_i].mobAnimation[ATTACK_MOB] = CreateAnimation(mob[_i].sprite, 6, 10, sfTrue, sfFalse, firstFrame);
+
+		firstFrame.top += HITBOX_SKELETON; firstFrame.width = HITBOX_SKELETON;
+		mob[_i].mobAnimation[TAKE_IT] = CreateAnimation(mob[_i].sprite, 4, 9, sfTrue, sfFalse, firstFrame);
+
+		firstFrame.top += HITBOX_SKELETON;
+		mob[_i].mobAnimation[DEATH] = CreateAnimation(mob[_i].sprite, 4, 6, sfTrue, sfFalse, firstFrame);
+		break;
 	default:
 		break;
 	}
@@ -210,10 +218,10 @@ void CheckCollisionMobPlat(float _dt, unsigned _i)
 				mob[_i].hitbox.top = (hitPlat.top + hitPlat.height);
 			}
 
-			if ((mob[_i].hitbox.left + mob[_i].hitbox.width) > hitPlat.left && mob[_i].isGroundedMob)
-			{
-				//MoveMob(_dt, );
-			}
+			//if ((mob[_i].hitbox.left + mob[_i].hitbox.width) > hitPlat.left && mob[_i].isGroundedMob)
+			//{
+			//	//MoveMob(_dt, );
+			//}
 			else if (mob[_i].hitRect.left < hitPlat.left)
 			{
 				sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { hitPlat.left + (mob[_i].hitRect.width / 2), sfSprite_getPosition(mob[_i].sprite).y });
@@ -240,7 +248,7 @@ void MoveMob(float _dt, unsigned _i)
 	float distX = posPlayer.x - posMob.x;
 	if ((GetDistancePlayerMob(&player, _i) < 400.f && GetDistancePlayerMob(&player, _i) > -400.f) && (GetDistancePlayerMob(&player, _i) > DIST_ATTACK || GetDistancePlayerMob(&player, _i) < -DIST_ATTACK))
 	{
-	//	StateMobMachine(RUN_MOB);
+		StateMobMachine(RUN_MOB, _i);
 		if (distX < 0)
 		{
 			sfSprite_setScale(mob[_i].sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
@@ -264,14 +272,14 @@ void AttackMob(float _dt, unsigned _i)
 	{
 		mob[_i].velocity.x = 0;
 		mob[_i].timerState = 0.f;
-		//StateMobMachine(ATTACK_MOB, _i);
+		StateMobMachine(ATTACK_MOB, _i);
 	}
 
-//	if (!mob[_i].currentMobAnimation->isPlaying)
-//	{
-		///StateMobMachine(IDLE_MOB, _i);
+	if (!mob[_i].currentMobAnimation->isPlaying)
+	{
+		StateMobMachine(IDLE_MOB, _i);
 
-//	}
+	}
 }
 
 
