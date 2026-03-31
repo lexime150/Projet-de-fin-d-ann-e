@@ -74,5 +74,4 @@ void CleanupGame(void)
 	CleanupMap();
 	CleanUpPlayer();
 	CleanUpCamera();
-
 }
