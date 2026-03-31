@@ -55,6 +55,7 @@ void UpdateGame(float _dt)
 	UpdatePlayer(_dt);
 	UpdateCamera(_dt);
 	UpdateMob(NULL, _dt);
+	UpdateHUD();
 }
 
 void DrawGame(sfRenderWindow* _renderWindow)

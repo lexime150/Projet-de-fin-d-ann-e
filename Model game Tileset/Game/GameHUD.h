@@ -15,6 +15,7 @@ typedef struct HUD
 
 void LoadHUD();
 void DrawHUD(sfRenderWindow* _renderWindow);
+void UpdateHUD();
 void CleanupHUD();
 
 

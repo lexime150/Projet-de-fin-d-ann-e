@@ -15,6 +15,14 @@ void DrawHUD(sfRenderWindow* _renderWindow)
 	sfRenderWindow_drawSprite(_renderWindow, hud.healthBarContainerSprite, NULL);
 }
 
+void UpdateHUD()
+{
+	float ratio = player.health / player.maxHealth;
+	sfIntRect updatedHealthBar = { 1, 0, 45 * ratio, 5 };
+	printf("%f\n", ratio);
+	sfSprite_setTextureRect(hud.healthBarSprite, updatedHealthBar);
+}
+
 void CleanupHUD()
 {
 }
@@ -30,13 +38,13 @@ void CreateHealthBarHUD()
 
 	sfSprite_setTexture(hud.healthBarContainerSprite, hud.healthBarTexture, sfTrue);
 	sfSprite_setTextureRect(hud.healthBarContainerSprite, healthBarContainerRect);
-	sfSprite_setPosition(hud.healthBarContainerSprite, (sfVector2f) { 0, 0 });
-	sfSprite_setScale(hud.healthBarContainerSprite, (sfVector2f) {2.5 * GAME_SCALE, 2.5 * GAME_SCALE});
+	sfSprite_setPosition(hud.healthBarContainerSprite, (sfVector2f) { 10, 25 });
+	sfSprite_setScale(hud.healthBarContainerSprite, (sfVector2f) {2 * GAME_SCALE, 2 * GAME_SCALE});
 
 
 	sfSprite_setTexture(hud.healthBarSprite, hud.healthBarTexture, sfTrue);
 	sfSprite_setTextureRect(hud.healthBarSprite, healthBarRect);
-	sfSprite_setPosition(hud.healthBarSprite, (sfVector2f) { 10, 10 });
-	sfSprite_setScale(hud.healthBarSprite, (sfVector2f) {2.5 * GAME_SCALE, 2.5 * GAME_SCALE});
+	sfSprite_setPosition(hud.healthBarSprite, (sfVector2f) { 18 , 33 });
+	sfSprite_setScale(hud.healthBarSprite, (sfVector2f) {2 * GAME_SCALE, 2 * GAME_SCALE});
 
 }

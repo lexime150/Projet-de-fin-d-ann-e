@@ -107,8 +107,8 @@ typedef struct Player
 
 	float jumpStartPosition;
 
-	int health;
-	int maxHealth;
+	float health;
+	float maxHealth;
 
 }Player;
 
