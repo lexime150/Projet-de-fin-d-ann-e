@@ -10,6 +10,7 @@ void LoadGame(void)
 	LoadPlayer();
 	LoadCamera();
 	LoadMob();
+	LoadHUD();
 }
 
 
@@ -54,6 +55,7 @@ void UpdateGame(float _dt)
 	UpdatePlayer(_dt);
 	UpdateCamera(_dt);
 	UpdateMob(NULL, _dt);
+	UpdateHUD();
 }
 
 void DrawGame(sfRenderWindow* _renderWindow)
@@ -63,6 +65,8 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawMap(_renderWindow);
 	DrawMob(_renderWindow);
 	DrawPlayer(_renderWindow);
+	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
+	DrawHUD(_renderWindow);
 }
 
 void CleanupGame(void)
@@ -70,8 +74,5 @@ void CleanupGame(void)
 	CleanupMap();
 	CleanUpPlayer();
 	CleanUpCamera();
-	//Cleanup
-	// 
-	// 
-	// ();
+
 }
