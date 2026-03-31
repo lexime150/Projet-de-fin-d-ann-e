@@ -47,18 +47,21 @@ typedef struct Mob
 	sfBool isMoving;
 	sfBool isAttack;
 	sfBool isAlive;
-	
+	sfBool isGroundedMob;
+	sfBool isTakeIt;
+
+
 	MobState lastState;
 	MobState currentState;
 
 	sfFloatRect hitbox;
 
-	sfBool isGroundedMob;
 
 	sfRectangleShape* rect;
 	sfFloatRect hitRect;
 
 	float timerState;
+	float timerDamage;
 
 	TypeMob mobType;
 

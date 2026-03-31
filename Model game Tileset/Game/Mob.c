@@ -218,10 +218,6 @@ void CheckCollisionMobPlat(float _dt, unsigned _i)
 				mob[_i].hitbox.top = (hitPlat.top + hitPlat.height);
 			}
 
-			//if ((mob[_i].hitbox.left + mob[_i].hitbox.width) > hitPlat.left && mob[_i].isGroundedMob)
-			//{
-			//	//MoveMob(_dt, );
-			//}
 			else if (mob[_i].hitRect.left < hitPlat.left)
 			{
 				sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { hitPlat.left + (mob[_i].hitRect.width / 2), sfSprite_getPosition(mob[_i].sprite).y });
@@ -302,9 +298,22 @@ void DrawMob(sfRenderWindow* _renderWindow)
 	}
 }
 
-void cleanupmob(void)
+void CleanupMob(void)
 {
+	sfTexture_destroy(texture[MUSHROOM]);
+	sfTexture_destroy(texture[SKELETON]);
+	texture[MUSHROOM] = NULL;
+	texture[SKELETON] = NULL;
 
+
+	for (int i = 0; i < mobCount; i++)
+	{
+		sfSprite_destroy(mob[i].sprite);
+		sfRectangleShape_destroy(mob[i].rect);
+		mob[i] = (Mob){ NULL };
+	}
+	free(mob);
+	mob = (Mob*){ NULL };
 }
 
 
