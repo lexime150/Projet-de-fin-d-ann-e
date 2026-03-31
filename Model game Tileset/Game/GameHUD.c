@@ -19,8 +19,15 @@ void UpdateHUD()
 {
 	float ratio = player.health / player.maxHealth;
 	sfIntRect updatedHealthBar = { 1, 0, 45 * ratio, 5 };
-	printf("%f\n", ratio);
 	sfSprite_setTextureRect(hud.healthBarSprite, updatedHealthBar);
+	if (player.health <= 0)
+	{
+		player.health = 0;
+	}
+	else if (player.health >= player.maxHealth)
+	{
+		player.health = player.maxHealth;
+	}
 }
 
 void CleanupHUD()
