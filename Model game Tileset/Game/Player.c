@@ -62,6 +62,8 @@ void LoadPlayer(void)
 
 	player.attackCooldownTimer = 2.f;
 
+	player.health = 200;
+	player.maxHealth = 200;
 	LoadAnimationPlayer();
 }
 
