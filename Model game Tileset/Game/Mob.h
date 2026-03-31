@@ -10,6 +10,9 @@
 
 #define DIST_ATTACK 150.f
 
+#define HITBOX_SKELETON 32
+#define HITBOX_ATTACK_SKELETON_WIDTH 48
+
 typedef enum MobState
 {
 	IDLE_MOB,
@@ -56,11 +59,14 @@ typedef struct Mob
 	sfFloatRect hitRect;
 
 	float timerState;
+
+	TypeMob mobType;
+
 }Mob;
 
 
 void LoadMob(void);
-void LoadMobAnimation(Mob* _mob);
+void LoadMobAnimation(void);
 void UpdateMob(sfRenderWindow* _renderWindow, float _dt);
 void DrawMob(sfRenderWindow* _renderWindow);
 void CleanupMob(void);

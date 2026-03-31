@@ -2,215 +2,266 @@
 #include "Map.h"
 #include "Player.h"
 
-Mob* mushroom = { 0 };
-Mob* zombie = { 0 };
-sfTexture* textureMushroom;
+Mob* mob = { 0 };
+
+sfTexture* texture[MOB_NUMBER];
 Player player;
 unsigned mobCount;
 
-void SetAnimationMushroom(Mob* _mob, MobState _state);
-void StateMobMachine(Mob* _mob, MobState _state);
-void CheckCollisionMobPlat(Mob* _mob, float _dt);
-void MoveMob(Mob* _mob, float _dt);
-void AttackMob(Mob* _mob, float _dt);
 
-void CheckVelocityY(Mob* _mob, float _dt);
+void SetTypeMob(void);
+
+void SetAnimationMushroom(MobState _state);
+void StateMobMachine(MobState _state);
+void CheckCollisionMobPlat(float _dt);
+void MoveMob(float _dt);
+void AttackMob(float _dt);
+
+void CheckVelocityY(float _dt);
+
+void AddMob(TypeMob _type, float _x, float _y);
 
 float GetDistancePlayerMob(Player* _player, Mob* _mob);
 
 void LoadMob(void)
 {
-	textureMushroom = sfTexture_createFromFile("Assets/Sprites/Champignon du Mordhor.png", NULL);
+	texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Champignon du Mordhor.png", NULL);
+	texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/skeleton.png", NULL);
 
-	mushroom = calloc(2 , sizeof(Mob));
-	if (!mushroom)
+
+	mob = malloc(sizeof(Mob));
+	if (!mob)
 	{
 		fprintf(stderr, "MALLOC FAILURE");
 		return;
 	}
-	mobCount = 2;
 
-	for (int i = 0; i < mobCount; i++)
+
+
+	AddMob(SKELETON, 600, 125);
+
+}
+
+void AddMob(TypeMob _type, float _x, float _y)
+{
+	Mob* temp = realloc(mob, (mobCount + 1) * sizeof(Mob));
+	if (!temp)
 	{
-		mushroom[i].sprite = sfSprite_create();
-		sfSprite_setTexture(mushroom[i].sprite, textureMushroom, sfTrue);
-		sfSprite_setOrigin(mushroom[i].sprite, (sfVector2f) { (MUSHROOM_SIZE / 2), MUSHROOM_SIZE });
-		sfSprite_setScale(mushroom[i].sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-		sfSprite_setPosition(mushroom[i].sprite, (sfVector2f) { 600 * (i + 1), 125 });
-
-		mushroom[i].speed = 0;
-		mushroom[i].velocity = (sfVector2f){ 0, 0 };
-		mushroom[i].isGroundedMob = sfFalse;
-		mushroom[i].timerState = 0;
-
-		mushroom[i].rect = sfRectangleShape_create();
-		sfRectangleShape_setSize(mushroom[i].rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT });
-		sfRectangleShape_setOrigin(mushroom[i].rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT });
-		sfRectangleShape_setScale(mushroom[i].rect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-		sfRectangleShape_setFillColor(mushroom[i].rect, sfTransparent);
-		sfRectangleShape_setOutlineColor(mushroom[i].rect, sfMagenta);
-		sfRectangleShape_setOutlineThickness(mushroom[i].rect, 1.f);
-		sfRectangleShape_setPosition(mushroom[i].rect, sfSprite_getPosition(mushroom[i].sprite));
-
-		mushroom[i].hitRect = sfRectangleShape_getGlobalBounds(mushroom[i].rect);
-
-
-		LoadMobAnimation(&mushroom[i]);
+		fprintf(stderr, "realloc failure\n");
+		return;
 	}
+
+	mob = temp;
+	temp = NULL;
+
+	Mob newMob = { 0 };
+
+	newMob.mobType = _type;
+
+	newMob.sprite = sfSprite_create();
+
+	newMob.rect = sfRectangleShape_create();
+
+	switch (newMob.mobType)
+	{
+	case MUSHROOM:
+		sfSprite_setTexture(newMob.sprite, texture[MUSHROOM], sfTrue);
+		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { MUSHROOM_SIZE / 2, MUSHROOM_SIZE });
+		sfRectangleShape_setSize(newMob.rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT });
+		sfRectangleShape_setOrigin(newMob.rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT });
+		break;
+	case SKELETON:
+		sfSprite_setTexture(newMob.sprite, texture[SKELETON], sfTrue);
+		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { HITBOX_SKELETON / 2, HITBOX_SKELETON });
+		sfRectangleShape_setSize(newMob.rect, (sfVector2f) { HITBOX_SKELETON, HITBOX_SKELETON });
+		sfRectangleShape_setOrigin(newMob.rect, (sfVector2f) { HITBOX_SKELETON / 2, HITBOX_SKELETON });
+		sfSprite_setTextureRect(newMob.sprite, (sfIntRect) { 0, 0, 32, 32 });
+		break;
+	default:
+		break;
+	}
+
+	sfSprite_setScale(newMob.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+	sfRectangleShape_setScale(newMob.rect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+	sfSprite_setPosition(newMob.sprite, (sfVector2f) { _x, _y });
+	sfRectangleShape_setPosition(newMob.rect, sfSprite_getPosition(newMob.sprite));
+
+	mob[mobCount] = newMob;
+	mobCount++;
+
+	LoadMobAnimation();
 }
 
-void LoadMobAnimation(Mob* _mob)
+
+
+void LoadMobAnimation()
 {
-	sfIntRect firstFrame = { 0, 0, MUSHROOM_SIZE, MUSHROOM_SIZE };
-	_mob->mobAnimation[IDLE_MOB] = CreateAnimation(_mob->sprite, 4, 7, sfTrue, sfTrue, firstFrame);
+	sfIntRect firstFrame = { 0 };
+	switch (mob->mobType)
+	{
+	case MUSHROOM:
+		firstFrame = (sfIntRect){ 0, 0, MUSHROOM_SIZE, MUSHROOM_SIZE };
+		mob[mobCount].mobAnimation[IDLE_MOB] = CreateAnimation(mob[mobCount].sprite, 4, 7, sfTrue, sfTrue, firstFrame);
 
-	firstFrame.top += MUSHROOM_SIZE;
-	_mob->mobAnimation[RUN_MOB] = CreateAnimation(_mob->sprite, 8, 10, sfTrue, sfTrue, firstFrame);
+		firstFrame.top += MUSHROOM_SIZE;
+		mob[mobCount].mobAnimation[RUN_MOB] = CreateAnimation(mob[mobCount].sprite, 8, 10, sfTrue, sfTrue, firstFrame);
 
-	firstFrame.top += MUSHROOM_SIZE;
-	_mob->mobAnimation[ATTACK_MOB] = CreateAnimation(_mob->sprite, 8, 10, sfTrue, sfFalse, firstFrame);
+		firstFrame.top += MUSHROOM_SIZE;
+		mob[mobCount].mobAnimation[ATTACK_MOB] = CreateAnimation(mob[mobCount].sprite, 8, 10, sfTrue, sfFalse, firstFrame);
 
-	firstFrame.top += MUSHROOM_SIZE;
-	_mob->mobAnimation[TAKE_IT] = CreateAnimation(_mob->sprite, 3, 9, sfTrue, sfFalse, firstFrame);
+		firstFrame.top += MUSHROOM_SIZE;
+		mob[mobCount].mobAnimation[TAKE_IT] = CreateAnimation(mob[mobCount].sprite, 3, 9, sfTrue, sfFalse, firstFrame);
 
-	firstFrame.top += MUSHROOM_SIZE;
-	_mob->mobAnimation[DEATH] = CreateAnimation(_mob->sprite, 4, 7, sfTrue, sfFalse, firstFrame);
+		firstFrame.top += MUSHROOM_SIZE;
+		mob[mobCount].mobAnimation[DEATH] = CreateAnimation(mob[mobCount].sprite, 4, 7, sfTrue, sfFalse, firstFrame);
+		break;
+	case SKELETON:
+		firstFrame = (sfIntRect){0, 0, HITBOX_SKELETON, HITBOX_SKELETON};
+		mob[mobCount].mobAnimation[IDLE_MOB] = CreateAnimation(mob[mobCount].sprite, 3, 6, sfTrue, sfTrue, firstFrame);
 
-	SetAnimationMushroom(_mob, IDLE_MOB);
+
+	default:
+		break;
+	}
+	SetAnimationMushroom(IDLE_MOB, mobCount);
+
+
 
 }
 
-void SetAnimationMushroom(Mob* _mob, MobState _state)
+
+
+
+void SetAnimationMushroom(MobState _state, unsigned _i)
 {
-	_mob->lastState = _mob->currentState;
-	_mob->currentState = _state;
-	_mob->currentMobAnimation = &_mob->mobAnimation[_state];
-	_mob->currentMobAnimation->currentFrame = 0;
-	_mob->currentMobAnimation->isPlaying = sfTrue;
-	_mob->currentMobAnimation->timer = 0.f;
+	mob[_i].lastState = mob->currentState;
+	mob[_i].currentState = _state;
+	mob[_i].currentMobAnimation = &mob->mobAnimation[_state];
+	mob[_i].currentMobAnimation->currentFrame = 0;
+	mob[_i].currentMobAnimation->isPlaying = sfTrue;
+	mob[_i].currentMobAnimation->timer = 0.f;
 
 }
 
-void StateMobMachine(Mob* _mob, MobState _state)
+void StateMobMachine(MobState _state, unsigned _i)
 {
-	if (_mob->currentState == _state)
+	if (mob[_i].currentState == _state)
 	{
 		return;
 	}
 	else
 	{
-		SetAnimationMushroom(_mob, _state);
+		SetAnimationMushroom(_state, _i);
 	}
 }
 
 void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 {
-	for (int i = 0; i < mobCount; i++)
+	for (unsigned i = 0; i < mobCount; i++)
 	{
 
-#pragma region function indi
-		mushroom[i].hitRect = sfRectangleShape_getGlobalBounds(mushroom[i].rect);
-		sfSprite_move(mushroom[i].sprite, (sfVector2f) { mushroom[i].velocity.x* _dt, mushroom[i].velocity.y* _dt });
-		sfRectangleShape_setPosition(mushroom[i].rect, sfSprite_getPosition(mushroom[i].sprite));
+
+		mob[i].hitRect = sfRectangleShape_getGlobalBounds(mob[i].rect);
+		sfSprite_move(mob[i].sprite, (sfVector2f) { mob[i].velocity.x* _dt, mob[i].velocity.y* _dt });
+		sfRectangleShape_setPosition(mob[i].rect, sfSprite_getPosition(mob[i].sprite));
 
 
-#pragma endregion
 
-		MoveMob(&mushroom[i], _dt);
-		AttackMob(&mushroom[i], _dt);
+		MoveMob(_dt);
+		AttackMob(_dt);
 
-		CheckVelocityY(&mushroom[i], _dt);
-		CheckCollisionMobPlat(&mushroom[i], _dt);
+		CheckVelocityY(_dt);
+		CheckCollisionMobPlat(_dt);
 
-		UpdateAnimation(mushroom[i].currentMobAnimation, _dt);
+		UpdateAnimation(mob[i].currentMobAnimation, _dt);
 
 	}
 }
 
 
-void CheckCollisionMobPlat(Mob* _mob, float _dt)
+void CheckCollisionMobPlat(float _dt)
 {
-	_mob->isGroundedMob = sfFalse;
-	//for (int x = 0; x < mobCount; x++)
-//	{
-		for (unsigned i = 0; i < GetCollisionTabSize(); i++)
+	mob->isGroundedMob = sfFalse;
+
+
+	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
+	{
+		sfFloatRect hitPlat = GetMapCollision(i);
+		mob->hitbox = sfSprite_getGlobalBounds(mob->sprite);
+
+		if (sfFloatRect_intersects(&hitPlat, &mob->hitbox, NULL))
 		{
-			sfFloatRect hitPlat = GetMapCollision(i);
-			_mob->hitbox = sfSprite_getGlobalBounds(_mob->sprite);
-
-			if (sfFloatRect_intersects(&hitPlat, &_mob->hitbox, NULL))
+			if (mob->velocity.y > 0)
 			{
-				if (_mob->velocity.y > 0)
-				{
-					_mob->isGroundedMob = sfTrue;
-					_mob->hitbox.top = hitPlat.top - (hitPlat.height);
-					_mob->velocity.y = 0;
-				}
-				else if (_mob->velocity.y < 0)
-				{
-					mushroom[0].hitbox.top = (hitPlat.top + hitPlat.height);
-				}
+				mob->isGroundedMob = sfTrue;
+				mob->hitbox.top = hitPlat.top - (hitPlat.height);
+				mob->velocity.y = 0;
+			}
+			else if (mob->velocity.y < 0)
+			{
+				mob[0].hitbox.top = (hitPlat.top + hitPlat.height);
+			}
 
-				if ((_mob->hitbox.left + _mob->hitbox.width) > hitPlat.left && _mob->isGroundedMob)
-				{
-					MoveMob(_mob, _dt);
-				}
-				else if (_mob->hitRect.left < hitPlat.left)
-				{
-					sfSprite_setPosition(_mob->sprite, (sfVector2f) { hitPlat.left + (_mob->hitRect.width / 2), sfSprite_getPosition(_mob->sprite).y });
-					_mob->velocity.x = 0;
-
-				}
-				else if ((_mob->hitRect.left + _mob->hitRect.width) > (hitPlat.left + hitPlat.width))
-				{
-					sfSprite_setPosition(_mob->sprite, (sfVector2f) { (hitPlat.left + hitPlat.width) - (_mob->hitRect.width / 2), sfSprite_getPosition(_mob->sprite).y });
-					_mob->velocity.x = 0;
-
-				}
+			if ((mob->hitbox.left + mob->hitbox.width) > hitPlat.left && mob->isGroundedMob)
+			{
+				MoveMob(_dt);
+			}
+			else if (mob->hitRect.left < hitPlat.left)
+			{
+				sfSprite_setPosition(mob->sprite, (sfVector2f) { hitPlat.left + (mob->hitRect.width / 2), sfSprite_getPosition(mob->sprite).y });
+				mob->velocity.x = 0;
 
 			}
+			else if ((mob->hitRect.left + mob->hitRect.width) > (hitPlat.left + hitPlat.width))
+			{
+				sfSprite_setPosition(mob->sprite, (sfVector2f) { (hitPlat.left + hitPlat.width) - (mob->hitRect.width / 2), sfSprite_getPosition(mob->sprite).y });
+				mob->velocity.x = 0;
+
+			}
+
 		}
-//	}
+	}
+
 }
 
-void MoveMob(Mob* _mob, float _dt)
+void MoveMob(float _dt)
 {
 	sfVector2f posPlayer = sfSprite_getPosition(player.sprite);
-	sfVector2f posMob = sfSprite_getPosition(_mob->sprite);
+	sfVector2f posMob = sfSprite_getPosition(mob->sprite);
 
 	float distX = posPlayer.x - posMob.x;
-	if ((GetDistancePlayerMob(&player, _mob) < 400.f && GetDistancePlayerMob(&player, _mob) > -400.f) && (GetDistancePlayerMob(&player, _mob) > DIST_ATTACK || GetDistancePlayerMob(&player, _mob) < -DIST_ATTACK))
+	if ((GetDistancePlayerMob(&player, mob) < 400.f && GetDistancePlayerMob(&player, mob) > -400.f) && (GetDistancePlayerMob(&player, mob) > DIST_ATTACK || GetDistancePlayerMob(&player, mob) < -DIST_ATTACK))
 	{
-		StateMobMachine(_mob, RUN_MOB);
+	//	StateMobMachine(RUN_MOB);
 		if (distX < 0)
 		{
-			sfSprite_setScale(_mob->sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
-			_mob->velocity.x = -DIST_ATTACK;
+			sfSprite_setScale(mob->sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+			mob->velocity.x = -DIST_ATTACK;
 		}
 		else
 		{
-			sfSprite_setScale(_mob->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-			_mob->velocity.x = DIST_ATTACK;
+			sfSprite_setScale(mob->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+			mob->velocity.x = DIST_ATTACK;
 		}
 
 	}
 
 }
 
-void AttackMob(Mob* _mob, float _dt)
+void AttackMob(float _dt)
 {
-	_mob->timerState += _dt;
-	if ((GetDistancePlayerMob(&player, _mob) < ((player.playerRect.left + player.playerRect.width) - _mob->hitRect.left) &&
-		GetDistancePlayerMob(&player, _mob) > player.collisionPlayerRect.left - (_mob->hitRect.left + _mob->hitRect.width)) && _mob->timerState > 0.85f)
+	mob->timerState += _dt;
+	if ((GetDistancePlayerMob(&player, mob) < ((player.playerRect.left + player.playerRect.width) - mob->hitRect.left) &&
+		GetDistancePlayerMob(&player, mob) > player.collisionPlayerRect.left - (mob->hitRect.left + mob->hitRect.width)) && mob->timerState > 0.85f)
 	{
-		_mob->velocity.x = 0;
-		_mob->timerState = 0.f;
-		StateMobMachine(_mob, ATTACK_MOB);
+		mob->velocity.x = 0;
+		mob->timerState = 0.f;
+	//	StateMobMachine(ATTACK_MOB);
 	}
-   
-	if (!_mob->currentMobAnimation->isPlaying)
+
+	if (!mob->currentMobAnimation->isPlaying)
 	{
-		StateMobMachine(_mob, IDLE_MOB);
+		StateMobMachine(IDLE_MOB);
 
 	}
 }
@@ -221,39 +272,33 @@ float GetDistancePlayerMob(Player* _player, Mob* _mob)
 	float distX = _player->position.x - sfSprite_getPosition(_mob->sprite).x;
 	float distY = _player->position.y - sfSprite_getPosition(_mob->sprite).y;
 
-	return sqrtf((distX * distX) - (distY * distY));
+	return sqrtf((distX * distX) + (distY * distY));
 
 }
 
 
 void DrawMob(sfRenderWindow* _renderWindow)
 {
-	for (int i = 0; i < mobCount; i++)
-	{
-		sfRenderWindow_drawRectangleShape(_renderWindow, mushroom[i].rect, NULL);
-		sfRenderWindow_drawSprite(_renderWindow, mushroom[i].sprite, NULL);
-	}
+
+	sfRenderWindow_drawRectangleShape(_renderWindow, mob[0].rect, NULL);
+	sfRenderWindow_drawSprite(_renderWindow, mob[0].sprite, NULL);
+
 }
 
-//void CleanupMob(void)
-//{
-//	for (int i = 0; i < mobCount; i++)
-//	{
-//		sfSprite_destroy(mushroom[i].sprite);
-//		free(mushroom);
-//		mushroom[i] = (Mob){ NULL };
-//	}
-//}
-
-
-void CheckVelocityY(Mob* _mob, float _dt)
+void cleanupmob(void)
 {
-	if (!_mob->isGroundedMob)
+
+}
+
+
+void CheckVelocityY(float _dt)
+{
+	if (!mob->isGroundedMob)
 	{
-		_mob->velocity.y += GRAVITY * _dt;
-		if (_mob->velocity.y > GRAVITY * 100.f * _dt)
+		mob->velocity.y += GRAVITY * _dt;
+		if (mob->velocity.y > GRAVITY * 100.f * _dt)
 		{
-			_mob->velocity.y = GRAVITY * 100.f * _dt;
+			mob->velocity.y = GRAVITY * 100.f * _dt;
 		}
 	}
 
