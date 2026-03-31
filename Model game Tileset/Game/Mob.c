@@ -38,8 +38,9 @@ void LoadMob(void)
 
 
 
-	AddMob(MUSHROOM, 600, 125);
-	AddMob(MUSHROOM, 800, 125);
+	AddMob(MUSHROOM, 450, 125);
+	AddMob(SKELETON, 600, 125);
+
 
 }
 
@@ -125,8 +126,11 @@ void LoadMobAnimation()
 	default:
 		break;
 	}
-	SetAnimationMob(IDLE_MOB, mobCount - 1);
 
+	for (int i = 0; i < mobCount; i++)
+	{
+		SetAnimationMob(IDLE_MOB, i);
+	}
 
 
 }
@@ -283,7 +287,7 @@ void DrawMob(sfRenderWindow* _renderWindow)
 {
 	for (int i = 0; i < mobCount; i++)
 	{
-		sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
+	//	sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
 	}
 }
