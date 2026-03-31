@@ -1,5 +1,3 @@
 ﻿  Mob.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(126,33): error C2197: 'void SetAnimationMushroom(MobState)' : trop d'arguments pour un appel
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(135,6): warning C4029: la déclaration de la liste de paramètres formels est différente de la définition
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(146,6): warning C4029: la déclaration de la liste de paramètres formels est différente de la définition
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(264,3): error C2198: 'void StateMobMachine(MobState,unsigned int)' : pas assez d'arguments pour un appel
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(284,20): warning C4018: '<' : incompatibilité signed/unsigned
+  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe

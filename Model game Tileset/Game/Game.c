@@ -70,5 +70,8 @@ void CleanupGame(void)
 	CleanupMap();
 	CleanUpPlayer();
 	CleanUpCamera();
-	//CleanupMob();
+	//Cleanup
+	// 
+	// 
+	// ();
 }
