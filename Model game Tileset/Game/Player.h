@@ -55,6 +55,7 @@ typedef enum PlayerState
 
 }PlayerState;
 
+
 typedef struct Player
 {
 	sfSprite* sprite;

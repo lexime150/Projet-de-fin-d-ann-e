@@ -98,8 +98,7 @@
               "RelativeToolTip": "Game\\GameHUD.c",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-03-31T12:57:26.787Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-31T12:57:26.787Z"
             },
             {
               "$type": "Document",
@@ -111,8 +110,7 @@
               "RelativeToolTip": "Game\\Mob.c",
               "ViewState": "AgIAACcAAAAAAAAAAAAawCwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-03-27T09:34:32.303Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-27T09:34:32.303Z"
             },
             {
               "$type": "Document",
@@ -156,9 +154,9 @@
               "Title": "Player.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c",
               "RelativeDocumentMoniker": "Game\\Player.c",
-              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c*",
-              "RelativeToolTip": "Game\\Player.c*",
-              "ViewState": "AgIAABwAAAAAAAAAAAAuwEAAAAATAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c",
+              "RelativeToolTip": "Game\\Player.c",
+              "ViewState": "AgIAABwAAAAAAAAAAAAuwDYAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-03-25T08:12:37.211Z",
               "EditorCaption": ""
@@ -233,8 +231,7 @@
               "RelativeToolTip": "Game\\Camera.c",
               "ViewState": "AgIAABQAAAAAAAAAAAAowCIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-03-25T08:40:58.349Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-25T08:40:58.349Z"
             },
             {
               "$type": "Document",
@@ -270,8 +267,7 @@
               "RelativeToolTip": "Game\\Game.c",
               "ViewState": "AgIAACoAAAAAAAAAAAAAADkAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-03-25T08:11:52.95Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-25T08:11:52.95Z"
             },
             {
               "$type": "Document",
