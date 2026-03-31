@@ -201,7 +201,7 @@ void AttackMob(Mob* _mob, float _dt)
 {
 	_mob->timerState += _dt;
 	if ((GetDistancePlayerMob(&player, _mob) < ((player.playerRect.left + player.playerRect.width) - _mob->hitRect.left) &&
-		GetDistancePlayerMob(&player, _mob) > player.collisionRect.left - (_mob->hitRect.left + _mob->hitRect.width)) && _mob->timerState > 0.85f)
+		GetDistancePlayerMob(&player, _mob) > player.collisionPlayerRect.left - (_mob->hitRect.left + _mob->hitRect.width)) && _mob->timerState > 0.85f)
 	{
 		_mob->velocity.x = 0;
 		_mob->timerState = 0.f;
@@ -235,15 +235,15 @@ void DrawMob(sfRenderWindow* _renderWindow)
 	}
 }
 
-void CleanupMob(void)
-{
-	for (int i = 0; i < mobCount; i++)
-	{
-		sfSprite_destroy(mushroom[i].sprite);
-		free(mushroom);
-		mushroom[i] = (Mob){ NULL };
-	}
-}
+//void CleanupMob(void)
+//{
+//	for (int i = 0; i < mobCount; i++)
+//	{
+//		sfSprite_destroy(mushroom[i].sprite);
+//		free(mushroom);
+//		mushroom[i] = (Mob){ NULL };
+//	}
+//}
 
 
 void CheckVelocityY(Mob* _mob, float _dt)

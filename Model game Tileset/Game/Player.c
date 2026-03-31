@@ -1,5 +1,7 @@
 ﻿#include "Player.h"
+
 Player player;
+void createCollisionAttack();
 void CollisionPlayerPlatformsX(float _dx);
 sfBool CheckCollisionPlayerPlatformsX(float _dx);
 
@@ -23,13 +25,13 @@ void LoadPlayer(void)
 	sfSprite_setPosition(player.sprite, (sfVector2f) { 100, 0 });
 	player.speed = 350.f;
 
-	player.collisionShape = sfRectangleShape_create();
-	sfRectangleShape_setSize(player.collisionShape, (sfVector2f) { PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE });
+	player.collisionPlayerShape = sfRectangleShape_create();
+	sfRectangleShape_setSize(player.collisionPlayerShape, (sfVector2f) { PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE });
 
 	sfVector2f spritePos = sfSprite_getPosition(player.sprite);
-	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { spritePos.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f, spritePos.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE) });
-	sfRectangleShape_setOutlineColor(player.collisionShape, sfRed);
-	sfRectangleShape_setFillColor(player.collisionShape, sfColor_fromRGBA(255, 255, 255, 50));
+	sfRectangleShape_setPosition(player.collisionPlayerShape, (sfVector2f) { spritePos.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f, spritePos.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE) });
+	sfRectangleShape_setOutlineColor(player.collisionPlayerShape, sfRed);
+	sfRectangleShape_setFillColor(player.collisionPlayerShape, sfColor_fromRGBA(255, 255, 255, 50));
 
 	player.velocity.x = 0;
 	player.velocity.y = 0;
@@ -54,7 +56,7 @@ void LoadPlayer(void)
 	player.jumpStartPosition = 0;
 
 	player.position = sfSprite_getPosition(player.sprite);
-	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
+	player.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.collisionPlayerShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 	player.slideCooldownTimer = 0.f;
 
@@ -89,8 +91,9 @@ void MovePlayer(float _dt)
 		player.slideCooldownTimer -= _dt;
 	}
 
-	if (sfMouse_isButtonPressed(sfMouseLeft) && player.attackCooldownTimer >= 1.2f && player.isGrounded)
+	if (sfMouse_isButtonPressed(sfMouseLeft) && player.attackCooldownTimer >= ATTACK_AXE_COOLDOWN && player.isGrounded)
 	{
+		createCollisionAttack();
 		player.isAttacking = sfTrue;
 		player.attackCooldownTimer = 0.f;
 		player.velocity.x = 0;
@@ -101,6 +104,7 @@ void MovePlayer(float _dt)
 	{
 		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
 		{
+			sfRectangleShape_destroy(player.collisionAttackShape);
 			player.isAttacking = sfFalse;
 			if (player.isGrounded)
 			{
@@ -114,16 +118,21 @@ void MovePlayer(float _dt)
 		return;
 	}
 
-	if (sfMouse_isButtonPressed(sfMouseRight) && player.attackCooldownTimer >= 1.2f && player.isGrounded)
+	if (sfMouse_isButtonPressed(sfMouseRight) && player.attackCooldownTimer >= ATTACK_SWORD_COOLDOWN && player.isGrounded)
 	{
+		createCollisionAttack();
+
 		player.isAttacking = sfTrue;
 		player.attackCooldownTimer = 0.f;
 		StateMachine(SWORD);
 	}
 	if (player.isAttacking && player.currentState == SWORD)
 	{
+		player.velocity.x = 0;
 		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
 		{
+			sfRectangleShape_destroy(player.collisionAttackShape);
+
 			player.isAttacking = sfFalse;
 			if (player.isGrounded)
 			{
@@ -454,14 +463,36 @@ void SetAnimation(PlayerState _state)
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
-	sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionShape, NULL);
+	sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionPlayerShape, NULL);
+	if (player.isAttacking)
+	{
+		sfRenderWindow_drawRectangleShape(_renderWindow, player.collisionAttackShape, NULL);
+
+	}
 }
 
 void CleanUpPlayer(void)
 {
 	sfSprite_destroy(player.sprite);
 	sfTexture_destroy(player.texture);
-	sfRectangleShape_destroy(player.collisionShape);
+	sfRectangleShape_destroy(player.collisionPlayerShape);
+}
+
+void createCollisionAttack()
+{
+	player.collisionAttackShape = sfRectangleShape_create();
+	sfRectangleShape_setSize(player.collisionAttackShape, (sfVector2f) { ATTACK_HITBOX_WIDTH* GAME_SCALE, ATTACK_HITBOX_HEIGHT* GAME_SCALE });
+	sfRectangleShape_setFillColor(player.collisionAttackShape, sfColor_fromRGBA(255,0,0,0));
+	player.collisionAttackRect = sfRectangleShape_getGlobalBounds(player.collisionAttackShape);
+	if (player.lastDirection == -1)
+	{
+		sfRectangleShape_setPosition(player.collisionAttackShape, (sfVector2f) {player.collisionPlayerRect.left - player.collisionAttackRect.width, player.collisionPlayerRect.top + player.collisionPlayerRect.width/2 -10});
+	}
+	else if (player.lastDirection == 1)
+	{
+		sfRectangleShape_setPosition(player.collisionAttackShape, (sfVector2f) { player.collisionPlayerRect.left + player.collisionPlayerRect.width, player.collisionPlayerRect.top + player.collisionPlayerRect.width / 2 - 10 });
+
+	}
 }
 
 void CollisionPlayerPlatformsX(float _dx)
@@ -496,8 +527,8 @@ void CollisionPlayerPlatformsX(float _dx)
 			}
 
 			sfSprite_setPosition(player.sprite, player.position);
-			sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { hitbox.left, hitbox.top });
-			player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
+			sfRectangleShape_setPosition(player.collisionPlayerShape, (sfVector2f) { hitbox.left, hitbox.top });
+			player.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.collisionPlayerShape);
 			player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 			return;
 		}
@@ -506,8 +537,8 @@ void CollisionPlayerPlatformsX(float _dx)
 	player.justWallJumped = sfFalse;
 	player.position.x += _dx;
 	sfSprite_setPosition(player.sprite, player.position);
-	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { player.position.x - playerHalfWidth, player.position.y - playerHeight });
-	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
+	sfRectangleShape_setPosition(player.collisionPlayerShape, (sfVector2f) { player.position.x - playerHalfWidth, player.position.y - playerHeight });
+	player.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.collisionPlayerShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
 
@@ -574,8 +605,8 @@ void CollisionPlayerPlatformsY(float _dy)
 			player.velocity.y = 0;
 			player.position.y = hitbox.top + hitbox.height;
 			sfSprite_setPosition(player.sprite, player.position);
-			sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { hitbox.left, hitbox.top });
-			player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
+			sfRectangleShape_setPosition(player.collisionPlayerShape, (sfVector2f) { hitbox.left, hitbox.top });
+			player.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.collisionPlayerShape);
 			player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 			return;
 		}
@@ -583,8 +614,8 @@ void CollisionPlayerPlatformsY(float _dy)
 
 	player.position.y += _dy;
 	sfSprite_setPosition(player.sprite, player.position);
-	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { player.position.x - playerHalfWidth, player.position.y - playerHeight });
-	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
+	sfRectangleShape_setPosition(player.collisionPlayerShape, (sfVector2f) { player.position.x - playerHalfWidth, player.position.y - playerHeight });
+	player.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.collisionPlayerShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
 
@@ -596,8 +627,8 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	float dy = player.velocity.y * _dt;
 	CollisionPlayerPlatformsY(dy);
 
-	sfRectangleShape_setPosition(player.collisionShape, (sfVector2f) { player.position.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f, player.position.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE) });
-	player.collisionRect = sfRectangleShape_getGlobalBounds(player.collisionShape);
+	sfRectangleShape_setPosition(player.collisionPlayerShape, (sfVector2f) { player.position.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f, player.position.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE) });
+	player.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.collisionPlayerShape);
 	player.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
 

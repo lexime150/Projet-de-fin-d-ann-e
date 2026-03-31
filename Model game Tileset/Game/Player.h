@@ -24,6 +24,13 @@
 #define PLAYER_HITBOX_WIDTH  20
 #define PLAYER_HITBOX_HEIGHT 28
 
+#define ATTACK_HITBOX_WIDTH 22
+#define ATTACK_HITBOX_HEIGHT 15
+
+#define ATTACK_SWORD_COOLDOWN 0.8f
+#define ATTACK_AXE_COOLDOWN 1.2f
+
+
 
 typedef enum PlayerState
 {
@@ -57,6 +64,7 @@ typedef struct Player
 	sfVector2f velocity;
 	sfVector2f position;
 	float wallJumpVelocityX;
+
 	sfFloatRect playerRect;
 
 	Animation animationPlayer[17];
@@ -65,9 +73,11 @@ typedef struct Player
 
 	short lastDirection;
 
-	sfRectangleShape* collisionShape;
-	sfFloatRect collisionRect;
+	sfRectangleShape* collisionPlayerShape;
+	sfFloatRect collisionPlayerRect;
 
+	sfRectangleShape* collisionAttackShape;
+	sfFloatRect collisionAttackRect;
 
 	sfBool isGrounded;
 	sfBool isMoving;

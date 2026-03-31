@@ -1,7 +1,17 @@
-﻿  Mob.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(33,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(39,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(108,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(231,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(240,20): warning C4018: '<' : incompatibilité signed/unsigned
-  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+﻿  Camera.c
+  Game.c
+  GameOver.c
+  GameState.c
+  Menu.c
+  Mob.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(33,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(39,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(108,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(231,20): warning C4018: '<' : incompatibilité signed/unsigned
+  Player.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(311,60): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+  main.c
+  Génération de code en cours...
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.
