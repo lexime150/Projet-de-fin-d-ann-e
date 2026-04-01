@@ -8,7 +8,8 @@ sfTexture* texture[MOB_NUMBER];
 Player player;
 unsigned mobCount;
 
-
+void Swap(Mob* _mob, int _i, int _j);
+void BubbleSort(Mob* _mob, int _i);
 
 
 void SetAnimationMob(MobState _state, unsigned _i);
@@ -16,12 +17,14 @@ void StateMobMachine(MobState _state, unsigned _i);
 void CheckCollisionMobPlat(float _dt, unsigned _i);
 void MoveMob(float _dt, unsigned _i);
 void AttackMob(float _dt, unsigned _i);
-
 void CheckVelocityY(float _dt, unsigned _i);
-
 void AddMob(TypeMob _type, float _x, float _y);
-
 float GetDistancePlayerMob(Player* _player, unsigned _i);
+void SetBubbleSort(void);
+void DeleteMob(unsigned* _i);
+
+
+
 
 void LoadMob(void)
 {
@@ -94,6 +97,28 @@ void AddMob(TypeMob _type, float _x, float _y)
 	LoadMobAnimation(mobCount - 1);
 }
 
+void DeleteMob(unsigned* _i)
+{
+	if (sfKeyboard_isKeyPressed(sfKeyT))
+	{
+		sfSprite_destroy(mob[*_i].sprite);
+		sfRectangleShape_destroy(mob[*_i].rect);
+		mob[*_i] = (Mob){ NULL };
+		SetBubbleSort();
+		mobCount--;
+		mob = realloc(mob, mobCount * (sizeof(Mob)));
+		if (!mob)
+		{
+			fprintf(stderr, "Realloc Failure\n");
+			return;
+		}
+		*_i--;
+		for (unsigned x = 0; x < mobCount; x++)
+		{
+			SetAnimationMob(mob[x].currentState, x);
+		}
+	}
+}
 
 
 void LoadMobAnimation(unsigned _i)
@@ -137,7 +162,7 @@ void LoadMobAnimation(unsigned _i)
 		break;
 	}
 
-	for (int i = 0; i < mobCount; i++)
+	for (unsigned i = 0; i < mobCount; i++)
 	{
 		SetAnimationMob(IDLE_MOB, i);
 	}
@@ -171,6 +196,36 @@ void StateMobMachine(MobState _state, unsigned _i)
 	}
 }
 
+void Swap(Mob* _mob, int _i, int _j)
+{
+	Mob temp = mob[_i];
+	mob[_i] = mob[_j];
+	mob[_j] = temp;
+}
+
+void BubbleSort(Mob* _mob, int _i)
+{
+	for (int i = 0; i < _i - 1; i++)
+	{
+		for (int j = 0; j < _i - i - 1; j++)
+		{
+			if (mob[j].sprite == NULL && mob[j + 1].sprite != NULL)
+			{
+				Swap(mob, j, j + 1);
+			}
+
+		}
+	}
+}
+
+void SetBubbleSort()
+{
+	int i = mobCount;
+
+	BubbleSort(mob, i);
+}
+
+
 void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 {
 	for (unsigned i = 0; i < mobCount; i++)
@@ -181,7 +236,7 @@ void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 		sfSprite_move(mob[i].sprite, (sfVector2f) { mob[i].velocity.x* _dt, mob[i].velocity.y* _dt });
 		sfRectangleShape_setPosition(mob[i].rect, sfSprite_getPosition(mob[i].sprite));
 
-
+		
 
 		MoveMob(_dt, i);
 		AttackMob(_dt, i);
@@ -190,6 +245,8 @@ void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 		CheckCollisionMobPlat(_dt, i);
 
 		UpdateAnimation(mob[i].currentMobAnimation, _dt);
+	
+		DeleteMob(&i);
 
 	}
 }
@@ -291,7 +348,7 @@ float GetDistancePlayerMob(Player* _player, unsigned _i)
 
 void DrawMob(sfRenderWindow* _renderWindow)
 {
-	for (int i = 0; i < mobCount; i++)
+	for (unsigned i = 0; i < mobCount; i++)
 	{
 	//	sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
@@ -306,12 +363,13 @@ void CleanupMob(void)
 	texture[SKELETON] = NULL;
 
 
-	for (int i = 0; i < mobCount; i++)
+	for (unsigned i = 0; i < mobCount; i++)
 	{
 		sfSprite_destroy(mob[i].sprite);
 		sfRectangleShape_destroy(mob[i].rect);
-		mob[i] = (Mob){ NULL };
+		mob[i] = (Mob){ 0 };
 	}
+	mobCount = 0;
 	free(mob);
 	mob = (Mob*){ NULL };
 }

@@ -108,7 +108,7 @@
               "RelativeDocumentMoniker": "Game\\Mob.c",
               "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.c",
               "RelativeToolTip": "Game\\Mob.c",
-              "ViewState": "AgIAACAAAAAAAAAAAAAcwLMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAswHsAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-03-27T09:34:32.303Z",
               "EditorCaption": ""
@@ -123,8 +123,7 @@
               "RelativeToolTip": "Game\\Mob.h",
               "ViewState": "AgIAAC0AAAAAAAAAAAAAAEoAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-03-27T09:25:52.712Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-27T09:25:52.712Z"
             },
             {
               "$type": "Document",
@@ -136,8 +135,7 @@
               "RelativeToolTip": "Game\\main.c",
               "ViewState": "AgIAABUAAAAAAAAAAAAAACoAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-03-25T08:51:19.716Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-25T08:51:19.716Z"
             },
             {
               "$type": "Document",
@@ -161,8 +159,7 @@
               "RelativeToolTip": "Game\\Player.c",
               "ViewState": "AgIAAMoBAAAAAAAAAAAAADYAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-03-25T08:12:37.211Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-25T08:12:37.211Z"
             },
             {
               "$type": "Document",
@@ -270,8 +267,7 @@
               "RelativeToolTip": "Game\\Game.c",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAEwAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-03-25T08:11:52.95Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-25T08:11:52.95Z"
             },
             {
               "$type": "Document",
