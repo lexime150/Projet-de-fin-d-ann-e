@@ -16,8 +16,6 @@ sfBool CheckCollisionPlayerPlatformsX(float _dx);
 void CheckCollisionPlayerPlatforms(float _dt);
 
 
-
-
 void LoadPlayer(void)
 {
 	player.sprite = sfSprite_create();
@@ -390,7 +388,7 @@ void MovePlayer(float _dt)
 		jumpPressed = sfTrue;
 		player.data.jumpStartPosition = player.data.position.y;
 
-		if (player.action.isGrounded || player.action.isSliding)
+		if (player.action.isGrounded || (player.action.isSliding && player.action.isGrounded))
 		{
 			player.data.lastWallTouched = 0;
 			if (player.action.isSliding)
@@ -668,11 +666,6 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
 
-
-
-
-
-
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
@@ -689,10 +682,6 @@ void CleanUpPlayer(void)
 	sfTexture_destroy(player.texture);
 	sfRectangleShape_destroy(player.shape.collisionPlayerShape);
 }
-
-
-
-
 
 void StateMachine(PlayerState _state)
 {
