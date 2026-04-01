@@ -9,8 +9,9 @@
 #define HITBOX_MUSHROOM_HEIGHT 37
 
 #define DIST_ATTACK 150.f
+#define DIST_RUN 400.f
 
-#define HITBOX_SKELETON 32
+#define HITBOX_SKELETON_HEIGHT 32
 #define HITBOX_ATTACK_SKELETON_WIDTH 48
 
 typedef enum MobState
@@ -47,8 +48,8 @@ typedef struct Mob
 	sfBool isMoving;
 	sfBool isAttack;
 	sfBool isAlive;
-	sfBool isGroundedMob;
 	sfBool isTakeIt;
+	sfBool isGroundedMob;
 
 
 	MobState lastState;
