@@ -23,7 +23,6 @@ void LoadPlayer(void)
 	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
 	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfSprite_setPosition(player.sprite, GetPlayerSpawn());
-	printf("x: %f, y: %f", sfSprite_getPosition(player.sprite).x, sfSprite_getPosition(player.sprite).y);
 	player.shape.collisionPlayerShape = sfRectangleShape_create();
 	sfRectangleShape_setSize(player.shape.collisionPlayerShape, (sfVector2f) { PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE });
 
@@ -163,17 +162,18 @@ void createCollisionAttack()
 {
 	player.shape.collisionAttackShape = sfRectangleShape_create();
 	sfRectangleShape_setSize(player.shape.collisionAttackShape, (sfVector2f) { ATTACK_HITBOX_WIDTH* GAME_SCALE, ATTACK_HITBOX_HEIGHT* GAME_SCALE });
-	sfRectangleShape_setFillColor(player.shape.collisionAttackShape, sfColor_fromRGBA(255,0,0,0));
+	sfRectangleShape_setFillColor(player.shape.collisionAttackShape, sfColor_fromRGBA(255, 0, 0, 150));
 	player.shape.collisionAttackRect = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
 	if (player.data.lastDirection == -1)
 	{
-		sfRectangleShape_setPosition(player.shape.collisionAttackShape, (sfVector2f) {player.shape.collisionPlayerRect.left - player.shape.collisionAttackRect.width, player.shape.collisionPlayerRect.top + player.shape.collisionPlayerRect.width/2 -10});
+		sfRectangleShape_setPosition(player.shape.collisionAttackShape, (sfVector2f) { player.shape.collisionPlayerRect.left - player.shape.collisionAttackRect.width, player.shape.collisionPlayerRect.top + player.shape.collisionPlayerRect.width / 2 - 10 });
 	}
 	else if (player.data.lastDirection == 1)
 	{
 		sfRectangleShape_setPosition(player.shape.collisionAttackShape, (sfVector2f) { player.shape.collisionPlayerRect.left + player.shape.collisionPlayerRect.width, player.shape.collisionPlayerRect.top + player.shape.collisionPlayerRect.width / 2 - 10 });
 
 	}
+
 }
 void MovePlayer(float _dt)
 {
@@ -199,13 +199,21 @@ void MovePlayer(float _dt)
 		player.data.velocity.x = 0;
 		StateMachine(AXE);
 	}
-
-	if (player.action.isAttacking && player.currentState == AXE)
+	if (sfMouse_isButtonPressed(sfMouseRight) && player.data.attackCooldownTimer >= ATTACK_SWORD_COOLDOWN && player.action.isGrounded)
 	{
+		createCollisionAttack();
+		player.action.isAttacking = sfTrue;
+		player.data.attackCooldownTimer = 0.f;
+		StateMachine(SWORD);
+	}
+	 if (player.action.isAttacking && player.currentState == AXE)
+	{
+		player.data.velocity.x = 0;
 		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
 		{
 			sfRectangleShape_destroy(player.shape.collisionAttackShape);
 			player.action.isAttacking = sfFalse;
+
 			if (player.action.isGrounded)
 			{
 				StateMachine(player.action.isMoving ? RUN : IDLE);
@@ -216,15 +224,6 @@ void MovePlayer(float _dt)
 			}
 		}
 		return;
-	}
-
-	if (sfMouse_isButtonPressed(sfMouseRight) && player.data.attackCooldownTimer >= ATTACK_SWORD_COOLDOWN && player.action.isGrounded)
-	{
-		createCollisionAttack();
-
-		player.action.isAttacking = sfTrue;
-		player.data.attackCooldownTimer = 0.f;
-		StateMachine(SWORD);
 	}
 	if (player.action.isAttacking && player.currentState == SWORD)
 	{
@@ -245,6 +244,7 @@ void MovePlayer(float _dt)
 		}
 		return;
 	}
+
 
 	if (player.action.isWallJumping)
 	{
@@ -669,12 +669,12 @@ void CheckCollisionPlayerPlatforms(float _dt)
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
-	//sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionPlayerShape, NULL);
-	//if (player.action.isAttacking)
-	//{
-	//	sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionAttackShape, NULL);
+	sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionPlayerShape, NULL);
+	if (player.action.isAttacking)
+	{
+		sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionAttackShape, NULL);
 
-	//}
+	}
 }
 void CleanUpPlayer(void)
 {
