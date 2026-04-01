@@ -1,19 +1,2 @@
-﻿  Animation.c
-  Camera.c
-  Game.c
-  GameHUD.c
-  GameOver.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\GameHUD.c(21,42): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-  GameState.c
-  main.c
-  Map.c
-  Menu.c
-  Mob.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(140,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(298,20): warning C4018: '<' : incompatibilité signed/unsigned
-  Player.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(313,60): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-  Génération de code en cours...
-  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
-  'pwsh.exe' n'est pas reconnu en tant que commande interne
-  ou externe, un programme exécutable ou un fichier de commandes.
+﻿  Mob.c
+  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
