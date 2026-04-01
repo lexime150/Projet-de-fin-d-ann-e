@@ -7,7 +7,19 @@ Player player;
 void LoadGame(void)
 {
 	LoadMap("Map");
+	//sfVector2f pSpawn = GetPlayerSpawn();
+	//printf("Player Spawn -> x: %.2f, y: %.2f\n", pSpawn.x, pSpawn.y);
+
+	//unsigned int enemyCount = GetEnemySpawnTabSize();
+	//printf("Enemy Spawn count: %u\n", enemyCount);
+
+	//for (unsigned int i = 0; i < enemyCount; i++)
+	//{
+	//	sfVector2f eSpawn = GetEnemySpawn(i);
+	//	printf("Enemy Spawn [%u] -> x: %.2f, y: %.2f\n", i, eSpawn.x, eSpawn.y);
+	//}
 	LoadPlayer();
+
 	LoadCamera();
 	LoadMob();
 	LoadHUD();

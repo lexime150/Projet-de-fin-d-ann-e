@@ -24,8 +24,8 @@ void LoadPlayer(void)
 	player.texture = sfTexture_createFromFile("Assets/Sprites/IDLE.png", NULL);
 	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
 	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-	sfSprite_setPosition(player.sprite, (sfVector2f) { 100, 0 });
-
+	sfSprite_setPosition(player.sprite, GetPlayerSpawn());
+	printf("x: %f, y: %f", sfSprite_getPosition(player.sprite).x, sfSprite_getPosition(player.sprite).y);
 	player.shape.collisionPlayerShape = sfRectangleShape_create();
 	sfRectangleShape_setSize(player.shape.collisionPlayerShape, (sfVector2f) { PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE });
 
