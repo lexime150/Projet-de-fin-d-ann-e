@@ -320,8 +320,8 @@ void MoveMob(float _dt, unsigned _i)
 void AttackMob(float _dt, unsigned _i)
 {
 	mob[_i].timerState += _dt;
-	if ((GetDistancePlayerMob(&player, _i) < ((player.playerRect.left + player.playerRect.width) - mob[_i].hitRect.left) &&
-		GetDistancePlayerMob(&player, _i) > player.collisionPlayerRect.left - (mob[_i].hitRect.left + mob[_i].hitRect.width)) && mob[_i].timerState > 0.85f)
+	if ((GetDistancePlayerMob(&player, _i) < ((player.shape.playerRect.left + player.shape.playerRect.width) - mob[_i].hitRect.left) &&
+		GetDistancePlayerMob(&player, _i) > player.shape.collisionPlayerRect.left - (mob[_i].hitRect.left + mob[_i].hitRect.width)) && mob[_i].timerState > 0.85f)
 	{
 		mob[_i].velocity.x = 0;
 		mob[_i].timerState = 0.f;
@@ -338,8 +338,8 @@ void AttackMob(float _dt, unsigned _i)
 
 float GetDistancePlayerMob(Player* _player, unsigned _i)
 {
-	float distX = _player->position.x - sfSprite_getPosition(mob[_i].sprite).x;
-	float distY = _player->position.y - sfSprite_getPosition(mob[_i].sprite).y;
+	float distX = _player->data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
+	float distY = _player->data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
 
 	return sqrtf((distX * distX) + (distY * distY));
 

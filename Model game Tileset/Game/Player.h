@@ -55,31 +55,8 @@ typedef enum PlayerState
 
 }PlayerState;
 
-
-typedef struct Player
+typedef struct Action
 {
-	sfSprite* sprite;
-	sfTexture* texture;
-
-	float speed;
-	sfVector2f velocity;
-	sfVector2f position;
-	float wallJumpVelocityX;
-
-	sfFloatRect playerRect;
-
-	Animation animationPlayer[17];
-	Animation* currentAnimation;
-
-
-	short lastDirection;
-
-	sfRectangleShape* collisionPlayerShape;
-	sfFloatRect collisionPlayerRect;
-
-	sfRectangleShape* collisionAttackShape;
-	sfFloatRect collisionAttackRect;
-
 	sfBool isGrounded;
 	sfBool isMoving;
 
@@ -91,25 +68,61 @@ typedef struct Player
 	sfBool isTouchingWall;
 	sfBool isWallJumping;
 
-
-	sfBool isAttacking;
-	float attackCooldownTimer;
-
 	sfBool justWallJumped;
 
-	PlayerState currentState;
-	PlayerState lastState;
+	sfBool isAttacking;
+}Action;
 
-	float lastWallTouched;
-	float currentWallTouched;
+typedef struct Stats
+{
+	float speed;
+	float health;
+	float maxHealth;
+
+	sfVector2f velocity;
+	sfVector2f position;
+
+	float wallJumpVelocityX;
+	
 	float slideTimer;
 	float slideVelocityX;
 	float slideCooldownTimer;
 
+	short lastDirection;
+	float lastWallTouched;
+	float currentWallTouched;
+
+	float attackCooldownTimer;
+
 	float jumpStartPosition;
 
-	float health;
-	float maxHealth;
+}Stats;
+
+typedef struct Shape
+{
+	sfFloatRect playerRect;
+	sfRectangleShape* collisionPlayerShape;
+	sfFloatRect collisionPlayerRect;
+
+	sfRectangleShape* collisionAttackShape;
+	sfFloatRect collisionAttackRect;
+}Shape;
+
+typedef struct Player
+{
+	sfSprite* sprite;
+	sfTexture* texture;
+
+	Action action;
+	Stats data;
+	Shape shape;
+
+	PlayerState currentState;
+	PlayerState lastState;
+
+	Animation animationPlayer[17];
+	Animation* currentAnimation;
+
 
 }Player;
 

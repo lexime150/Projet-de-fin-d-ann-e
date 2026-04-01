@@ -1,2 +1,8 @@
-﻿  Mob.c
-  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+﻿  GameHUD.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\GameHUD.c(21,42): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+  Player.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(313,72): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+  Génération de code en cours...
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.
