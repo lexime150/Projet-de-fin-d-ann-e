@@ -22,4 +22,8 @@ unsigned int GetTriggerTabSize(void);
 sfFloatRect GetMapCollision(unsigned int _index);
 Trigger GetMapTrigger(unsigned int _index);
 
+unsigned int GetEnemySpawnTabSize(void);
+sfVector2f GetEnemySpawn(unsigned int _index);
+
+sfVector2f GetPlayerSpawn(void);
 #endif

@@ -9,6 +9,10 @@ unsigned int collisionTabSize;
 Trigger* triggerTab;
 unsigned int triggerTabSize;
 
+sfVector2f* enemySpawnTab;
+unsigned int enemySpawnTabSize;
+sfVector2f playerSpawn;
+
 void LoadCollisionAndTrigger(void);
 void DrawTileLayer(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer);
 void DrawObjectGroup(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer);
@@ -73,6 +77,9 @@ void CleanupMap(void)
 
 	free(triggerTab);
 	triggerTab = NULL;
+
+	free(enemySpawnTab);
+	enemySpawnTab = NULL;
 }
 
 void LoadCollisionAndTrigger(void)
@@ -92,6 +99,12 @@ void LoadCollisionAndTrigger(void)
 	{
 		return;
 	}
+
+	enemySpawnTab = calloc(1, sizeof(sfVector2f));
+	enemySpawnTabSize = 0;
+
+	playerSpawn = (sfVector2f){ 0, 0 };
+
 
 	// Select the first layer
 	cute_tiled_layer_t* layer = map->layers;
@@ -140,6 +153,28 @@ void LoadCollisionAndTrigger(void)
 					triggerTab[triggerTabSize].width = object->width * GAME_SCALE;
 					triggerTab[triggerTabSize].height = object->height * GAME_SCALE;
 					triggerTabSize++;
+				}
+			}
+			if (object->point == 1)
+			{
+				if (strcmp(layer->name.ptr, "Enemy-Spawn") == 0)
+				{
+					sfVector2f* enemySpawnTabTemp = realloc(enemySpawnTab, (unsigned long long)(enemySpawnTabSize + 1) * sizeof(sfVector2f));
+					if (enemySpawnTabTemp == NULL) return;
+					enemySpawnTab = enemySpawnTabTemp;
+
+					enemySpawnTab[enemySpawnTabSize] = (sfVector2f){
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE
+					};
+					enemySpawnTabSize++;
+				}
+				else if (strcmp(layer->name.ptr, "Player-Spawn") == 0)
+				{
+					playerSpawn = (sfVector2f){
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE
+					};
 				}
 			}
 			// Next object
@@ -240,3 +275,20 @@ Trigger GetMapTrigger(unsigned int _index)
 	}
 }
 
+unsigned int GetEnemySpawnTabSize(void)
+{
+    return enemySpawnTabSize;
+}
+
+sfVector2f GetEnemySpawn(unsigned int _index)
+{
+    if (_index < enemySpawnTabSize)
+        return enemySpawnTab[_index];
+    else
+        return (sfVector2f){ 0, 0 };
+}
+
+sfVector2f GetPlayerSpawn(void)
+{
+    return playerSpawn;
+}

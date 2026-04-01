@@ -43,8 +43,9 @@ void LoadMob(void)
 
 
 
-	AddMob(MUSHROOM, 450, 125);
-	AddMob(SKELETON, 600, 125);
+	AddMob(SKELETON, GetEnemySpawn(0).x, GetEnemySpawn(0).y);
+	AddMob(SKELETON, GetEnemySpawn(1).x, GetEnemySpawn(1).y);
+
 }
 
 void AddMob(TypeMob _type, float _x, float _y)
