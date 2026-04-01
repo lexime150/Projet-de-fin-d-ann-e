@@ -26,8 +26,6 @@ void LoadGame(void)
 }
 
 
-
-
 void PollEventGame(sfRenderWindow* _renderWindow)
 {
 	sfEvent event;

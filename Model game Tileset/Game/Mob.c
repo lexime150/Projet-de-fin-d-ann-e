@@ -45,7 +45,7 @@ void LoadMob(void)
 
 	AddMob(MUSHROOM, GetEnemySpawn(0).x, GetEnemySpawn(0).y);
 	AddMob(SKELETON, GetEnemySpawn(1).x, GetEnemySpawn(1).y);
-	AddMob(MUSHROOM, GetEnemySpawn(2).x, GetEnemySpawn(2).y);
+
 
 }
 
@@ -110,13 +110,15 @@ void DeleteMob(unsigned* _i)
 		mob[*_i] = (Mob){ NULL };
 		SetBubbleSort();
 		mobCount--;
-		mob = realloc(mob, mobCount * (sizeof(Mob)));
-		if (!mob)
+		Mob* temp = realloc(mob, mobCount * sizeof(Mob));
+		if (!temp && mobCount > 0)
 		{
 			fprintf(stderr, "Realloc Failure\n");
 			return;
 		}
-		*_i--;
+
+		mob = temp;
+		_i--;
 		for (unsigned x = 0; x < mobCount; x++)
 		{
 			SetAnimationMob(mob[x].currentState, x);
@@ -264,7 +266,7 @@ void CheckCollisionMobPlat(float _dt, unsigned _i)
 	sfFloatRect hitMob = { 0 };
 	sfFloatRect hitPlat = { 0 };
 
-	for (int i = 0; i < GetCollisionTabSize(); i++)
+	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		hitPlat = GetMapCollision(i);
 		hitMob = mob[_i].hitRect;
