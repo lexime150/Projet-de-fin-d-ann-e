@@ -232,6 +232,7 @@ void SetBubbleSort()
 
 void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 {
+	//printf("%d\n", mobCount);
 	//AddMob(rand() % 2, rand() % 5000, 125);
 	for (unsigned i = 0; i < mobCount; i++)
 	{

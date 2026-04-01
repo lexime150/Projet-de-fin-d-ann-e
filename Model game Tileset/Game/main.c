@@ -65,6 +65,11 @@ void Update(MainData _mainData)
 {
 	float dt = sfTime_asSeconds(sfClock_restart(_mainData.clock));
 
+	if (dt >= 0.03f)
+	{
+		dt = 0.03f;
+	}
+
 	switch (GetGameState())
 	{
 	case MENU:
