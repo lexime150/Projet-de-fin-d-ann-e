@@ -43,7 +43,8 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
 	case sfKeyEscape:
 		SetGameState(MENU);
 		break;
-	case sfKeySpace:
+	case sfKeyG:
+		player.data.health -= rand() % 50;
 		break;
 	default:
 		break;

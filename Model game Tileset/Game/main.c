@@ -22,7 +22,7 @@ void CleanupMainData(MainData* _mainData);
 int main(void)
 {
 	MainData mainData = { 0 };
-
+	srand(_getpid());
 	Load(&mainData);
 
 	while (sfRenderWindow_isOpen(mainData.renderWindow))

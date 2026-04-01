@@ -1,19 +1,21 @@
 ﻿#include "Player.h"
 
 Player player;
-void createCollisionAttack();
-void CollisionPlayerPlatformsX(float _dx);
-sfBool CheckCollisionPlayerPlatformsX(float _dx);
 
-void CollisionPlayerPlatformsY(float _dy);
-void CheckCollisionPlayerPlatforms(float _dt);
-
+void LoadPlayer(void);
 void LoadAnimationPlayer(void);
-
 void StateMachine(PlayerState _state);
 void SetAnimation(PlayerState _state);
+void createCollisionAttack();
+void UpdatePlayer(float _dt);
 void ApplyPhysic(float _dt);
 void MovePlayer(float _dt);
+void CollisionPlayerPlatformsX(float _dx);
+void CollisionPlayerPlatformsY(float _dy);
+sfBool CheckCollisionPlayerPlatformsX(float _dx);
+void CheckCollisionPlayerPlatforms(float _dt);
+
+
 
 
 void LoadPlayer(void)
@@ -23,7 +25,6 @@ void LoadPlayer(void)
 	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
 	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfSprite_setPosition(player.sprite, (sfVector2f) { 100, 0 });
-	player.data.speed = 350.f;
 
 	player.shape.collisionPlayerShape = sfRectangleShape_create();
 	sfRectangleShape_setSize(player.shape.collisionPlayerShape, (sfVector2f) { PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE });
@@ -33,40 +34,110 @@ void LoadPlayer(void)
 	sfRectangleShape_setOutlineColor(player.shape.collisionPlayerShape, sfRed);
 	sfRectangleShape_setFillColor(player.shape.collisionPlayerShape, sfColor_fromRGBA(255, 255, 255, 50));
 
-	player.data.velocity.x = 0;
-	player.data.velocity.y = 0;
-	player.data.slideVelocityX = 0;
-	player.data.lastDirection = 1;
-
 	player.lastState = IDLE;
 
-	player.data.lastWallTouched = 0;
 
 	sfSprite_setOrigin(player.sprite, (sfVector2f) { PLAYER_WIDTH / 2.f, PLAYER_HEIGHT });
 
 	player.action.isAttacking = sfFalse;
 	player.action.isGrounded = sfFalse;
 	player.action.isMoving = sfFalse;
+
 	player.action.isSlideJumping = sfFalse;
 	player.action.isSliding = sfFalse;
+
 	player.action.isTouchingLeftWall = sfFalse;
 	player.action.isTouchingRightWall = sfFalse;
 	player.action.isTouchingWall = sfFalse;
 	player.action.isWallJumping = sfFalse;
-	player.data.jumpStartPosition = 0;
 
 	player.data.position = sfSprite_getPosition(player.sprite);
 	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
-	player.data.slideCooldownTimer = 0.f;
+
 
 	player.data.attackCooldownTimer = 2.f;
+	player.data.lastWallTouched = 0;
 
 	player.data.health = 200;
 	player.data.maxHealth = 200;
+	player.data.speed = 350.f;
+
+	player.data.jumpStartPosition = 0;
+	player.data.velocity.x = 0;
+	player.data.velocity.y = 0;
+
+	player.data.slideVelocityX = 0;
+	player.data.slideCooldownTimer = 0.f;
+
+	player.data.lastDirection = 1;
 	LoadAnimationPlayer();
 }
+void LoadAnimationPlayer(void)
+{
+	sfIntRect firstFrame = { 0, 0 * PLAYER_HEIGHT , PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[IDLE] = CreateAnimation(player.sprite, 5, 7, sfTrue, sfTrue, firstFrame);
 
+	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 9, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[TURN] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 3 * PLAYER_WIDTH, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[FALL] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[D_JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, PLAYER_HEIGHT * 3 , PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[DASH_GROUND] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 4 * PLAYER_WIDTH, 3 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[DASH_UP] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 8 * PLAYER_WIDTH, 3 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[DASH_DIAGONAL] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 4 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[SLIDE] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 5 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[CLIMB_WALL] = CreateAnimation(player.sprite, 6, 9, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 6 * PLAYER_WIDTH, 5 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[LADDER] = CreateAnimation(player.sprite, 6, 7, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 6 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[WALL_GRIP_FALL] = CreateAnimation(player.sprite, 2, 4, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 2 * PLAYER_WIDTH, 6 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[WALL_JUMP] = CreateAnimation(player.sprite, 3, 9, sfTrue, sfFalse, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 7 * PLAYER_HEIGHT, 48, PLAYER_HEIGHT };
+	player.animationPlayer[AXE] = CreateAnimation(player.sprite, 10, 15, sfTrue, sfFalse, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 8 * PLAYER_HEIGHT, 48, PLAYER_HEIGHT };
+	player.animationPlayer[SWORD] = CreateAnimation(player.sprite, 4, 18, sfTrue, sfFalse, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, 9 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	player.animationPlayer[DASH] = CreateAnimation(player.sprite, 2, 7, sfTrue, sfFalse, firstFrame);
+
+	SetAnimation(IDLE);
+}
+
+void SetAnimation(PlayerState _state)
+{
+	player.lastState = player.currentState;
+	player.currentAnimation = &player.animationPlayer[_state];
+	player.currentAnimation->timer = 0.f;
+	player.currentAnimation->isPlaying = sfTrue;
+	player.currentAnimation->currentFrame = 0;
+	player.currentState = _state;
+}
 
 void UpdatePlayer(float _dt)
 {
@@ -75,8 +146,37 @@ void UpdatePlayer(float _dt)
 	CheckCollisionPlayerPlatforms(_dt);
 	UpdateAnimation(player.currentAnimation, _dt);
 }
+void ApplyPhysic(float _dt)
+{
+	if (!player.action.isGrounded)
+	{
+		player.data.velocity.y += GRAVITY * _dt;
+		if (player.data.velocity.y >= GRAVITY * 100 * _dt)
+		{
+			player.data.velocity.y = GRAVITY * 100 * _dt;
+		}
+	}
+	else
+	{
+		player.data.velocity.y = 50.f;
+	}
+}
+void createCollisionAttack()
+{
+	player.shape.collisionAttackShape = sfRectangleShape_create();
+	sfRectangleShape_setSize(player.shape.collisionAttackShape, (sfVector2f) { ATTACK_HITBOX_WIDTH* GAME_SCALE, ATTACK_HITBOX_HEIGHT* GAME_SCALE });
+	sfRectangleShape_setFillColor(player.shape.collisionAttackShape, sfColor_fromRGBA(255,0,0,0));
+	player.shape.collisionAttackRect = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
+	if (player.data.lastDirection == -1)
+	{
+		sfRectangleShape_setPosition(player.shape.collisionAttackShape, (sfVector2f) {player.shape.collisionPlayerRect.left - player.shape.collisionAttackRect.width, player.shape.collisionPlayerRect.top + player.shape.collisionPlayerRect.width/2 -10});
+	}
+	else if (player.data.lastDirection == 1)
+	{
+		sfRectangleShape_setPosition(player.shape.collisionAttackShape, (sfVector2f) { player.shape.collisionPlayerRect.left + player.shape.collisionPlayerRect.width, player.shape.collisionPlayerRect.top + player.shape.collisionPlayerRect.width / 2 - 10 });
 
-
+	}
+}
 void MovePlayer(float _dt)
 {
 	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
@@ -434,69 +534,6 @@ void MovePlayer(float _dt)
 	}
 }
 
-
-void ApplyPhysic(float _dt)
-{
-	if (!player.action.isGrounded)
-	{
-		player.data.velocity.y += GRAVITY * _dt;
-		if (player.data.velocity.y >= GRAVITY * 100 * _dt)
-		{
-			player.data.velocity.y = GRAVITY * 100 * _dt;
-		}
-	}
-	else
-	{
-		player.data.velocity.y = 50.f;
-	}
-}
-
-void SetAnimation(PlayerState _state)
-{
-	player.lastState = player.currentState;
-	player.currentAnimation = &player.animationPlayer[_state];
-	player.currentAnimation->timer = 0.f;
-	player.currentAnimation->isPlaying = sfTrue;
-	player.currentAnimation->currentFrame = 0;
-	player.currentState = _state;
-}
-
-
-void DrawPlayer(sfRenderWindow* _renderWindow)
-{
-	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
-	sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionPlayerShape, NULL);
-	if (player.action.isAttacking)
-	{
-		sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionAttackShape, NULL);
-
-	}
-}
-
-void CleanUpPlayer(void)
-{
-	sfSprite_destroy(player.sprite);
-	sfTexture_destroy(player.texture);
-	sfRectangleShape_destroy(player.shape.collisionPlayerShape);
-}
-
-void createCollisionAttack()
-{
-	player.shape.collisionAttackShape = sfRectangleShape_create();
-	sfRectangleShape_setSize(player.shape.collisionAttackShape, (sfVector2f) { ATTACK_HITBOX_WIDTH* GAME_SCALE, ATTACK_HITBOX_HEIGHT* GAME_SCALE });
-	sfRectangleShape_setFillColor(player.shape.collisionAttackShape, sfColor_fromRGBA(255,0,0,0));
-	player.shape.collisionAttackRect = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
-	if (player.data.lastDirection == -1)
-	{
-		sfRectangleShape_setPosition(player.shape.collisionAttackShape, (sfVector2f) {player.shape.collisionPlayerRect.left - player.shape.collisionAttackRect.width, player.shape.collisionPlayerRect.top + player.shape.collisionPlayerRect.width/2 -10});
-	}
-	else if (player.data.lastDirection == 1)
-	{
-		sfRectangleShape_setPosition(player.shape.collisionAttackShape, (sfVector2f) { player.shape.collisionPlayerRect.left + player.shape.collisionPlayerRect.width, player.shape.collisionPlayerRect.top + player.shape.collisionPlayerRect.width / 2 - 10 });
-
-	}
-}
-
 void CollisionPlayerPlatformsX(float _dx)
 {
 	player.action.isTouchingLeftWall = sfFalse;
@@ -543,42 +580,6 @@ void CollisionPlayerPlatformsX(float _dx)
 	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
-
-sfBool CheckCollisionPlayerPlatformsX(float _dx)
-{
-	player.action.isTouchingLeftWall = sfFalse;
-	player.action.isTouchingRightWall = sfFalse;
-
-	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
-	float playerWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
-	float playerHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
-
-	sfFloatRect hitbox = { player.data.position.x - playerHalfWidth + _dx, player.data.position.y - playerHeight, playerWidth, playerHeight };
-
-	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
-	{
-		sfFloatRect platform = GetMapCollision(i);
-		if (sfFloatRect_intersects(&hitbox, &platform, NULL))
-		{
-			float playerCenterX = player.data.position.x;
-			float platformCenterX = platform.left + platform.width * 0.5f;
-
-			if (playerCenterX < platformCenterX)
-			{
-				player.action.isTouchingRightWall = sfTrue;
-			}
-			else
-			{
-				player.action.isTouchingLeftWall = sfTrue;
-			}
-
-			return sfTrue;
-		}
-	}
-	return sfFalse;
-}
-
-
 void CollisionPlayerPlatformsY(float _dy)
 {
 	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
@@ -621,6 +622,39 @@ void CollisionPlayerPlatformsY(float _dy)
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
 
+sfBool CheckCollisionPlayerPlatformsX(float _dx)
+{
+	player.action.isTouchingLeftWall = sfFalse;
+	player.action.isTouchingRightWall = sfFalse;
+
+	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
+	float playerWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
+	float playerHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
+
+	sfFloatRect hitbox = { player.data.position.x - playerHalfWidth + _dx, player.data.position.y - playerHeight, playerWidth, playerHeight };
+
+	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
+	{
+		sfFloatRect platform = GetMapCollision(i);
+		if (sfFloatRect_intersects(&hitbox, &platform, NULL))
+		{
+			float playerCenterX = player.data.position.x;
+			float platformCenterX = platform.left + platform.width * 0.5f;
+
+			if (playerCenterX < platformCenterX)
+			{
+				player.action.isTouchingRightWall = sfTrue;
+			}
+			else
+			{
+				player.action.isTouchingLeftWall = sfTrue;
+			}
+
+			return sfTrue;
+		}
+	}
+	return sfFalse;
+}
 void CheckCollisionPlayerPlatforms(float _dt)
 {
 	float dx = player.data.velocity.x * _dt;
@@ -634,6 +668,32 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
 
+
+
+
+
+
+void DrawPlayer(sfRenderWindow* _renderWindow)
+{
+	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
+	//sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionPlayerShape, NULL);
+	//if (player.action.isAttacking)
+	//{
+	//	sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionAttackShape, NULL);
+
+	//}
+}
+void CleanUpPlayer(void)
+{
+	sfSprite_destroy(player.sprite);
+	sfTexture_destroy(player.texture);
+	sfRectangleShape_destroy(player.shape.collisionPlayerShape);
+}
+
+
+
+
+
 void StateMachine(PlayerState _state)
 {
 	if (player.currentState == _state)
@@ -643,59 +703,3 @@ void StateMachine(PlayerState _state)
 	SetAnimation(_state);
 }
 
-
-void LoadAnimationPlayer(void)
-{
-	sfIntRect firstFrame = { 0, 0 * PLAYER_HEIGHT , PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[IDLE] = CreateAnimation(player.sprite, 5, 7, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 9, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[TURN] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 3 * PLAYER_WIDTH, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[FALL] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[D_JUMP] = CreateAnimation(player.sprite, 3, 6, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, PLAYER_HEIGHT * 3 , PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[DASH_GROUND] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 4 * PLAYER_WIDTH, 3 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[DASH_UP] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 8 * PLAYER_WIDTH, 3 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[DASH_DIAGONAL] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, 4 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[SLIDE] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, 5 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[CLIMB_WALL] = CreateAnimation(player.sprite, 6, 9, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 6 * PLAYER_WIDTH, 5 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[LADDER] = CreateAnimation(player.sprite, 6, 7, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, 6 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[WALL_GRIP_FALL] = CreateAnimation(player.sprite, 2, 4, sfTrue, sfTrue, firstFrame);
-
-	firstFrame = (sfIntRect){ 2 * PLAYER_WIDTH, 6 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[WALL_JUMP] = CreateAnimation(player.sprite, 3, 9, sfTrue, sfFalse, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, 7 * PLAYER_HEIGHT, 48, PLAYER_HEIGHT };
-	player.animationPlayer[AXE] = CreateAnimation(player.sprite, 10, 15, sfTrue, sfFalse, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, 8 * PLAYER_HEIGHT, 48, PLAYER_HEIGHT };
-	player.animationPlayer[SWORD] = CreateAnimation(player.sprite, 4, 18, sfTrue, sfFalse, firstFrame);
-
-	firstFrame = (sfIntRect){ 0, 9 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[DASH] = CreateAnimation(player.sprite, 2, 7, sfTrue, sfFalse, firstFrame);
-
-	SetAnimation(IDLE);
-}
