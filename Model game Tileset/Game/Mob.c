@@ -43,8 +43,9 @@ void LoadMob(void)
 
 
 
-	AddMob(SKELETON, GetEnemySpawn(0).x, GetEnemySpawn(0).y);
+	AddMob(MUSHROOM, GetEnemySpawn(0).x, GetEnemySpawn(0).y);
 	AddMob(SKELETON, GetEnemySpawn(1).x, GetEnemySpawn(1).y);
+	AddMob(MUSHROOM, GetEnemySpawn(2).x, GetEnemySpawn(2).y);
 
 }
 
@@ -287,11 +288,11 @@ void CheckCollisionMobPlat(float _dt, unsigned _i)
 
 void CheckCollisionMobPlayer(float _dt, unsigned _i)
 {
-	if (mob[_i].hitRect.left < (player.collisionPlayerRect.left + player.collisionPlayerRect.width))
+	if (mob[_i].hitRect.left < (player.shape.collisionPlayerRect.left + player.shape.collisionPlayerRect.width))
 	{
 		
 	}
-	else if ((mob[_i].hitRect.left + mob[_i].hitRect.width) > player.collisionPlayerRect.left)
+	else if ((mob[_i].hitRect.left + mob[_i].hitRect.width) > player.shape.collisionPlayerRect.left)
 	{
 		
 	}
@@ -336,7 +337,7 @@ void AttackMob(float _dt, unsigned _i)
 
 	mob[_i].timerState += _dt;
 
-	if ((GetDistancePlayerMob(&player, _i) < player.playerRect.width && (GetDistancePlayerMob(&player, _i) > -player.playerRect.width && mob[_i].timerState > 1.f)))
+	if ((GetDistancePlayerMob(&player, _i) < player.shape.playerRect.width && (GetDistancePlayerMob(&player, _i) > -player.shape.playerRect.width && mob[_i].timerState > 1.f)))
 	{
 		mob[_i].isAttack = sfTrue;
 		MobIsAttack(_i);
