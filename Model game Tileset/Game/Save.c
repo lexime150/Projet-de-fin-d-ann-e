@@ -1,23 +1,54 @@
 #include "Save.h"
 #include "Player.h"
 
-Player player;
+extern Player player;
+
+PlayerSaveData playerSaveData;
 
 
-sfBool SavePlayer(void)
+
+void GetSavePath(int slot, char* path)
 {
-    FILE* f = fopen(SAVE_PATH, "wb");
+    snprintf(path, 32, SAVE_PATH_FMT, slot);
+}
+
+
+
+static sfBool IsValidSlot(int slot)
+{
+    if (slot < 1 || slot > SAVE_SLOT_COUNT)
+    {
+        printf("[Save] Slot invalide : %d (attendu 1-%d).\n", slot, SAVE_SLOT_COUNT);
+        return sfFalse;
+    }
+    return sfTrue;
+}
+
+
+
+sfBool SavePlayer(int slot)
+{
+    if (!IsValidSlot(slot))
+    {
+        return sfFalse;
+    }
+
+    char path[32];
+    GetSavePath(slot, path);
+
+    FILE* f = fopen(path, "wb");
     if (!f)
     {
-        printf("[Save] Erreur : impossible d'ouvrir %s en écriture.\n", SAVE_PATH);
+        printf("[Save] Erreur : impossible d'ouvrir %s en écriture.\n", path);
         return sfFalse;
     }
 
     PlayerSaveData save;
-
-
-    save.version = SAVE_VERSION;
+    save.save = SAVE_VERSION;
     save.health = player.data.health;
+    save.position = player.data.position;
+    save.canDoubleJump = player.data.canDoubleJump;
+    save.canWallJump = player.data.canWallJump;
 
 
 
@@ -26,58 +57,84 @@ sfBool SavePlayer(void)
 
     if (written != 1)
     {
-        printf("[Save] Erreur : écriture incomplète.\n");
+        printf("[Save] Erreur : écriture incomplète dans %s.\n", path);
         return sfFalse;
     }
-
-    printf("[Save] Sauvegarde réussie. (hp=%.0f)\n", save.health);
     return sfTrue;
 }
 
 
-PlayerSaveData* LoadSave(void)
+PlayerSaveData* LoadSave(int slot)
 {
-    FILE* f = fopen(SAVE_PATH, "rb");
+    if (!IsValidSlot(slot)) return NULL;
+
+    char path[32];
+    GetSavePath(slot, path);
+
+    FILE* f = fopen(path, "rb");
     if (!f)
     {
-        printf("[Save] Aucune save trouvée.\n");
+        printf("[Save] Slot %d : aucune save trouvée (%s).\n", slot, path);
         return NULL;
     }
 
-    PlayerSaveData save;
-    size_t read = fread(&save, sizeof(PlayerSaveData), 1, f);
+    PlayerSaveData tmp;
+    size_t read = fread(&tmp, sizeof(PlayerSaveData), 1, f);
     fclose(f);
 
     if (read != 1)
     {
-        printf("[Save] Erreur : lecture incomplète.\n");
+        printf("[Save] Slot %d : lecture incomplète.\n", slot);
         return NULL;
     }
 
-    if (save.version != SAVE_VERSION)
+    if (tmp.save != SAVE_VERSION)
     {
-        printf("[Save] Version incompatible (save=%u, attendu=%u). Save ignorée.\n",
-            save.version, SAVE_VERSION);
+        printf("[Save] Slot %d : version incompatible (save=%u, attendu=%u). Save ignorée.\n",
+            slot, tmp.save, SAVE_VERSION);
         return NULL;
     }
 
-    printf("[Save] Save chargée. (hp=%.0f\n",
-        save.health);
-    return &save;
+
+    playerSaveData = tmp;
+    playerSaveData.save = slot;
+
+    player.data.health = playerSaveData.health;
+    player.data.position = playerSaveData.position;
+    player.data.canDoubleJump = playerSaveData.canDoubleJump;
+    player.data.canWallJump = playerSaveData.canWallJump;
+
+
+    printf("[Save] Slot %d chargé. (hp=%.0f)\n",slot, playerSaveData.health);
+
+    return &playerSaveData;
 }
 
 
-void DeleteSave(void)
+
+void DeleteSave(int slot)
 {
-    if (remove(SAVE_PATH) == 0)
-        printf("[Save] Fichier supprimé.\n");
+    if (!IsValidSlot(slot)) return;
+
+    char path[32];
+    GetSavePath(slot, path);
+
+    if (remove(path) == 0)
+        printf("[Save] Slot %d supprimé (%s).\n", slot, path);
     else
-        printf("[Save] Aucun fichier à supprimer.\n");
+        printf("[Save] Slot %d : aucun fichier à supprimer.\n", slot);
 }
 
-sfBool SaveExists(void)
+
+
+sfBool SaveExists(int slot)
 {
-    FILE* f = fopen(SAVE_PATH, "rb");
+    if (!IsValidSlot(slot)) return sfFalse;
+
+    char path[32];
+    GetSavePath(slot, path);
+
+    FILE* f = fopen(path, "rb");
     if (!f) return sfFalse;
     fclose(f);
     return sfTrue;

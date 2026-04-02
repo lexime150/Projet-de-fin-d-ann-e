@@ -5,37 +5,48 @@
 #include "GameState.h"
 
 
+typedef struct
+{
+    sfText* text;
+    sfFloatRect bounds;
+} Button;
+
+
+typedef enum
+{
+    MENU_MAIN,
+    MENU_PLAY,
+    MENU_SETTINGS
+} MenuState;
+
+
 typedef struct Menu
 {
-	sfFont* font;
+    sfSprite* backgroundSprite;
+    sfTexture* backgroundTexture;
 
-	sfText* playText;
-	sfFloatRect playTextBound;
+    // Boutons
+    Button mainButtons[3]; // PLAY, SETTING, QUIT
+    Button saveButtons[4]; // SAVE 1,2,3, BACK
 
-	sfText* quitText;
-	sfFloatRect quitTextBound;
+    sfFont* font;
 
-	sfText* settingText;
+    sfText* hoverLeft;
+    sfText* hoverRight;
 
-	sfText* hoverSelectionLeftText;
-	sfText* hoverSelectionRightText;
-	sfBool hoverSelected;
-	char buffer[32];
-	sfSprite* backgroundSprite;
-	sfTexture* backgroundTexture;
+    sfBool hoverActive;
+    int hoveredIndex;
+
+    MenuState state;
+
+} Menu;
 
 
-	sfFloatRect hoverSelectionLeftTextBound;
-	sfFloatRect hoverSelectionRightTextBound;
-
-	sfFloatRect settingTextBound;
-}Menu;
 void LoadMenu(void);
 void PollEventMenu(sfRenderWindow* _renderWindow);
 void UpdateMenu(sfRenderWindow* _renderWindow, float _dt);
 void DrawMenu(sfRenderWindow* _renderWindow);
 void CleanupMenu(void);
 
-void KeyPressedMenu(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent);
+#endif // MENU_H
 
-#endif // !MENU_H

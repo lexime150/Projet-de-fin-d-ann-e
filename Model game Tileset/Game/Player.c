@@ -1,8 +1,8 @@
 ﻿#include "Player.h"
 
 Player player;
+PlayerSaveData save;
 
-void LoadPlayer(void);
 void LoadAnimationPlayer(void);
 void StateMachine(PlayerState _state);
 void SetAnimation(PlayerState _state);
@@ -16,25 +16,27 @@ sfBool CheckCollisionPlayerPlatformsX(float _dx);
 void CheckCollisionPlayerPlatforms(float _dt);
 
 
-void LoadPlayer(void)
+void LoadPlayer(int slot)
 {
 	player.sprite = sfSprite_create();
 	player.texture = sfTexture_createFromFile("Assets/Sprites/IDLE.png", NULL);
 	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
 	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfSprite_setPosition(player.sprite, GetPlayerSpawn());
+
 	player.shape.collisionPlayerShape = sfRectangleShape_create();
-	sfRectangleShape_setSize(player.shape.collisionPlayerShape, (sfVector2f) { PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE });
+	sfRectangleShape_setSize(player.shape.collisionPlayerShape,(sfVector2f) {PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE});
 
 	sfVector2f spritePos = sfSprite_getPosition(player.sprite);
-	sfRectangleShape_setPosition(player.shape.collisionPlayerShape, (sfVector2f) { spritePos.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f, spritePos.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE) });
+	sfRectangleShape_setPosition(player.shape.collisionPlayerShape,(sfVector2f) {spritePos.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f,spritePos.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE)});
+
 	sfRectangleShape_setOutlineColor(player.shape.collisionPlayerShape, sfRed);
 	sfRectangleShape_setFillColor(player.shape.collisionPlayerShape, sfColor_fromRGBA(255, 255, 255, 50));
 
-	player.lastState = IDLE;
-
-
 	sfSprite_setOrigin(player.sprite, (sfVector2f) { PLAYER_WIDTH / 2.f, PLAYER_HEIGHT });
+
+
+	player.lastState = IDLE;
 
 	player.action.isAttacking = sfFalse;
 	player.action.isGrounded = sfFalse;
@@ -52,15 +54,15 @@ void LoadPlayer(void)
 	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 
-
-	player.data.attackCooldownTimer = 2.f;
+	player.data.attackCooldownTimer = 0.5f;
 	player.data.lastWallTouched = 0;
 
-	player.data.health = 200;
 	player.data.maxHealth = 200;
-	player.data.speed = 350.f;
+	player.data.health = player.data.maxHealth;
 
+	player.data.speed = 350.f;
 	player.data.jumpStartPosition = 0;
+
 	player.data.velocity.x = 0;
 	player.data.velocity.y = 0;
 
@@ -68,8 +70,28 @@ void LoadPlayer(void)
 	player.data.slideCooldownTimer = 0.f;
 
 	player.data.lastDirection = 1;
+
+	player.data.canDoubleJump = 0;
+	player.data.canWallJump = 0;
+
+	PlayerSaveData* save = LoadSave(slot);
+
+	if (save != NULL)
+	{
+		player.data.health = save->health;
+		player.data.canDoubleJump = save->canDoubleJump;
+		player.data.canWallJump = save->canWallJump;
+
+		printf("[Player] Save appliquée (hp=%.0f)\n", save->health);
+	}
+	else
+	{
+		printf("[Player] Aucune save, valeurs par défaut utilisées\n");
+	}
+
 	LoadAnimationPlayer();
 }
+
 void LoadAnimationPlayer(void)
 {
 	sfIntRect firstFrame = { 0, 0 * PLAYER_HEIGHT , PLAYER_WIDTH, PLAYER_HEIGHT };

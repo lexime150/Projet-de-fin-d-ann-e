@@ -18,7 +18,7 @@ void LoadGame(void)
 	//	sfVector2f eSpawn = GetEnemySpawn(i);
 	//	printf("Enemy Spawn [%u] -> x: %.2f, y: %.2f\n", i, eSpawn.x, eSpawn.y);
 	//}
-	LoadPlayer();
+	LoadPlayer(playerSaveData.save);
 
 	LoadCamera();
 	LoadMob();
@@ -67,6 +67,7 @@ void UpdateGame(float _dt)
 	UpdateCamera(_dt);
 	UpdateMob(NULL, _dt);
 	UpdateHUD();
+	SavePlayer(playerSaveData.save);
 }
 
 void DrawGame(sfRenderWindow* _renderWindow)
