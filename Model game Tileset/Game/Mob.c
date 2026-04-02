@@ -10,16 +10,19 @@ unsigned mobCount;
 
 void Swap(Mob* _mob, int _i, int _j);
 void BubbleSort(Mob* _mob, int _i);
-float GetDistancePlayerMob(Player* _player, unsigned _i);
-void MobIsAttack(unsigned _i);
+float GetDistancePlayerMobY(unsigned _i);
+float GetDistancePlayerMobX(Player* _player, unsigned _i);
+float GetDistancePlayerMobVector(unsigned _i);
 
+void UpdateMobInfo(float _dt, unsigned _i);
 void SetAnimationMob(MobState _state, unsigned _i);
 void StateMobMachine(MobState _state, unsigned _i);
 void CheckCollisionMobPlat(float _dt, unsigned _i);
 void CheckCollisionMobPlayer(float _dt, unsigned _i);
+
 void MoveMob(float _dt, unsigned _i);
 void AttackMob(float _dt, unsigned _i);
-void CheckVelocityY(float _dt, unsigned _i);
+void TakeItMob(float _dt, unsigned _i);
 void AddMob(TypeMob _type, float _x, float _y);
 void SetBubbleSort(void);
 void DeleteMob(unsigned* _i);
@@ -46,7 +49,7 @@ void LoadMob(void)
 	AddMob(MUSHROOM, GetEnemySpawn(0).x, GetEnemySpawn(0).y);
 	AddMob(SKELETON, GetEnemySpawn(1).x, GetEnemySpawn(1).y);
 
-
+	GetDistancePlayerMobVector(0);
 }
 
 void AddMob(TypeMob _type, float _x, float _y)
@@ -78,6 +81,8 @@ void AddMob(TypeMob _type, float _x, float _y)
 		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { MUSHROOM_SIZE / 2, MUSHROOM_SIZE });
 		sfRectangleShape_setSize(newMob.rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT });
 		sfRectangleShape_setOrigin(newMob.rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT });
+		newMob.rangeMove = DIST_RUN_MUSHROOM;
+		newMob.rangeAttack = DIST_ATTACK_MUSHROOM;
 		break;
 	case SKELETON:
 		sfSprite_setTexture(newMob.sprite, texture[SKELETON], sfTrue);
@@ -85,6 +90,8 @@ void AddMob(TypeMob _type, float _x, float _y)
 		sfRectangleShape_setSize(newMob.rect, (sfVector2f) { HITBOX_SKELETON_HEIGHT, HITBOX_SKELETON_HEIGHT });
 		sfRectangleShape_setOrigin(newMob.rect, (sfVector2f) { HITBOX_SKELETON_HEIGHT / 2, HITBOX_SKELETON_HEIGHT });
 		sfSprite_setTextureRect(newMob.sprite, (sfIntRect) { 0, 0, 32, 32 });
+		newMob.rangeMove = DIST_RUN_MUSHROOM;
+		newMob.rangeAttack = DIST_ATTACK_SKELETON;
 		break;
 	default:
 		break;
@@ -176,9 +183,6 @@ void LoadMobAnimation(unsigned _i)
 
 }
 
-
-
-
 void SetAnimationMob(MobState _state, unsigned _i)
 {
 	mob[_i].lastState = mob[_i].currentState;
@@ -231,34 +235,29 @@ void SetBubbleSort()
 	BubbleSort(mob, i);
 }
 
-
-void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
+void UpdateMobInfo(float _dt, unsigned _i)
 {
-	//printf("%d\n", mobCount);
-	//AddMob(rand() % 2, rand() % 5000, 125);
-	for (unsigned i = 0; i < mobCount; i++)
-	{
-
-		mob[i].hitRect = sfRectangleShape_getGlobalBounds(mob[i].rect);
-		MoveMob(_dt, i);
-		sfSprite_move(mob[i].sprite, (sfVector2f) { mob[i].velocity.x* _dt, mob[i].velocity.y* _dt });
-		sfRectangleShape_setPosition(mob[i].rect, sfSprite_getPosition(mob[i].sprite));
-
-		mob[i].position = sfSprite_getPosition(mob[i].sprite);
-
-		CheckCollisionMobPlayer(_dt, i);
-		SetVelocity(i, _dt);
-		AttackMob(_dt, i);
-
-		CheckCollisionMobPlat(_dt, i);
-
-		UpdateAnimation(mob[i].currentMobAnimation, _dt);
-	
-		DeleteMob(&i);
-
-	}
+	mob[_i].hitRect = sfRectangleShape_getGlobalBounds(mob[_i].rect);
+	sfRectangleShape_setPosition(mob[_i].rect, sfSprite_getPosition(mob[_i].sprite));
+	mob[_i].position = sfSprite_getPosition(mob[_i].sprite);
 }
 
+void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
+{		
+	for (unsigned i = 0; i < mobCount; i++)
+	{
+		
+		UpdateMobInfo(_dt, i);
+		CheckCollisionMobPlayer(_dt, i);
+	
+		MoveMob(_dt, i);
+		AttackMob(_dt, i);
+		TakeItMob(_dt, i);
+		CheckCollisionMobPlat(_dt, i);
+		UpdateAnimation(mob[i].currentMobAnimation, _dt);
+		DeleteMob(&i);
+	}
+}
 
 void CheckCollisionMobPlat(float _dt, unsigned _i)
 {
@@ -277,9 +276,8 @@ void CheckCollisionMobPlat(float _dt, unsigned _i)
 			{
 				mob[_i].isGroundedMob = sfTrue;
 				mob[_i].velocity.y = 0;
-				sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { sfSprite_getPosition(mob[_i].sprite).x, hitPlat.top});
+				sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { sfSprite_getPosition(mob[_i].sprite).x, hitPlat.top});	
 			}
-			
 		}
 		else
 		{
@@ -303,88 +301,110 @@ void CheckCollisionMobPlayer(float _dt, unsigned _i)
 
 }
 
+
+
 void MoveMob(float _dt, unsigned _i)
 {
-
-	if (GetDistancePlayerMob(&player, _i) < DIST_RUN && GetDistancePlayerMob(&player, _i) > -DIST_RUN && !mob[_i].isAttack)
+	if (GetDistancePlayerMobY(_i) < 1.f)
 	{
+		if (sfSprite_getPosition(player.sprite).x >= mob[_i].position.x)
+		{
 
-			StateMobMachine(RUN_MOB, _i);
-			mob[_i].isMoving = sfTrue;
-		
+			sfSprite_setScale(mob[_i].sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+		}
+		else
+		{
+
+			sfSprite_setScale(mob[_i].sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+		}
 	}
-	else
+
+	if (GetDistancePlayerMobVector(_i) < DIST_RUN_MUSHROOM && !mob[_i].isAttack)
 	{
-		mob[_i].isMoving = sfFalse;
+			if(GetDistancePlayerMobX(&player, _i) > (player.shape.collisionPlayerRect.width))
+			{ 
+				StateMobMachine(RUN_MOB, _i);
+				mob[_i].isMoving = sfTrue;
+			}
+			else
+			{
+				mob[_i].isMoving = sfFalse;
+			}
 	}
 
+	SetVelocity(_i, _dt);
 
 }
 
 void AttackMob(float _dt, unsigned _i)
 {
-	//mob[_i].timerState += _dt;
-	//if ((GetDistancePlayerMob(&player, _i) < ((player.playerRect.left + player.playerRect.width) - mob[_i].hitRect.left) &&
-	//	GetDistancePlayerMob(&player, _i) > player.collisionPlayerRect.left - (mob[_i].hitRect.left + mob[_i].hitRect.width)) && mob[_i].timerState > 0.85f)
-	//{
-	//	mob[_i].velocity.x = 0;
-	//	mob[_i].timerState = 0.f;
-	//	StateMobMachine(ATTACK_MOB, _i);
-	//}
+	//mob[_i].isAttack = sfFalse;
+	mob[_i].timerAttack += _dt;
 
-	//if (!mob[_i].currentMobAnimation->isPlaying)
-	//{
-	//	StateMobMachine(IDLE_MOB, _i);
+		if (GetDistancePlayerMobVector(_i) < (player.shape.collisionPlayerRect.width) && mob[_i].timerAttack > TIMER_ATTACK)
+		{
+			mob[_i].isAttack = sfTrue;
+			mob[_i].timerAttack = 0;
+			StateMobMachine(ATTACK_MOB, _i);
+		}
+		else if (!mob[_i].currentMobAnimation->isPlaying)
+		{
+			printf("ccc");
+			StateMobMachine(IDLE_MOB, _i);
+			mob[_i].isAttack = sfFalse;
+		}
 
-	//}
+}
 
-	mob[_i].timerState += _dt;
-
-	if ((GetDistancePlayerMob(&player, _i) < player.shape.playerRect.width && (GetDistancePlayerMob(&player, _i) > -player.shape.playerRect.width && mob[_i].timerState > 1.f)))
+void TakeItMob(float _dt, unsigned _i)
+{
+	mob[_i].timerDamage += _dt;
+	if (player.currentState == SWORD || player.currentState == AXE)
 	{
-		mob[_i].isAttack = sfTrue;
-		MobIsAttack(_i);
+		if (mob[_i].timerDamage > 1.f && !mob[_i].isTakeIt && sfFloatRect_intersects(&player.shape.collisionAttackRect, &mob[_i].hitRect, NULL))
+		{
+			mob[_i].isTakeIt = sfTrue;
+			mob[_i].hp -= 50 + rand() % 51;
+			StateMobMachine(TAKE_IT, _i);
+			mob[_i].timerDamage = 0;
+		}
+	
+	}
+}
+
+
+float GetDistancePlayerMobX(Player* _player, unsigned _i)
+{
+	float distX = _player->data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
+
+	if (distX < 0.f)
+	{
+		return distX * -1;
 	}
 	else
 	{
-		mob[_i].isAttack = sfFalse;
+		return distX;
 	}
-
 }
 
-
-void MobIsAttack(unsigned _i)
+float GetDistancePlayerMobY(unsigned _i)
 {
+	float distY = player.data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
 	
-	if (mob[_i].isAttack && mob[_i].currentState != ATTACK_MOB)
-	{
-		StateMobMachine(ATTACK_MOB, _i);
-	}
-	else if (mob[_i].currentState == ATTACK_MOB && !mob[_i].currentMobAnimation->isPlaying)
-	{
-		mob[_i].timerState = 0;
-		mob[_i].isAttack = sfFalse;
-		StateMobMachine(IDLE_MOB, _i);
-	}
+	return distY;
 
 }
 
-
-float GetDistancePlayerMob(Player* _player, unsigned _i)
+float GetDistancePlayerMobVector(unsigned _i)
 {
-	float distX = _player->data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
-	float distY = _player->data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
-
-	return distX; //sqrtf((distX * distX) + (distY * distY));
-
+	return sqrtf(powf(GetDistancePlayerMobX(&player, _i), 2.f) + powf(GetDistancePlayerMobY(_i), 2.f));
 }
-
 
 void DrawMob(sfRenderWindow* _renderWindow)
 {
 	for (unsigned i = 0; i < mobCount; i++)
 	{
-	//	sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
+		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
 	}
 }
@@ -410,21 +430,20 @@ void CleanupMob(void)
 
 void SetVelocity(unsigned _i, float _dt)
 {
+
 	if (mob[_i].isMoving)
 	{
 		if (sfSprite_getPosition(player.sprite).x > mob[_i].position.x)
 		{
 			mob[_i].velocity.x = mob[_i].speed;
-			sfSprite_setScale(mob[_i].sprite, (sfVector2f){GAME_SCALE, GAME_SCALE});
 		}
 		else 
 		{
 			mob[_i].velocity.x = -mob[_i].speed;
-			sfSprite_setScale(mob[_i].sprite, (sfVector2f){-GAME_SCALE, GAME_SCALE});
 		}
 	}
 	
-	if (mob[_i].isAttack && !mob[_i].isMoving)
+	if (mob[_i].isAttack || !mob[_i].isMoving || mob[_i].isTakeIt)
 	{
 		mob[_i].velocity.x = 0;
 	}
@@ -438,19 +457,11 @@ void SetVelocity(unsigned _i, float _dt)
 		mob[_i].velocity.y = 0;
 	}
 
-}
-
-
-
-void CheckVelocityY(float _dt, unsigned _i)
-{
-	if (!mob[_i].isGroundedMob)
-	{
-		mob[_i].velocity.y += GRAVITY * _dt;
-		if (mob[_i].velocity.y > GRAVITY * 100.f * _dt)
-		{
-			mob[_i].velocity.y = GRAVITY * 100.f * _dt;
-		}
-	}
+	sfSprite_move(mob[_i].sprite, (sfVector2f) { mob[_i].velocity.x* _dt, mob[_i].velocity.y* _dt });
 
 }
+
+
+
+
+

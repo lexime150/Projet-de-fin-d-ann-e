@@ -8,11 +8,18 @@
 #define HITBOX_MUSHROOM_WIDTH 24
 #define HITBOX_MUSHROOM_HEIGHT 37
 
-#define DIST_ATTACK 150.f
-#define DIST_RUN 400.f
+#define DIST_ATTACK_MUSHROOM 150.f
+#define DIST_RUN_MUSHROOM 400.f
+
+#define DIST_RUN_SKELETON 300.f
+#define DIST_ATTACK_SKELETON 100.f
+
+#define DIST_RANGE_ENEMY 17.f
 
 #define HITBOX_SKELETON_HEIGHT 32
 #define HITBOX_ATTACK_SKELETON_WIDTH 48
+
+#define TIMER_ATTACK 1.f
 
 typedef enum MobState
 {
@@ -61,10 +68,15 @@ typedef struct Mob
 	sfRectangleShape* rect;
 	sfFloatRect hitRect;
 
-	float timerState;
+	float timerAttack;
 	float timerDamage;
 
+	unsigned hp;
+
 	TypeMob mobType;
+
+	float rangeMove;
+	float rangeAttack;
 
 }Mob;
 
