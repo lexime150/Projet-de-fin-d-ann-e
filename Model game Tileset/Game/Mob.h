@@ -3,26 +3,45 @@
 
 #include "Common.h"
 
+//------Mushroom
 
-#define MUSHROOM_SIZE 45
+//Sprite
+
+#define MUSHROOM_SIZE_SPRITE 45
+
+//Rectangle
+
 #define HITBOX_MUSHROOM_WIDTH 24
 #define HITBOX_MUSHROOM_HEIGHT 37
+#define HITBOX_MUSHROOM_ATTACK_WIDTH 30
+
+//Range
 
 #define DIST_ATTACK_MUSHROOM 150.f
 #define DIST_RUN_MUSHROOM 400.f
 
+//Timer
+
+#define TIMER_ATTACK_MUSHROOM 1.6f
+#define TIMER_TAKE_HIT_MUSHROOM 0.75f
+
+
+//-------Skeleton
+
+//Range
+
 #define DIST_RUN_SKELETON 300.f
 #define DIST_ATTACK_SKELETON 100.f
 
-#define DIST_RANGE_ENEMY 17.f
+//Hitbox
 
-#define HITBOX_SKELETON_HEIGHT 32
-#define HITBOX_ATTACK_SKELETON_WIDTH 48
+#define HITBOX_SKELETON 32
+#define HITBOX_ATTACK_STATE_SKELETON_WIDTH 48
+#define HITBOX_ATTACK_SKELETON 48
 
-#define TIMER_ATTACK_MUSHROOM 1.6f
+//Timer
+
 #define TIMER_ATTACK_SKELETON 1.1f
-
-#define TIMER_TAKE_HIT_MUSHROOM 0.75f
 #define TIMER_TAKE_HIT_SKELETON 1.f
 
 
@@ -50,7 +69,7 @@ typedef enum MobAct
 	IS_IDLE,
 	IS_MOVING,
 	IS_ATTACK,
-	IS_ALIVE,
+	IS_DEATH,
 	IS_TAKE_HIT,
 	IS_GROUNDED_MOB
 }MobAct;
@@ -73,6 +92,7 @@ typedef struct Mob
 	float speed;
 	sfVector2f velocity;
 	sfVector2f position;
+	
 
 	Animation mobAnimation[STATE_MOB_NUMBER];
 	Animation* currentMobAnimation;
@@ -83,15 +103,16 @@ typedef struct Mob
 	MobState currentState;
 
 	sfFloatRect hitbox;
+	sfFloatRect hitRect;
+	sfFloatRect hitAttack;
 
 	Timer timer;
 
 	sfRectangleShape* rect;
-	sfFloatRect hitRect;
 
-	
+	sfRectangleShape* attackRect;
 
-	unsigned hp;
+	int hp;
 
 	TypeMob mobType;
 
