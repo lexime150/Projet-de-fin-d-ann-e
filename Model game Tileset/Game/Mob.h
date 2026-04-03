@@ -40,6 +40,16 @@ typedef enum TypeMob
 
 }TypeMob;
 
+typedef enum MobAct
+{
+	IS_IDLE,
+	IS_MOVING,
+	IS_ATTACK,
+	IS_ALIVE,
+	IS_TAKE_HIT,
+	IS_GROUNDED_MOB
+}MobAct;
+
 
 typedef struct Mob
 {
@@ -58,6 +68,7 @@ typedef struct Mob
 	sfBool isTakeIt;
 	sfBool isGroundedMob;
 
+	MobAct act;
 
 	MobState lastState;
 	MobState currentState;

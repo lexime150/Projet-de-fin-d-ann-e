@@ -17,12 +17,10 @@ float GetDistancePlayerMobVector(unsigned _i);
 void UpdateMobInfo(float _dt, unsigned _i);
 void SetAnimationMob(MobState _state, unsigned _i);
 void StateMobMachine(MobState _state, unsigned _i);
-void CheckCollisionMobPlat(float _dt, unsigned _i);
-void CheckCollisionMobPlayer(float _dt, unsigned _i);
+void CheckCollisionMobEntities(float _dt, unsigned _i);
 
-void MoveMob(float _dt, unsigned _i);
-void AttackMob(float _dt, unsigned _i);
-void TakeItMob(float _dt, unsigned _i);
+void StateMob(float _dt, unsigned _i);
+
 void AddMob(TypeMob _type, float _x, float _y);
 void SetBubbleSort(void);
 void DeleteMob(unsigned* _i);
@@ -101,6 +99,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 	sfRectangleShape_setScale(newMob.rect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfSprite_setPosition(newMob.sprite, (sfVector2f) { _x, _y });
 	sfRectangleShape_setPosition(newMob.rect, sfSprite_getPosition(newMob.sprite));
+	newMob.act = IS_IDLE;
 
 	mob[mobCount] = newMob;
 	mobCount++;
@@ -248,63 +247,107 @@ void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 	{
 		
 		UpdateMobInfo(_dt, i);
-		CheckCollisionMobPlayer(_dt, i);
-	
-		MoveMob(_dt, i);
-		AttackMob(_dt, i);
-		TakeItMob(_dt, i);
-		CheckCollisionMobPlat(_dt, i);
+		CheckCollisionMobEntities(_dt, i);
+		
+		StateMob(_dt, i);
 		UpdateAnimation(mob[i].currentMobAnimation, _dt);
 		DeleteMob(&i);
 	}
 }
 
-void CheckCollisionMobPlat(float _dt, unsigned _i)
+
+
+
+
+void CheckCollisionMobEntities(float _dt, unsigned _i)
 {
+	//---------MOB PLAT----------
+	
+	
+	mob[_i].isGroundedMob = sfFalse;
+
 
 	sfFloatRect hitMob = { 0 };
 	sfFloatRect hitPlat = { 0 };
+	sfFloatRect intersection = { 0 };
+	sfVector2f posMob = sfSprite_getPosition(mob[_i].sprite);
+
+	for (int i = 0; i < GetCollisionTabSize(); i++)
+	{
+		hitPlat = GetMapCollision(i);
+		hitMob = mob[_i].hitRect;
+
+		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection))
+		{
+			if (intersection.width < intersection.height)
+			{
+				if (mob[_i].velocity.x < 0.f)
+				{
+					posMob.x += intersection.width;
+					
+				}
+				else if (mob[_i].velocity.x > 0.f)
+				{
+					
+					posMob.x -= intersection.width;
+					
+				}
+				StateMobMachine(IDLE_MOB, _i);
+				
+			}
+			else if (hitMob.left < hitPlat.left)
+			{
+				
+				posMob.x = hitPlat.left + (hitMob.width / 2);
+				StateMobMachine(IDLE_MOB, _i);
+			}
+			else if ((hitMob.left + hitMob.width) > (hitPlat.left + hitPlat.width))
+			{
+				StateMobMachine(IDLE_MOB, _i);
+				
+				posMob.x = (hitPlat.left + hitPlat.width) - (hitMob.width / 2);
+			}
+
+
+			sfSprite_setPosition(mob[_i].sprite, posMob);
+		}
+		
+
+	}
+
 
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		hitPlat = GetMapCollision(i);
 		hitMob = mob[_i].hitRect;
 
-		if (sfFloatRect_intersects(&hitPlat, &hitMob, NULL))
+
+		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection))
 		{
-			if (mob[_i].velocity.y >= 0)
+			if (intersection.width > intersection.height)
 			{
-				mob[_i].isGroundedMob = sfTrue;
-				mob[_i].velocity.y = 0;
-				sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { sfSprite_getPosition(mob[_i].sprite).x, hitPlat.top});	
+				if (mob[_i].velocity.y >= 0)
+				{
+					mob[_i].isGroundedMob = sfTrue;
+					mob[_i].velocity.y = 0;
+					sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { sfSprite_getPosition(mob[_i].sprite).x, hitPlat.top + 1.f });
+				}
 			}
 		}
-		else
-		{
-			mob[_i].isGroundedMob = sfFalse;
-		}
-	}
-
-}
-
-void CheckCollisionMobPlayer(float _dt, unsigned _i)
-{
-	if (mob[_i].hitRect.left < (player.shape.collisionPlayerRect.left + player.shape.collisionPlayerRect.width))
-	{
-		
-	}
-	else if ((mob[_i].hitRect.left + mob[_i].hitRect.width) > player.shape.collisionPlayerRect.left)
-	{
 		
 	}
 
 
+	
+
 }
 
-
-
-void MoveMob(float _dt, unsigned _i)
+void StateMob(float _dt, unsigned _i)
 {
+	//-------MOVE PLAYER---------
+
+	mob[_i].isMoving = sfFalse;
+
 	if (GetDistancePlayerMobY(_i) < 1.f)
 	{
 		if (sfSprite_getPosition(player.sprite).x >= mob[_i].position.x)
@@ -321,43 +364,39 @@ void MoveMob(float _dt, unsigned _i)
 
 	if (GetDistancePlayerMobVector(_i) < DIST_RUN_MUSHROOM && !mob[_i].isAttack)
 	{
-			if(GetDistancePlayerMobX(&player, _i) > (player.shape.collisionPlayerRect.width))
-			{ 
-				StateMobMachine(RUN_MOB, _i);
-				mob[_i].isMoving = sfTrue;
-			}
-			else
-			{
-				mob[_i].isMoving = sfFalse;
-			}
+		if (GetDistancePlayerMobX(&player, _i) > (player.shape.collisionPlayerRect.width))
+		{
+			StateMobMachine(RUN_MOB, _i);
+			mob[_i].isMoving = sfTrue;
+		}
+	}
+	else
+	{
+		StateMobMachine(IDLE_MOB, _i);
 	}
 
 	SetVelocity(_i, _dt);
 
-}
 
-void AttackMob(float _dt, unsigned _i)
-{
-	//mob[_i].isAttack = sfFalse;
+	//---------ATTACK MOB---------
+
 	mob[_i].timerAttack += _dt;
 
-		if (GetDistancePlayerMobVector(_i) < (player.shape.collisionPlayerRect.width) && mob[_i].timerAttack > TIMER_ATTACK)
-		{
-			mob[_i].isAttack = sfTrue;
-			mob[_i].timerAttack = 0;
-			StateMobMachine(ATTACK_MOB, _i);
-		}
-		else if (!mob[_i].currentMobAnimation->isPlaying)
-		{
-			printf("ccc");
-			StateMobMachine(IDLE_MOB, _i);
-			mob[_i].isAttack = sfFalse;
-		}
+	if (GetDistancePlayerMobVector(_i) < (player.shape.collisionPlayerRect.width) && mob[_i].timerAttack > TIMER_ATTACK)
+	{
+		mob[_i].isAttack = sfTrue;
+		mob[_i].timerAttack = 0;
+		StateMobMachine(ATTACK_MOB, _i);
+	}
+	else if (!mob[_i].currentMobAnimation->isPlaying)
+	{
+		printf("ccc");
+		StateMobMachine(IDLE_MOB, _i);
+		mob[_i].isAttack = sfFalse;
+	}
 
-}
+	//---------TAKE IT---------
 
-void TakeItMob(float _dt, unsigned _i)
-{
 	mob[_i].timerDamage += _dt;
 	if (player.currentState == SWORD || player.currentState == AXE)
 	{
@@ -368,8 +407,9 @@ void TakeItMob(float _dt, unsigned _i)
 			StateMobMachine(TAKE_IT, _i);
 			mob[_i].timerDamage = 0;
 		}
-	
+
 	}
+
 }
 
 
@@ -404,7 +444,7 @@ void DrawMob(sfRenderWindow* _renderWindow)
 {
 	for (unsigned i = 0; i < mobCount; i++)
 	{
-		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
+		sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
 	}
 }
