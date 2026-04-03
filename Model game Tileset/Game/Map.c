@@ -22,11 +22,11 @@ void LoadMap(char* _mapName)
 	char filename[FILENAME_MAX];
 
 	// Load the map
-	sprintf_s(filename, FILENAME_MAX, "Assets/Map/%s.json", _mapName);
+	sprintf_s(filename, FILENAME_MAX, "Assets/Map/Levels/%s.json", _mapName);
 	map = cute_tiled_load_map_from_file(filename, NULL);
 
 	// Load the texture used as Tileset
-	sprintf_s(filename, FILENAME_MAX, "Assets/Map/%s", map->tilesets->image.ptr);
+	sprintf_s(filename, FILENAME_MAX, "Assets/Map/Tilesets/%s", map->tilesets->image.ptr);
 	tileTexture = sfTexture_createFromFile(filename, NULL);
 
 	// Create the sprite used to draw each tile

@@ -1,188 +1,243 @@
 #include "Menu.h"
 
 Menu menu;
-void LoadText(void);
-void DrawText(sfRenderWindow* _renderWindow);
-void CleanupText(void);
-void CheckMouseHoverMenu(sfRenderWindow* _renderWindow);
-void CheckMouseClickMenu(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouseButtonEvent);
-void LoadMenu(void)
-{
-	LoadText();
+PlayerSaveData playerSaveData;
+PlayerSaveData* save = NULL;
+sfBool saveExist = sfFalse;
+void UpdateSlotText();
 
+void InitButton(Button* btn, sfFont* font, const char* str, float y)
+{
+
+
+
+	btn->text = sfText_create();
+	sfText_setFont(btn->text, font);
+	sfText_setCharacterSize(btn->text, 48);
+	sfText_setOutlineColor(btn->text, sfBlack);
+	sfText_setOutlineThickness(btn->text, 2);
+	sfText_setString(btn->text, str);
+
+	btn->bounds = sfText_getGlobalBounds(btn->text);
+
+	sfText_setPosition(btn->text, (sfVector2f) { (SCREEN_WIDTH - btn->bounds.width) / 2, y });
+
+	btn->bounds = sfText_getGlobalBounds(btn->text);
 }
 
-void PollEventMenu(sfRenderWindow* _renderWindow)
+
+void LoadMenu(void)
+{
+	menu.state = MENU_MAIN;
+	menu.hoverActive = sfFalse;
+	menu.hoveredIndex = -1;
+
+	menu.font = sfFont_createFromFile("Assets/Fonts/Arcade.ttf");
+
+	InitButton(&menu.mainButtons[0], menu.font, "PLAY", SCREEN_HEIGHT / 2);
+	InitButton(&menu.mainButtons[1], menu.font, "SETTING", SCREEN_HEIGHT / 2 + 100);
+	InitButton(&menu.mainButtons[2], menu.font, "QUIT", SCREEN_HEIGHT / 2 + 200);
+
+	InitButton(&menu.saveButtons[0], menu.font, "SAVE 1 (EMPTY)", SCREEN_HEIGHT / 2 - 100);
+	InitButton(&menu.saveButtons[1], menu.font, "SAVE 2 (EMPTY)", SCREEN_HEIGHT / 2 + 000);
+	InitButton(&menu.saveButtons[2], menu.font, "SAVE 3 (EMPTY)", SCREEN_HEIGHT / 2 + 100);
+	InitButton(&menu.saveButtons[3], menu.font, "BACK", SCREEN_HEIGHT / 2 + 250);
+
+	menu.hoverLeft = sfText_create();
+	sfText_setFont(menu.hoverLeft, menu.font);
+	sfText_setCharacterSize(menu.hoverLeft, 48);
+	sfText_setString(menu.hoverLeft, "[");
+
+	menu.hoverRight = sfText_create();
+	sfText_setFont(menu.hoverRight, menu.font);
+	sfText_setCharacterSize(menu.hoverRight, 48);
+	sfText_setString(menu.hoverRight, "]");
+}
+
+
+void UpdateHover(sfRenderWindow* window)
+{
+	sfVector2i mouse = sfMouse_getPositionRenderWindow(window);
+
+	menu.hoverActive = sfFalse;
+	menu.hoveredIndex = -1;
+
+	Button* buttons = NULL;
+	int count = 0;
+
+	if (menu.state == MENU_MAIN)
+	{
+		buttons = menu.mainButtons;
+		count = 3;
+	}
+	else if (menu.state == MENU_PLAY)
+	{
+		buttons = menu.saveButtons;
+		count = 4;
+	}
+
+	for (int i = 0; i < count; i++)
+	{
+		if (sfFloatRect_contains(&buttons[i].bounds, mouse.x, mouse.y))
+		{
+			menu.hoverActive = sfTrue;
+			menu.hoveredIndex = i;
+
+			sfVector2f pos = sfText_getPosition(buttons[i].text);
+
+			sfText_setPosition(menu.hoverLeft, (sfVector2f) { pos.x - 40, pos.y });
+			sfText_setPosition(menu.hoverRight, (sfVector2f) { pos.x + buttons[i].bounds.width + 10, pos.y });
+
+			break;
+		}
+	}
+}
+
+
+void HandleClick(sfRenderWindow* window)
+{
+	if (!menu.hoverActive)
+	{
+		return;
+	}
+
+	if (menu.state == MENU_MAIN)
+	{
+		switch (menu.hoveredIndex)
+		{
+		case 0: // PLAY
+			menu.state = MENU_PLAY;
+			break;
+
+		case 1: // SETTING
+			printf("Settings\n");
+			break;
+
+		case 2: // QUIT
+			sfRenderWindow_close(window);
+			break;
+		}
+	}
+	else if (menu.state == MENU_PLAY)
+	{
+		switch (menu.hoveredIndex)
+		{
+		case 0:
+		case 1:
+		case 2:
+			playerSaveData.save = menu.hoveredIndex + 1;
+			SetGameState(GAME);
+			break;
+
+		case 3: // BACK
+			menu.state = MENU_MAIN;
+			break;
+		default:
+			break;
+		}
+
+	}
+}
+
+
+void PollEventMenu(sfRenderWindow* window)
 {
 	sfEvent event;
 
-	while (sfRenderWindow_pollEvent(_renderWindow, &event))
+	while (sfRenderWindow_pollEvent(window, &event))
 	{
 		switch (event.type)
 		{
 		case sfEvtClosed:
-			sfRenderWindow_close(_renderWindow);
+			sfRenderWindow_close(window);
 			break;
-		case sfEvtKeyPressed:
-			KeyPressedMenu(_renderWindow, event.key);
-			break;
+
 		case sfEvtMouseButtonPressed:
-			CheckMouseClickMenu(_renderWindow, event.mouseButton);
+			HandleClick(window);
 			break;
+
+		case sfEvtKeyPressed:
+			if (event.key.code == sfKeyEscape)
+				sfRenderWindow_close(window);
+			break;
+
 		default:
 			break;
 		}
 	}
 }
 
-void KeyPressedMenu(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
+
+void UpdateMenu(sfRenderWindow* window, float dt)
 {
-	switch (_keyEvent.code)
+	UpdateHover(window);
+	UpdateSlotText(window);
+}
+
+
+void DrawMenu(sfRenderWindow* window)
+{
+	sfRenderWindow_setView(window, sfRenderWindow_getDefaultView(window));
+
+	Button* buttons = NULL;
+	int count = 0;
+
+	if (menu.state == MENU_MAIN)
 	{
-	case sfKeyEscape:
-		sfRenderWindow_close(_renderWindow);
-		break;
-	case sfKeySpace:
-		SetGameState(GAME);
-		break;
-	default:
-		break;
+		buttons = menu.mainButtons;
+		count = 3;
 	}
-}
+	else if (menu.state == MENU_PLAY)
+	{
+		buttons = menu.saveButtons;
+		count = 4;
+	}
 
-void UpdateMenu(sfRenderWindow* _renderWindow, float _dt)
-{
-	CheckMouseHoverMenu(_renderWindow);
-}
+	for (int i = 0; i < count; i++)
+	{
+		sfRenderWindow_drawText(window, buttons[i].text, NULL);
+	}
 
-void DrawMenu(sfRenderWindow* _renderWindow)
-{
-	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
-	DrawText(_renderWindow);
+	if (menu.hoverActive)
+	{
+		sfRenderWindow_drawText(window, menu.hoverLeft, NULL);
+		sfRenderWindow_drawText(window, menu.hoverRight, NULL);
+	}
 }
 
 void CleanupMenu(void)
 {
-	sfText_destroy(menu.playText);
+	for (int i = 0; i < 3; i++)
+	{
+		sfText_destroy(menu.mainButtons[i].text);
+		sfText_destroy(menu.saveButtons[i].text);
+	}
+
+	sfText_destroy(menu.hoverLeft);
+	sfText_destroy(menu.hoverRight);
+	sfFont_destroy(menu.font);
 }
 
-void LoadText(void)
+void UpdateSlotText()
 {
-	menu.hoverSelected = sfFalse;
-
-	menu.playText = sfText_create();
-	menu.font = sfFont_createFromFile("Assets/Fonts/Arcade.ttf");
-	sfText_setFont(menu.playText, menu.font);
-	sfText_setCharacterSize(menu.playText, 48);
-	sfText_setOutlineColor(menu.playText, sfBlack);
-	sfText_setOutlineThickness(menu.playText, 2);
-	sfText_setString(menu.playText, "PLAY");
-	menu.playTextBound = sfText_getGlobalBounds(menu.playText);
-	sfText_setPosition(menu.playText, (sfVector2f) { (SCREEN_WIDTH - menu.playTextBound.width) / 2, (SCREEN_HEIGHT / 2 - menu.playTextBound.height) });
-
-	menu.settingText = sfText_create();
-	sfText_setFont(menu.settingText, menu.font);
-	sfText_setCharacterSize(menu.settingText, 48);
-	sfText_setOutlineColor(menu.settingText, sfBlack);
-	sfText_setOutlineThickness(menu.settingText, 2);
-	sfText_setString(menu.settingText, "SETTING");
-	menu.settingTextBound = sfText_getGlobalBounds(menu.settingText);
-	sfText_setPosition(menu.settingText, (sfVector2f) { (SCREEN_WIDTH - menu.settingTextBound.width) / 2, (SCREEN_HEIGHT / 2 - menu.settingTextBound.height) + 100 });
-
-	menu.quitText = sfText_create();
-	sfText_setFont(menu.quitText, menu.font);
-	sfText_setCharacterSize(menu.quitText, 48);
-	sfText_setOutlineColor(menu.quitText, sfBlack);
-	sfText_setOutlineThickness(menu.quitText, 2);
-	sfText_setString(menu.quitText, "QUIT");
-	menu.quitTextBound = sfText_getGlobalBounds(menu.quitText);
-	sfText_setPosition(menu.quitText, (sfVector2f) { (SCREEN_WIDTH - menu.quitTextBound.width) / 2, (SCREEN_HEIGHT / 2 - menu.quitTextBound.height) + 200 });
-
-	menu.hoverSelectionLeftText = sfText_create();
-	sfText_setFont(menu.hoverSelectionLeftText, menu.font);
-	sfText_setCharacterSize(menu.hoverSelectionLeftText, 48);
-	sfText_setOutlineColor(menu.hoverSelectionLeftText, sfBlack);
-	sfText_setOutlineThickness(menu.hoverSelectionLeftText, 2);
-	sfText_setString(menu.hoverSelectionLeftText, "[");
-
-	menu.hoverSelectionRightText = sfText_create();
-	sfText_setFont(menu.hoverSelectionRightText, menu.font);
-	sfText_setCharacterSize(menu.hoverSelectionRightText, 48);
-	sfText_setOutlineColor(menu.hoverSelectionRightText, sfBlack);
-	sfText_setOutlineThickness(menu.hoverSelectionRightText, 2);
-	sfText_setString(menu.hoverSelectionRightText, "]");
-
-	menu.settingTextBound = sfText_getGlobalBounds(menu.settingText);
-	menu.quitTextBound = sfText_getGlobalBounds(menu.quitText);
-	menu.playTextBound = sfText_getGlobalBounds(menu.playText);
-	menu.hoverSelectionLeftTextBound = sfText_getGlobalBounds(menu.hoverSelectionLeftText);
-	menu.hoverSelectionRightTextBound = sfText_getGlobalBounds(menu.hoverSelectionRightText);
-
-}
-
-void DrawText(sfRenderWindow* _renderWindow)
-{
-	sfRenderWindow_drawText(_renderWindow, menu.playText, NULL);
-	sfRenderWindow_drawText(_renderWindow, menu.settingText, NULL);
-	sfRenderWindow_drawText(_renderWindow, menu.quitText, NULL);
-	if (menu.hoverSelected)
+	for (int i = 0; i < 3; i++)
 	{
-		sfRenderWindow_drawText(_renderWindow, menu.hoverSelectionLeftText, NULL);
-		sfRenderWindow_drawText(_renderWindow, menu.hoverSelectionRightText, NULL);
+		menu.saveButtons[i].bounds = sfText_getGlobalBounds(menu.saveButtons[i].text);
+		if (SaveExists(i + 1))
+		{
+			save = LoadSave(i + 1);
 
-	}
-}
+			snprintf(menu.buffer, sizeof(menu.buffer),
+				"SAVE %d (%s)", i + 1, save->level);
 
-void CleanupText(void)
-{
-	sfText_destroy(menu.playText);
-	sfText_destroy(menu.settingText);
-	sfText_destroy(menu.quitText);
-	sfText_destroy(menu.hoverSelectionLeftText);
-	sfText_destroy(menu.hoverSelectionRightText);
-}
+			sfText_setString(menu.saveButtons[i].text, menu.buffer);
+		}
+		else
+		{
+			snprintf(menu.buffer, sizeof(menu.buffer),
+				"SAVE %d (EMPTY)", i + 1);
 
-void CheckMouseHoverMenu(sfRenderWindow* _renderWindow)
-{
-	menu.hoverSelected = sfFalse;
-	sfVector2i mousePos = sfMouse_getPositionRenderWindow(_renderWindow);
-	if (sfFloatRect_contains(&menu.playTextBound, (float)mousePos.x, (float)mousePos.y))
-	{
-		menu.hoverSelected = sfTrue;
-
-		sfText_setPosition(menu.hoverSelectionLeftText, (sfVector2f) { menu.playTextBound.left - 30, menu.playTextBound.top - menu.hoverSelectionLeftTextBound.height / 2 + 10 });
-		sfText_setPosition(menu.hoverSelectionRightText, (sfVector2f) { menu.playTextBound.left + menu.playTextBound.width + 10, menu.playTextBound.top - menu.hoverSelectionRightTextBound.height / 2 + 10 });
-	}
-	else if (sfFloatRect_contains(&menu.settingTextBound, (float)mousePos.x, (float)mousePos.y))
-	{
-		menu.hoverSelected = sfTrue;
-		sfText_setPosition(menu.hoverSelectionLeftText, (sfVector2f) { menu.settingTextBound.left - 30, menu.settingTextBound.top - menu.hoverSelectionLeftTextBound.height / 2 + 10 });
-		sfText_setPosition(menu.hoverSelectionRightText, (sfVector2f) { menu.settingTextBound.left + menu.settingTextBound.width + 10, menu.settingTextBound.top - menu.hoverSelectionRightTextBound.height / 2 + 10 });
-
-	}
-	else if (sfFloatRect_contains(&menu.quitTextBound, (float)mousePos.x, (float)mousePos.y))
-	{
-		menu.hoverSelected = sfTrue;
-		sfText_setPosition(menu.hoverSelectionLeftText, (sfVector2f) { menu.quitTextBound.left - 30, menu.quitTextBound.top - menu.hoverSelectionLeftTextBound.height / 2 + 10 });
-		sfText_setPosition(menu.hoverSelectionRightText, (sfVector2f) { menu.quitTextBound.left + menu.quitTextBound.width + 10, menu.quitTextBound.top - menu.hoverSelectionRightTextBound.height / 2 + 10 });
-	}
-
-
-}
-
-void CheckMouseClickMenu(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouseButtonEvent)
-{
-	sfVector2i mousePos = sfMouse_getPositionRenderWindow(_renderWindow);
-	if (sfFloatRect_contains(&menu.playTextBound, (float)mousePos.x, (float)mousePos.y))
-	{
-		SetGameState(GAME);
-	}
-	else if (sfFloatRect_contains(&menu.settingTextBound, (float)mousePos.x, (float)mousePos.y))
-	{
-		printf("Setting clicked\n");
-	}
-	else if (sfFloatRect_contains(&menu.quitTextBound, (float)mousePos.x, (float)mousePos.y))
-	{
-		sfRenderWindow_close(_renderWindow);
+			sfText_setString(menu.saveButtons[i].text, menu.buffer);
+		}
 	}
 }

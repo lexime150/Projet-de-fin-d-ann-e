@@ -67,7 +67,7 @@
       <Filter>Fichiers sources\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Save.c">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

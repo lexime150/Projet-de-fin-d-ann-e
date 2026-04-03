@@ -3,6 +3,7 @@
 
 #include "Common.h"
 #include "Map.h"
+#include "Game.h"
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
@@ -82,6 +83,10 @@ typedef struct Stats
 	float speed;
 	float health;
 	float maxHealth;
+	char level[20];
+
+	sfBool canWallJump;
+	sfBool canDoubleJump;
 
 	sfVector2f velocity;
 	sfVector2f position;
@@ -131,8 +136,9 @@ typedef struct Player
 }Player;
 
 
-void LoadPlayer(void);
+void LoadPlayer(PlayerSaveData* save);
 void UpdatePlayer(float _dt);
+void setSavedStat(PlayerSaveData* save);
 void DrawPlayer(sfRenderWindow* _renderWindow);
 void CleanUpPlayer(void);
 
