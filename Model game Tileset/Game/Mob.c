@@ -43,9 +43,13 @@ void LoadMob(void)
 
 
 
+	for (int i = 0; i < GetEnemySpawnTabSize(); i++)
+	{
+		int mobType = rand() % 2;
+		
+		AddMob(mobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
+	}
 
-	AddMob(MUSHROOM, GetEnemySpawn(0).x, GetEnemySpawn(0).y);
-	AddMob(SKELETON, GetEnemySpawn(1).x, GetEnemySpawn(1).y);
 
 	GetDistancePlayerMobVector(0);
 }
