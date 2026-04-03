@@ -43,9 +43,11 @@ void LoadMob(void)
 
 
 
-
-	AddMob(SKELETON, GetEnemySpawn(0).x, GetEnemySpawn(0).y);
-	AddMob(SKELETON, GetEnemySpawn(1).x, GetEnemySpawn(1).y);
+	for (int i = 0; i < GetEnemySpawnTabSize(); i++)
+	{
+		int randMobType = rand() % 2;
+		AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
+	}
 
 	GetDistancePlayerMobVector(0);
 }
@@ -347,93 +349,93 @@ void StateMob(float _dt, unsigned _i)
 	mob[_i].timer.timerTakeHit += _dt;
 	mob[_i].timer.timerAttack += _dt;
 
-	
-	
-		if (sfSprite_getPosition(player.sprite).x >= mob[_i].position.x)
+
+
+	if (sfSprite_getPosition(player.sprite).x >= mob[_i].position.x)
+	{
+
+		sfSprite_setScale(mob[_i].sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+	}
+	else
+	{
+
+		sfSprite_setScale(mob[_i].sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+	}
+
+
+	if (mob[_i].currentState != TAKE_HIT && mob[_i].currentMobAnimation->isPlaying)
+	{
+		if (GetDistancePlayerMobVector(_i) < mob[_i].rangeMove && GetDistancePlayerMobY(_i) < (player.shape.collisionPlayerRect.height * 2))
 		{
+			if (GetDistancePlayerMobX(&player, _i) > (player.shape.collisionPlayerRect.width))
+			{
+				StateMobMachine(RUN_MOB, _i);
+				mob[_i].act = IS_MOVING;
 
-			sfSprite_setScale(mob[_i].sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+			}
+			else
+			{
+				mob[_i].act = IS_ATTACK;
+			}
 		}
-		else
-		{
-
-			sfSprite_setScale(mob[_i].sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
-		}
-	
-
-		if (mob[_i].currentState != TAKE_HIT && mob[_i].currentMobAnimation->isPlaying)
-		{
-			if (GetDistancePlayerMobVector(_i) < mob[_i].rangeMove && GetDistancePlayerMobY(_i) < (player.shape.collisionPlayerRect.height * 2))
-			{
-				if (GetDistancePlayerMobX(&player, _i) > (player.shape.collisionPlayerRect.width))
-				{
-						StateMobMachine(RUN_MOB, _i);
-						mob[_i].act = IS_MOVING;
-					
-				}
-				else
-				{
-					mob[_i].act = IS_ATTACK;
-				}
-			}
-			else if (GetDistancePlayerMobY(_i) > (player.shape.collisionPlayerRect.height * 2))
-			{
-				StateMobMachine(IDLE_MOB, _i);
-				mob[_i].act = IS_IDLE;
-			}
-			
-
-			//---------ATTACK MOB---------//
-
-
-
-
-			if (mob[_i].act == IS_ATTACK && mob[_i].timer.timerAttack > mob[_i].timer.timerAttackLimit)
-			{
-
-				StateMobMachine(ATTACK_MOB, _i);
-				mob[_i].timer.timerAttack = 0;
-			}
-			else if (!mob[_i].currentMobAnimation->isPlaying && mob[_i].act != IS_TAKE_HIT)
-			{
-				mob[_i].act = IS_IDLE;
-				StateMobMachine(IDLE_MOB, _i);
-			}
-
-
-
-			//---------TAKE IT---------//
-
-
-			if (player.currentState == SWORD || player.currentState == AXE)
-			{
-				sfFloatRect hitAttackPlayer = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
-				sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].rect);
-				if (sfFloatRect_intersects(&hitAttackPlayer, &hitMob, NULL))
-				{
-					if (mob[_i].timer.timerTakeHit > mob[_i].timer.timerTakeHitLimit && mob[_i].act != IS_ATTACK)
-					{
-						printf("wn");
-						mob[_i].hp -= (50 + rand() % 51);
-						StateMobMachine(TAKE_HIT, _i);
-						mob[_i].act = IS_TAKE_HIT;
-						mob[_i].timer.timerTakeHit = 0;
-					}
-					else if (mob[_i].act == IS_TAKE_HIT)
-					{
-						StateMobMachine(IDLE_MOB, _i);
-						mob[_i].act = IS_IDLE;
-					}
-
-				}
-			}
-
-		}
-		else if((mob[_i].currentState == TAKE_HIT || mob[_i].currentState == ATTACK_MOB) && !mob[_i].currentMobAnimation->isPlaying)
+		else if (GetDistancePlayerMobY(_i) > (player.shape.collisionPlayerRect.height * 2))
 		{
 			StateMobMachine(IDLE_MOB, _i);
 			mob[_i].act = IS_IDLE;
 		}
+
+
+		//---------ATTACK MOB---------//
+
+
+
+
+		if (mob[_i].act == IS_ATTACK && mob[_i].timer.timerAttack > mob[_i].timer.timerAttackLimit)
+		{
+
+			StateMobMachine(ATTACK_MOB, _i);
+			mob[_i].timer.timerAttack = 0;
+		}
+		else if (!mob[_i].currentMobAnimation->isPlaying && mob[_i].act != IS_TAKE_HIT)
+		{
+			mob[_i].act = IS_IDLE;
+			StateMobMachine(IDLE_MOB, _i);
+		}
+
+
+
+		//---------TAKE IT---------//
+
+
+		if (player.currentState == SWORD || player.currentState == AXE)
+		{
+			sfFloatRect hitAttackPlayer = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
+			sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].rect);
+			if (sfFloatRect_intersects(&hitAttackPlayer, &hitMob, NULL))
+			{
+				if (mob[_i].timer.timerTakeHit > mob[_i].timer.timerTakeHitLimit && mob[_i].act != IS_ATTACK)
+				{
+					printf("wn");
+					mob[_i].hp -= (50 + rand() % 51);
+					StateMobMachine(TAKE_HIT, _i);
+					mob[_i].act = IS_TAKE_HIT;
+					mob[_i].timer.timerTakeHit = 0;
+				}
+				else if (mob[_i].act == IS_TAKE_HIT)
+				{
+					StateMobMachine(IDLE_MOB, _i);
+					mob[_i].act = IS_IDLE;
+				}
+
+			}
+		}
+
+	}
+	else if ((mob[_i].currentState == TAKE_HIT || mob[_i].currentState == ATTACK_MOB) && !mob[_i].currentMobAnimation->isPlaying)
+	{
+		StateMobMachine(IDLE_MOB, _i);
+		mob[_i].act = IS_IDLE;
+	}
 
 	SetVelocity(_i, _dt);
 }
