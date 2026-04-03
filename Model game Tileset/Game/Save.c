@@ -46,7 +46,9 @@ sfBool SavePlayer(int slot)
     PlayerSaveData save;
     save.save = SAVE_VERSION;
     save.health = player.data.health;
-    save.position = player.data.position;
+    strncpy_s(save.level, sizeof(save.level), player.data.level, _TRUNCATE);
+    save.level[sizeof(save.level) - 1] = '\0';
+
     save.canDoubleJump = player.data.canDoubleJump;
     save.canWallJump = player.data.canWallJump;
 
@@ -99,8 +101,8 @@ PlayerSaveData* LoadSave(int slot)
     playerSaveData = tmp;
     playerSaveData.save = slot;
 
+    strncpy_s(player.data.level, sizeof(player.data.level), playerSaveData.level, _TRUNCATE);
     player.data.health = playerSaveData.health;
-    player.data.position = playerSaveData.position;
     player.data.canDoubleJump = playerSaveData.canDoubleJump;
     player.data.canWallJump = playerSaveData.canWallJump;
 

@@ -82,7 +82,7 @@ typedef struct Stats
 	float speed;
 	float health;
 	float maxHealth;
-
+	char level[8];
 
 	sfBool canWallJump;
 	sfBool canDoubleJump;
@@ -135,8 +135,9 @@ typedef struct Player
 }Player;
 
 
-void LoadPlayer(int slot);
+void LoadPlayer(PlayerSaveData* save);
 void UpdatePlayer(float _dt);
+void setSavedStat(PlayerSaveData* save);
 void DrawPlayer(sfRenderWindow* _renderWindow);
 void CleanUpPlayer(void);
 

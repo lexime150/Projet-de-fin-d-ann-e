@@ -13,10 +13,12 @@
 typedef struct
 {
     unsigned int save; 
+    char level[8];
     float health;
     sfBool canWallJump;
     sfBool canDoubleJump;
     sfVector2f position;
+
 } PlayerSaveData;
 
 

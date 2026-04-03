@@ -15,80 +15,12 @@ void CollisionPlayerPlatformsY(float _dy);
 sfBool CheckCollisionPlayerPlatformsX(float _dx);
 void CheckCollisionPlayerPlatforms(float _dt);
 
+void basePlayer();
+void setSavedStat(PlayerSaveData* save);
 
-void LoadPlayer(int slot)
+void LoadPlayer(PlayerSaveData* save)
 {
-	player.sprite = sfSprite_create();
-	player.texture = sfTexture_createFromFile("Assets/Sprites/IDLE.png", NULL);
-	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
-	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-	sfSprite_setPosition(player.sprite, GetPlayerSpawn());
-
-	player.shape.collisionPlayerShape = sfRectangleShape_create();
-	sfRectangleShape_setSize(player.shape.collisionPlayerShape,(sfVector2f) {PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE});
-
-	sfVector2f spritePos = sfSprite_getPosition(player.sprite);
-	sfRectangleShape_setPosition(player.shape.collisionPlayerShape,(sfVector2f) {spritePos.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f,spritePos.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE)});
-
-	sfRectangleShape_setOutlineColor(player.shape.collisionPlayerShape, sfRed);
-	sfRectangleShape_setFillColor(player.shape.collisionPlayerShape, sfColor_fromRGBA(255, 255, 255, 50));
-
-	sfSprite_setOrigin(player.sprite, (sfVector2f) { PLAYER_WIDTH / 2.f, PLAYER_HEIGHT });
-
-
-	player.lastState = IDLE;
-
-	player.action.isAttacking = sfFalse;
-	player.action.isGrounded = sfFalse;
-	player.action.isMoving = sfFalse;
-
-	player.action.isSlideJumping = sfFalse;
-	player.action.isSliding = sfFalse;
-
-	player.action.isTouchingLeftWall = sfFalse;
-	player.action.isTouchingRightWall = sfFalse;
-	player.action.isTouchingWall = sfFalse;
-	player.action.isWallJumping = sfFalse;
-
-	player.data.position = sfSprite_getPosition(player.sprite);
-	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
-	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
-
-	player.data.attackCooldownTimer = 0.5f;
-	player.data.lastWallTouched = 0;
-
-	player.data.maxHealth = 200;
-	player.data.health = player.data.maxHealth;
-
-	player.data.speed = 350.f;
-	player.data.jumpStartPosition = 0;
-
-	player.data.velocity.x = 0;
-	player.data.velocity.y = 0;
-
-	player.data.slideVelocityX = 0;
-	player.data.slideCooldownTimer = 0.f;
-
-	player.data.lastDirection = 1;
-
-	player.data.canDoubleJump = 0;
-	player.data.canWallJump = 0;
-
-	PlayerSaveData* save = LoadSave(slot);
-
-	if (save != NULL)
-	{
-		player.data.health = save->health;
-		player.data.canDoubleJump = save->canDoubleJump;
-		player.data.canWallJump = save->canWallJump;
-
-		printf("[Player] Save appliquée (hp=%.0f)\n", save->health);
-	}
-	else
-	{
-		printf("[Player] Aucune save, valeurs par défaut utilisées\n");
-	}
-
+	basePlayer();
 	LoadAnimationPlayer();
 }
 
@@ -228,7 +160,7 @@ void MovePlayer(float _dt)
 		player.data.attackCooldownTimer = 0.f;
 		StateMachine(SWORD);
 	}
-	 if (player.action.isAttacking && player.currentState == AXE)
+	if (player.action.isAttacking && player.currentState == AXE)
 	{
 		player.data.velocity.x = 0;
 		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
@@ -686,6 +618,83 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	sfRectangleShape_setPosition(player.shape.collisionPlayerShape, (sfVector2f) { player.data.position.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f, player.data.position.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE) });
 	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
+}
+
+void basePlayer()
+{
+	player.sprite = sfSprite_create();
+	player.texture = sfTexture_createFromFile("Assets/Sprites/IDLE.png", NULL);
+	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
+	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+	sfSprite_setPosition(player.sprite, GetPlayerSpawn());
+
+	player.shape.collisionPlayerShape = sfRectangleShape_create();
+	sfRectangleShape_setSize(player.shape.collisionPlayerShape, (sfVector2f) { PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE });
+
+	sfVector2f spritePos = sfSprite_getPosition(player.sprite);
+	sfRectangleShape_setPosition(player.shape.collisionPlayerShape, (sfVector2f) { spritePos.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f, spritePos.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE) });
+
+	sfRectangleShape_setOutlineColor(player.shape.collisionPlayerShape, sfRed);
+	sfRectangleShape_setFillColor(player.shape.collisionPlayerShape, sfColor_fromRGBA(255, 255, 255, 50));
+
+	sfSprite_setOrigin(player.sprite, (sfVector2f) { PLAYER_WIDTH / 2.f, PLAYER_HEIGHT });
+
+
+	player.lastState = IDLE;
+
+	player.action.isAttacking = sfFalse;
+	player.action.isGrounded = sfFalse;
+	player.action.isMoving = sfFalse;
+
+	player.action.isSlideJumping = sfFalse;
+	player.action.isSliding = sfFalse;
+
+	player.action.isTouchingLeftWall = sfFalse;
+	player.action.isTouchingRightWall = sfFalse;
+	player.action.isTouchingWall = sfFalse;
+	player.action.isWallJumping = sfFalse;
+
+	player.data.position = sfSprite_getPosition(player.sprite);
+	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
+	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
+
+	strncpy_s(player.data.level, sizeof(player.data.level), "level00", _TRUNCATE);
+	player.data.level[sizeof(player.data.level) - 1] = '\0';
+
+	player.data.attackCooldownTimer = 0.5f;
+	player.data.lastWallTouched = 0;
+
+	player.data.maxHealth = 200;
+	player.data.health = player.data.maxHealth;
+
+	player.data.speed = 350.f;
+	player.data.jumpStartPosition = 0;
+
+	player.data.velocity.x = 0;
+	player.data.velocity.y = 0;
+
+	player.data.slideVelocityX = 0;
+	player.data.slideCooldownTimer = 0.f;
+
+	player.data.lastDirection = 1;
+
+	player.data.canDoubleJump = 0;
+	player.data.canWallJump = 0;
+
+
+}
+
+void setSavedStat(PlayerSaveData* save)
+{
+
+	player.data.health = save->health;
+	player.data.canDoubleJump = save->canDoubleJump;
+	player.data.canWallJump = save->canWallJump;
+	strncpy_s(player.data.level, sizeof(player.data.level), save->level, _TRUNCATE);
+	printf("%s\n", player.data.level);
+	printf("[Player] Save appliquée (hp=%.0f)\n", save->health);
+
+
 }
 
 void DrawPlayer(sfRenderWindow* _renderWindow)

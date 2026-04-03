@@ -1,12 +1,12 @@
 #include "Game.h"
-
+void CheckSaveAndLoadLevel(int slot);
 
 Game game;
 Player player;
 
 void LoadGame(void)
 {
-	LoadMap("Map");
+
 	//sfVector2f pSpawn = GetPlayerSpawn();
 	//printf("Player Spawn -> x: %.2f, y: %.2f\n", pSpawn.x, pSpawn.y);
 
@@ -18,11 +18,9 @@ void LoadGame(void)
 	//	sfVector2f eSpawn = GetEnemySpawn(i);
 	//	printf("Enemy Spawn [%u] -> x: %.2f, y: %.2f\n", i, eSpawn.x, eSpawn.y);
 	//}
-	LoadPlayer(playerSaveData.save);
+	int slot = playerSaveData.save;
+	CheckSaveAndLoadLevel(slot);
 
-	LoadCamera();
-	LoadMob();
-	LoadHUD();
 }
 
 
@@ -67,7 +65,6 @@ void UpdateGame(float _dt)
 	UpdateCamera(_dt);
 	UpdateMob(NULL, _dt);
 	UpdateHUD();
-	SavePlayer(playerSaveData.save);
 }
 
 void DrawGame(sfRenderWindow* _renderWindow)
@@ -87,4 +84,37 @@ void CleanupGame(void)
 	CleanUpPlayer();
 	CleanUpCamera();
 	CleanupMob();
+	SavePlayer(playerSaveData.save);
+}
+
+void CheckSaveAndLoadLevel(int slot)
+{
+
+	PlayerSaveData* save = NULL;
+
+	if (SaveExists(slot));
+	{
+		save = LoadSave(slot);
+	}
+
+	if (save != NULL)
+	{
+
+		LoadMap(save->level);
+
+		LoadPlayer(save);
+		setSavedStat(save);
+
+		LoadCamera();
+		LoadMob();
+		LoadHUD();
+	}
+	else
+	{
+		LoadMap("level00");
+		LoadPlayer(save);
+		LoadCamera();
+		LoadMob();
+		LoadHUD();
+	}
 }
