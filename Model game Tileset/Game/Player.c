@@ -658,9 +658,8 @@ void basePlayer()
 	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 
-	strncpy_s(player.data.level, sizeof(player.data.level), "level00", _TRUNCATE);
-	player.data.level[sizeof(player.data.level) - 1] = '\0';
-
+	snprintf(player.data.level, sizeof(player.data.level), "level00");
+	printf("player level: %s\n", player.data.level);
 	player.data.attackCooldownTimer = 0.5f;
 	player.data.lastWallTouched = 0;
 
@@ -690,8 +689,10 @@ void setSavedStat(PlayerSaveData* save)
 	player.data.health = save->health;
 	player.data.canDoubleJump = save->canDoubleJump;
 	player.data.canWallJump = save->canWallJump;
-	strncpy_s(player.data.level, sizeof(player.data.level), save->level, _TRUNCATE);
-	printf("%s\n", player.data.level);
+
+	snprintf(player.data.level, sizeof(player.data.level), "%s", save->level);
+	printf("buffer: %s\n", player.data.level);
+
 	printf("[Player] Save appliquée (hp=%.0f)\n", save->health);
 
 

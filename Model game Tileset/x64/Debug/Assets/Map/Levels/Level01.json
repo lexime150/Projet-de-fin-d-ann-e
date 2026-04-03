@@ -110,7 +110,7 @@
                  "visible":true,
                  "width":0,
                  "x":96,
-                 "y":80
+                 "y":112
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -148,7 +148,7 @@
                 {
                  "height":32,
                  "id":2,
-                 "name":"Level01",
+                 "name":"level00",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -172,7 +172,7 @@
         {
          "columns":14,
          "firstgid":1,
-         "image":"tilesheet.png",
+         "image":"..\/Tilesets\/tilesheet.png",
          "imageheight":160,
          "imagewidth":224,
          "margin":0,

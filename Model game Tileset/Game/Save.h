@@ -25,18 +25,18 @@ typedef struct
 extern PlayerSaveData playerSaveData;
 
 
-sfBool          SavePlayer(int slot);
+sfBool SavePlayer(int slot);
 
 
 PlayerSaveData* LoadSave(int slot);
 
 
-void            DeleteSave(int slot);
+void DeleteSave(int slot);
 
 
-sfBool          SaveExists(int slot);
+sfBool SaveExists(int slot);
 
 
-void            GetSavePath(int slot, char* path);
+void GetSavePath(int slot, char* path);
 
 #endif
