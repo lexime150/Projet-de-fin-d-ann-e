@@ -3,6 +3,7 @@
 
 #include "Common.h"
 #include "Map.h"
+#include "Game.h"
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32

@@ -2,7 +2,7 @@
 
 Player player;
 PlayerSaveData save;
-
+sfBool keyWasPressed = sfFalse;
 void LoadAnimationPlayer(void);
 void StateMachine(PlayerState _state);
 void SetAnimation(PlayerState _state);
@@ -17,6 +17,9 @@ void CheckCollisionPlayerPlatforms(float _dt);
 
 void basePlayer();
 void setSavedStat(PlayerSaveData* save);
+
+void CollisionPlayerTrigger();
+
 
 void LoadPlayer(PlayerSaveData* save)
 {
@@ -95,6 +98,7 @@ void UpdatePlayer(float _dt)
 	ApplyPhysic(_dt);
 	MovePlayer(_dt);
 	CheckCollisionPlayerPlatforms(_dt);
+	CollisionPlayerTrigger();
 	UpdateAnimation(player.currentAnimation, _dt);
 }
 void ApplyPhysic(float _dt)
@@ -696,6 +700,35 @@ void setSavedStat(PlayerSaveData* save)
 	printf("[Player] Save appliquée (hp=%.0f)\n", save->health);
 
 
+}
+ 
+
+void CollisionPlayerTrigger()
+{
+	sfBool keyIsPressed = sfKeyboard_isKeyPressed(sfKeyE);
+
+	for (int i = 0; i < GetTriggerTabSize(); i++)
+	{
+		sfFloatRect trigger = {
+			GetMapTrigger(i).left,
+			GetMapTrigger(i).top,
+			GetMapTrigger(i).width,
+			GetMapTrigger(i).height
+		};
+
+		if (sfFloatRect_intersects(&player.shape.collisionPlayerRect, &trigger, NULL))
+		{
+			if (keyIsPressed && !keyWasPressed)
+			{
+				snprintf(player.data.level, sizeof(player.data.level), "%s", GetMapTrigger(i).name);
+				LoadMap(player.data.level);
+				CleanupGame();
+				LoadGame();
+			}
+		}
+	}
+
+	keyWasPressed = keyIsPressed;
 }
 
 void DrawPlayer(sfRenderWindow* _renderWindow)
