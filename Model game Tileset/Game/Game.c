@@ -111,7 +111,7 @@ void CheckSaveAndLoadLevel(int slot)
 	}
 	else
 	{
-		LoadMap("level00");
+		LoadMap("level_00");
 		LoadPlayer(save);
 		LoadCamera();
 		LoadMob();

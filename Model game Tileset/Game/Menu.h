@@ -38,7 +38,7 @@ typedef struct Menu
     int hoveredIndex;
 
     MenuState state;
-
+    char buffer[20];
 } Menu;
 
 

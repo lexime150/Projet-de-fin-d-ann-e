@@ -13,7 +13,7 @@
 typedef struct
 {
     unsigned int save; 
-    char level[8];
+    char level[20];
     float health;
     sfBool canWallJump;
     sfBool canDoubleJump;

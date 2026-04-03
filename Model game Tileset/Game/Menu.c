@@ -2,10 +2,15 @@
 
 Menu menu;
 PlayerSaveData playerSaveData;
+PlayerSaveData* save = NULL;
+sfBool saveExist = sfFalse;
 void UpdateSlotText();
 
 void InitButton(Button* btn, sfFont* font, const char* str, float y)
 {
+
+
+
 	btn->text = sfText_create();
 	sfText_setFont(btn->text, font);
 	sfText_setCharacterSize(btn->text, 48);
@@ -33,9 +38,9 @@ void LoadMenu(void)
 	InitButton(&menu.mainButtons[1], menu.font, "SETTING", SCREEN_HEIGHT / 2 + 100);
 	InitButton(&menu.mainButtons[2], menu.font, "QUIT", SCREEN_HEIGHT / 2 + 200);
 
-	InitButton(&menu.saveButtons[0], menu.font, "SAVE 1", SCREEN_HEIGHT / 2 - 100);
-	InitButton(&menu.saveButtons[1], menu.font, "SAVE 2", SCREEN_HEIGHT / 2 + 000);
-	InitButton(&menu.saveButtons[2], menu.font, "SAVE 3", SCREEN_HEIGHT / 2 + 100);
+	InitButton(&menu.saveButtons[0], menu.font, "SAVE 1 (EMPTY)", SCREEN_HEIGHT / 2 - 100);
+	InitButton(&menu.saveButtons[1], menu.font, "SAVE 2 (EMPTY)", SCREEN_HEIGHT / 2 + 000);
+	InitButton(&menu.saveButtons[2], menu.font, "SAVE 3 (EMPTY)", SCREEN_HEIGHT / 2 + 100);
 	InitButton(&menu.saveButtons[3], menu.font, "BACK", SCREEN_HEIGHT / 2 + 250);
 
 	menu.hoverLeft = sfText_create();
@@ -215,4 +220,24 @@ void CleanupMenu(void)
 
 void UpdateSlotText()
 {
+	for (int i = 0; i < 3; i++)
+	{
+		menu.saveButtons[i].bounds = sfText_getGlobalBounds(menu.saveButtons[i].text);
+		if (SaveExists(i + 1))
+		{
+			save = LoadSave(i + 1);
+
+			snprintf(menu.buffer, sizeof(menu.buffer),
+				"SAVE %d (%s)", i + 1, save->level);
+
+			sfText_setString(menu.saveButtons[i].text, menu.buffer);
+		}
+		else
+		{
+			snprintf(menu.buffer, sizeof(menu.buffer),
+				"SAVE %d (EMPTY)", i + 1);
+
+			sfText_setString(menu.saveButtons[i].text, menu.buffer);
+		}
+	}
 }

@@ -662,7 +662,7 @@ void basePlayer()
 	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 
-	snprintf(player.data.level, sizeof(player.data.level), "level00");
+	snprintf(player.data.level, sizeof(player.data.level), "level_00");
 	printf("player level: %s\n", player.data.level);
 	player.data.attackCooldownTimer = 0.5f;
 	player.data.lastWallTouched = 0;

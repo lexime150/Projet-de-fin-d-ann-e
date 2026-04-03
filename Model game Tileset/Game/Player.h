@@ -83,7 +83,7 @@ typedef struct Stats
 	float speed;
 	float health;
 	float maxHealth;
-	char level[8];
+	char level[20];
 
 	sfBool canWallJump;
 	sfBool canDoubleJump;
