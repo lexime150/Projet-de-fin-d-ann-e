@@ -19,7 +19,7 @@
 #define HITBOX_SKELETON_HEIGHT 32
 #define HITBOX_ATTACK_SKELETON_WIDTH 48
 
-#define TIMER_ATTACK 1.f
+#define TIMER_ATTACK 1.6f
 
 typedef enum MobState
 {

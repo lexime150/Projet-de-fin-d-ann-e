@@ -263,8 +263,6 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 {
 	//---------MOB PLAT----------
 	
-	
-	mob[_i].isGroundedMob = sfFalse;
 
 
 	sfFloatRect hitMob = { 0 };
@@ -328,7 +326,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 			{
 				if (mob[_i].velocity.y >= 0)
 				{
-					mob[_i].isGroundedMob = sfTrue;
+					mob[_i].act = IS_GROUNDED_MOB;
 					mob[_i].velocity.y = 0;
 					sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { sfSprite_getPosition(mob[_i].sprite).x, hitPlat.top + 1.f });
 				}
@@ -346,7 +344,7 @@ void StateMob(float _dt, unsigned _i)
 {
 	//-------MOVE PLAYER---------
 
-	mob[_i].isMoving = sfFalse;
+//	mob[_i].isMoving = sfFalse;
 
 	if (GetDistancePlayerMobY(_i) < 1.f)
 	{
@@ -367,48 +365,52 @@ void StateMob(float _dt, unsigned _i)
 		if (GetDistancePlayerMobX(&player, _i) > (player.shape.collisionPlayerRect.width))
 		{
 			StateMobMachine(RUN_MOB, _i);
-			mob[_i].isMoving = sfTrue;
+			mob[_i].act = IS_MOVING;
+		}
+		else
+		{
+			mob[_i].act = IS_ATTACK;
 		}
 	}
-	else
-	{
-		StateMobMachine(IDLE_MOB, _i);
-	}
+	
 
-	SetVelocity(_i, _dt);
+	
 
 
 	//---------ATTACK MOB---------
 
 	mob[_i].timerAttack += _dt;
 
-	if (GetDistancePlayerMobVector(_i) < (player.shape.collisionPlayerRect.width) && mob[_i].timerAttack > TIMER_ATTACK)
-	{
-		mob[_i].isAttack = sfTrue;
-		mob[_i].timerAttack = 0;
-		StateMobMachine(ATTACK_MOB, _i);
-	}
-	else if (!mob[_i].currentMobAnimation->isPlaying)
-	{
-		printf("ccc");
-		StateMobMachine(IDLE_MOB, _i);
-		mob[_i].isAttack = sfFalse;
-	}
+		if (mob[_i].act == IS_ATTACK && mob[_i].timerAttack > TIMER_ATTACK)
+		{
+			StateMobMachine(ATTACK_MOB, _i);
+			printf("ccc");
+			mob[_i].timerAttack = 0;
+		}
+		else if (!mob[_i].currentMobAnimation->isPlaying)
+		{
+			mob[_i].act = IS_IDLE;
+			StateMobMachine(IDLE_MOB, _i);
+		}
+	
 
 	//---------TAKE IT---------
 
 	mob[_i].timerDamage += _dt;
 	if (player.currentState == SWORD || player.currentState == AXE)
 	{
-		if (mob[_i].timerDamage > 1.f && !mob[_i].isTakeIt && sfFloatRect_intersects(&player.shape.collisionAttackRect, &mob[_i].hitRect, NULL))
+		if (mob[_i].timerDamage > 1.f && mob[_i].act != IS_TAKE_HIT && sfFloatRect_intersects(&player.shape.collisionAttackRect, &mob[_i].hitRect, NULL))
 		{
-			mob[_i].isTakeIt = sfTrue;
+			printf("wn");
+			mob[_i].act = IS_TAKE_HIT;
 			mob[_i].hp -= 50 + rand() % 51;
 			StateMobMachine(TAKE_IT, _i);
 			mob[_i].timerDamage = 0;
 		}
 
 	}
+
+	SetVelocity(_i, _dt);
 
 }
 
@@ -471,7 +473,7 @@ void CleanupMob(void)
 void SetVelocity(unsigned _i, float _dt)
 {
 
-	if (mob[_i].isMoving)
+	if (mob[_i].act == IS_MOVING)
 	{
 		if (sfSprite_getPosition(player.sprite).x > mob[_i].position.x)
 		{
@@ -483,12 +485,12 @@ void SetVelocity(unsigned _i, float _dt)
 		}
 	}
 	
-	if (mob[_i].isAttack || !mob[_i].isMoving || mob[_i].isTakeIt)
+	if (mob[_i].act == IS_IDLE || mob[_i].act == IS_ATTACK || mob[_i].act == IS_TAKE_HIT)
 	{
 		mob[_i].velocity.x = 0;
 	}
 
-	if (!mob[_i].isGroundedMob)
+	if (mob[_i].act != IS_GROUNDED_MOB)
 	{
 		mob[_i].velocity.y += GRAVITY * _dt;
 	}
