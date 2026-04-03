@@ -19,14 +19,19 @@
 #define HITBOX_SKELETON_HEIGHT 32
 #define HITBOX_ATTACK_SKELETON_WIDTH 48
 
-#define TIMER_ATTACK 1.6f
+#define TIMER_ATTACK_MUSHROOM 1.6f
+#define TIMER_ATTACK_SKELETON 1.1f
+
+#define TIMER_TAKE_HIT_MUSHROOM 0.75f
+#define TIMER_TAKE_HIT_SKELETON 1.f
+
 
 typedef enum MobState
 {
 	IDLE_MOB,
 	RUN_MOB,
 	ATTACK_MOB,
-	TAKE_IT,
+	TAKE_HIT,
 	DEATH,
 	STATE_MOB_NUMBER
 }MobState;
@@ -50,6 +55,16 @@ typedef enum MobAct
 	IS_GROUNDED_MOB
 }MobAct;
 
+typedef struct Timer
+{
+	float timerAttack;
+	float timerTakeHit;
+
+	float timerAttackLimit;
+	float timerTakeHitLimit;
+
+}Timer;
+
 
 typedef struct Mob
 {
@@ -62,12 +77,6 @@ typedef struct Mob
 	Animation mobAnimation[STATE_MOB_NUMBER];
 	Animation* currentMobAnimation;
 
-	sfBool isMoving;
-	sfBool isAttack;
-	sfBool isAlive;
-	sfBool isTakeIt;
-	sfBool isGroundedMob;
-
 	MobAct act;
 
 	MobState lastState;
@@ -75,12 +84,12 @@ typedef struct Mob
 
 	sfFloatRect hitbox;
 
+	Timer timer;
 
 	sfRectangleShape* rect;
 	sfFloatRect hitRect;
 
-	float timerAttack;
-	float timerDamage;
+	
 
 	unsigned hp;
 
