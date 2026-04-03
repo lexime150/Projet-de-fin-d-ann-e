@@ -10,13 +10,6 @@
 #include "Mob.h"
 #include "GameHUD.h"
 
-typedef struct Game
-{
-	int test;
-}Game;
-
-
-
 void LoadGame(void);
 void PollEventGame(sfRenderWindow* _renderWindow);
 void UpdateGame(float _dt);

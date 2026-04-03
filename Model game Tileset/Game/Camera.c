@@ -22,6 +22,7 @@ void DrawCamera(sfRenderWindow* _renderWindow)
 
 void CleanUpCamera()
 {
+	sfView_destroy(camera.cameraView);
 }
 
 void CenterCamera()

@@ -1,7 +1,6 @@
 #include "Game.h"
 void CheckSaveAndLoadLevel(int slot);
 
-Game game;
 Player player;
 
 void LoadGame(void)

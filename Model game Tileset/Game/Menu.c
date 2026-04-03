@@ -107,6 +107,7 @@ void HandleClick(sfRenderWindow* window)
 		{
 		case 0: // PLAY
 			menu.state = MENU_PLAY;
+			UpdateSlotText(window);
 			break;
 
 		case 1: // SETTING
@@ -171,7 +172,10 @@ void PollEventMenu(sfRenderWindow* window)
 void UpdateMenu(sfRenderWindow* window, float dt)
 {
 	UpdateHover(window);
-	UpdateSlotText(window);
+	for (int i = 0; i < 3; i++)
+	{
+		menu.saveButtons[i].bounds = sfText_getGlobalBounds(menu.saveButtons[i].text);
+	}
 }
 
 

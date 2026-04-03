@@ -478,7 +478,7 @@ void DrawMob(sfRenderWindow* _renderWindow)
 {
 	for (unsigned i = 0; i < mobCount; i++)
 	{
-		sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
+		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
 	}
 }
