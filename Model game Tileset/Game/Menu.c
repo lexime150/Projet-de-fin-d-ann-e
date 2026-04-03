@@ -227,15 +227,13 @@ void UpdateSlotText()
 		{
 			save = LoadSave(i + 1);
 
-			snprintf(menu.buffer, sizeof(menu.buffer),
-				"SAVE %d (%s)", i + 1, save->level);
+			snprintf(menu.buffer, sizeof(menu.buffer),"SAVE %d (%s)", i + 1, save->level);
 
 			sfText_setString(menu.saveButtons[i].text, menu.buffer);
 		}
 		else
 		{
-			snprintf(menu.buffer, sizeof(menu.buffer),
-				"SAVE %d (EMPTY)", i + 1);
+			snprintf(menu.buffer, sizeof(menu.buffer),"SAVE %d (EMPTY)", i + 1);
 
 			sfText_setString(menu.saveButtons[i].text, menu.buffer);
 		}

@@ -1,6 +1,1 @@
-﻿  Menu.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Menu.c(81,53): warning C4244: 'fonction' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Menu.c(81,62): warning C4244: 'fonction' : conversion de 'int' en 'float', perte possible de données
-  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
-  'pwsh.exe' n'est pas reconnu en tant que commande interne
-  ou externe, un programme exécutable ou un fichier de commandes.
+﻿  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
