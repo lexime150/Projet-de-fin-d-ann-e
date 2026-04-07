@@ -155,6 +155,7 @@ void MovePlayer(float _dt)
 		player.action.isAttacking = sfTrue;
 		player.data.attackCooldownTimer = 0.f;
 		player.data.velocity.x = 0;
+		sfSound_play(player.sound.axeSound);
 		StateMachine(AXE);
 	}
 	if (sfMouse_isButtonPressed(sfMouseRight) && player.data.attackCooldownTimer >= ATTACK_SWORD_COOLDOWN && player.action.isGrounded)
@@ -688,6 +689,10 @@ void basePlayer()
 	player.sound.swordSound = sfSound_create();
 	player.sound.buffer = sfSoundBuffer_createFromFile("Assets/Sounds/Sword_Attack_Sound.wav");
 	sfSound_setBuffer(player.sound.swordSound, player.sound.buffer);
+
+	player.sound.axeSound = sfSound_create();
+	player.sound.buffer = sfSoundBuffer_createFromFile("Assets/Sounds/Axe_Attack_Sound.wav");
+	sfSound_setBuffer(player.sound.axeSound, player.sound.buffer);
 
 }
 
