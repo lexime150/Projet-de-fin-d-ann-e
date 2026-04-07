@@ -162,6 +162,7 @@ void MovePlayer(float _dt)
 		createCollisionAttack();
 		player.action.isAttacking = sfTrue;
 		player.data.attackCooldownTimer = 0.f;
+		sfSound_play(player.sound.swordSound);
 		StateMachine(SWORD);
 	}
 	if (player.action.isAttacking && player.currentState == AXE)
@@ -684,6 +685,9 @@ void basePlayer()
 	player.data.canDoubleJump = 0;
 	player.data.canWallJump = 0;
 
+	player.sound.swordSound = sfSound_create();
+	player.sound.buffer = sfSoundBuffer_createFromFile("Assets/Sounds/Sword_Attack_Sound.wav");
+	sfSound_setBuffer(player.sound.swordSound, player.sound.buffer);
 
 }
 

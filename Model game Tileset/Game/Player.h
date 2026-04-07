@@ -78,6 +78,13 @@ typedef struct Action
 	sfBool isAttacking;
 }Action;
 
+typedef struct Sound
+{
+	sfSoundBuffer* buffer;
+	sfSound* swordSound;
+	sfSound* axeSound;
+}Sound;
+
 typedef struct Stats
 {
 	float speed;
@@ -125,6 +132,7 @@ typedef struct Player
 	Action action;
 	Stats data;
 	Shape shape;
+	Sound sound;
 
 	PlayerState currentState;
 	PlayerState lastState;
