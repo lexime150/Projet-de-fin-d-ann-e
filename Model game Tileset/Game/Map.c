@@ -1,5 +1,6 @@
 #include "Map.h"
 
+
 sfTexture* tileTexture;
 sfSprite* tileSprite;
 cute_tiled_map_t* map;
@@ -80,6 +81,8 @@ void CleanupMap(void)
 
 	free(enemySpawnTab);
 	enemySpawnTab = NULL;
+
+
 }
 
 void LoadCollisionAndTrigger(void)
