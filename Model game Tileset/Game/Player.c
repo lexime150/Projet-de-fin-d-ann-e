@@ -383,23 +383,25 @@ void MovePlayer(float _dt)
 				player.data.lastWallTouched = player.data.currentWallTouched;
 
 				float wallJumpHX = 550.f;
-				player.data.velocity.y = -JUMP_FORCE * 0.75;
+				
 
-				if (player.action.isTouchingRightWall)
+				if (player.action.isTouchingRightWall && movingRight)
 				{
 					player.action.isWallJumping = sfTrue;
 					player.action.justWallJumped = sfTrue;
 					player.data.wallJumpVelocityX = -wallJumpHX;
 					player.data.lastDirection = -1;
 					sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+					player.data.velocity.y = -JUMP_FORCE * 0.75;
 				}
-				else if (player.action.isTouchingLeftWall)
+				else if (player.action.isTouchingLeftWall && movingLeft)
 				{
 					player.action.isWallJumping = sfTrue;
 					player.action.justWallJumped = sfTrue;
 					player.data.wallJumpVelocityX = wallJumpHX;
 					player.data.lastDirection = 1;
 					sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+					player.data.velocity.y = -JUMP_FORCE * 0.75;
 				}
 
 				player.action.isGrounded = sfFalse;
