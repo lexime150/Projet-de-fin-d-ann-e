@@ -155,9 +155,10 @@ void MovePlayer(float _dt)
 		player.action.isAttacking = sfTrue;
 		player.data.attackCooldownTimer = 0.f;
 		player.data.velocity.x = 0;
-		sfSound_setPitch(player.sound.axeSound, RandomFloat(0.8, 1.2));
 
+		sfSound_setPitch(player.sound.axeSound, RandomFloat(0.8, 1.2));
 		sfSound_play(player.sound.axeSound);
+
 		StateMachine(AXE);
 	}
 	if (sfMouse_isButtonPressed(sfMouseRight) && player.data.attackCooldownTimer >= ATTACK_SWORD_COOLDOWN && player.action.isGrounded)
@@ -165,8 +166,10 @@ void MovePlayer(float _dt)
 		createCollisionAttack();
 		player.action.isAttacking = sfTrue;
 		player.data.attackCooldownTimer = 0.f;
-		sfSound_setPitch(player.sound.swordSound, RandomFloat(0.9,1.2));
+
+		sfSound_setPitch(player.sound.swordSound, RandomFloat(0.9, 1.2));
 		sfSound_play(player.sound.swordSound);
+
 		StateMachine(SWORD);
 	}
 	if (player.action.isAttacking && player.currentState == AXE)
@@ -706,7 +709,7 @@ void setSavedStat(PlayerSaveData* save)
 	snprintf(player.data.level, sizeof(player.data.level), "%s", save->level);
 	printf("buffer: %s\n", player.data.level);
 }
- 
+
 
 void CollisionPlayerTrigger()
 {

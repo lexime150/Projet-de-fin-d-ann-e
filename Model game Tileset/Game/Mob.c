@@ -405,7 +405,6 @@ void StateMob(float _dt, unsigned _i)
 			{
 				if (mob[_i].timer.timerTakeHit > mob[_i].timer.timerTakeHitLimit && mob[_i].act != IS_ATTACK)
 				{
-
 					mob[_i].hp -= (50 + rand() % 51);
 					StateMobMachine(TAKE_HIT, _i);
 					mob[_i].act = IS_TAKE_HIT;
