@@ -407,7 +407,6 @@ void StateMob(float _dt, unsigned _i)
 			{
 
 				mob[_i].hp -= (50 + rand() % 51);
-				printf("%u\n", mob[_i].hp);
 				StateMobMachine(TAKE_HIT, _i);
 				mob[_i].act = IS_TAKE_HIT;
 				mob[_i].timer.timerTakeHit = 0;

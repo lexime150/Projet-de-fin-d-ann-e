@@ -1,7 +1,8 @@
 #include "Game.h"
 void CheckSaveAndLoadLevel(int slot);
-
+void changeLevel(const char* level);
 Player player;
+
 
 void LoadGame(void)
 {
@@ -34,6 +35,7 @@ void PollEventGame(sfRenderWindow* _renderWindow)
 
 void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
 {
+
 	switch (_keyEvent.code)
 	{
 	case sfKeyEscape:
@@ -41,6 +43,18 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
 		break;
 	case sfKeyG:
 		player.data.health -= rand() % 50;
+		break;
+	case sfKeyNum1:
+		changeLevel("Level_00");
+		break;
+	case sfKeyNum2:
+		changeLevel("Level_01");
+		break;
+	case sfKeyNum3:
+		changeLevel("Level_02");
+		break;
+	case sfKeyNum4:
+		changeLevel("Level_03");
 		break;
 	default:
 		break;
@@ -80,7 +94,7 @@ void CheckSaveAndLoadLevel(int slot)
 
 	PlayerSaveData* save = NULL;
 
-	if (SaveExists(slot));
+	if (SaveExists(slot))
 	{
 		save = LoadSave(slot);
 	}
@@ -89,7 +103,6 @@ void CheckSaveAndLoadLevel(int slot)
 	{
 
 		LoadMap(save->level);
-
 		LoadPlayer(save);
 		setSavedStat(save);
 
@@ -105,4 +118,23 @@ void CheckSaveAndLoadLevel(int slot)
 		LoadMob();
 		LoadHUD();
 	}
+}
+
+void changeLevel(const char* level)
+{
+
+	snprintf(player.data.level, sizeof(player.data.level), "%s", level);
+
+
+	CleanupMob();
+	CleanupMap();
+
+
+	LoadMap(player.data.level);
+	LoadCamera();
+	LoadMob();
+	LoadHUD();
+
+	player.data.position = GetPlayerSpawn();
+
 }

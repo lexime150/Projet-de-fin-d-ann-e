@@ -696,10 +696,6 @@ void setSavedStat(PlayerSaveData* save)
 
 	snprintf(player.data.level, sizeof(player.data.level), "%s", save->level);
 	printf("buffer: %s\n", player.data.level);
-
-	printf("[Player] Save appliquée (hp=%.0f)\n", save->health);
-
-
 }
  
 
