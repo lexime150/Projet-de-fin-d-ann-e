@@ -31,6 +31,7 @@ void PollEventGame(sfRenderWindow* _renderWindow)
 			break;
 		}
 	}
+	
 }
 
 void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)

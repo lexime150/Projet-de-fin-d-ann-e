@@ -90,6 +90,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.timer.timerAttackLimit = TIMER_ATTACK_MUSHROOM;
 		newMob.timer.timerTakeHitLimit = TIMER_TAKE_HIT_MUSHROOM;
 		newMob.hp = 300;
+		newMob.degats = MUSHROOM_DEGATS;
 
 		//----AttackRect
 
@@ -108,6 +109,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.timer.timerAttackLimit = TIMER_ATTACK_SKELETON;
 		newMob.timer.timerTakeHitLimit = TIMER_TAKE_HIT_SKELETON;
 		newMob.hp = 180;
+		newMob.degats = SKELETON_DEGATS;
 
 		//----Attack Rect
 
@@ -291,6 +293,8 @@ void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 			StateMob(_dt, i);
 			UpdateAnimation(mob[i].currentMobAnimation, _dt);
 			DeleteMob(&i);
+
+
 		}
 	}
 }
@@ -371,6 +375,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	}
 
+	//Move later
 
 
 
