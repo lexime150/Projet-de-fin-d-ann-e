@@ -46,8 +46,11 @@ void LoadMob(void)
 
 	for (int i = 0; i < GetEnemySpawnTabSize(); i++)
 	{
-		int randMobType = rand() % 2;
-		AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
+		if (GetEnemySpawnTabSize() <= 0.f)
+		{
+			int randMobType = rand() % 2;
+			AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
+		}
 	}
 
 	GetDistancePlayerMobVector(0);
@@ -282,14 +285,16 @@ void UpdateMobInfo(float _dt, unsigned _i)
 
 void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 {
-	for (unsigned i = 0; i < mobCount; i++)
-	{
-
-		UpdateMobInfo(_dt, i);
-		StateMob(_dt, i);
-		UpdateAnimation(mob[i].currentMobAnimation, _dt);
-		DeleteMob(&i);
-	}
+	//for (unsigned i = 0; i < mobCount; i++)
+	//{
+	//	if (mobCount != 0)
+	//	{
+	//		UpdateMobInfo(_dt, i);
+	//		StateMob(_dt, i);
+	//		UpdateAnimation(mob[i].currentMobAnimation, _dt);
+	//		DeleteMob(&i);
+	//	}
+	//}
 }
 
 
@@ -489,7 +494,7 @@ void StateMob(float _dt, unsigned _i)
 
 float GetDistancePlayerMobX(unsigned _i)
 {
-	if (&mob[_i] != NULL)
+	if (mobCount > 0)
 	{
 		float distX = player.data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
 
@@ -502,24 +507,22 @@ float GetDistancePlayerMobX(unsigned _i)
 			return distX;
 		}
 	}
-	else
-	{
-		return;
-	}
-
 }
 
 float GetDistancePlayerMobY(unsigned _i)
 {
-	float distY = player.data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
+	if (mobCount > 0)
+	{
+		float distY = player.data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
 
-	if (distY < 0)
-	{
-		return distY * -1;
-	}
-	else
-	{
-		return distY;
+		if (distY < 0.f)
+		{
+			return distY * -1;
+		}
+		else
+		{
+			return distY;
+		}
 	}
 }
 
