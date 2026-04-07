@@ -10,6 +10,9 @@ unsigned int collisionTabSize;
 Trigger* triggerTab;
 unsigned int triggerTabSize;
 
+sfFloatRect* spikeTab;
+unsigned spikeTabSize;
+
 sfVector2f* enemySpawnTab;
 unsigned int enemySpawnTabSize;
 sfVector2f playerSpawn;
@@ -76,6 +79,9 @@ void CleanupMap(void)
 	free(collisionTab);
 	collisionTab = NULL;
 
+	free(spikeTab);
+	spikeTab = NULL;
+
 	free(triggerTab);
 	triggerTab = NULL;
 
@@ -103,6 +109,13 @@ void LoadCollisionAndTrigger(void)
 		return;
 	}
 
+	spikeTab = calloc(1, sizeof(sfFloatRect));
+	if (spikeTab == NULL)
+	{
+		return;
+	}
+
+
 	enemySpawnTab = calloc(1, sizeof(sfVector2f));
 	enemySpawnTabSize = 0;
 
@@ -129,6 +142,8 @@ void LoadCollisionAndTrigger(void)
 					{
 						return;
 					}
+
+
 					collisionTab = collisionTabTemp;
 
 					// Add the collision in the array
@@ -157,7 +172,30 @@ void LoadCollisionAndTrigger(void)
 					triggerTab[triggerTabSize].height = object->height * GAME_SCALE;
 					triggerTabSize++;
 				}
+				else if (strcmp(layer->name.ptr, "Spike") == 0)
+				{
+
+					sfFloatRect* spikeTemp = realloc(spikeTab, (unsigned long long)(spikeTabSize + 1) * sizeof(sfFloatRect));
+					if (spikeTemp == NULL)
+					{
+						return;
+					}
+					spikeTab = spikeTemp;
+
+					spikeTab[spikeTabSize] = (sfFloatRect){
+					object->x * GAME_SCALE,
+					object->y * GAME_SCALE,
+					object->width * GAME_SCALE,
+					object->height * GAME_SCALE };
+					spikeTabSize++;
+				}
+
+				
 			}
+			
+
+
+
 			if (object->point == 1)
 			{
 				if (strcmp(layer->name.ptr, "Enemy-Spawn") == 0)
@@ -294,4 +332,17 @@ sfVector2f GetEnemySpawn(unsigned int _index)
 sfVector2f GetPlayerSpawn(void)
 {
     return playerSpawn;
+}
+
+sfFloatRect GetSpikeTab(unsigned _index)
+{
+	if (_index < spikeTabSize)
+		return spikeTab[_index];
+	else
+		return (sfFloatRect) { 0 };
+}
+
+unsigned GetSpikeTabSize(void)
+{
+	return spikeTabSize;
 }

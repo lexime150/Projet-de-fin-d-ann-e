@@ -28,6 +28,8 @@ void LoadPlayer(PlayerSaveData* save)
 {
 	basePlayer();
 	LoadAnimationPlayer();
+	printf("%f", GetSpikeTab(3).left);
+
 }
 
 void LoadAnimationPlayer(void)
@@ -125,7 +127,6 @@ void CheckCollisionPlayerMob(void)
 					player.data.health -= mob[i].degats + rand() % mob[i].degats;
 					StateMachine(JUMP);
 					player.data.velocity.y -= JUMP_FORCE;
-					///sfSprite_move(player.sprite, (sfVector2f) { 0, -200.f });
 					player.data.timerTakeIt = 0.f;
 				}
 			}

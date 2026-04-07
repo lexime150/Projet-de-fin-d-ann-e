@@ -26,4 +26,10 @@ unsigned int GetEnemySpawnTabSize(void);
 sfVector2f GetEnemySpawn(unsigned int _index);
 
 sfVector2f GetPlayerSpawn(void);
+
+
+
+sfFloatRect GetSpikeTab(unsigned _index);
+unsigned GetSpikeTabSize(void);
+
 #endif
