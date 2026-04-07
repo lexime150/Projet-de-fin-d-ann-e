@@ -99,9 +99,9 @@ void AddMob(TypeMob _type, float _x, float _y)
 		break;
 	case SKELETON:
 		sfSprite_setTexture(newMob.sprite, texture[SKELETON], sfTrue);
-		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { HITBOX_SKELETON / 2, HITBOX_SKELETON });
-		sfRectangleShape_setSize(newMob.rect, (sfVector2f) { HITBOX_SKELETON, HITBOX_SKELETON });
-		sfRectangleShape_setOrigin(newMob.rect, (sfVector2f) { HITBOX_SKELETON / 2, HITBOX_SKELETON });
+		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { HITBOX_SKELETON_WIDTH / 2, HITBOX_SKELETON_WIDTH });
+		sfRectangleShape_setSize(newMob.rect, (sfVector2f) { HITBOX_SKELETON_WIDTH, HITBOX_SKELETON_HEIGHT });
+		sfRectangleShape_setOrigin(newMob.rect, (sfVector2f) { HITBOX_SKELETON_WIDTH / 2, HITBOX_SKELETON_HEIGHT });
 		sfSprite_setTextureRect(newMob.sprite, (sfIntRect) { 0, 0, 32, 32 });
 		newMob.rangeMove = DIST_RUN_MUSHROOM;
 		newMob.rangeAttack = DIST_ATTACK_SKELETON;
@@ -111,8 +111,8 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 		//----Attack Rect
 
-		sfRectangleShape_setSize(newMob.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON, HITBOX_SKELETON });
-		sfRectangleShape_setOrigin(newMob.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON / 2, HITBOX_MUSHROOM_HEIGHT });
+		sfRectangleShape_setSize(newMob.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON, HITBOX_SKELETON_WIDTH });
+		sfRectangleShape_setOrigin(newMob.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON / 2, HITBOX_ATTACK_SKELETON });
 
 		break;
 	default:
@@ -188,19 +188,19 @@ void LoadMobAnimation(unsigned _i)
 		mob[_i].mobAnimation[DEATH] = CreateAnimation(mob[_i].sprite, 4, 7, sfTrue, sfFalse, firstFrame);
 		break;
 	case SKELETON:
-		firstFrame = (sfIntRect){ 0, 0, HITBOX_SKELETON, HITBOX_SKELETON };
+		firstFrame = (sfIntRect){ 0, 0, HITBOX_SKELETON_WIDTH, HITBOX_SKELETON_WIDTH };
 		mob[_i].mobAnimation[IDLE_MOB] = CreateAnimation(mob[_i].sprite, 3, 6, sfTrue, sfTrue, firstFrame);
 
-		firstFrame.top += HITBOX_SKELETON;
+		firstFrame.top += HITBOX_SKELETON_WIDTH;
 		mob[_i].mobAnimation[RUN_MOB] = CreateAnimation(mob[_i].sprite, 4, 11, sfTrue, sfTrue, firstFrame);
 
-		firstFrame.top += HITBOX_SKELETON; firstFrame.width = HITBOX_ATTACK_STATE_SKELETON_WIDTH;
+		firstFrame.top += HITBOX_SKELETON_WIDTH; firstFrame.width = HITBOX_ATTACK_STATE_SKELETON_WIDTH;
 		mob[_i].mobAnimation[ATTACK_MOB] = CreateAnimation(mob[_i].sprite, 6, 10, sfTrue, sfFalse, firstFrame);
 
-		firstFrame.top += HITBOX_SKELETON; firstFrame.width = HITBOX_SKELETON;
+		firstFrame.top += HITBOX_SKELETON_WIDTH; firstFrame.width = HITBOX_SKELETON_WIDTH;
 		mob[_i].mobAnimation[TAKE_HIT] = CreateAnimation(mob[_i].sprite, 4, 9, sfTrue, sfFalse, firstFrame);
 
-		firstFrame.top += HITBOX_SKELETON;
+		firstFrame.top += HITBOX_SKELETON_WIDTH;
 		mob[_i].mobAnimation[DEATH] = CreateAnimation(mob[_i].sprite, 4, 6, sfTrue, sfFalse, firstFrame);
 		break;
 	default:
@@ -383,7 +383,7 @@ void StateMob(float _dt, unsigned _i)
 	mob[_i].timer.timerTakeHit += _dt;
 	mob[_i].timer.timerAttack += _dt;
 
-	if (mob[_i].currentState != DEATH)
+	if (mob[_i].hp > 0)
 	{
 		if (sfSprite_getPosition(player.sprite).x >= mob[_i].position.x)
 		{
@@ -395,93 +395,93 @@ void StateMob(float _dt, unsigned _i)
 
 			sfSprite_setScale(mob[_i].sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
 		}
-	}
 
-	if (player.currentState == SWORD || player.currentState == AXE)
-	{
-		sfFloatRect hitAttackPlayer = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
-		sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].rect);
-		if (sfFloatRect_intersects(&hitAttackPlayer, &hitMob, NULL))
+
+		if (player.currentState == SWORD || player.currentState == AXE)
 		{
-			if (mob[_i].timer.timerTakeHit > mob[_i].timer.timerTakeHitLimit && mob[_i].act != IS_ATTACK)
+			sfFloatRect hitAttackPlayer = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
+			sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].rect);
+			if (sfFloatRect_intersects(&hitAttackPlayer, &hitMob, NULL))
 			{
+				if (mob[_i].timer.timerTakeHit > mob[_i].timer.timerTakeHitLimit && mob[_i].act != IS_ATTACK)
+				{
 
-				mob[_i].hp -= (50 + rand() % 51);
-				StateMobMachine(TAKE_HIT, _i);
-				mob[_i].act = IS_TAKE_HIT;
-				mob[_i].timer.timerTakeHit = 0;
+					mob[_i].hp -= (50 + rand() % 51);
+					StateMobMachine(TAKE_HIT, _i);
+					mob[_i].act = IS_TAKE_HIT;
+					mob[_i].timer.timerTakeHit = 0;
+				}
+				else if (mob[_i].act == IS_TAKE_HIT)
+				{
+					StateMobMachine(IDLE_MOB, _i);
+					mob[_i].act = IS_IDLE;
+				}
+
 			}
-			else if (mob[_i].act == IS_TAKE_HIT)
+		}
+
+	
+
+
+		
+			if (mob[_i].currentState != TAKE_HIT && mob[_i].currentMobAnimation->isPlaying)
+			{
+				if (GetDistancePlayerMobVector(_i) < mob[_i].rangeMove && GetDistancePlayerMobY(_i) < (player.shape.collisionPlayerRect.height * 2))
+				{
+					if (GetDistancePlayerMobX(_i) > (player.shape.collisionPlayerRect.width))
+					{
+						StateMobMachine(RUN_MOB, _i);
+						mob[_i].act = IS_MOVING;
+
+					}
+					else
+					{
+						mob[_i].act = IS_ATTACK;
+					}
+				}
+				else if (GetDistancePlayerMobY(_i) > (player.shape.collisionPlayerRect.height * 2))
+				{
+					StateMobMachine(IDLE_MOB, _i);
+					mob[_i].act = IS_IDLE;
+				}
+
+
+				//---------ATTACK MOB---------//
+
+
+
+
+				if (mob[_i].act == IS_ATTACK && mob[_i].timer.timerAttack > mob[_i].timer.timerAttackLimit)
+				{
+
+					StateMobMachine(ATTACK_MOB, _i);
+					mob[_i].timer.timerAttack = 0;
+				}
+				else if (!mob[_i].currentMobAnimation->isPlaying && mob[_i].act != IS_TAKE_HIT)
+				{
+					mob[_i].act = IS_IDLE;
+					StateMobMachine(IDLE_MOB, _i);
+				}
+
+
+
+				//---------TAKE IT---------//
+
+			}
+			else if ((mob[_i].currentState == TAKE_HIT || mob[_i].currentState == ATTACK_MOB) && !mob[_i].currentMobAnimation->isPlaying)
 			{
 				StateMobMachine(IDLE_MOB, _i);
 				mob[_i].act = IS_IDLE;
 			}
-
-		}
+		
 	}
-
-	if (mob[_i].hp < 0)
+	else if (mob[_i].hp < 0)
 	{
+	//	printf("de");
 		mob[_i].act = IS_DEATH;
 		StateMobMachine(DEATH, _i);
 		mob[_i].velocity.x = 0.f;
 	}
-
-
-	if (mob[_i].act != IS_DEATH)
-	{
-		if (mob[_i].currentState != TAKE_HIT && mob[_i].currentMobAnimation->isPlaying)
-		{
-			if (GetDistancePlayerMobVector(_i) < mob[_i].rangeMove && GetDistancePlayerMobY(_i) < (player.shape.collisionPlayerRect.height * 2))
-			{
-				if (GetDistancePlayerMobX(_i) > (player.shape.collisionPlayerRect.width))
-				{
-					StateMobMachine(RUN_MOB, _i);
-					mob[_i].act = IS_MOVING;
-
-				}
-				else
-				{
-					mob[_i].act = IS_ATTACK;
-				}
-			}
-			else if (GetDistancePlayerMobY(_i) > (player.shape.collisionPlayerRect.height * 2))
-			{
-				StateMobMachine(IDLE_MOB, _i);
-				mob[_i].act = IS_IDLE;
-			}
-
-
-			//---------ATTACK MOB---------//
-
-
-
-
-			if (mob[_i].act == IS_ATTACK && mob[_i].timer.timerAttack > mob[_i].timer.timerAttackLimit)
-			{
-
-				StateMobMachine(ATTACK_MOB, _i);
-				mob[_i].timer.timerAttack = 0;
-			}
-			else if (!mob[_i].currentMobAnimation->isPlaying && mob[_i].act != IS_TAKE_HIT)
-			{
-				mob[_i].act = IS_IDLE;
-				StateMobMachine(IDLE_MOB, _i);
-			}
-
-
-
-			//---------TAKE IT---------//
-
-		}
-		else if ((mob[_i].currentState == TAKE_HIT || mob[_i].currentState == ATTACK_MOB) && !mob[_i].currentMobAnimation->isPlaying)
-		{
-			StateMobMachine(IDLE_MOB, _i);
-			mob[_i].act = IS_IDLE;
-		}
-	}
-
-
 
 
 
@@ -532,8 +532,8 @@ void DrawMob(sfRenderWindow* _renderWindow)
 {
 	for (unsigned i = 0; i < mobCount; i++)
 	{
-		sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].attackRect, NULL);
-		//	sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
+		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].attackRect, NULL);
+		sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
 	}
 }
