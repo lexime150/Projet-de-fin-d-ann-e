@@ -14,7 +14,7 @@ void CollisionPlayerPlatformsX(float _dx);
 void CollisionPlayerPlatformsY(float _dy);
 sfBool CheckCollisionPlayerPlatformsX(float _dx);
 void CheckCollisionPlayerPlatforms(float _dt);
-
+float RandomFloat(float min, float max);
 void basePlayer();
 void setSavedStat(PlayerSaveData* save);
 
@@ -163,6 +163,7 @@ void MovePlayer(float _dt)
 		createCollisionAttack();
 		player.action.isAttacking = sfTrue;
 		player.data.attackCooldownTimer = 0.f;
+		sfSound_setPitch(player.sound.swordSound, RandomFloat(0.8,1.2));
 		sfSound_play(player.sound.swordSound);
 		StateMachine(SWORD);
 	}
@@ -445,9 +446,6 @@ void MovePlayer(float _dt)
 
 			if (movingLeft && player.action.isTouchingLeftWall && player.currentState == JUMP)
 			{
-				// Verifie la distance verticale du saut avant de grip le wall
-				// pour ne pas rester coincé au sol si on se colle à un mur et qu'on saute
-				//cheh Damien mon code marche mieux que toi :)
 				float fallenDistance = player.data.position.y - player.data.jumpStartPosition;
 				if (-fallenDistance > MIN_WALL_GRIP_DISTANCE)
 				{
@@ -762,3 +760,7 @@ void StateMachine(PlayerState _state)
 	SetAnimation(_state);
 }
 
+float RandomFloat(float min, float max)
+{
+	return min + (float)rand() / (float)RAND_MAX * (max - min);
+}

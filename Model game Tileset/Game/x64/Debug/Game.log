@@ -1,6 +1,8 @@
 ﻿  Player.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(371,72): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(715,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(166,60): warning C4305: 'fonction' : troncation de 'double' à 'float'
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(166,64): warning C4305: 'fonction' : troncation de 'double' à 'float'
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(372,72): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(713,20): warning C4018: '<' : incompatibilité signed/unsigned
   Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
   'pwsh.exe' n'est pas reconnu en tant que commande interne
   ou externe, un programme exécutable ou un fichier de commandes.
