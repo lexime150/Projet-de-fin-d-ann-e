@@ -25,6 +25,7 @@
 #define TIMER_ATTACK_MUSHROOM 1.6f
 #define TIMER_TAKE_HIT_MUSHROOM 0.75f
 
+#define MUSHROOM_DEGATS 60
 
 //-------Skeleton
 
@@ -44,6 +45,8 @@
 
 #define TIMER_ATTACK_SKELETON 1.1f
 #define TIMER_TAKE_HIT_SKELETON 1.f
+
+#define SKELETON_DEGATS 40
 
 
 typedef enum MobState
@@ -119,6 +122,7 @@ typedef struct Mob
 
 	float rangeMove;
 	float rangeAttack;
+	unsigned degats;
 
 }Mob;
 

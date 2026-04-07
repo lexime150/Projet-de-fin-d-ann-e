@@ -36,6 +36,8 @@
 #define ATTACK_AXE_COOLDOWN 1.2f
 
 
+#define TIMER_TAKE_IT 0.9f
+
 
 typedef enum PlayerState
 {
@@ -112,6 +114,7 @@ typedef struct Stats
 	float attackCooldownTimer;
 
 	float jumpStartPosition;
+	float timerTakeIt;
 
 }Stats;
 
@@ -150,5 +153,7 @@ void UpdatePlayer(float _dt);
 void setSavedStat(PlayerSaveData* save);
 void DrawPlayer(sfRenderWindow* _renderWindow);
 void CleanUpPlayer(void);
+
+void StateMachine(PlayerState _state);
 
 #endif

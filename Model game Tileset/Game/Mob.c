@@ -90,6 +90,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.timer.timerAttackLimit = TIMER_ATTACK_MUSHROOM;
 		newMob.timer.timerTakeHitLimit = TIMER_TAKE_HIT_MUSHROOM;
 		newMob.hp = 300;
+		newMob.degats = MUSHROOM_DEGATS;
 
 		//----AttackRect
 
@@ -108,6 +109,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.timer.timerAttackLimit = TIMER_ATTACK_SKELETON;
 		newMob.timer.timerTakeHitLimit = TIMER_TAKE_HIT_SKELETON;
 		newMob.hp = 180;
+		newMob.degats = SKELETON_DEGATS;
 
 		//----Attack Rect
 
@@ -285,13 +287,12 @@ void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 {
 	for (unsigned i = 0; i < mobCount; i++)
 	{
-		//	if (mobCount != 0)
-		{
+	
 			UpdateMobInfo(_dt, i);
 			StateMob(_dt, i);
 			UpdateAnimation(mob[i].currentMobAnimation, _dt);
 			DeleteMob(&i);
-		}
+
 	}
 }
 
@@ -371,8 +372,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	}
 
-
-
+	//Move later
 
 }
 
@@ -490,7 +490,7 @@ void StateMob(float _dt, unsigned _i)
 
 float GetDistancePlayerMobX(unsigned _i)
 {
-	//if (mobCount > 0)
+	if (mobCount > 0)
 	{
 		float distX = player.data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
 
@@ -507,7 +507,7 @@ float GetDistancePlayerMobX(unsigned _i)
 
 float GetDistancePlayerMobY(unsigned _i)
 {
-	//	if (mobCount > 0)
+	if (mobCount > 0)
 	{
 		float distY = player.data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
 

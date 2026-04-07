@@ -3,8 +3,10 @@
 Player player;
 PlayerSaveData save;
 sfBool keyWasPressed = sfFalse;
+unsigned mobCount;
+Mob* mob;
+
 void LoadAnimationPlayer(void);
-void StateMachine(PlayerState _state);
 void SetAnimation(PlayerState _state);
 void createCollisionAttack();
 void UpdatePlayer(float _dt);
@@ -15,6 +17,7 @@ void CollisionPlayerPlatformsY(float _dy);
 sfBool CheckCollisionPlayerPlatformsX(float _dx);
 void CheckCollisionPlayerPlatforms(float _dt);
 float RandomFloat(float min, float max);
+void CheckCollisionPlayerMob(void);
 void basePlayer();
 void setSavedStat(PlayerSaveData* save);
 
@@ -25,6 +28,8 @@ void LoadPlayer(PlayerSaveData* save)
 {
 	basePlayer();
 	LoadAnimationPlayer();
+	printf("%f", GetSpikeTab(3).left);
+
 }
 
 void LoadAnimationPlayer(void)
@@ -99,8 +104,42 @@ void UpdatePlayer(float _dt)
 	MovePlayer(_dt);
 	CheckCollisionPlayerPlatforms(_dt);
 	CollisionPlayerTrigger();
+	CheckCollisionPlayerMob();
 	UpdateAnimation(player.currentAnimation, _dt);
 }
+
+void CheckCollisionPlayerMob(void)
+{
+	sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player.sprite);
+	sfFloatRect hitMob = { 0 };
+	sfFloatRect intersection;
+	for (int i = 0; i < mobCount; i++)
+	{
+		hitMob = sfRectangleShape_getGlobalBounds(mob[i].rect);
+
+		if (player.data.health > 0)
+		{
+			if (mob[i].currentState == ATTACK_MOB)
+			{
+				if (player.data.timerTakeIt > TIMER_TAKE_IT && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
+				{
+					printf("r");
+					player.data.health -= mob[i].degats + rand() % mob[i].degats;
+					StateMachine(JUMP);
+					player.data.velocity.y -= JUMP_FORCE;
+					player.data.timerTakeIt = 0.f;
+				}
+			}
+		}
+		else
+		{
+			changeLevel("Level_01");
+			player.data.health = player.data.maxHealth;
+		}
+	}
+}
+
+
 void ApplyPhysic(float _dt)
 {
 	if (!player.action.isGrounded)
@@ -135,6 +174,9 @@ void createCollisionAttack()
 }
 void MovePlayer(float _dt)
 {
+	player.data.timerTakeIt += _dt;
+
+
 	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
 	sfBool movingRight = sfKeyboard_isKeyPressed(sfKeyD);
 	sfBool slideKey = sfKeyboard_isKeyPressed(sfKeyLControl) || sfKeyboard_isKeyPressed(sfKeyRControl);
@@ -691,6 +733,8 @@ void basePlayer()
 
 	player.data.canDoubleJump = 0;
 	player.data.canWallJump = 0;
+
+	player.data.timerTakeIt = 0;
 
 	player.sound.swordSound = sfSound_create();
 	player.sound.buffer = sfSoundBuffer_createFromFile("Assets/Sounds/Sword_Attack_Sound.wav");
