@@ -46,11 +46,10 @@ void LoadMob(void)
 
 	for (int i = 0; i < GetEnemySpawnTabSize(); i++)
 	{
-		if (GetEnemySpawnTabSize() <= 0.f)
-		{
-			int randMobType = rand() % 2;
-			AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
-		}
+
+		int randMobType = rand() % 2;
+		AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
+
 
 	}
 
@@ -96,9 +95,9 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 		//----AttackRect
 
-		sfRectangleShape_setSize(newMob.attackRect, (sfVector2f) {HITBOX_MUSHROOM_ATTACK_WIDTH, HITBOX_MUSHROOM_HEIGHT});
-		sfRectangleShape_setOrigin(newMob.attackRect, (sfVector2f){HITBOX_MUSHROOM_ATTACK_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT});
-		
+		sfRectangleShape_setSize(newMob.attackRect, (sfVector2f) { HITBOX_MUSHROOM_ATTACK_WIDTH, HITBOX_MUSHROOM_HEIGHT });
+		sfRectangleShape_setOrigin(newMob.attackRect, (sfVector2f) { HITBOX_MUSHROOM_ATTACK_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT });
+
 		break;
 	case SKELETON:
 		sfSprite_setTexture(newMob.sprite, texture[SKELETON], sfTrue);
@@ -127,7 +126,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 	sfRectangleShape_setFillColor(newMob.attackRect, sfTransparent);
 	sfRectangleShape_setOutlineColor(newMob.attackRect, sfMagenta);
 	sfRectangleShape_setOutlineThickness(newMob.attackRect, 1.f);
-	sfRectangleShape_setScale(newMob.attackRect, (sfVector2f){GAME_SCALE, GAME_SCALE});
+	sfRectangleShape_setScale(newMob.attackRect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfRectangleShape_setPosition(newMob.attackRect, sfSprite_getPosition(newMob.sprite));
 
 
@@ -279,23 +278,23 @@ void UpdateMobInfo(float _dt, unsigned _i)
 	//----AttackRect
 	sfRectangleShape_setPosition(mob[_i].attackRect, sfSprite_getPosition(mob[_i].sprite));
 	mob[_i].hitAttack = sfRectangleShape_getGlobalBounds(mob[_i].attackRect);
-	
+
 
 	CheckCollisionMobEntities(_dt, _i);
 }
 
 void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 {
-	//for (unsigned i = 0; i < mobCount; i++)
-	//{
-	//	if (mobCount != 0)
-	//	{
-	//		UpdateMobInfo(_dt, i);
-	//		StateMob(_dt, i);
-	//		UpdateAnimation(mob[i].currentMobAnimation, _dt);
-	//		DeleteMob(&i);
-	//	}
-	//}
+	for (unsigned i = 0; i < mobCount; i++)
+	{
+		//	if (mobCount != 0)
+		{
+			UpdateMobInfo(_dt, i);
+			StateMob(_dt, i);
+			UpdateAnimation(mob[i].currentMobAnimation, _dt);
+			DeleteMob(&i);
+		}
+	}
 }
 
 
@@ -439,7 +438,7 @@ void StateMob(float _dt, unsigned _i)
 		{
 			if (mob[_i].timer.timerTakeHit > mob[_i].timer.timerTakeHitLimit && mob[_i].act != IS_ATTACK)
 			{
-				
+
 				mob[_i].hp -= (50 + rand() % 51);
 				printf("%u\n", mob[_i].hp);
 				StateMobMachine(TAKE_HIT, _i);
@@ -515,10 +514,10 @@ void StateMob(float _dt, unsigned _i)
 			mob[_i].act = IS_IDLE;
 		}
 	}
-	
 
 
-	
+
+
 
 
 		//---------ATTACK MOB---------//
@@ -579,7 +578,7 @@ void StateMob(float _dt, unsigned _i)
 
 float GetDistancePlayerMobX(unsigned _i)
 {
-	if (mobCount > 0)
+	//if (mobCount > 0)
 	{
 		float distX = player.data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
 
@@ -596,7 +595,7 @@ float GetDistancePlayerMobX(unsigned _i)
 
 float GetDistancePlayerMobY(unsigned _i)
 {
-	if (mobCount > 0)
+	//	if (mobCount > 0)
 	{
 		float distY = player.data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
 
@@ -622,7 +621,7 @@ void DrawMob(sfRenderWindow* _renderWindow)
 	{
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].attackRect, NULL);
-	//	sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
+		//	sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
 	}
 }
