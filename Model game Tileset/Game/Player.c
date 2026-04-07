@@ -628,6 +628,7 @@ void CheckCollisionPlayerPlatforms(float _dt)
 
 void basePlayer()
 {
+	player.action.isTransitioning = sfTrue;
 	player.sprite = sfSprite_create();
 	player.texture = sfTexture_createFromFile("Assets/Sprites/IDLE.png", NULL);
 	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
@@ -726,6 +727,7 @@ void CollisionPlayerTrigger()
 			if (keyIsPressed && !keyWasPressed)
 			{
 				snprintf(player.data.level, sizeof(player.data.level), "%s", GetMapTrigger(i).name);
+				player.action.isTransitioning = sfTrue;
 				LoadMap(player.data.level);
 				CleanupGame();
 				LoadGame();

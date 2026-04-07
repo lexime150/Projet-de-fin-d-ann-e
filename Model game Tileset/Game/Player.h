@@ -75,6 +75,7 @@ typedef struct Action
 
 	sfBool justWallJumped;
 
+	sfBool isTransitioning;
 	sfBool isAttacking;
 }Action;
 
