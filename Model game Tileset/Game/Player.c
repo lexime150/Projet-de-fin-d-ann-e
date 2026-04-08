@@ -18,15 +18,16 @@ sfBool CheckCollisionPlayerPlatformsX(float _dx);
 void CheckCollisionPlayerPlatforms(float _dt);
 float RandomFloat(float min, float max);
 void CheckCollisionPlayerMob(void);
-void basePlayer();
-void setSavedStat(PlayerSaveData* save);
+void BasePlayer();
+void SetSavedStat(PlayerSaveData* save);
+void UpdateAttackShape();
 
 void CollisionPlayerTrigger();
 
 
 void LoadPlayer(PlayerSaveData* save)
 {
-	basePlayer();
+	BasePlayer();
 	LoadAnimationPlayer();
 	printf("%f", GetSpikeTab(3).left);
 
@@ -102,6 +103,7 @@ void UpdatePlayer(float _dt)
 {
 	ApplyPhysic(_dt);
 	MovePlayer(_dt);
+	UpdateAttackShape();
 	CheckCollisionPlayerPlatforms(_dt);
 	CollisionPlayerTrigger();
 	CheckCollisionPlayerMob();
@@ -202,7 +204,9 @@ void MovePlayer(float _dt)
 		sfSound_play(player.sound.axeSound);
 
 		StateMachine(AXE);
+	
 	}
+
 	if (sfMouse_isButtonPressed(sfMouseRight) && player.data.attackCooldownTimer >= ATTACK_SWORD_COOLDOWN && player.action.isGrounded)
 	{
 		createCollisionAttack();
@@ -216,7 +220,7 @@ void MovePlayer(float _dt)
 	}
 	if (player.action.isAttacking && player.currentState == AXE)
 	{
-		player.data.velocity.x = 0;
+		player.data.velocity.x = 300 * player.data.lastDirection;
 		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
 		{
 			sfRectangleShape_destroy(player.shape.collisionAttackShape);
@@ -235,7 +239,8 @@ void MovePlayer(float _dt)
 	}
 	if (player.action.isAttacking && player.currentState == SWORD)
 	{
-		player.data.velocity.x = 0;
+
+		player.data.velocity.x = 500 * player.data.lastDirection;
 		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
 		{
 			sfRectangleShape_destroy(player.shape.collisionAttackShape);
@@ -374,11 +379,12 @@ void MovePlayer(float _dt)
 			sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
 			player.action.isMoving = sfTrue;
 		}
-		else
+		else if (!movingLeft && !movingRight)
 		{
 			player.data.velocity.x = 0;
 			player.action.isMoving = sfFalse;
 		}
+
 
 		// SLIDE
 		if (slideKey && player.action.isGrounded && !player.action.isSliding && player.data.slideCooldownTimer <= 0.f)
@@ -673,7 +679,7 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
 
-void basePlayer()
+void BasePlayer()
 {
 	player.action.isTransitioning = sfTrue;
 	player.sprite = sfSprite_create();
@@ -746,7 +752,7 @@ void basePlayer()
 
 }
 
-void setSavedStat(PlayerSaveData* save)
+void SetSavedStat(PlayerSaveData* save)
 {
 
 	player.data.health = save->health;
@@ -755,6 +761,19 @@ void setSavedStat(PlayerSaveData* save)
 
 	snprintf(player.data.level, sizeof(player.data.level), "%s", save->level);
 	printf("buffer: %s\n", player.data.level);
+}
+
+void UpdateAttackShape()
+{
+	if (player.shape.collisionAttackShape && player.data.lastDirection == -1)
+	{
+		sfRectangleShape_setPosition(player.shape.collisionAttackShape, (sfVector2f) { player.shape.collisionPlayerRect.left - player.shape.collisionAttackRect.width, player.shape.collisionPlayerRect.top + player.shape.collisionPlayerRect.width / 2 - 10 });
+	}
+	else if (player.shape.collisionAttackShape && player.data.lastDirection == 1)
+	{
+		sfRectangleShape_setPosition(player.shape.collisionAttackShape, (sfVector2f) { player.shape.collisionPlayerRect.left + player.shape.collisionPlayerRect.width, player.shape.collisionPlayerRect.top + player.shape.collisionPlayerRect.width / 2 - 10 });
+
+	}
 }
 
 
@@ -790,10 +809,10 @@ void CollisionPlayerTrigger()
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
-	sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionPlayerShape, NULL);
+	//sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionPlayerShape, NULL);
 	if (player.action.isAttacking)
 	{
-		sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionAttackShape, NULL);
+		//sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionAttackShape, NULL);
 
 	}
 }

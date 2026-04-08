@@ -130,7 +130,7 @@ void CheckSaveAndLoadLevel(int _slot)
 
 		LoadMap(save->level);
 		LoadPlayer(save);
-		setSavedStat(save);
+		SetSavedStat(save);
 
 		LoadCamera();
 		LoadMob();
