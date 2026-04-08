@@ -15,12 +15,15 @@ void MovePlayer(float _dt);
 void CollisionPlayerPlatformsX(float _dx);
 void CollisionPlayerPlatformsY(float _dy);
 sfBool CheckCollisionPlayerPlatformsX(float _dx);
+void CheckCollisionPlayerSpike(unsigned _index, float _dt);
 void CheckCollisionPlayerPlatforms(float _dt);
 float RandomFloat(float min, float max);
 void CheckCollisionPlayerMob(void);
 void BasePlayer();
 void SetSavedStat(PlayerSaveData* save);
 void UpdateAttackShape();
+void CheckPlayerHP(void);
+
 
 void CollisionPlayerTrigger();
 
@@ -107,7 +110,10 @@ void UpdatePlayer(float _dt)
 	CheckCollisionPlayerPlatforms(_dt);
 	CollisionPlayerTrigger();
 	CheckCollisionPlayerMob();
+	CheckCollisionPlayerSpike(NULL, _dt);
+	CheckPlayerHP();
 	UpdateAnimation(player.currentAnimation, _dt);
+
 }
 
 void CheckCollisionPlayerMob(void)
@@ -133,11 +139,7 @@ void CheckCollisionPlayerMob(void)
 				}
 			}
 		}
-		else
-		{
-			ChangeLevel("Level_01");
-			player.data.health = player.data.maxHealth;
-		}
+		
 	}
 }
 
@@ -679,7 +681,89 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
 
-void BasePlayer()
+
+void CheckCollisionPlayerSpike(unsigned _index, float _dt)
+{
+	player.data.timerSpike += _dt;
+	sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player.sprite);
+	sfFloatRect hitSpike = { 0 };
+	sfFloatRect intersection = { 0 };
+
+	for (unsigned i = 0; i < GetSpikeTabSize(); i++)
+	{
+		hitSpike = GetSpikeTab(i);
+
+		if (sfFloatRect_intersects(&hitSpike, &hitPlayer, &intersection))
+		{
+			player.data.timerSpike = 0.f;
+			
+			//LEFT
+			if (hitPlayer.left < (hitSpike.left + hitSpike.width))
+			{
+				player.spikeSide = LEFT;
+			}
+			//WIDTH
+			else if ((hitPlayer.left + hitPlayer.width) > hitSpike.left)
+			{
+				player.spikeSide = WIDTH;
+			}
+
+			//TOP
+
+			if (hitPlayer.top < (hitSpike.top + hitSpike.width))
+			{
+				player.spikeSide = TOP;
+			}
+			//HEIGHT
+			else if ((hitPlayer.top + hitPlayer.height) > hitSpike.top)
+			{
+				player.spikeSide = HEIGHT;
+			}
+
+		}
+
+	}
+
+	if (player.spikeSide != NOTHING)
+	{
+
+		if (player.spikeSide == LEFT)
+		{
+			player.data.velocity.x += 1000.f;
+		}
+		else if (player.spikeSide == WIDTH)
+		{
+			player.data.velocity.x -= 1000.f;
+		}
+
+		if (player.spikeSide == TOP)
+		{
+			player.data.velocity.y = -600.f;
+		}
+		else if (player.spikeSide == HEIGHT)
+		{
+			player.data.velocity.y += 1000.f;
+		}
+
+		player.data.health -= 20;
+		player.spikeSide = NOTHING;
+	}
+
+
+
+}
+
+void CheckPlayerHP(void)
+{
+	if (player.data.health <= 0)
+	{
+		ChangeLevel("Level_01");
+		player.data.health = player.data.maxHealth;
+	}
+}
+
+
+void basePlayer()
 {
 	player.action.isTransitioning = sfTrue;
 	player.sprite = sfSprite_create();
@@ -741,6 +825,9 @@ void BasePlayer()
 	player.data.canWallJump = 0;
 
 	player.data.timerTakeIt = 0;
+	player.data.timerSpike = 0;
+
+	player.spikeSide = NOTHING;
 
 	player.sound.swordSound = sfSound_create();
 	player.sound.buffer = sfSoundBuffer_createFromFile("Assets/Sounds/Sword_Attack_Sound.wav");
