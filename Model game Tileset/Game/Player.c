@@ -763,7 +763,7 @@ void CheckPlayerHP(void)
 }
 
 
-void basePlayer()
+void BasePlayer()
 {
 	player.action.isTransitioning = sfTrue;
 	player.sprite = sfSprite_create();
@@ -881,11 +881,11 @@ void CollisionPlayerTrigger()
 		{
 			if (keyIsPressed && !keyWasPressed)
 			{
+				player.data.velocity.x = 0;
+				player.data.velocity.y = 0;
 				snprintf(player.data.level, sizeof(player.data.level), "%s", GetMapTrigger(i).name);
 				player.action.isTransitioning = sfTrue;
-				LoadMap(player.data.level);
-				CleanupGame();
-				LoadGame();
+				ChangeLevel(player.data.level);
 			}
 		}
 	}

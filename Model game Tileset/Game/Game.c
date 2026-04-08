@@ -154,15 +154,22 @@ void ChangeLevel(const char* _level)
 
 	CleanupMob();
 	CleanupMap();
-
+	CleanupHUD();
+	CleanUpCamera();
 
 	LoadMap(player.data.level);
 	LoadCamera();
 	LoadMob();
 	LoadHUD();
 
-	player.data.position = GetPlayerSpawn();
 
+	player.data.position = GetPlayerSpawn();
+	player.data.velocity.x = 0;
+	player.data.velocity.y = 0;
+	player.action.isGrounded = sfFalse;
+	player.action.isSliding = sfFalse;
+	player.action.isWallJumping = sfFalse;
+	player.action.isSlideJumping = sfFalse;
 }
 
 void LevelTransition()
