@@ -9,30 +9,35 @@ Mob* mob;
 void LoadAnimationPlayer(void);
 void SetAnimation(PlayerState _state);
 void createCollisionAttack();
+
 void UpdatePlayer(float _dt);
 void ApplyPhysic(float _dt);
 void MovePlayer(float _dt);
+
 void CollisionPlayerPlatformsX(float _dx);
 void CollisionPlayerPlatformsY(float _dy);
+
 sfBool CheckCollisionPlayerPlatformsX(float _dx);
 void CheckCollisionPlayerSpike(unsigned _index, float _dt);
 void CheckCollisionPlayerPlatforms(float _dt);
-float RandomFloat(float min, float max);
 void CheckCollisionPlayerMob(void);
+void CollisionPlayerTrigger();
+void CollisionPlayerDeathZone();
+float RandomFloat(float min, float max);
+
 void BasePlayer();
 void SetSavedStat(PlayerSaveData* save);
+
 void UpdateAttackShape();
 void CheckPlayerHP(void);
 
 
-void CollisionPlayerTrigger();
 
 
 void LoadPlayer(PlayerSaveData* save)
 {
 	BasePlayer();
 	LoadAnimationPlayer();
-	printf("%f", GetSpikeTab(3).left);
 
 }
 
@@ -111,6 +116,7 @@ void UpdatePlayer(float _dt)
 	CollisionPlayerTrigger();
 	CheckCollisionPlayerMob();
 	CheckCollisionPlayerSpike(NULL, _dt);
+	CollisionPlayerDeathZone();
 	CheckPlayerHP();
 	UpdateAnimation(player.currentAnimation, _dt);
 
@@ -131,7 +137,6 @@ void CheckCollisionPlayerMob(void)
 			{
 				if (player.data.timerTakeIt > TIMER_TAKE_IT && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 				{
-					printf("r");
 					player.data.health -= mob[i].degats + rand() % mob[i].degats;
 					StateMachine(JUMP);
 					player.data.velocity.y -= JUMP_FORCE;
@@ -891,6 +896,19 @@ void CollisionPlayerTrigger()
 	}
 
 	keyWasPressed = keyIsPressed;
+}
+
+void CollisionPlayerDeathZone()
+{
+	for (int i = 0; i < GetDeathZoneTabSize(); i++)
+	{
+		sfFloatRect deathZone = GetDeathZoneTab(i);
+
+		if (sfFloatRect_intersects(&player.shape.collisionPlayerRect, &deathZone, NULL))
+		{
+			player.data.health = 0;
+		}
+	}
 }
 
 void DrawPlayer(sfRenderWindow* _renderWindow)

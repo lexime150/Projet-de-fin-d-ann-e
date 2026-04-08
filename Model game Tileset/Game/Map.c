@@ -12,9 +12,12 @@ unsigned int triggerTabSize;
 
 sfFloatRect* spikeTab;
 unsigned spikeTabSize;
+sfFloatRect* deathZoneTab;
+unsigned int deathZoneTabSize;
 
 sfVector2f* enemySpawnTab;
 unsigned int enemySpawnTabSize;
+
 sfVector2f playerSpawn;
 
 void LoadCollisionAndTrigger(void);
@@ -81,6 +84,7 @@ void CleanupMap(void)
 
 	free(spikeTab);
 	spikeTab = NULL;
+	spikeTabSize = 0;
 
 	free(triggerTab);
 	triggerTab = NULL;
@@ -110,10 +114,20 @@ void LoadCollisionAndTrigger(void)
 	}
 
 	spikeTab = calloc(1, sizeof(sfFloatRect));
+	spikeTabSize = 0;
 	if (spikeTab == NULL)
 	{
 		return;
 	}
+
+	deathZoneTab = calloc(1, sizeof(sfFloatRect));
+	deathZoneTabSize = 0;
+	if (deathZoneTab == NULL)
+	{
+		return;
+	}
+
+
 
 
 	enemySpawnTab = calloc(1, sizeof(sfVector2f));
@@ -188,6 +202,22 @@ void LoadCollisionAndTrigger(void)
 					object->width * GAME_SCALE,
 					object->height * GAME_SCALE };
 					spikeTabSize++;
+				}
+				else if (strcmp(layer->name.ptr, "DeathZone") == 0)
+				{
+					sfFloatRect* deathZoneTemp = realloc(deathZoneTab, (unsigned long long)(deathZoneTabSize + 1) * sizeof(sfFloatRect));
+					if (deathZoneTemp == NULL)
+					{
+						return;
+					}
+					deathZoneTab = deathZoneTemp;
+
+					deathZoneTab[deathZoneTabSize] = (sfFloatRect){
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE,
+						object->width * GAME_SCALE,
+						object->height * GAME_SCALE };
+						deathZoneTabSize++;
 				}
 
 				
@@ -345,4 +375,22 @@ sfFloatRect GetSpikeTab(unsigned _index)
 unsigned GetSpikeTabSize(void)
 {
 	return spikeTabSize;
+}
+
+
+unsigned int GetDeathZoneTabSize(void)
+{
+	return deathZoneTabSize;
+}
+
+sfFloatRect GetDeathZoneTab(unsigned int _index)
+{
+	if (_index < deathZoneTabSize)
+	{
+		return deathZoneTab[_index];
+	}
+	else
+	{
+		return (sfFloatRect) { 0, 0, 0, 0 };
+	}
 }

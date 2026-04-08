@@ -28,9 +28,11 @@ sfVector2f GetEnemySpawn(unsigned int _index);
 sfVector2f GetPlayerSpawn(void);
 
 
-
 sfFloatRect GetSpikeTab(unsigned _index);
 unsigned GetSpikeTabSize(void);
+unsigned int GetDeathZoneTabSize(void);
+sfFloatRect GetDeathZoneTab(unsigned int _index);
+
 void ChangeLevel(const char* level);
 
 

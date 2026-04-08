@@ -97,6 +97,50 @@
         }, 
         {
          "draworder":"topdown",
+         "id":6,
+         "name":"DeathZone",
+         "objects":[
+                {
+                 "height":16,
+                 "id":6,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":208,
+                 "x":0,
+                 "y":208
+                }, 
+                {
+                 "height":224,
+                 "id":8,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":208,
+                 "y":0
+                }, 
+                {
+                 "height":208,
+                 "id":9,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":0,
+                 "y":0
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":4,
          "name":"Player-Spawn",
          "objects":[
@@ -173,8 +217,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":6,
- "nextobjectid":6,
+ "nextlayerid":7,
+ "nextobjectid":10,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
