@@ -23,7 +23,8 @@
 
 #define MIN_WALL_GRIP_DISTANCE 200.f
 
-
+#define SWORD_DEGATS 66
+#define AXE_DEGATS 90
 
 
 #define PLAYER_HITBOX_WIDTH  20
@@ -37,6 +38,18 @@
 
 
 #define TIMER_TAKE_IT 0.9f
+
+#define TIMER_SPIKE 1.4f
+
+typedef enum SpikeSide
+{
+	LEFT,
+	TOP,
+	WIDTH,
+	HEIGHT,
+	NOTHING
+
+}SpikeSide;
 
 
 typedef enum PlayerState
@@ -116,6 +129,8 @@ typedef struct Stats
 	float jumpStartPosition;
 	float timerTakeIt;
 
+	float timerSpike;
+
 }Stats;
 
 typedef struct Shape
@@ -144,6 +159,7 @@ typedef struct Player
 	Animation animationPlayer[17];
 	Animation* currentAnimation;
 
+	SpikeSide spikeSide;
 
 }Player;
 

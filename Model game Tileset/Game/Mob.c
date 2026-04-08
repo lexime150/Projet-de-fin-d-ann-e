@@ -372,7 +372,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	}
 
-	//Move later
+
 
 }
 
@@ -401,11 +401,20 @@ void StateMob(float _dt, unsigned _i)
 		{
 			sfFloatRect hitAttackPlayer = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
 			sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].rect);
+
+
 			if (sfFloatRect_intersects(&hitAttackPlayer, &hitMob, NULL))
 			{
 				if (mob[_i].timer.timerTakeHit > mob[_i].timer.timerTakeHitLimit && mob[_i].act != IS_ATTACK)
 				{
-					mob[_i].hp -= (50 + rand() % 51);
+					if (player.currentState == SWORD)
+					{
+						mob[_i].hp -= (SWORD_DEGATS + rand() % 21);
+					}
+					else if (player.currentState == AXE)
+					{
+						mob[_i].hp -= (AXE_DEGATS + rand() % 21);
+					}
 					StateMobMachine(TAKE_HIT, _i);
 					mob[_i].act = IS_TAKE_HIT;
 					mob[_i].timer.timerTakeHit = 0;

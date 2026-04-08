@@ -47,6 +47,39 @@
         }, 
         {
          "draworder":"topdown",
+         "id":11,
+         "name":"Spike",
+         "objects":[
+                {
+                 "height":16,
+                 "id":60,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":544,
+                 "y":272
+                }, 
+                {
+                 "height":16,
+                 "id":61,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":240,
+                 "x":944,
+                 "y":400
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":7,
          "name":"Collision",
          "objects":[
@@ -612,8 +645,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":11,
- "nextobjectid":60,
+ "nextlayerid":12,
+ "nextobjectid":62,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
