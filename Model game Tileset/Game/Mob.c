@@ -165,6 +165,7 @@ void DeleteMob(unsigned* _i)
 			SetAnimationMob(mob[x].currentState, x);
 		}
 	}
+
 }
 
 
