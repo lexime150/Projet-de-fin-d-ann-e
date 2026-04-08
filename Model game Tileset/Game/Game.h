@@ -17,7 +17,6 @@ void DrawGame(sfRenderWindow* _renderWindow);
 void CleanupGame(void);
 
 void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent);
-void changeLevel(const char* level);
 
 
 

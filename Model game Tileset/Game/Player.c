@@ -133,7 +133,7 @@ void CheckCollisionPlayerMob(void)
 		}
 		else
 		{
-			changeLevel("Level_01");
+			ChangeLevel("Level_01");
 			player.data.health = player.data.maxHealth;
 		}
 	}

@@ -31,5 +31,7 @@ sfVector2f GetPlayerSpawn(void);
 
 sfFloatRect GetSpikeTab(unsigned _index);
 unsigned GetSpikeTabSize(void);
+void ChangeLevel(const char* level);
+
 
 #endif
