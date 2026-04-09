@@ -183,6 +183,7 @@ void MovePlayer(float _dt)
 	if (player.data.knockBackTimer > 0.f)
 	{
 		player.data.knockBackTimer -= _dt;
+		return;
 	}
 
 	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
@@ -704,14 +705,15 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 
 		if (sfFloatRect_intersects(&hitSpike, &hitPlayer, &intersection) && player.data.timerSpikeWidth > TIMER_SPIKE)
 		{
+			player.data.knockBackTimer += 0.5f;
 			if (playerCenterX < spikeCenterX && player.data.position.y > (hitSpike.top + (hitSpike.height / 2)))
 			{
-				printf("writen");
+				
 				player.spikeSide = WIDTH;
 			}
 			else if (playerCenterX > spikeCenterX && player.data.position.y > (hitSpike.top + (hitSpike.height / 2)))
 			{
-				printf("read");
+				
 				player.spikeSide = LEFT;
 			}
 
@@ -723,21 +725,23 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 	{
 		//player.action.isGrounded = sfFalse;
 		
-
+		StateMachine(FALL);
 		if (player.spikeSide == LEFT)
 		{
-			
-			player.data.velocity.x = SPIKE_VELOCITY;
+			printf("LEFT\n");
+			player.action.isGrounded = sfFalse;
 			player.data.velocity.y = -SPIKE_VELOCITY;
+			player.data.velocity.x = SPIKE_VELOCITY;
 
 			
 
 		}
 		else if (player.spikeSide == WIDTH)
 		{
-			
-			player.data.velocity.x = -SPIKE_VELOCITY;
+			printf("RIGHT\n");
+			player.action.isGrounded = sfFalse;
 			player.data.velocity.y = -SPIKE_VELOCITY;
+			player.data.velocity.x = -SPIKE_VELOCITY;
 
 			
 		}
@@ -761,7 +765,7 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 
 		if (sfFloatRect_intersects(&hitSpike, &hitPlayer, &intersection) && player.data.timerSpikeHeight > TIMER_SPIKE)
 		{
-
+			player.data.knockBackTimer += _dt;
 			if (playerCenterY < spikeCenterY && (hitPlayer.left < (hitSpike.left + hitSpike.width)) && (hitPlayer.left + hitPlayer.width) > hitSpike.left)
 			{
 				player.spikeSide = TOP;
@@ -780,12 +784,12 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 
 		if (player.spikeSide == TOP)
 		{
-			printf("del");
+			printf("TOP\n");
 			player.data.velocity.y = -SPIKE_VELOCITY;
 		}
 		else if (player.spikeSide == HEIGHT)
 		{
-			printf("ar");
+			printf("HEIGHT\n");
 			player.data.velocity.y = SPIKE_VELOCITY;
 		}
 
