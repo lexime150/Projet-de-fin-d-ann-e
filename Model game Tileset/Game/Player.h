@@ -39,7 +39,7 @@
 
 #define TIMER_TAKE_IT 0.52f
 #define TIMER_SPIKE 0.3f
-#define	TIMER_PLAYER_MOB 1.25f
+#define	TIMER_PLAYER_MOB 0.5f
 
 #define SPIKE_VELOCITY 500.f
 

@@ -1,29 +1,13 @@
-﻿  Camera.c
-  Game.c
-  GameHUD.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\GameHUD.c(21,47): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-  GameOver.c
-  GameState.c
-  Menu.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Menu.c(81,53): warning C4244: 'fonction' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Menu.c(81,62): warning C4244: 'fonction' : conversion de 'int' en 'float', perte possible de données
-  Mob.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(43,20): warning C4018: '<' : incompatibilité signed/unsigned
-  Player.c
+﻿  Player.c
 C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(115,28): warning C4047: 'fonction' : les niveaux d'indirection de 'unsigned int' et de 'void *' sont différents
 C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(115,28): warning C4024: 'CheckCollisionPlayerSpike' : types différents pour le paramètre formel et réel 1
 C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(131,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(151,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(191,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(327,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(347,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(529,72): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(857,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(1025,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(1052,20): warning C4018: '<' : incompatibilité signed/unsigned
-  Save.c
-  main.c
-  Génération de code en cours...
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(514,1): warning C4715: 'GetDistancePlayerMobX' : les chemins de contrôle ne retournent pas tous une valeur
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(531,1): warning C4715: 'GetDistancePlayerMobY' : les chemins de contrôle ne retournent pas tous une valeur
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(154,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(194,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(330,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(350,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(532,72): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(860,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(1028,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(1055,20): warning C4018: '<' : incompatibilité signed/unsigned
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe

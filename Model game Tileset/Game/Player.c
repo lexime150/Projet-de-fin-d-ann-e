@@ -130,16 +130,19 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 	for (int i = 0; i < GetMobCount(); i++)
 	{
-		if (mob[i].act == IS_ATTACK && mob[i].timer.timerAttack > mob[i].timer.timerAttackLimit)
+		if (mob[i].act != IS_DEATH)
 		{
+			if (mob[i].act == IS_ATTACK && mob[i].timer.timerAttack > mob[i].timer.timerAttackLimit)
+			{
 
-			StateMobMachine(ATTACK_MOB, i);
-			mob[i].timer.timerAttack = 0;
-		}
-		else if (!mob[i].currentMobAnimation->isPlaying && mob[i].act != IS_TAKE_HIT)
-		{
-			mob[i].act = IS_IDLE;
-			StateMobMachine(IDLE_MOB, i);
+				StateMobMachine(ATTACK_MOB, i);
+				mob[i].timer.timerAttack = 0;
+			}
+			else if (!mob[i].currentMobAnimation->isPlaying && mob[i].act != IS_TAKE_HIT)
+			{
+				mob[i].act = IS_IDLE;
+				StateMobMachine(IDLE_MOB, i);
+			}
 		}
 	}
 
@@ -193,12 +196,12 @@ void CheckCollisionPlayerMob(float _dt)
 		hitMob = mob[i].collisionMob;
 		mobCenterX = hitMob.left + (hitMob.width * 0.5f);
 
-		if (player.currentState != AXE && player.currentState != SWORD && mob[i].currentState != DEATH && mob[i].currentState != ATTACK_MOB && player.data.attackCooldownTimer > ATTACK_AXE_COOLDOWN)
+		if (player.currentState != AXE && player.currentState != SWORD && mob[i].currentState != DEATH) //&& mob[i].currentState != ATTACK_MOB )//&& player.data.attackCooldownTimer > ATTACK_AXE_COOLDOWN)
 		{
-			if (sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection) && player.data.timerPlayerMob > TIMER_PLAYER_MOB)
+			if (sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection)) //&& player.data.timerPlayerMob > TIMER_PLAYER_MOB)
 			{
 				player.data.timerPlayerMob = 0;
-				player.data.knockBackTimer += 0.25f;
+				player.data.knockBackTimer += 0.1f;
 				player.action.isSlideJumping = sfFalse;
 				player.action.isTouchingWall = sfFalse;
 
@@ -802,7 +805,7 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 
 		if (sfFloatRect_intersects(&hitSpike, &hitPlayer, &intersection) && player.data.timerSpikeWidth > TIMER_SPIKE)
 		{
-			player.data.knockBackTimer += 0.5f;
+			player.data.knockBackTimer += 0.15f;
 			if (playerCenterX < spikeCenterX && player.data.position.y >(hitSpike.top + (hitSpike.height / 2)))
 			{
 
@@ -820,13 +823,13 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 
 	if (player.spikeSide != NOTHING)
 	{
-		//player.action.isGrounded = sfFalse;
+		player.action.isGrounded = sfFalse;
 
 		StateMachine(FALL);
 		if (player.spikeSide == LEFT)
 		{
 			printf("LEFT\n");
-			player.action.isGrounded = sfFalse;
+			//player.action.isGrounded = sfFalse;
 			player.data.velocity.y = -SPIKE_VELOCITY;
 			player.data.velocity.x = SPIKE_VELOCITY;
 
@@ -836,7 +839,7 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 		else if (player.spikeSide == WIDTH)
 		{
 			printf("RIGHT\n");
-			player.action.isGrounded = sfFalse;
+			//player.action.isGrounded = sfFalse;
 			player.data.velocity.y = -SPIKE_VELOCITY;
 			player.data.velocity.x = -SPIKE_VELOCITY;
 

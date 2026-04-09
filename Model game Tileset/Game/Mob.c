@@ -395,7 +395,7 @@ void StateMob(float _dt, unsigned _i)
 	mob[_i].timer.timerTakeHit += _dt;
 	mob[_i].timer.timerAttack += _dt;
 
-	if (mob[_i].hp > 0)
+	if (mob[_i].hp > 0 && mob[_i].act != IS_DEATH)
 	{
 		if (sfSprite_getPosition(player.sprite).x >= mob[_i].position.x)
 		{
@@ -466,10 +466,6 @@ void StateMob(float _dt, unsigned _i)
 			}
 
 
-			//---------ATTACK MOB---------//
-
-
-
 
 
 			//---------TAKE IT---------//
@@ -482,9 +478,8 @@ void StateMob(float _dt, unsigned _i)
 		}
 
 	}
-	else if (mob[_i].hp < 0)
+	else if (mob[_i].hp <= 0 && mob[_i].act != IS_DEATH)
 	{
-		//	printf("de");
 		mob[_i].act = IS_DEATH;
 		StateMobMachine(DEATH, _i);
 		mob[_i].velocity.x = 0.f;
