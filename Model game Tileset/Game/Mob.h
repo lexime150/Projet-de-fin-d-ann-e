@@ -27,6 +27,9 @@
 
 #define MUSHROOM_DEGATS 38
 
+#define COLLISION_MUSHROOM_WIDTH 1.5f
+#define COLLISION_MUSHROOM_HEIGHT 30
+
 //-------Skeleton
 
 //Range
@@ -40,6 +43,10 @@
 #define HITBOX_SKELETON_HEIGHT 28
 #define HITBOX_ATTACK_STATE_SKELETON_WIDTH 48
 #define HITBOX_ATTACK_SKELETON 48
+
+#define COLLISION_SKELETON_WIDTH 1.5f
+#define COLLISION_SKELETON_HEIGHT 28
+
 
 //Timer
 
@@ -109,11 +116,12 @@ typedef struct Mob
 	sfFloatRect hitbox;
 	sfFloatRect hitRect;
 	sfFloatRect hitAttack;
+	sfFloatRect collisionMob;
 
 	Timer timer;
 
 	sfRectangleShape* rect;
-
+	sfRectangleShape* collisionRect;
 	sfRectangleShape* attackRect;
 
 	int hp;
@@ -132,5 +140,14 @@ void LoadMobAnimation(unsigned _i);
 void UpdateMob(sfRenderWindow* _renderWindow, float _dt);
 void DrawMob(sfRenderWindow* _renderWindow);
 void CleanupMob(void);
+
+unsigned GetMobCount(void);
+
+float GetDistancePlayerMobY(unsigned _i);
+float GetDistancePlayerMobX(unsigned _i);
+float GetDistancePlayerMobVector(unsigned _i);
+
+void StateMobMachine(MobState _state, unsigned _i);
+
 
 #endif 

@@ -37,11 +37,16 @@
 #define ATTACK_AXE_COOLDOWN 1.2f
 
 
-#define TIMER_TAKE_IT 0.9f
-
+#define TIMER_TAKE_IT 0.52f
 #define TIMER_SPIKE 0.3f
+#define	TIMER_PLAYER_MOB 1.25f
 
-#define SPIKE_VELOCITY 800.f
+#define SPIKE_VELOCITY 500.f
+
+#define PLAYER_MOB_VELOCITY_X 500.f
+#define PLAYER_MOB_VELOCITY_Y 280.f
+
+#define PLAYER_MOB_MARGE 2.f
 
 typedef enum SpikeSide
 {
@@ -52,6 +57,15 @@ typedef enum SpikeSide
 	NOTHING
 
 }SpikeSide;
+
+typedef enum PlayerSide
+{
+	LEFT_PLAYER,
+	TOP_PLAYER,
+	WIDTH_PLAYER,
+	HEIGHT_PLAYER,
+	NOTHING_PLAYER
+}PlayerSide;
 
 
 typedef enum PlayerState
@@ -135,6 +149,10 @@ typedef struct Stats
 	float timerSpikeHeight;
 	float knockBackTimer;
 
+	float timerPlayerMob;
+
+	float timerAttack;
+
 }Stats;
 
 typedef struct Shape
@@ -164,6 +182,7 @@ typedef struct Player
 	Animation* currentAnimation;
 
 	SpikeSide spikeSide;
+	PlayerSide side;
 
 }Player;
 
