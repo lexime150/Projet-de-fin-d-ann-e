@@ -545,6 +545,7 @@ void DrawMob(sfRenderWindow* _renderWindow)
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
 	}
+
 }
 
 void CleanupMob(void)

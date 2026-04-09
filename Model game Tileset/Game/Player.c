@@ -110,13 +110,16 @@ void SetAnimation(PlayerState _state)
 void UpdatePlayer(float _dt)
 {
 	ApplyPhysic(_dt);
-	MovePlayer(_dt);
-	UpdateAttackShape();
 	CheckCollisionPlayerPlatforms(_dt);
+	MovePlayer(_dt);
+	CheckCollisionPlayerSpike(NULL, _dt);
+	UpdateAttackShape();
 	CollisionPlayerTrigger();
 	CheckCollisionPlayerMob();
 	CheckCollisionPlayerSpike(NULL, _dt);
 	CollisionPlayerDeathZone();
+
+
 	CheckPlayerHP();
 	UpdateAnimation(player.currentAnimation, _dt);
 
@@ -144,7 +147,7 @@ void CheckCollisionPlayerMob(void)
 				}
 			}
 		}
-		
+
 	}
 }
 
@@ -185,6 +188,11 @@ void MovePlayer(float _dt)
 {
 	player.data.timerTakeIt += _dt;
 
+	if (player.data.knockBackTimer > 0.f)
+	{
+		player.data.knockBackTimer -= _dt;
+		return;
+	}
 
 	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
 	sfBool movingRight = sfKeyboard_isKeyPressed(sfKeyD);
@@ -211,7 +219,7 @@ void MovePlayer(float _dt)
 		sfSound_play(player.sound.axeSound);
 
 		StateMachine(AXE);
-	
+
 	}
 
 	if (sfMouse_isButtonPressed(sfMouseRight) && player.data.attackCooldownTimer >= ATTACK_SWORD_COOLDOWN && player.action.isGrounded)
@@ -438,7 +446,7 @@ void MovePlayer(float _dt)
 				player.data.lastWallTouched = player.data.currentWallTouched;
 
 				float wallJumpHX = 550.f;
-				
+
 
 				if (player.action.isTouchingRightWall && movingRight)
 				{
@@ -689,40 +697,32 @@ void CheckCollisionPlayerPlatforms(float _dt)
 
 void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 {
-	player.data.timerSpike += _dt;
+	player.data.timerSpikeWidth += _dt;
+	player.data.timerSpikeHeight += _dt;
 	sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player.sprite);
 	sfFloatRect hitSpike = { 0 };
 	sfFloatRect intersection = { 0 };
+	float playerCenterX = hitPlayer.left + (hitPlayer.width / 2);
+	
+
 
 	for (unsigned i = 0; i < GetSpikeTabSize(); i++)
 	{
 		hitSpike = GetSpikeTab(i);
+		float spikeCenterX = hitSpike.left + (hitSpike.width / 2);
 
-		if (sfFloatRect_intersects(&hitSpike, &hitPlayer, &intersection))
+		if (sfFloatRect_intersects(&hitSpike, &hitPlayer, &intersection) && player.data.timerSpikeWidth > TIMER_SPIKE)
 		{
-			player.data.timerSpike = 0.f;
-			
-			//LEFT
-			if (hitPlayer.left < (hitSpike.left + hitSpike.width))
+			player.data.knockBackTimer += 0.5f;
+			if (playerCenterX < spikeCenterX && player.data.position.y > (hitSpike.top + (hitSpike.height / 2)))
 			{
-				player.spikeSide = LEFT;
-			}
-			//WIDTH
-			else if ((hitPlayer.left + hitPlayer.width) > hitSpike.left)
-			{
+				
 				player.spikeSide = WIDTH;
 			}
-
-			//TOP
-
-			if (hitPlayer.top < (hitSpike.top + hitSpike.width))
+			else if (playerCenterX > spikeCenterX && player.data.position.y > (hitSpike.top + (hitSpike.height / 2)))
 			{
-				player.spikeSide = TOP;
-			}
-			//HEIGHT
-			else if ((hitPlayer.top + hitPlayer.height) > hitSpike.top)
-			{
-				player.spikeSide = HEIGHT;
+				
+				player.spikeSide = LEFT;
 			}
 
 		}
@@ -731,27 +731,83 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 
 	if (player.spikeSide != NOTHING)
 	{
-
+		//player.action.isGrounded = sfFalse;
+		
+		StateMachine(FALL);
 		if (player.spikeSide == LEFT)
 		{
-			player.data.velocity.x += 1000.f;
+			printf("LEFT\n");
+			player.action.isGrounded = sfFalse;
+			player.data.velocity.y = -SPIKE_VELOCITY;
+			player.data.velocity.x = SPIKE_VELOCITY;
+
+			
+
 		}
 		else if (player.spikeSide == WIDTH)
 		{
-			player.data.velocity.x -= 1000.f;
+			printf("RIGHT\n");
+			player.action.isGrounded = sfFalse;
+			player.data.velocity.y = -SPIKE_VELOCITY;
+			player.data.velocity.x = -SPIKE_VELOCITY;
+
+			
 		}
+
+		player.data.timerSpikeHeight = 0.f;
+		player.data.timerSpikeWidth = 0.f;
+		player.data.health -= 20;
+		player.spikeSide = NOTHING;
+	}
+
+
+	float playerCenterY = hitPlayer.top + (hitPlayer.height / 2);
+	float spikeCenterY = 0;
+
+
+	for (int i = 0; i < GetSpikeTabSize(); i++)
+	{
+		hitSpike = GetSpikeTab(i);
+		spikeCenterY = hitSpike.top + (hitSpike.height / 2);
+
+
+		if (sfFloatRect_intersects(&hitSpike, &hitPlayer, &intersection) && player.data.timerSpikeHeight > TIMER_SPIKE)
+		{
+			player.data.knockBackTimer += _dt;
+			if (playerCenterY < spikeCenterY && (hitPlayer.left < (hitSpike.left + hitSpike.width)) && (hitPlayer.left + hitPlayer.width) > hitSpike.left)
+			{
+				player.spikeSide = TOP;
+			}
+			else if (playerCenterY > spikeCenterY && (hitPlayer.left < (hitSpike.left + hitSpike.width)) && (hitPlayer.left + hitPlayer.width) > hitSpike.left)
+			{
+				player.spikeSide = HEIGHT;
+			}
+
+
+		}
+	}
+
+	if (player.spikeSide != NOTHING)
+	{
 
 		if (player.spikeSide == TOP)
 		{
-			player.data.velocity.y = -600.f;
+			printf("TOP\n");
+			player.data.velocity.y = -SPIKE_VELOCITY;
 		}
 		else if (player.spikeSide == HEIGHT)
 		{
-			player.data.velocity.y += 1000.f;
+			printf("HEIGHT\n");
+			player.data.velocity.y = SPIKE_VELOCITY;
 		}
 
+
+		player.data.timerSpikeWidth = 0.f;
+		player.data.timerSpikeHeight = 0.f;
 		player.data.health -= 20;
 		player.spikeSide = NOTHING;
+		player.action.isMoving = sfTrue;
+
 	}
 
 
@@ -830,7 +886,9 @@ void BasePlayer()
 	player.data.canWallJump = 0;
 
 	player.data.timerTakeIt = 0;
-	player.data.timerSpike = 0;
+	player.data.timerSpikeWidth = 0;
+	player.data.timerSpikeHeight = 0;
+	player.data.knockBackTimer = 0;
 
 	player.spikeSide = NOTHING;
 

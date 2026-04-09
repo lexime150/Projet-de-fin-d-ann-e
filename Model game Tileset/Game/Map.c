@@ -304,7 +304,7 @@ void DrawObjectGroup(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer)
 			}
 			sfRectangleShape_setOutlineThickness(rectangle, 1);
 
-			//sfRenderWindow_drawRectangleShape(_renderWindow, rectangle, NULL);
+			sfRenderWindow_drawRectangleShape(_renderWindow, rectangle, NULL);
 			sfRectangleShape_destroy(rectangle);
 		}
 

@@ -39,7 +39,9 @@
 
 #define TIMER_TAKE_IT 0.9f
 
-#define TIMER_SPIKE 1.4f
+#define TIMER_SPIKE 0.3f
+
+#define SPIKE_VELOCITY 800.f
 
 typedef enum SpikeSide
 {
@@ -129,7 +131,9 @@ typedef struct Stats
 	float jumpStartPosition;
 	float timerTakeIt;
 
-	float timerSpike;
+	float timerSpikeWidth;
+	float timerSpikeHeight;
+	float knockBackTimer;
 
 }Stats;
 

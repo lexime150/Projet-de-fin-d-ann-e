@@ -1,16 +1,14 @@
 ﻿  Player.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(118,28): warning C4047: 'fonction' : les niveaux d'indirection de 'unsigned int' et de 'void *' sont différents
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(118,28): warning C4024: 'CheckCollisionPlayerSpike' : types différents pour le paramètre formel et réel 1
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(130,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(210,58): warning C4305: 'fonction' : troncation de 'double' à 'float'
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(210,63): warning C4305: 'fonction' : troncation de 'double' à 'float'
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(223,60): warning C4305: 'fonction' : troncation de 'double' à 'float'
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(223,65): warning C4305: 'fonction' : troncation de 'double' à 'float'
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(230,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(250,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(432,72): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(876,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(903,20): warning C4018: '<' : incompatibilité signed/unsigned
-  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
-  'pwsh.exe' n'est pas reconnu en tant que commande interne
-  ou externe, un programme exécutable ou un fichier de commandes.
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(110,28): warning C4047: 'fonction' : les niveaux d'indirection de 'unsigned int' et de 'void *' sont différents
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(110,28): warning C4024: 'CheckCollisionPlayerSpike' : types différents pour le paramètre formel et réel 1
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(124,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(210,55): warning C4305: 'fonction' : troncation de 'double' à 'float'
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(210,60): warning C4305: 'fonction' : troncation de 'double' à 'float'
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(223,57): warning C4305: 'fonction' : troncation de 'double' à 'float'
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(223,62): warning C4305: 'fonction' : troncation de 'double' à 'float'
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(230,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(250,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(432,72): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(760,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(926,20): warning C4018: '<' : incompatibilité signed/unsigned
+  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
