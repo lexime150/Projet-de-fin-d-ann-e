@@ -16,6 +16,7 @@ void LoadGame(void)
 	int slot = playerSaveData.save;
 	CheckSaveAndLoadLevel(slot);
 	LevelTransition();
+	LoadKey();
 
 }
 
@@ -97,6 +98,7 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawCamera(_renderWindow);
 	DrawMap(_renderWindow);
 	DrawMob(_renderWindow);
+	DrawKey(_renderWindow);
 	DrawPlayer(_renderWindow);
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);

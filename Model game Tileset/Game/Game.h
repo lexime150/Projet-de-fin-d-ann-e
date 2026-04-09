@@ -10,6 +10,8 @@
 #include "Mob.h"
 #include "GameHUD.h"
 
+#include "Key.h"
+
 void LoadGame(void);
 void PollEventGame(sfRenderWindow* _renderWindow);
 void UpdateGame(float _dt);

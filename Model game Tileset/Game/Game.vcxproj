@@ -143,6 +143,7 @@
     <ClCompile Include="GameHUD.c" />
     <ClCompile Include="GameOver.c" />
     <ClCompile Include="GameState.c" />
+    <ClCompile Include="Key.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Map.c" />
     <ClCompile Include="Menu.c" />
@@ -159,6 +160,7 @@
     <ClInclude Include="GameHUD.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="Key.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mob.h" />
