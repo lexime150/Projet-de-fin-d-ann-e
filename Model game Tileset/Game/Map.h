@@ -33,6 +33,9 @@ unsigned GetSpikeTabSize(void);
 unsigned int GetDeathZoneTabSize(void);
 sfFloatRect GetDeathZoneTab(unsigned int _index);
 
+unsigned int GetSemiSolidCollisionTabSize(void);
+sfFloatRect GetSemiSolidCollisionTab(unsigned int _index);
+
 void ChangeLevel(const char* level);
 
 

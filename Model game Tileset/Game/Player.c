@@ -668,6 +668,7 @@ void MovePlayer(float _dt)
 
 void CollisionPlayerPlatformsX(float _dx)
 {
+	sfBool sKey = sfKeyboard_isKeyPressed(sfKeyS);
 	player.action.isTouchingLeftWall = sfFalse;
 	player.action.isTouchingRightWall = sfFalse;
 
@@ -705,6 +706,7 @@ void CollisionPlayerPlatformsX(float _dx)
 		}
 	}
 
+
 	player.action.justWallJumped = sfFalse;
 	player.data.position.x += _dx;
 	sfSprite_setPosition(player.sprite, player.data.position);
@@ -714,12 +716,14 @@ void CollisionPlayerPlatformsX(float _dx)
 }
 void CollisionPlayerPlatformsY(float _dy)
 {
+	sfBool sKey = sfKeyboard_isKeyPressed(sfKeyS);
 	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
 	float playerWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
 	float playerHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
 
-	player.data.lastWallTouched = 0;
-	sfFloatRect hitbox = { player.data.position.x - playerHalfWidth, player.data.position.y - playerHeight + _dy, playerWidth, playerHeight };
+	float previousBottom = player.data.position.y;
+
+	sfFloatRect hitbox = {player.data.position.x - playerHalfWidth,player.data.position.y - playerHeight + _dy,playerWidth,playerHeight};
 	player.action.isGrounded = sfFalse;
 
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
@@ -747,13 +751,38 @@ void CollisionPlayerPlatformsY(float _dy)
 		}
 	}
 
+	for (unsigned i = 0; i < GetSemiSolidCollisionTabSize(); i++)
+	{
+		sfFloatRect semi = GetSemiSolidCollisionTab(i);
+
+		if (!sfFloatRect_intersects(&hitbox, &semi, NULL))
+		{
+			continue;
+		}
+
+		sfBool wasAbove = previousBottom <= semi.top;
+		sfBool isFalling = player.data.velocity.y > 0;
+
+		if (isFalling && wasAbove && !sKey)
+		{
+			hitbox.top = semi.top - hitbox.height;
+			player.action.isGrounded = sfTrue;
+			player.data.velocity.y = 0;
+			player.data.position.y = hitbox.top + hitbox.height;
+			sfSprite_setPosition(player.sprite, player.data.position);
+			sfRectangleShape_setPosition(player.shape.collisionPlayerShape, (sfVector2f) { hitbox.left, hitbox.top });
+			player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
+			player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
+			return;
+		}
+	}
+
 	player.data.position.y += _dy;
 	sfSprite_setPosition(player.sprite, player.data.position);
-	sfRectangleShape_setPosition(player.shape.collisionPlayerShape, (sfVector2f) { player.data.position.x - playerHalfWidth, player.data.position.y - playerHeight });
+	sfRectangleShape_setPosition(player.shape.collisionPlayerShape,(sfVector2f) {player.data.position.x - playerHalfWidth, player.data.position.y - playerHeight});
 	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
-
 sfBool CheckCollisionPlayerPlatformsX(float _dx)
 {
 	player.action.isTouchingLeftWall = sfFalse;
