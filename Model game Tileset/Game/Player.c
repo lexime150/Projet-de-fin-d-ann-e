@@ -166,13 +166,13 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 			if (mob[i].currentState == ATTACK_MOB)
 			{
-				if (mob[i].currentMobAnimation->currentFrame == 4 && !player.action.degatsEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
+				if (mob[i].currentMobAnimation->currentFrame == (mob[i].currentMobAnimation->frameCount - 2) && !player.action.degatsEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 				{
 					player.action.degatsEnable = sfTrue;
 					player.data.health -= mob[i].degats + rand() % mob[i].degats;
 
 				}
-				else if (mob[i].currentMobAnimation->currentFrame != 4)
+				else if (mob[i].currentMobAnimation->currentFrame != (mob[i].currentMobAnimation->frameCount - 2))
 				{
 					player.action.degatsEnable = sfFalse;
 				}
