@@ -33,13 +33,10 @@ void KeyPosition(float _x, float _y, float _textureRectX, int _textureRectY ,int
 
 void DrawKey(sfRenderWindow* _renderWindow)
 {
-	/*for (int i = 0; i < KEY_NUMBER; i++)
-	{
-		//sfRenderWindow_drawSprite(_renderWindow, keySprite[i], NULL);
-	//}*/
 	sfRenderWindow_drawSprite(_renderWindow, keySprite[0], NULL);
 }
 
 void CleanupKey(void)
 {
+
 }

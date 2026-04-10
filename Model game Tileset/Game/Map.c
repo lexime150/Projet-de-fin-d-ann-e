@@ -18,6 +18,10 @@ unsigned int deathZoneTabSize;
 sfVector2f* enemySpawnTab;
 unsigned int enemySpawnTabSize;
 
+
+sfFloatRect* semiSolidCollisionTab;
+unsigned int semiSolidCollisionTabSize;
+
 sfVector2f playerSpawn;
 
 void LoadCollisionAndTrigger(void);
@@ -92,6 +96,8 @@ void CleanupMap(void)
 	free(enemySpawnTab);
 	enemySpawnTab = NULL;
 
+	free(semiSolidCollisionTab);
+	semiSolidCollisionTab = NULL;
 
 }
 
@@ -101,6 +107,13 @@ void LoadCollisionAndTrigger(void)
 	collisionTab = calloc(1, sizeof(sfFloatRect));
 	collisionTabSize = 0;
 	if (collisionTab == NULL)
+	{
+		return;
+	}
+
+	semiSolidCollisionTab = calloc(1, sizeof(sfFloatRect));
+	semiSolidCollisionTabSize = 0;
+	if (semiSolidCollisionTab == NULL)
 	{
 		return;
 	}
@@ -126,6 +139,8 @@ void LoadCollisionAndTrigger(void)
 	{
 		return;
 	}
+
+
 
 
 
@@ -217,12 +232,30 @@ void LoadCollisionAndTrigger(void)
 						object->y * GAME_SCALE,
 						object->width * GAME_SCALE,
 						object->height * GAME_SCALE };
-						deathZoneTabSize++;
+					deathZoneTabSize++;
+				}
+				else if (strcmp(layer->name.ptr, "Semi-Solid-Collision") == 0)
+				{
+					sfFloatRect* semiSolidCollisionTemp = realloc(semiSolidCollisionTab, (unsigned long long)(semiSolidCollisionTabSize + 1) * sizeof(sfFloatRect));
+
+					if (semiSolidCollisionTemp == NULL)
+					{
+						return;
+					}
+					semiSolidCollisionTab = semiSolidCollisionTemp;
+
+					semiSolidCollisionTab[semiSolidCollisionTabSize] = (sfFloatRect){
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE,
+						object->width * GAME_SCALE,
+						object->height * GAME_SCALE };
+					semiSolidCollisionTabSize++;
+
 				}
 
-				
+
 			}
-			
+
 
 
 
@@ -290,8 +323,8 @@ void DrawObjectGroup(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer)
 		if (object->ellipse == 0 && object->point == 0 && object->vertices == 0)
 		{
 			sfRectangleShape* rectangle = sfRectangleShape_create();
-			sfRectangleShape_setPosition(rectangle, (sfVector2f) { object->x* GAME_SCALE, object->y* GAME_SCALE});
-			sfRectangleShape_setSize(rectangle, (sfVector2f) { object->width* GAME_SCALE, object->height* GAME_SCALE});
+			sfRectangleShape_setPosition(rectangle, (sfVector2f) { object->x* GAME_SCALE, object->y* GAME_SCALE });
+			sfRectangleShape_setSize(rectangle, (sfVector2f) { object->width* GAME_SCALE, object->height* GAME_SCALE });
 			sfRectangleShape_setFillColor(rectangle, sfTransparent);
 
 			if (strcmp(_layer->name.ptr, "Collision") == 0)
@@ -348,20 +381,20 @@ Trigger GetMapTrigger(unsigned int _index)
 
 unsigned int GetEnemySpawnTabSize(void)
 {
-    return enemySpawnTabSize;
+	return enemySpawnTabSize;
 }
 
 sfVector2f GetEnemySpawn(unsigned int _index)
 {
-    if (_index < enemySpawnTabSize)
-        return enemySpawnTab[_index];
-    else
-        return (sfVector2f){ 0, 0 };
+	if (_index < enemySpawnTabSize)
+		return enemySpawnTab[_index];
+	else
+		return (sfVector2f) { 0, 0 };
 }
 
 sfVector2f GetPlayerSpawn(void)
 {
-    return playerSpawn;
+	return playerSpawn;
 }
 
 sfFloatRect GetSpikeTab(unsigned _index)
@@ -388,6 +421,23 @@ sfFloatRect GetDeathZoneTab(unsigned int _index)
 	if (_index < deathZoneTabSize)
 	{
 		return deathZoneTab[_index];
+	}
+	else
+	{
+		return (sfFloatRect) { 0, 0, 0, 0 };
+	}
+}
+
+unsigned int GetSemiSolidCollisionTabSize(void)
+{
+	return semiSolidCollisionTabSize;
+}
+
+sfFloatRect GetSemiSolidCollisionTab(unsigned int _index)
+{
+	if (_index < semiSolidCollisionTabSize)
+	{
+		return semiSolidCollisionTab[_index];
 	}
 	else
 	{
