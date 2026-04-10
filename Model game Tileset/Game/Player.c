@@ -665,7 +665,8 @@ void MovePlayer(float _dt)
 		}
 	}
 }
-/////////////////////////////////////////////////////////////////////////////
+
+
 void CollisionPlayerPlatformsX(float _dx)
 {
 	sfBool sKey = sfKeyboard_isKeyPressed(sfKeyS);
