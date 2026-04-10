@@ -132,6 +132,8 @@ typedef struct Mob
 	float rangeAttack;
 	unsigned degats;
 
+
+
 }Mob;
 
 

@@ -108,6 +108,8 @@ typedef struct Action
 
 	sfBool isTransitioning;
 	sfBool isAttacking;
+	sfBool degatsEnable;
+	
 }Action;
 
 typedef struct Sound

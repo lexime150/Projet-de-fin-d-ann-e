@@ -146,7 +146,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 		}
 	}
 
-
+	
 
 	sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player.sprite);
 	sfFloatRect hitMob = { 0 };
@@ -166,12 +166,15 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 			if (mob[i].currentState == ATTACK_MOB)
 			{
-				player.data.timerTakeIt += _dt;
-				if (player.data.timerTakeIt > TIMER_TAKE_IT && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
+				if (mob[i].currentMobAnimation->currentFrame == 4 && !player.action.degatsEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 				{
-					player.data.timerTakeIt = 0;
+					player.action.degatsEnable = sfTrue;
 					player.data.health -= mob[i].degats + rand() % mob[i].degats;
 
+				}
+				else if (mob[i].currentMobAnimation->currentFrame != 4)
+				{
+					player.action.degatsEnable = sfFalse;
 				}
 			}
 		}
@@ -950,6 +953,8 @@ void BasePlayer()
 	player.action.isTouchingRightWall = sfFalse;
 	player.action.isTouchingWall = sfFalse;
 	player.action.isWallJumping = sfFalse;
+
+	player.action.degatsEnable = sfFalse;
 
 	player.data.position = sfSprite_getPosition(player.sprite);
 	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
