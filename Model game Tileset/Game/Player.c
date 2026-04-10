@@ -111,14 +111,20 @@ void SetAnimation(PlayerState _state)
 void UpdatePlayer(float _dt)
 {
 	ApplyPhysic(_dt);
+
+
+	UpdateAttackShape();
+
+
+	MovePlayer(_dt);
+
 	CheckCollisionPlayerPlatforms(_dt);
 	CheckCollisionPlayerSpike(NULL, _dt);
-	UpdateAttackShape();
 	CollisionPlayerTrigger();
 	CheckCollisionPlayerAttackMob(_dt);
 	CheckCollisionPlayerMob(_dt);
-	MovePlayer(_dt);
 	CollisionPlayerDeathZone();
+
 	CheckPlayerHP();
 	UpdateAnimation(player.currentAnimation, _dt);
 
@@ -515,6 +521,7 @@ void MovePlayer(float _dt)
 		if (player.action.isGrounded || (player.action.isSliding && player.action.isGrounded))
 		{
 			player.data.lastWallTouched = 0;
+			player.action.justWallJumped = sfFalse;
 			if (player.action.isSliding)
 			{
 				player.action.isSlideJumping = sfTrue;
@@ -608,7 +615,10 @@ void MovePlayer(float _dt)
 		{
 			float dx = player.data.velocity.x * _dt;
 			CheckCollisionPlayerPlatformsX(dx);
-
+			if (!player.action.isTouchingLeftWall && !player.action.isTouchingRightWall)
+			{
+				player.data.lastWallTouched = 0;
+			}
 			if (movingLeft && player.action.isTouchingLeftWall && player.currentState == JUMP)
 			{
 				float fallenDistance = player.data.position.y - player.data.jumpStartPosition;
@@ -637,6 +647,10 @@ void MovePlayer(float _dt)
 		{
 			float dx = player.data.velocity.x * _dt;
 			CheckCollisionPlayerPlatformsX(dx);
+			if (!player.action.isTouchingLeftWall && !player.action.isTouchingRightWall)
+			{
+				player.data.lastWallTouched = 0;
+			}
 			if (movingLeft && player.action.isTouchingLeftWall)
 			{
 				StateMachine(WALL_GRIP_FALL);
@@ -736,6 +750,8 @@ void CollisionPlayerPlatformsY(float _dy)
 			{
 				hitbox.top = platform.top - hitbox.height;
 				player.action.isGrounded = sfTrue;
+				player.data.lastWallTouched = 0;
+				player.action.justWallJumped = sfFalse;
 			}
 			else if (player.data.velocity.y < 0)
 			{
@@ -768,6 +784,10 @@ void CollisionPlayerPlatformsY(float _dy)
 		{
 			hitbox.top = semi.top - hitbox.height;
 			player.action.isGrounded = sfTrue;
+			player.data.lastWallTouched = 0;
+			player.action.justWallJumped = sfFalse;
+
+
 			player.data.velocity.y = 0;
 			player.data.position.y = hitbox.top + hitbox.height;
 			sfSprite_setPosition(player.sprite, player.data.position);

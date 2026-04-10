@@ -1,2 +1,20 @@
+<<<<<<< Updated upstream
 ﻿  Key.c
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+=======
+﻿  Player.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(122,28): warning C4047: 'fonction' : les niveaux d'indirection de 'unsigned int' et de 'void *' sont différents
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(122,28): warning C4024: 'CheckCollisionPlayerSpike' : types différents pour le paramètre formel et réel 1
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(137,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(160,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(203,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(339,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(359,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(542,72): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(924,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(1094,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(1121,20): warning C4018: '<' : incompatibilité signed/unsigned
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.
+>>>>>>> Stashed changes
