@@ -23,6 +23,9 @@
 
 #define MIN_WALL_GRIP_DISTANCE 200.f
 
+#define MAX_GRIP_WALL_SPEED 400.f
+
+
 #define SWORD_DEGATS 66
 #define AXE_DEGATS 90
 

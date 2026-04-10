@@ -1,4 +1,5 @@
 ﻿  Player.c
+<<<<<<< Updated upstream
 C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(115,28): warning C4047: 'fonction' : les niveaux d'indirection de 'unsigned int' et de 'void *' sont différents
 C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(115,28): warning C4024: 'CheckCollisionPlayerSpike' : types différents pour le paramètre formel et réel 1
 C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(131,20): warning C4018: '<' : incompatibilité signed/unsigned
@@ -11,3 +12,19 @@ C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Gam
 C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(1033,20): warning C4018: '<' : incompatibilité signed/unsigned
 C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(1060,20): warning C4018: '<' : incompatibilité signed/unsigned
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+=======
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(115,28): warning C4047: 'fonction' : les niveaux d'indirection de 'unsigned int' et de 'void *' sont différents
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(115,28): warning C4024: 'CheckCollisionPlayerSpike' : types différents pour le paramètre formel et réel 1
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(131,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(154,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(194,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(330,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(350,32): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(532,72): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(871,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(1039,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(1066,20): warning C4018: '<' : incompatibilité signed/unsigned
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.
+>>>>>>> Stashed changes
