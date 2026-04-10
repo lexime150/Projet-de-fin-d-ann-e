@@ -827,6 +827,7 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 	if (player.spikeSide != NOTHING)
 	{
 		player.action.isGrounded = sfFalse;
+	
 
 		StateMachine(FALL);
 		if (player.spikeSide == LEFT)
@@ -835,7 +836,7 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 			//player.action.isGrounded = sfFalse;
 			player.data.velocity.y = -SPIKE_VELOCITY;
 			player.data.velocity.x = SPIKE_VELOCITY;
-
+			sfSprite_setScale(player.sprite, (sfVector2f){GAME_SCALE, GAME_SCALE});
 
 
 		}
@@ -845,7 +846,7 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 			//player.action.isGrounded = sfFalse;
 			player.data.velocity.y = -SPIKE_VELOCITY;
 			player.data.velocity.x = -SPIKE_VELOCITY;
-
+			sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
 
 		}
 
@@ -884,6 +885,10 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 
 	if (player.spikeSide != NOTHING)
 	{
+		player.action.isTouchingLeftWall = sfFalse;
+		player.action.isTouchingRightWall = sfFalse;
+		player.action.isTouchingWall = sfFalse;
+
 
 		if (player.spikeSide == TOP)
 		{

@@ -17,7 +17,7 @@ void LoadGame(void)
 	CheckSaveAndLoadLevel(slot);
 	LevelTransition();
 	LoadKey();
-
+	printf("%f\n", sfSprite_getPosition(player.sprite).y);
 }
 
 void UpdateTransition(float _dt)
@@ -146,6 +146,8 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadMob();
 		LoadHUD();
 	}
+
+
 }
 
 void ChangeLevel(const char* _level)
