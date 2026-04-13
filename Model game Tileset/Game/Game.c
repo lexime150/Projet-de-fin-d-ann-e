@@ -107,9 +107,9 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawMap(_renderWindow);
 	DrawMob(_renderWindow);
 	DrawKey(_renderWindow);
+	DrawOrb(_renderWindow);
 	DrawPlayer(_renderWindow);
 
-	DrawOrb(_renderWindow);
 
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);
