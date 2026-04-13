@@ -845,7 +845,7 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 {
 	player.data.timerSpikeWidth += _dt;
 	player.data.timerSpikeHeight += _dt;
-	sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player.sprite);
+	sfFloatRect hitPlayer = player.shape.hitRectCollisionPlayerMob;
 	sfFloatRect hitSpike = { 0 };
 	sfFloatRect intersection = { 0 };
 	float playerCenterX = hitPlayer.left + (hitPlayer.width / 2);
@@ -862,7 +862,6 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 			player.data.knockBackTimer += 0.15f;
 			if (playerCenterX < spikeCenterX && player.data.position.y >(hitSpike.top + (hitSpike.height / 2)))
 			{
-
 				player.spikeSide = WIDTH;
 			}
 			else if (playerCenterX > spikeCenterX && player.data.position.y > (hitSpike.top + (hitSpike.height / 2)))
