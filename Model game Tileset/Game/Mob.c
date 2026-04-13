@@ -26,8 +26,8 @@ void SetVelocity(unsigned _i, float _dt);
 
 void LoadMob(void)
 {
-	texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Champignon du Mordhor.png", NULL);
-	texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/skeleton.png", NULL);
+	texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Mob/Champignon du Mordhor.png", NULL);
+	texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Mob/skeleton.png", NULL);
 
 
 	mob = malloc(sizeof(Mob));
@@ -313,11 +313,69 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 {
 	//---------MOB PLAT----------//
 
-
+	sfBool platTransition = sfFalse;
 	sfFloatRect hitMob = { 0 };
 	sfFloatRect hitPlat = { 0 };
+	sfFloatRect hitSemiPlat = { 0 };
 	sfFloatRect intersection = { 0 };
 	sfVector2f posMob = sfSprite_getPosition(mob[_i].sprite);
+
+
+	for (int i = 0; i < GetCollisionTabSize(); i++)
+	{
+		hitMob = mob[_i].hitRect;
+		hitPlat = GetMapCollision(i);
+
+		for(int x = 0; x < GetSemiSolidCollisionTabSize(); x++)
+		{
+			hitSemiPlat = GetSemiSolidCollisionTab(x);
+			if (sfFloatRect_intersects(&hitMob, &hitPlat, NULL) && sfFloatRect_intersects(&hitMob, &hitSemiPlat, NULL))
+			{
+				platTransition = sfTrue;
+				break;
+			}
+		}
+
+	}
+
+
+	for (int i = 0; i < GetSemiSolidCollisionTabSize(); i++)
+	{
+		hitPlat = GetSemiSolidCollisionTab(i);
+		hitMob = mob[_i].hitRect;
+
+		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection))
+		{
+			if (intersection.width < intersection.height && !platTransition)
+			{
+				if (mob[_i].velocity.x > 0)
+				{
+					posMob.x -= intersection.width;
+				}
+				else if (mob[_i].velocity.x < 0)
+				{
+					posMob.x += intersection.width;
+				}
+
+			}
+			else if (intersection.width > intersection.height && !platTransition)
+			{
+				if (mob[_i].velocity.y < 0.f)
+				{
+					posMob.y += intersection.height;
+				}
+				else
+				{
+					posMob.y -= intersection.height;
+				}
+			}
+
+			sfSprite_setPosition(mob[_i].sprite, posMob);
+		}
+
+	}
+
+
 
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
@@ -326,7 +384,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection))
 		{
-			if (intersection.width < intersection.height)
+			if (intersection.width < intersection.height && !platTransition)
 			{
 				if (mob[_i].velocity.x < 0.f)
 				{
@@ -342,13 +400,13 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 				StateMobMachine(IDLE_MOB, _i);
 
 			}
-			else if (hitMob.left < hitPlat.left)
+			else if (hitMob.left < hitPlat.left && !platTransition)
 			{
 
 				posMob.x = hitPlat.left + (hitMob.width / 2);
 				StateMobMachine(IDLE_MOB, _i);
 			}
-			else if ((hitMob.left + hitMob.width) > (hitPlat.left + hitPlat.width))
+			else if ((hitMob.left + hitMob.width) > (hitPlat.left + hitPlat.width) && !platTransition)
 			{
 				StateMobMachine(IDLE_MOB, _i);
 
@@ -362,6 +420,10 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	}
 
+	//---------MOB SEMI PLAT----------//
+
+
+
 
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
@@ -371,7 +433,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection))
 		{
-			if (intersection.width > intersection.height)
+			if (intersection.width > intersection.height) //&& !platTransition)
 			{
 				if (mob[_i].velocity.y >= 0)
 				{
@@ -383,6 +445,28 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		}
 
 	}
+
+
+	for (int i = 0; i < GetSemiSolidCollisionTabSize(); i++)
+	{
+		hitSemiPlat = GetSemiSolidCollisionTab(i);
+		hitMob = mob[_i].hitRect;
+	
+		if (sfFloatRect_intersects(&hitSemiPlat, &hitMob, &intersection))
+		{
+			if (mob[_i].velocity.y > 0)
+			{
+				mob[_i].velocity.y = 0;
+				posMob.y -= intersection.height;
+			}
+
+
+			sfSprite_setPosition(mob[_i].sprite, posMob);
+		}
+	
+	
+	}
+
 
 
 

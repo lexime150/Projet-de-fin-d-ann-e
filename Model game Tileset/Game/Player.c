@@ -157,19 +157,15 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 		if (player.data.health > 0)
 		{
-			if (player.data.timerAttack > 0.f)
-			{
-				player.data.timerAttack -= (_dt * 2);
-			}
 
 
-
-			if (mob[i].currentState == ATTACK_MOB)
+			if (mob[i].currentState == ATTACK_MOB && player.data.timerInvincible > TIMER_INVINCIBLE)
 			{
 				if (mob[i].currentMobAnimation->currentFrame == (mob[i].currentMobAnimation->frameCount - 2) && !player.action.degatsEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 				{
 					player.action.degatsEnable = sfTrue;
 					player.data.health -= mob[i].degats + rand() % mob[i].degats;
+					
 
 				}
 				else if (mob[i].currentMobAnimation->currentFrame != (mob[i].currentMobAnimation->frameCount - 2))
@@ -177,6 +173,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 					player.action.degatsEnable = sfFalse;
 				}
 			}
+
 		}
 
 	}
@@ -186,9 +183,14 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 void CheckCollisionPlayerMob(float _dt)
 {
+	player.data.timerInvincible += _dt;
+
+	sfRectangleShape_setPosition(player.shape.rectCollisionPlayerMob, sfSprite_getPosition(player.sprite));
+	player.shape.hitRectCollisionPlayerMob = sfRectangleShape_getGlobalBounds(player.shape.rectCollisionPlayerMob);
+
 	player.data.timerPlayerMob += _dt;
 
-	sfFloatRect hitPlayer = player.shape.playerRect;
+	sfFloatRect hitPlayer = player.shape.hitRectCollisionPlayerMob;
 	sfFloatRect hitMob;
 	sfFloatRect intersection;
 	float playerCenterX = hitPlayer.left + (hitPlayer.width * 0.5f);
@@ -199,14 +201,17 @@ void CheckCollisionPlayerMob(float _dt)
 		hitMob = mob[i].collisionMob;
 		mobCenterX = hitMob.left + (hitMob.width * 0.5f);
 
-		if (player.currentState != AXE && player.currentState != SWORD && mob[i].currentState != DEATH)
+		if (player.currentState != AXE && player.currentState != SWORD && !player.action.isInvincible && mob[i].currentState != DEATH)
 		{
 			if (sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 			{
 				player.data.timerPlayerMob = 0;
-				player.data.knockBackTimer += 0.1f;
+				player.data.knockBackTimer += 0.2f;
 				player.action.isSlideJumping = sfFalse;
 				player.action.isTouchingWall = sfFalse;
+				player.action.isInvincible = sfTrue;
+				player.data.timerInvincible = 0;
+				player.data.health -= 15;
 
 				if (playerCenterX > (mobCenterX) + PLAYER_MOB_MARGE)
 				{
@@ -242,7 +247,10 @@ void CheckCollisionPlayerMob(float _dt)
 		player.side = NOTHING_PLAYER;
 	}
 
-
+	if (player.data.timerInvincible > TIMER_INVINCIBLE)
+	{
+		player.action.isInvincible = sfFalse;
+	}
 
 }
 
@@ -969,7 +977,7 @@ void BasePlayer()
 {
 	player.action.isTransitioning = sfTrue;
 	player.sprite = sfSprite_create();
-	player.texture = sfTexture_createFromFile("Assets/Sprites/IDLE.png", NULL);
+	player.texture = sfTexture_createFromFile("Assets/Sprites/Player/PlayerState.png", NULL);
 	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
 	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfSprite_setPosition(player.sprite, GetPlayerSpawn());
@@ -1001,10 +1009,17 @@ void BasePlayer()
 	player.action.isWallJumping = sfFalse;
 
 	player.action.degatsEnable = sfFalse;
+	player.action.isInvincible = sfFalse;
 
 	player.data.position = sfSprite_getPosition(player.sprite);
 	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
+
+	player.shape.rectCollisionPlayerMob = sfRectangleShape_create();
+	sfRectangleShape_setSize(player.shape.rectCollisionPlayerMob, (sfVector2f){PLAYER_COLLISION_WIDTH, PLAYER_COLLISION_HEIGHT});
+	sfRectangleShape_setOrigin(player.shape.rectCollisionPlayerMob, (sfVector2f){PLAYER_COLLISION_WIDTH / 2, PLAYER_COLLISION_HEIGHT});
+	sfRectangleShape_setScale(player.shape.rectCollisionPlayerMob, (sfVector2f){GAME_SCALE, GAME_SCALE});
+
 
 	snprintf(player.data.level, sizeof(player.data.level), "level_00");
 	printf("player level: %s\n", player.data.level);
@@ -1033,6 +1048,7 @@ void BasePlayer()
 	player.data.timerSpikeHeight = 0;
 	player.data.knockBackTimer = 0;
 	player.data.timerPlayerMob = 0;
+	player.data.timerInvincible = 0;
 
 	player.spikeSide = NOTHING;
 	player.side = NOTHING_PLAYER;
@@ -1116,6 +1132,7 @@ void CollisionPlayerDeathZone()
 
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
+	sfRenderWindow_drawSprite(_renderWindow, player.shape.rectCollisionPlayerMob, NULL);
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
 	//sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionPlayerShape, NULL);
 	if (player.action.isAttacking)

@@ -5,7 +5,7 @@ Key key[KEY_NUMBER];
 
 void LoadKey(void)
 {
-	sfTexture* texture = sfTexture_createFromFile("Assets/Sprites/Key.png", NULL);
+	sfTexture* texture = sfTexture_createFromFile("Assets/Sprites/Key/Key.png", NULL);
 
 	for (int i = 0; i < KEY_NUMBER; i++)
 	{

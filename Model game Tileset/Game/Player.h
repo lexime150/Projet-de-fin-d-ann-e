@@ -43,13 +43,17 @@
 #define TIMER_TAKE_IT 0.52f
 #define TIMER_SPIKE 0.3f
 #define	TIMER_PLAYER_MOB 0.5f
+#define TIMER_INVINCIBLE 2.f
 
 #define SPIKE_VELOCITY 500.f
 
-#define PLAYER_MOB_VELOCITY_X 500.f
-#define PLAYER_MOB_VELOCITY_Y 280.f
+#define PLAYER_MOB_VELOCITY_X 350.f
+#define PLAYER_MOB_VELOCITY_Y 120.f
 
 #define PLAYER_MOB_MARGE 2.f
+
+#define PLAYER_COLLISION_WIDTH 4.f
+#define PLAYER_COLLISION_HEIGHT 32.f
 
 typedef enum SpikeSide
 {
@@ -112,6 +116,8 @@ typedef struct Action
 	sfBool isTransitioning;
 	sfBool isAttacking;
 	sfBool degatsEnable;
+
+	sfBool isInvincible;
 	
 }Action;
 
@@ -158,6 +164,8 @@ typedef struct Stats
 
 	float timerAttack;
 
+	float timerInvincible;
+
 }Stats;
 
 typedef struct Shape
@@ -168,6 +176,10 @@ typedef struct Shape
 
 	sfRectangleShape* collisionAttackShape;
 	sfFloatRect collisionAttackRect;
+
+	sfRectangleShape* rectCollisionPlayerMob;
+	sfFloatRect hitRectCollisionPlayerMob;
+
 }Shape;
 
 typedef struct Player
