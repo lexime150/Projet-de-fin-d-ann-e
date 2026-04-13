@@ -115,7 +115,7 @@ typedef struct Action
 
 	sfBool isTransitioning;
 	sfBool isAttacking;
-	sfBool degatsEnable;
+	sfBool damageEnable;
 
 	sfBool isInvincible;
 	

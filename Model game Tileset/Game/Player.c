@@ -46,7 +46,7 @@ void LoadAnimationPlayer(void)
 	player.animationPlayer[IDLE] = CreateAnimation(player.sprite, 5, 7, sfTrue, sfTrue, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 9, sfTrue, sfTrue, firstFrame);
+	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 11, sfTrue, sfTrue, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[TURN] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
@@ -165,9 +165,9 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 			if (mob[i].currentState == ATTACK_MOB && player.data.timerInvincible > TIMER_INVINCIBLE)
 			{
-				if (mob[i].currentMobAnimation->currentFrame == (mob[i].currentMobAnimation->frameCount - 2) && !player.action.degatsEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
+				if (mob[i].currentMobAnimation->currentFrame == (mob[i].currentMobAnimation->frameCount - 2) && !player.action.damageEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 				{
-					player.action.degatsEnable = sfTrue;
+					player.action.damageEnable = sfTrue;
 
 					player.data.health -= mob[i].damage + rand() % mob[i].damage;
 
@@ -177,7 +177,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 				}
 				else if (mob[i].currentMobAnimation->currentFrame != (mob[i].currentMobAnimation->frameCount - 2))
 				{
-					player.action.degatsEnable = sfFalse;
+					player.action.damageEnable = sfFalse;
 				}
 			}
 
@@ -501,7 +501,7 @@ void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey
 
 		if (player.action.isGrounded)
 		{
-			player.data.lastWallTouched = 0;
+			//player.data.lastWallTouched = 0;
 			player.action.justWallJumped = sfFalse;
 
 			if (player.action.isSliding)
@@ -523,10 +523,10 @@ void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey
 			{
 				player.data.currentWallTouched = player.action.isTouchingRightWall ? 1 : -1;
 
-				if (player.data.lastWallTouched == player.data.currentWallTouched)
-					return;
+				//if (player.data.lastWallTouched == player.data.currentWallTouched)
+				//	return;
 
-				player.data.lastWallTouched = player.data.currentWallTouched;
+				//player.data.lastWallTouched = player.data.currentWallTouched;
 
 				float wallJumpHX = 550.f;
 
@@ -566,8 +566,8 @@ void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
 	float dx = player.data.velocity.x * _dt;
 	CheckCollisionPlayerPlatformsX(dx);
 
-	if (!player.action.isTouchingLeftWall && !player.action.isTouchingRightWall)
-		player.data.lastWallTouched = 0;
+	//if (!player.action.isTouchingLeftWall && !player.action.isTouchingRightWall)
+	//	player.data.lastWallTouched = 0;
 
 	if (player.data.velocity.y < 0)
 	{
@@ -750,7 +750,7 @@ void CollisionPlayerPlatformsY(float _dy)
 			{
 				hitbox.top = platform.top - hitbox.height;
 				player.action.isGrounded = sfTrue;
-				player.data.lastWallTouched = 0;
+				//player.data.lastWallTouched = 0;
 				player.action.justWallJumped = sfFalse;
 			}
 			else if (player.data.velocity.y < 0)
@@ -784,7 +784,7 @@ void CollisionPlayerPlatformsY(float _dy)
 		{
 			hitbox.top = semi.top - hitbox.height;
 			player.action.isGrounded = sfTrue;
-			player.data.lastWallTouched = 0;
+		//	player.data.lastWallTouched = 0;
 			player.action.justWallJumped = sfFalse;
 
 
@@ -1020,7 +1020,7 @@ void BasePlayer()
 	player.action.isTouchingWall = sfFalse;
 	player.action.isWallJumping = sfFalse;
 
-	player.action.degatsEnable = sfFalse;
+	player.action.damageEnable = sfFalse;
 	player.action.isInvincible = sfFalse;
 
 	player.data.position = sfSprite_getPosition(player.sprite);
@@ -1036,7 +1036,7 @@ void BasePlayer()
 	snprintf(player.data.level, sizeof(player.data.level), "level_00");
 	printf("player level: %s\n", player.data.level);
 	player.data.attackCooldownTimer = 0.5f;
-	player.data.lastWallTouched = 0;
+	//player.data.lastWallTouched = 0;
 
 	player.data.maxHealth = 200;
 	player.data.health = player.data.maxHealth;

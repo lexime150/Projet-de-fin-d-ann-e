@@ -117,6 +117,8 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.hp = 180;
 		newMob.damage = SKELETON_DEGATS;
 
+		newMob.isGrounded = sfFalse;
+
 		//----Attack Rect
 
 		sfRectangleShape_setSize(newMob.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON, HITBOX_SKELETON_WIDTH });
@@ -429,15 +431,16 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 	{
 		hitPlat = GetMapCollision(i);
 		hitMob = mob[_i].hitRect;
-
+		mob[_i].isGrounded = sfFalse;
 
 		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection))
 		{
-			if (intersection.width > intersection.height) //&& !platTransition)
+			if (intersection.width > intersection.height && !platTransition)
 			{
 				if (mob[_i].velocity.y >= 0)
 				{
-					mob[_i].act = IS_GROUNDED_MOB;
+
+					mob[_i].isGrounded = sfTrue;
 					mob[_i].velocity.y = 0;
 					sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { sfSprite_getPosition(mob[_i].sprite).x, hitPlat.top + 1.f });
 				}
@@ -451,11 +454,14 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 	{
 		hitSemiPlat = GetSemiSolidCollisionTab(i);
 		hitMob = mob[_i].hitRect;
+		mob[_i].isGrounded = sfFalse;
 	
 		if (sfFloatRect_intersects(&hitSemiPlat, &hitMob, &intersection))
 		{
 			if (mob[_i].velocity.y > 0)
 			{
+
+				mob[_i].isGrounded = sfTrue;
 				mob[_i].velocity.y = 0;
 				posMob.y -= intersection.height;
 			}
@@ -515,7 +521,7 @@ void StateMob(float _dt, unsigned _i)
 					mob[_i].act = IS_TAKE_HIT;
 					mob[_i].timer.timerTakeHit = 0;
 				}
-				else if (mob[_i].act == IS_TAKE_HIT)
+				else if (mob[_i].act == IS_TAKE_HIT && mob[_i].timer.timerTakeHit > mob[_i].timer.timerTakeHitLimit)
 				{
 					StateMobMachine(IDLE_MOB, _i);
 					mob[_i].act = IS_IDLE;
@@ -562,7 +568,7 @@ void StateMob(float _dt, unsigned _i)
 		}
 
 	}
-	else if (mob[_i].hp <= 0 && mob[_i].act != IS_DEATH)
+	else if (mob[_i].hp <= 0 && mob[_i].act != IS_DEATH && mob[_i].currentMobAnimation->isPlaying)
 	{
 		mob[_i].act = IS_DEATH;
 		player.data.keyNumber++;
@@ -667,7 +673,7 @@ void SetVelocity(unsigned _i, float _dt)
 		mob[_i].velocity.x = 0;
 	}
 
-	if (mob[_i].act != IS_GROUNDED_MOB)
+	if (!mob[_i].isGrounded)
 	{
 		mob[_i].velocity.y += GRAVITY * _dt;
 	}
