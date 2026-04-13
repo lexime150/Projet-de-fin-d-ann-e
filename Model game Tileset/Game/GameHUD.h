@@ -3,6 +3,7 @@
 
 #include "Common.h"
 #include "Player.h"
+#include "Mob.h"
 typedef struct HUD
 {
 	sfSprite* healthBarContainerSprite;
@@ -10,8 +11,11 @@ typedef struct HUD
 	sfTexture* healthBarTexture;
 
 	sfSprite* keyFragmentSprite;
+	sfTexture* keyFragmentTexture;
 	sfText* keyFragmentText;
 	sfFont* font;
+
+	char buffer[16];
 
 }HUD;
 

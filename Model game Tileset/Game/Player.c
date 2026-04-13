@@ -1098,7 +1098,7 @@ void CollisionPlayerTrigger()
 
 		if (sfFloatRect_intersects(&player.shape.collisionPlayerRect, &trigger, NULL))
 		{
-			if (keyIsPressed && !keyWasPressed)
+			if (keyIsPressed && !keyWasPressed && player.data.keyNumber >= GetMobCount())
 			{
 				player.data.velocity.x = 0;
 				player.data.velocity.y = 0;

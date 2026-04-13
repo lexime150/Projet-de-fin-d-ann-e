@@ -2,18 +2,23 @@
 Player player;
 HUD hud;
 
+
 void CreateHealthBarHUD();
 void CreateKeyNumHUD();
 
 void LoadHUD()
 {
 	CreateHealthBarHUD();
+	CreateKeyNumHUD();
 }
 
 void DrawHUD(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_drawSprite(_renderWindow, hud.healthBarSprite, NULL);
 	sfRenderWindow_drawSprite(_renderWindow, hud.healthBarContainerSprite, NULL);
+
+	sfRenderWindow_drawSprite(_renderWindow, hud.keyFragmentSprite, NULL);
+	sfRenderWindow_drawSprite(_renderWindow, hud.keyFragmentText, NULL);
 }
 
 void UpdateHUD()
@@ -29,6 +34,9 @@ void UpdateHUD()
 	{
 		player.data.health = player.data.maxHealth;
 	}
+
+	snprintf(hud.buffer, sizeof(hud.buffer), "%d/%d", player.data.keyNumber, GetMobCount());
+	sfText_setString(hud.keyFragmentText, hud.buffer);
 }
 
 void CleanupHUD()
@@ -60,4 +68,23 @@ void CreateHealthBarHUD()
 void CreateKeyNumHUD()
 {
 
+	hud.keyFragmentSprite = sfSprite_create();
+	hud.keyFragmentTexture = sfTexture_createFromFile("Assets/Sprites/HUD/Keys.png", NULL);
+	sfIntRect keyFragmentRect = { 48,0,16,16 };
+	sfSprite_setTexture(hud.keyFragmentSprite, hud.keyFragmentTexture, sfTrue);
+	sfSprite_setTextureRect(hud.keyFragmentSprite, keyFragmentRect);
+	sfSprite_setScale(hud.keyFragmentSprite, (sfVector2f) { GAME_SCALE * 1.15, GAME_SCALE * 1.15 });
+	sfFloatRect keyFragmentBound = sfSprite_getGlobalBounds(hud.keyFragmentSprite);
+	sfSprite_setPosition(hud.keyFragmentSprite, (sfVector2f) {SCREEN_WIDTH - keyFragmentBound.width * 1.2, 2 * GAME_SCALE});
+	keyFragmentBound = sfSprite_getGlobalBounds(hud.keyFragmentSprite);
+
+	hud.keyFragmentText = sfText_create();
+	hud.font = sfFont_createFromFile("Assets/Fonts/Arcade.ttf");
+
+	sfText_setFont(hud.keyFragmentText, hud.font);
+	sfText_setCharacterSize(hud.keyFragmentText, 28);
+	sfText_setString(hud.keyFragmentText, "0/mobCount");
+	sfText_getGlobalBounds(hud.keyFragmentText);
+	sfFloatRect keyFragmentTextBound = sfText_getGlobalBounds(hud.keyFragmentText);
+	sfText_setPosition(hud.keyFragmentText, (sfVector2f) {keyFragmentBound.left - keyFragmentTextBound.width / 2, keyFragmentBound.top + keyFragmentTextBound.height /2 + 10});
 }
