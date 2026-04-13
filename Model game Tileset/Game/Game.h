@@ -13,6 +13,8 @@
 #include "GameHUD.h"
 
 #include "Key.h"
+#include "Collectibles.h"
+
 
 void LoadGame(void);
 void PollEventGame(sfRenderWindow* _renderWindow);

@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.c" />
     <ClCompile Include="Camera.c" />
+    <ClCompile Include="Collectibles.c" />
     <ClCompile Include="Game.c" />
     <ClCompile Include="GameHUD.c" />
     <ClCompile Include="GameOver.c" />
@@ -154,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collectibles.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="cute_tiled.h" />
     <ClInclude Include="Game.h" />

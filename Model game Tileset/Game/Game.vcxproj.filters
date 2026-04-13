@@ -70,7 +70,10 @@
       <Filter>Fichiers sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Key.c">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Collectibles.c">
+      <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="Key.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Collectibles.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

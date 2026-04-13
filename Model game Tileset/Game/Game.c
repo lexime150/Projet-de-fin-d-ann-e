@@ -97,6 +97,8 @@ void UpdateGame(float _dt)
 	UpdateMob(NULL, _dt);
 	UpdateHUD();
 	UpdateTransition(_dt);
+
+	UpdateOrb(_dt);
 }
 
 void DrawGame(sfRenderWindow* _renderWindow)
@@ -106,6 +108,9 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawMob(_renderWindow);
 	DrawKey(_renderWindow);
 	DrawPlayer(_renderWindow);
+
+	DrawOrb(_renderWindow);
+
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);
 	if (player.action.isTransitioning)
@@ -139,7 +144,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadMap(save->level);
 		LoadPlayer(save);
 		SetSavedStat(save);
-
+		LoadOrb();
 		LoadCamera();
 		LoadMob();
 		LoadHUD();
@@ -148,11 +153,12 @@ void CheckSaveAndLoadLevel(int _slot)
 	{
 		LoadMap("level_00");
 		LoadPlayer(save);
+		LoadOrb();
+
 		LoadCamera();
 		LoadMob();
 		LoadHUD();
 	}
-
 
 }
 
