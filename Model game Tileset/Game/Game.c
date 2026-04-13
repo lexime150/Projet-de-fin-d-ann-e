@@ -159,7 +159,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadMob();
 		LoadHUD();
 	}
-
+	AddOrb(GetPlayerSpawn().x, GetPlayerSpawn().y - 150);
 }
 
 void ChangeLevel(const char* _level)

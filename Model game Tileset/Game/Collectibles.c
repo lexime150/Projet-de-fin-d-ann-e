@@ -42,7 +42,7 @@ void AddOrb(float _x, float _y)
 	orbCount++;
 }
 
-static void ApplyPhysicsOrb(unsigned i, float _dt)
+void ApplyPhysicsOrb(unsigned i, float _dt)
 {
 	if (!orb[i].isGrounded)
 	{
@@ -56,7 +56,7 @@ static void ApplyPhysicsOrb(unsigned i, float _dt)
 	}
 }
 
-static sfBool CollisionOrbX(unsigned i, float _dx)
+sfBool CollisionOrbX(unsigned i, float _dx)
 {
 	sfFloatRect bounds = sfSprite_getGlobalBounds(orb[i].orbSprite);
 	sfVector2f  pos = sfSprite_getPosition(orb[i].orbSprite);
@@ -123,7 +123,7 @@ static sfBool CollisionOrbX(unsigned i, float _dx)
 	return sfFalse;
 }
 
-static sfBool CollisionOrbY(unsigned i, float _dy)
+sfBool CollisionOrbY(unsigned i, float _dy)
 {
 	sfFloatRect bounds = sfSprite_getGlobalBounds(orb[i].orbSprite);
 	sfVector2f  pos = sfSprite_getPosition(orb[i].orbSprite);
@@ -193,7 +193,10 @@ void UpdateOrb(float _dt)
 		{
 			orb[i].velocity.x *= 0.85f;
 			if (fabsf(orb[i].velocity.x) < 1.f)
+			{
 				orb[i].velocity.x = 0.f;
+
+			}
 		}
 
 		float dx = orb[i].velocity.x * _dt;

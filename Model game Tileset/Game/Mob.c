@@ -482,6 +482,7 @@ void StateMob(float _dt, unsigned _i)
 	{
 		mob[_i].act = IS_DEATH;
 		player.data.keyNumber++;
+
 		StateMobMachine(DEATH, _i);
 		mob[_i].velocity.x = 0.f;
 	}
