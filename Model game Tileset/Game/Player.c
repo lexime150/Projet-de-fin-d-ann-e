@@ -46,7 +46,7 @@ void LoadAnimationPlayer(void)
 	player.animationPlayer[IDLE] = CreateAnimation(player.sprite, 5, 7, sfTrue, sfTrue, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 9, sfTrue, sfTrue, firstFrame);
+	player.animationPlayer[RUN] = CreateAnimation(player.sprite, 6, 11, sfTrue, sfTrue, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[TURN] = CreateAnimation(player.sprite, 4, 7, sfTrue, sfTrue, firstFrame);
@@ -165,9 +165,9 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 			if (mob[i].currentState == ATTACK_MOB && player.data.timerInvincible > TIMER_INVINCIBLE)
 			{
-				if (mob[i].currentMobAnimation->currentFrame == (mob[i].currentMobAnimation->frameCount - 2) && !player.action.degatsEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
+				if (mob[i].currentMobAnimation->currentFrame == (mob[i].currentMobAnimation->frameCount - 2) && !player.action.damageEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 				{
-					player.action.degatsEnable = sfTrue;
+					player.action.damageEnable = sfTrue;
 
 					player.data.health -= mob[i].damage + rand() % mob[i].damage;
 
@@ -177,7 +177,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 				}
 				else if (mob[i].currentMobAnimation->currentFrame != (mob[i].currentMobAnimation->frameCount - 2))
 				{
-					player.action.degatsEnable = sfFalse;
+					player.action.damageEnable = sfFalse;
 				}
 			}
 
@@ -501,7 +501,6 @@ void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey
 
 		if (player.action.isGrounded)
 		{
-
 			player.action.justWallJumped = sfFalse;
 
 			if (player.action.isSliding)
@@ -522,7 +521,6 @@ void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey
 			if (CheckCollisionPlayerPlatformsX(dx))
 			{
 				player.data.currentWallTouched = player.action.isTouchingRightWall ? 1 : -1;
-
 
 				float wallJumpHX = 550.f;
 
@@ -561,7 +559,6 @@ void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
 {
 	float dx = player.data.velocity.x * _dt;
 	CheckCollisionPlayerPlatformsX(dx);
-
 
 	if (player.data.velocity.y < 0)
 	{
@@ -1014,7 +1011,7 @@ void BasePlayer()
 	player.action.isTouchingWall = sfFalse;
 	player.action.isWallJumping = sfFalse;
 
-	player.action.degatsEnable = sfFalse;
+	player.action.damageEnable = sfFalse;
 	player.action.isInvincible = sfFalse;
 
 	player.data.position = sfSprite_getPosition(player.sprite);

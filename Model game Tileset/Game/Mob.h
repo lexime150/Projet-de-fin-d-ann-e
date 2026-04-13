@@ -133,6 +133,7 @@ typedef struct Mob
 	unsigned damage;
 
 	sfBool isDead;
+	sfBool isGrounded;
 
 }Mob;
 
