@@ -2,7 +2,7 @@
 
 Items* item;
 unsigned itemCount;
-
+Player player;
 sfTexture* healthTexture;
 sfTexture* keyTexture;
 
@@ -35,7 +35,7 @@ void Additem(ItemType _itemType, float _x, float _y)
 	int direction = (rand() % 2 == 0) ? -1 : 1;
 	newitem.velocity.x = direction * (rand() % (120 - 80 + 1) + 80);
 	newitem.velocity.y = -200.f;
-	
+
 
 	newitem.itemSprite = sfSprite_create();
 	switch (_itemType)
@@ -43,7 +43,7 @@ void Additem(ItemType _itemType, float _x, float _y)
 	case ITEM_HEALTH:
 		sfSprite_setTexture(newitem.itemSprite, healthTexture, sfTrue);
 		newitem.type = ITEM_HEALTH;
-		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE*1.2, GAME_SCALE*1.2 });
+		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE * 1.2, GAME_SCALE * 1.2 });
 		break;
 	case ITEM_KEY:
 		sfSprite_setTexture(newitem.itemSprite, keyTexture, sfTrue);
@@ -57,7 +57,7 @@ void Additem(ItemType _itemType, float _x, float _y)
 		break;
 	}
 
-	
+
 	sfSprite_setPosition(newitem.itemSprite, (sfVector2f) { _x, _y });
 	newitem.itemPosition = sfSprite_getPosition(newitem.itemSprite);
 
@@ -100,23 +100,30 @@ sfBool CollisionitemX(unsigned i, float _dx)
 		return sfTrue;
 	}
 
-	// Vérifie les semi-solides aussi
 	for (unsigned j = 0; j < GetSemiSolidCollisionTabSize(); j++)
 	{
 		sfFloatRect semi = GetSemiSolidCollisionTab(j);
 		if (!sfFloatRect_intersects(&hitbox, &semi, NULL))
+		{
 			continue;
 
+		}
+
 		if (item[i].velocity.x > 0.f)
+		{
 			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { semi.left - bounds.width, pos.y });
+
+		}
 		else if (item[i].velocity.x < 0.f)
+		{
 			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { semi.left + semi.width, pos.y });
+
+		}
 
 		item[i].velocity.x = 0.f;
 		return sfTrue;
 	}
 
-	// Si au sol, vérifie qu'il y a du sol devant avant de bouger
 	if (item[i].isGrounded)
 	{
 		sfFloatRect groundCheck = { pos.x + _dx, pos.y + bounds.height + 1.f, bounds.width, 2.f };
@@ -124,7 +131,7 @@ sfBool CollisionitemX(unsigned i, float _dx)
 
 		for (unsigned j = 0; j < GetCollisionTabSize(); j++)
 		{
-		sfFloatRect collision = GetMapCollision(j);
+			sfFloatRect collision = GetMapCollision(j);
 			if (sfFloatRect_intersects(&groundCheck, &collision, NULL))
 			{
 				groundFound = sfTrue;
@@ -243,16 +250,29 @@ void Drawitem(sfRenderWindow* _renderWindow)
 
 void Cleanupitem(void)
 {
+	sfTexture_destroy(healthTexture);
+	sfTexture_destroy(keyTexture);
+	healthTexture = NULL;
+	keyTexture = NULL;
+
+
 	for (unsigned i = 0; i < itemCount; i++)
 	{
-
 		sfSprite_destroy(item[i].itemSprite);
-	}
 
+		item[i] = (Items){ 0 };
+	}
+	itemCount = 0;
 	free(item);
 	item = NULL;
-	itemCount = 0;
 
-	sfTexture_destroy(healthTexture);
-	healthTexture = NULL;
+}
+
+void GetItemDistance(unsigned _index)
+{
+	sfVector2f distance;
+
+	distance.x = sfSprite_getPosition(item[_index].itemSprite).x - sfSprite_getPosition(player.sprite).x;
+	distance.y = sfSprite_getPosition(item[_index].itemSprite).y - sfSprite_getPosition(player.sprite).y;
+	return distance;
 }

@@ -125,6 +125,7 @@ void CleanupGame(void)
 	CleanupMap();
 	CleanUpPlayer();
 	CleanUpCamera();
+	Cleanupitem();
 	SavePlayer(playerSaveData.save);
 }
 
@@ -171,11 +172,13 @@ void ChangeLevel(const char* _level)
 	CleanupMap();
 	CleanupHUD();
 	CleanUpCamera();
+	Cleanupitem();
 
 	LoadMap(player.data.level);
 	LoadCamera();
 	LoadMob();
 	LoadHUD();
+	Loaditem();
 
 
 	player.data.position = GetPlayerSpawn();
