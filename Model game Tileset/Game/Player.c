@@ -24,6 +24,8 @@ void CheckCollisionPlayerAttackMob(float _dt);
 void CheckCollisionPlayerMob(float _dt);
 void CollisionPlayerTrigger();
 void CollisionPlayerDeathZone();
+
+void CollisionPlayerItems(unsigned index);
 float RandomFloat(float min, float max);
 
 void BasePlayer();
@@ -1159,6 +1161,11 @@ void StateMachine(PlayerState _state)
 		return;
 	}
 	SetAnimation(_state);
+}
+
+void CollisionPlayerItems(unsigned index)
+{
+
 }
 
 float RandomFloat(float min, float max)
