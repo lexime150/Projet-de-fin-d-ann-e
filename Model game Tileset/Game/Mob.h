@@ -50,10 +50,19 @@
 
 //Timer
 
-#define TIMER_ATTACK_SKELETON 1.1f
-#define TIMER_TAKE_HIT_SKELETON 1.f
+#define TIMER_ATTACK_SKELETON 0.4f
+#define TIMER_TAKE_HIT_SKELETON 0.35f
+
+#define SKELETON_KNOCKBACK_
+
 
 #define SKELETON_DEGATS 25
+
+
+
+
+#define MOB_ATTACK_PLAYER_VELOCITY_X 200.f
+#define MOB_ATTACK_PLAYER_VELOCITY_Y 50.f 
 
 
 typedef enum MobState
@@ -85,6 +94,16 @@ typedef enum MobAct
 	IS_GROUNDED_MOB
 }MobAct;
 
+typedef enum MobSide
+{
+	LEFT_MOB,
+	TOP_MOB,
+	WIDTH_MOB,
+	HEIGHT_MOB,
+	NOTHING_MOB
+}MobSide;
+
+
 typedef struct Timer
 {
 	float timerAttack;
@@ -92,6 +111,9 @@ typedef struct Timer
 
 	float timerAttackLimit;
 	float timerTakeHitLimit;
+
+	float timerKnockBack;
+	float timerKnockBackLimit;
 
 }Timer;
 
@@ -109,6 +131,8 @@ typedef struct Mob
 	Animation* currentMobAnimation;
 
 	MobAct act;
+
+	MobSide side;
 
 	MobState lastState;
 	MobState currentState;
