@@ -1,18 +1,4 @@
-<<<<<<< HEAD
 ﻿  Collectibles.c
-  Game.c
-  Génération de code en cours...
   Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
   'pwsh.exe' n'est pas reconnu en tant que commande interne
   ou externe, un programme exécutable ou un fichier de commandes.
-=======
-﻿  Mob.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(43,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(324,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(329,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(342,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(450,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(593,1): warning C4715: 'GetDistancePlayerMobX' : les chemins de contrôle ne retournent pas tous une valeur
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(610,1): warning C4715: 'GetDistancePlayerMobY' : les chemins de contrôle ne retournent pas tous une valeur
-  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
->>>>>>> bug-fixed

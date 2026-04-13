@@ -30,7 +30,7 @@ void AddOrb(float _x, float _y)
 	newOrb.isGrounded = sfFalse;
 
 	int direction = (rand() % 2 == 0) ? -1 : 1;
-	newOrb.velocity.x = direction * 80.f;
+	newOrb.velocity.x = direction * 120.f;
 	newOrb.velocity.y = -200.f;
 
 	newOrb.orbSprite = sfSprite_create();

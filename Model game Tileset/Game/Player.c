@@ -171,7 +171,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 					player.data.health -= mob[i].damage + rand() % mob[i].damage;
 
-					player.data.health -= mob[i].degats + rand() % mob[i].degats;
+					player.data.health -= mob[i].damage + rand() % mob[i].damage;
 					
 
 				}
