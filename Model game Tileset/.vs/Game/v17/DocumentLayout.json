@@ -77,12 +77,32 @@
           "SelectedChildIndex": 2,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Mob.h",
+              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.h",
+              "RelativeDocumentMoniker": "Game\\Mob.h",
+              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.h",
+              "RelativeToolTip": "Game\\Mob.h",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAEAAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-04-10T07:34:06.78Z",
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Player.h",
+              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.h",
+              "RelativeDocumentMoniker": "Game\\Player.h",
+              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.h",
+              "RelativeToolTip": "Game\\Player.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHUAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-04-10T07:34:06.781Z",
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -92,10 +112,33 @@
               "RelativeDocumentMoniker": "Game\\Mob.c",
               "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.c",
               "RelativeToolTip": "Game\\Mob.c",
-              "ViewState": "AgIAAB0CAAAAAAAAAAAYwCwCAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACwCAAAAAAAAAAAAAD4CAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-04-13T11:13:46.085Z",
+              "IsPinned": true,
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Player.c",
+              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c",
+              "RelativeDocumentMoniker": "Game\\Player.c",
+              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c",
+              "RelativeToolTip": "Game\\Player.c",
+              "ViewState": "AgIAAGECAAAAAAAAAAAtwH4CAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-04-10T07:34:06.846Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
@@ -119,8 +162,7 @@
               "RelativeToolTip": "Game\\Collectibles.c",
               "ViewState": "AgIAABAAAAAAAAAAAAAuwCUAAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-04-13T09:59:06.72Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-13T09:59:06.72Z"
             },
             {
               "$type": "Document",
@@ -133,19 +175,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFgAAABqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-04-13T08:00:15.865Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Mob.h",
-              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.h",
-              "RelativeDocumentMoniker": "Game\\Mob.h",
-              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.h",
-              "RelativeToolTip": "Game\\Mob.h",
-              "ViewState": "AgIAAFIAAAAAAAAAAAAtwG4AAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-10T07:34:06.78Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -197,19 +226,6 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Player.c",
-              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c",
-              "RelativeDocumentMoniker": "Game\\Player.c",
-              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c",
-              "RelativeToolTip": "Game\\Player.c",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAAADAAAABDAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-04-10T07:34:06.846Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 14,
               "Title": "GameHUD.h",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\GameHUD.h",
@@ -243,19 +259,6 @@
               "ViewState": "AgIAAA0AAAAAAAAAAAAcwCcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-04-10T07:52:31.673Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Player.h",
-              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.h",
-              "RelativeDocumentMoniker": "Game\\Player.h",
-              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.h",
-              "RelativeToolTip": "Game\\Player.h",
-              "ViewState": "AgIAAE4AAAAAAAAAAAAAAHUAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-10T07:34:06.781Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",

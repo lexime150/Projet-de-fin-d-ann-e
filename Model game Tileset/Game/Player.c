@@ -136,7 +136,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 	{
 		if (mob[i].act != IS_DEATH)
 		{
-			if (mob[i].act == IS_ATTACK && mob[i].timer.timerAttack > mob[i].timer.timerAttackLimit)
+			if (mob[i].act == IS_ATTACK)// && mob[i].timer.timerAttack > mob[i].timer.timerAttackLimit)
 			{
 
 				StateMobMachine(ATTACK_MOB, i);
