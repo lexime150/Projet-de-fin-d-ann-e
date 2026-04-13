@@ -91,7 +91,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.timer.timerAttackLimit = TIMER_ATTACK_MUSHROOM;
 		newMob.timer.timerTakeHitLimit = TIMER_TAKE_HIT_MUSHROOM;
 		newMob.hp = 300;
-		newMob.degats = MUSHROOM_DEGATS;
+		newMob.damage = MUSHROOM_DEGATS;
 
 		//----AttackRect
 
@@ -115,7 +115,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.timer.timerAttackLimit = TIMER_ATTACK_SKELETON;
 		newMob.timer.timerTakeHitLimit = TIMER_TAKE_HIT_SKELETON;
 		newMob.hp = 180;
-		newMob.degats = SKELETON_DEGATS;
+		newMob.damage = SKELETON_DEGATS;
 
 		//----Attack Rect
 
@@ -142,7 +142,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 	sfRectangleShape_setPosition(newMob.rect, sfSprite_getPosition(newMob.sprite));
 
 	sfRectangleShape_setScale(newMob.collisionRect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-
+	newMob.isDead = sfFalse;
 	newMob.act = IS_IDLE;
 
 	mob[mobCount] = newMob;
@@ -481,6 +481,7 @@ void StateMob(float _dt, unsigned _i)
 	else if (mob[_i].hp <= 0 && mob[_i].act != IS_DEATH)
 	{
 		mob[_i].act = IS_DEATH;
+		player.data.keyNumber++;
 		StateMobMachine(DEATH, _i);
 		mob[_i].velocity.x = 0.f;
 	}

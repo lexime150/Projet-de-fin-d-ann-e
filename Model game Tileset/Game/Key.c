@@ -80,7 +80,7 @@ void DrawKey(sfRenderWindow* _renderWindow)
 
 	for (int i = 0; i < KEY_NUMBER; i++)
 	{
-	//	sfRenderWindow_drawSprite(_renderWindow, key[i].keySprite, NULL);
+		//sfRenderWindow_drawSprite(_renderWindow, key[i].keySprite, NULL);
 	}
 }
 

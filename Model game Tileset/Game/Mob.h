@@ -130,9 +130,9 @@ typedef struct Mob
 
 	float rangeMove;
 	float rangeAttack;
-	unsigned degats;
+	unsigned damage;
 
-
+	sfBool isDead;
 
 }Mob;
 

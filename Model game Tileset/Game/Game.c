@@ -3,6 +3,7 @@ void CheckSaveAndLoadLevel(int _slot);
 void ChangeLevel(const char* _level);
 void LevelTransition();
 void UpdateTransition(float _dt);
+void GivePlayerKeys();
 float transitionAlpha = 255;
 
 
@@ -16,8 +17,7 @@ void LoadGame(void)
 	int slot = playerSaveData.save;
 	CheckSaveAndLoadLevel(slot);
 	LevelTransition();
-	LoadKey();
-	printf("%f\n", sfSprite_getPosition(player.sprite).y);
+	//LoadKey();
 }
 
 void UpdateTransition(float _dt)
@@ -37,6 +37,12 @@ void UpdateTransition(float _dt)
 	}
 
 	sfRectangleShape_setFillColor(transitionShape,sfColor_fromRGBA(0, 0, 0, (sfUint8)transitionAlpha));
+}
+void GivePlayerKeys()
+{
+
+
+
 }
 void PollEventGame(sfRenderWindow* _renderWindow)
 {

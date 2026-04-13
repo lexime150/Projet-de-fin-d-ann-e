@@ -33,8 +33,6 @@ void UpdateAttackShape();
 void CheckPlayerHP(void);
 
 
-
-
 void LoadPlayer(PlayerSaveData* save)
 {
 	BasePlayer();
@@ -127,12 +125,12 @@ void UpdatePlayer(float _dt)
 
 	CheckPlayerHP();
 	UpdateAnimation(player.currentAnimation, _dt);
-
+	printf("player key number: %d\n", player.data.keyNumber);
 }
 
 void CheckCollisionPlayerAttackMob(float _dt)
 {
-	
+
 
 	for (int i = 0; i < GetMobCount(); i++)
 	{
@@ -152,7 +150,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 		}
 	}
 
-	
+
 
 	sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player.sprite);
 	sfFloatRect hitMob = { 0 };
@@ -175,7 +173,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 				if (mob[i].currentMobAnimation->currentFrame == (mob[i].currentMobAnimation->frameCount - 2) && !player.action.degatsEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 				{
 					player.action.degatsEnable = sfTrue;
-					player.data.health -= mob[i].degats + rand() % mob[i].degats;
+					player.data.health -= mob[i].damage + rand() % mob[i].damage;
 
 				}
 				else if (mob[i].currentMobAnimation->currentFrame != (mob[i].currentMobAnimation->frameCount - 2))
@@ -214,11 +212,11 @@ void CheckCollisionPlayerMob(float _dt)
 				player.action.isSlideJumping = sfFalse;
 				player.action.isTouchingWall = sfFalse;
 
-				if (playerCenterX > (mobCenterX) + PLAYER_MOB_MARGE)
+				if (playerCenterX > (mobCenterX)+PLAYER_MOB_MARGE)
 				{
 					player.side = LEFT_PLAYER;
 				}
-				else if (playerCenterX < (mobCenterX) - PLAYER_MOB_MARGE)
+				else if (playerCenterX < (mobCenterX)-PLAYER_MOB_MARGE)
 				{
 					player.side = WIDTH_PLAYER;
 				}
@@ -244,7 +242,7 @@ void CheckCollisionPlayerMob(float _dt)
 			sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
 			player.data.velocity.x = -PLAYER_MOB_VELOCITY_X;
 		}
-	
+
 		player.side = NOTHING_PLAYER;
 	}
 
@@ -285,243 +283,216 @@ void createCollisionAttack()
 	}
 
 }
-void MovePlayer(float _dt)
+
+void ApplyHorizontalInput(sfBool movingLeft, sfBool movingRight)
 {
-	//player.data.timerTakeIt += _dt;
-
-	if (player.data.knockBackTimer > 0.f)
+	if (movingRight)
 	{
-		player.data.knockBackTimer -= _dt;
-		return;
+		player.data.velocity.x = player.data.speed;
+		player.data.lastDirection = 1;
+		player.action.isMoving = sfTrue;
+		sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	}
+	else if (movingLeft)
+	{
+		player.data.velocity.x = -player.data.speed;
+		player.data.lastDirection = -1;
+		player.action.isMoving = sfTrue;
+		sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+	}
+	else
+	{
+		player.data.velocity.x = 0;
+		player.action.isMoving = sfFalse;
+	}
+}
 
-	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
-	sfBool movingRight = sfKeyboard_isKeyPressed(sfKeyD);
-	sfBool slideKey = sfKeyboard_isKeyPressed(sfKeyLControl) || sfKeyboard_isKeyPressed(sfKeyRControl);
-	sfBool jumpKey = sfKeyboard_isKeyPressed(sfKeySpace);
 
-	static sfBool jumpPressed = sfFalse;
-
+void HandleAttackInput(float _dt, sfBool movingLeft, sfBool movingRight)
+{
 	player.data.attackCooldownTimer += _dt;
 
-	if (player.data.slideCooldownTimer > 0.f)
-	{
-		player.data.slideCooldownTimer -= _dt;
-	}
-
-	if (sfMouse_isButtonPressed(sfMouseLeft) && player.data.attackCooldownTimer >= ATTACK_AXE_COOLDOWN && player.action.isGrounded)
+	if (sfMouse_isButtonPressed(sfMouseLeft) &&
+		player.data.attackCooldownTimer >= ATTACK_AXE_COOLDOWN &&
+		player.action.isGrounded)
 	{
 		createCollisionAttack();
 		player.action.isAttacking = sfTrue;
 		player.data.attackCooldownTimer = 0.f;
 		player.data.velocity.x = 0;
-
 		sfSound_setPitch(player.sound.axeSound, RandomFloat(0.8f, 1.2f));
 		sfSound_play(player.sound.axeSound);
-
 		StateMachine(AXE);
-
 	}
 
-	if (sfMouse_isButtonPressed(sfMouseRight) && player.data.attackCooldownTimer >= ATTACK_SWORD_COOLDOWN && player.action.isGrounded)
+	if (sfMouse_isButtonPressed(sfMouseRight) &&
+		player.data.attackCooldownTimer >= ATTACK_SWORD_COOLDOWN &&
+		player.action.isGrounded)
 	{
 		createCollisionAttack();
 		player.action.isAttacking = sfTrue;
 		player.data.attackCooldownTimer = 0.f;
-
 		sfSound_setPitch(player.sound.swordSound, RandomFloat(0.9f, 1.2f));
 		sfSound_play(player.sound.swordSound);
-
 		StateMachine(SWORD);
 	}
-	if (player.action.isAttacking && player.currentState == AXE)
+}
+
+
+sfBool HandleAttackState(sfBool movingLeft, sfBool movingRight)
+{
+	if (!player.action.isAttacking)
+	{
+		return sfFalse;
+
+	}
+
+	if (player.currentState == AXE)
 	{
 		player.data.velocity.x = 300 * player.data.lastDirection;
+
 		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
 		{
 			sfRectangleShape_destroy(player.shape.collisionAttackShape);
 			player.action.isAttacking = sfFalse;
-
-			if (player.action.isGrounded)
-			{
-				StateMachine(player.action.isMoving ? RUN : IDLE);
-			}
-			else
-			{
-				StateMachine(FALL);
-			}
+			StateMachine(player.action.isGrounded ? (player.action.isMoving ? RUN : IDLE) : FALL);
 		}
-		return;
-	}
-	if (player.action.isAttacking && player.currentState == SWORD)
-	{
-
-		player.data.velocity.x = 500 * player.data.lastDirection;
-		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
-		{
-			sfRectangleShape_destroy(player.shape.collisionAttackShape);
-
-			player.action.isAttacking = sfFalse;
-			if (player.action.isGrounded)
-			{
-				StateMachine(player.action.isMoving ? RUN : IDLE);
-			}
-			else
-			{
-				StateMachine(FALL);
-			}
-		}
-		return;
+		return sfTrue;
 	}
 
-
-	if (player.action.isWallJumping)
+	if (player.currentState == SWORD)
 	{
-		float sign = (player.data.wallJumpVelocityX > 0) ? 1.f : -1.f;
-		player.data.wallJumpVelocityX -= (player.data.wallJumpVelocityX > 0 ? 1.f : -1.f) * WALL_JUMP_FRICTION * _dt;
-		if (sign > 0 && player.data.wallJumpVelocityX < MIN_WALL_JUMP_SPEED)
-		{
-			player.data.wallJumpVelocityX = MIN_WALL_JUMP_SPEED;
-		}
-		if (sign < 0 && player.data.wallJumpVelocityX > -MIN_WALL_JUMP_SPEED)
-		{
-			player.data.wallJumpVelocityX = -MIN_WALL_JUMP_SPEED;
-		}
+		float horizontalInput = 0.f;
 
-		float inputVelocity = 0;
-		if (movingRight)
+		if (movingRight && player.data.lastDirection == 1)
 		{
-			inputVelocity = player.data.speed;
-		}
-		if (movingLeft)
-		{
-			inputVelocity = -player.data.speed;
-		}
-
-		player.data.velocity.x = player.data.wallJumpVelocityX + inputVelocity * 0.3f;
-
-		if (player.action.isGrounded)
-		{
-			player.action.isWallJumping = sfFalse;
-		}
-	}
-
-	else if (player.action.isSlideJumping)
-	{
-		float sign = (player.data.slideVelocityX > 0) ? 1.f : -1.f;
-		player.data.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
-
-		if (sign > 0 && player.data.slideVelocityX < MIN_SLIDE_JUMP_SPEED)
-		{
-			player.data.slideVelocityX = MIN_SLIDE_JUMP_SPEED;
-		}
-		if (sign < 0 && player.data.slideVelocityX > -MIN_SLIDE_JUMP_SPEED)
-		{
-			player.data.slideVelocityX = -MIN_SLIDE_JUMP_SPEED;
-		}
-
-		float inputVelocity = 0;
-		if (movingRight)
-		{
-			inputVelocity = player.data.speed;
-		}
-		if (movingLeft)
-		{
-			inputVelocity = -player.data.speed;
-		}
-
-		player.data.velocity.x = player.data.slideVelocityX + inputVelocity * 0.4f;
-
-		if (player.action.isGrounded)
-		{
-			player.action.isSlideJumping = sfFalse;
-		}
-	}
-
-	else if (player.action.isSliding)
-	{
-		player.data.slideTimer -= _dt;
-
-		float sign = (player.data.lastDirection > 0) ? 1.f : -1.f;
-		player.data.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
-
-		if (sign > 0 && player.data.slideVelocityX < 0)
-		{
-			player.data.slideVelocityX = 0;
-		}
-		if (sign < 0 && player.data.slideVelocityX > 0)
-		{
-			player.data.slideVelocityX = 0;
-		}
-
-		float inputVelocity = 0;
-		if (movingRight)
-		{
-			inputVelocity = player.data.speed;
-			player.data.lastDirection = 1;
-			sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-		}
-		else if (movingLeft)
-		{
-			inputVelocity = -player.data.speed;
-			player.data.lastDirection = -1;
-			sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
-		}
-
-		player.data.velocity.x = player.data.slideVelocityX + inputVelocity * 0.5f;
-
-		if (player.data.slideTimer <= 0 || !slideKey)
-		{
-			player.action.isSliding = sfFalse;
-			player.data.slideVelocityX = 0;
-			player.data.slideCooldownTimer = SLIDE_COOLDOWN;
-			StateMachine(player.action.isMoving ? RUN : IDLE);
-		}
-	}
-	// DEPLACEMENT GAUCHE DROITE
-	else
-	{
-		if (movingRight)
-		{
-			player.data.velocity.x = player.data.speed;
-			player.data.lastDirection = 1;
-			sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+			horizontalInput = player.data.speed;
 			player.action.isMoving = sfTrue;
 		}
-		else if (movingLeft)
+		else if (movingLeft && player.data.lastDirection == -1)
 		{
-			player.data.velocity.x = -player.data.speed;
-			player.data.lastDirection = -1;
-			sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+			horizontalInput = -player.data.speed;
 			player.action.isMoving = sfTrue;
 		}
-		else if (!movingLeft && !movingRight)
+		else
 		{
-			player.data.velocity.x = 0;
+			horizontalInput = 0.f;
 			player.action.isMoving = sfFalse;
 		}
 
+		player.data.velocity.x = horizontalInput;
 
-		// SLIDE
-		if (slideKey && player.action.isGrounded && !player.action.isSliding && player.data.slideCooldownTimer <= 0.f)
+
+		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
 		{
-			player.action.isSliding = sfTrue;
-			player.data.slideTimer = SLIDE_DURATION;
-			player.data.slideVelocityX = player.data.lastDirection * SLIDE_SPEED;
-			StateMachine(SLIDE);
+			sfRectangleShape_destroy(player.shape.collisionAttackShape);
+			player.action.isAttacking = sfFalse;
+			StateMachine(player.action.isGrounded ? (player.action.isMoving ? RUN : IDLE) : FALL);
 		}
+		return sfTrue;
 	}
 
+	return sfFalse;
+}
+
+
+void HandleWallJumping(float _dt, sfBool movingLeft, sfBool movingRight)
+{
+	float sign = (player.data.wallJumpVelocityX > 0) ? 1.f : -1.f;
+	player.data.wallJumpVelocityX -= sign * WALL_JUMP_FRICTION * _dt;
+
+	if (sign > 0 && player.data.wallJumpVelocityX < MIN_WALL_JUMP_SPEED)
+		player.data.wallJumpVelocityX = MIN_WALL_JUMP_SPEED;
+	if (sign < 0 && player.data.wallJumpVelocityX > -MIN_WALL_JUMP_SPEED)
+		player.data.wallJumpVelocityX = -MIN_WALL_JUMP_SPEED;
+
+	float inputVelocity = movingRight ? player.data.speed : (movingLeft ? -player.data.speed : 0);
+	player.data.velocity.x = player.data.wallJumpVelocityX + inputVelocity * 0.3f;
+
+	if (player.action.isGrounded)
+		player.action.isWallJumping = sfFalse;
+}
+
+void HandleSlideJumping(float _dt, sfBool movingLeft, sfBool movingRight)
+{
+	float sign = (player.data.slideVelocityX > 0) ? 1.f : -1.f;
+	player.data.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
+
+	if (sign > 0 && player.data.slideVelocityX < MIN_SLIDE_JUMP_SPEED)
+		player.data.slideVelocityX = MIN_SLIDE_JUMP_SPEED;
+	if (sign < 0 && player.data.slideVelocityX > -MIN_SLIDE_JUMP_SPEED)
+		player.data.slideVelocityX = -MIN_SLIDE_JUMP_SPEED;
+
+	float inputVelocity = movingRight ? player.data.speed : (movingLeft ? -player.data.speed : 0);
+	player.data.velocity.x = player.data.slideVelocityX + inputVelocity * 0.4f;
+
+	if (player.action.isGrounded)
+		player.action.isSlideJumping = sfFalse;
+}
+
+void HandleSliding(float _dt, sfBool movingLeft, sfBool movingRight, sfBool slideKey)
+{
+	player.data.slideTimer -= _dt;
+
+	float sign = (player.data.lastDirection > 0) ? 1.f : -1.f;
+	player.data.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
+
+	if (sign > 0 && player.data.slideVelocityX < 0) player.data.slideVelocityX = 0;
+	if (sign < 0 && player.data.slideVelocityX > 0) player.data.slideVelocityX = 0;
+
+	float inputVelocity = 0;
+	if (movingRight)
+	{
+		inputVelocity = player.data.speed;
+		player.data.lastDirection = 1;
+		sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+	}
+	else if (movingLeft)
+	{
+		inputVelocity = -player.data.speed;
+		player.data.lastDirection = -1;
+		sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+	}
+
+	player.data.velocity.x = player.data.slideVelocityX + inputVelocity * 0.5f;
+
+	if (player.data.slideTimer <= 0 || !slideKey)
+	{
+		player.action.isSliding = sfFalse;
+		player.data.slideVelocityX = 0;
+		player.data.slideCooldownTimer = SLIDE_COOLDOWN;
+		StateMachine(player.action.isMoving ? RUN : IDLE);
+	}
+}
+
+void HandleGroundMovement(sfBool movingLeft, sfBool movingRight, sfBool slideKey)
+{
+	ApplyHorizontalInput(movingLeft, movingRight);
+
+	if (slideKey && player.action.isGrounded && !player.action.isSliding && player.data.slideCooldownTimer <= 0.f)
+	{
+		player.action.isSliding = sfTrue;
+		player.data.slideTimer = SLIDE_DURATION;
+		player.data.slideVelocityX = player.data.lastDirection * SLIDE_SPEED;
+		StateMachine(SLIDE);
+	}
+}
+
+
+void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey)
+{
+	static sfBool jumpPressed = sfFalse;
 
 	if (jumpKey && !jumpPressed)
 	{
 		jumpPressed = sfTrue;
 		player.data.jumpStartPosition = player.data.position.y;
 
-		if (player.action.isGrounded || (player.action.isSliding && player.action.isGrounded))
+		if (player.action.isGrounded)
 		{
 			player.data.lastWallTouched = 0;
 			player.action.justWallJumped = sfFalse;
+
 			if (player.action.isSliding)
 			{
 				player.action.isSlideJumping = sfTrue;
@@ -540,15 +511,13 @@ void MovePlayer(float _dt)
 			if (CheckCollisionPlayerPlatformsX(dx))
 			{
 				player.data.currentWallTouched = player.action.isTouchingRightWall ? 1 : -1;
+
 				if (player.data.lastWallTouched == player.data.currentWallTouched)
-				{
 					return;
-				}
 
 				player.data.lastWallTouched = player.data.currentWallTouched;
 
 				float wallJumpHX = 550.f;
-
 
 				if (player.action.isTouchingRightWall && movingRight)
 				{
@@ -556,8 +525,8 @@ void MovePlayer(float _dt)
 					player.action.justWallJumped = sfTrue;
 					player.data.wallJumpVelocityX = -wallJumpHX;
 					player.data.lastDirection = -1;
+					player.data.velocity.y = -JUMP_FORCE * 0.75f;
 					sfSprite_setScale(player.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
-					player.data.velocity.y = -JUMP_FORCE * 0.75;
 				}
 				else if (player.action.isTouchingLeftWall && movingLeft)
 				{
@@ -565,8 +534,8 @@ void MovePlayer(float _dt)
 					player.action.justWallJumped = sfTrue;
 					player.data.wallJumpVelocityX = wallJumpHX;
 					player.data.lastDirection = 1;
+					player.data.velocity.y = -JUMP_FORCE * 0.75f;
 					sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-					player.data.velocity.y = -JUMP_FORCE * 0.75;
 				}
 
 				player.action.isGrounded = sfFalse;
@@ -577,107 +546,127 @@ void MovePlayer(float _dt)
 	}
 
 	if (!jumpKey)
-	{
 		jumpPressed = sfFalse;
-	}
+}
 
 
-	// ANIMATION
-	if (player.action.isGrounded && !player.action.isSliding)
+void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
+{
+	float dx = player.data.velocity.x * _dt;
+	CheckCollisionPlayerPlatformsX(dx);
+
+	if (!player.action.isTouchingLeftWall && !player.action.isTouchingRightWall)
+		player.data.lastWallTouched = 0;
+
+	if (player.data.velocity.y < 0)
 	{
-		if (player.currentState != TURN)
+		if (movingLeft && player.action.isTouchingLeftWall && player.currentState == JUMP)
 		{
-			if (player.action.isMoving)
+			float fallen = player.data.position.y - player.data.jumpStartPosition;
+			if (-fallen > MIN_WALL_GRIP_DISTANCE)
 			{
-				StateMachine(RUN);
-			}
-			else
-			{
-				StateMachine(IDLE);
+				player.data.velocity.y = 0;
+				StateMachine(WALL_GRIP_FALL);
 			}
 		}
-		if (player.currentState == TURN &&
-			player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
+		else if (movingRight && player.action.isTouchingRightWall && player.currentState == JUMP)
 		{
-			if (player.action.isMoving)
+			float fallen = player.data.position.y - player.data.jumpStartPosition;
+			if (-fallen > MIN_WALL_GRIP_DISTANCE)
 			{
-				StateMachine(RUN);
-			}
-			else
-			{
-				StateMachine(IDLE);
+				player.data.velocity.y = 0;
+				StateMachine(WALL_GRIP_FALL);
 			}
 		}
-	}
-	else if (!player.action.isGrounded)
-	{
-		if (player.data.velocity.y < 0)
-		{
-			float dx = player.data.velocity.x * _dt;
-			CheckCollisionPlayerPlatformsX(dx);
-			if (!player.action.isTouchingLeftWall && !player.action.isTouchingRightWall)
-			{
-				player.data.lastWallTouched = 0;
-			}
-			if (movingLeft && player.action.isTouchingLeftWall && player.currentState == JUMP)
-			{
-				float fallenDistance = player.data.position.y - player.data.jumpStartPosition;
-				if (-fallenDistance > MIN_WALL_GRIP_DISTANCE)
-				{
-					player.data.velocity.y = 0;
-					StateMachine(WALL_GRIP_FALL);
-				}
-			}
-			else if (movingRight && player.action.isTouchingRightWall && player.currentState == JUMP)
-			{
-				float fallenDistance = player.data.position.y - player.data.jumpStartPosition;
-				if (-fallenDistance > MIN_WALL_GRIP_DISTANCE)
-				{
-					player.data.velocity.y = 0;
-					StateMachine(WALL_GRIP_FALL);
-				}
-			}
 
-			if (player.currentState != JUMP && player.currentState != WALL_JUMP)
-			{
-				StateMachine(JUMP);
-			}
+		if (player.currentState != JUMP && player.currentState != WALL_JUMP)
+			StateMachine(JUMP);
+	}
+	else
+	{
+		if (movingLeft && player.action.isTouchingLeftWall)
+		{
+			player.data.velocity.y -= 10;
+			if (player.data.velocity.y >= MAX_GRIP_WALL_SPEED)
+				player.data.velocity.y = MAX_GRIP_WALL_SPEED;
+			StateMachine(WALL_GRIP_FALL);
+		}
+		else if (movingRight && player.action.isTouchingRightWall)
+		{
+			player.data.velocity.y -= 10;
+			if (player.data.velocity.y >= MAX_GRIP_WALL_SPEED)
+				player.data.velocity.y = MAX_GRIP_WALL_SPEED;
+			StateMachine(WALL_GRIP_FALL);
 		}
 		else
 		{
-			float dx = player.data.velocity.x * _dt;
-			CheckCollisionPlayerPlatformsX(dx);
-			if (!player.action.isTouchingLeftWall && !player.action.isTouchingRightWall)
-			{
-				player.data.lastWallTouched = 0;
-			}
-			if (movingLeft && player.action.isTouchingLeftWall)
-			{
-				StateMachine(WALL_GRIP_FALL);
-
-				player.data.velocity.y -= 10;
-				if (player.data.velocity.y >= MAX_GRIP_WALL_SPEED)
-				{
-					player.data.velocity.y = MAX_GRIP_WALL_SPEED;
-				}
-
-			}
-			else if (movingRight && player.action.isTouchingRightWall)
-			{
-				StateMachine(WALL_GRIP_FALL);
-				player.data.velocity.y -= 10;
-				if (player.data.velocity.y >= MAX_GRIP_WALL_SPEED)
-				{
-					player.data.velocity.y = MAX_GRIP_WALL_SPEED;
-				}
-			}
-
-			else
-			{
-				StateMachine(FALL);
-			}
+			StateMachine(FALL);
 		}
 	}
+}
+
+void HandleAnimationState(float _dt, sfBool movingLeft, sfBool movingRight)
+{
+	if (player.action.isGrounded && !player.action.isSliding)
+	{
+		if (player.currentState != TURN)
+			StateMachine(player.action.isMoving ? RUN : IDLE);
+
+		if (player.currentState == TURN &&
+			player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
+			StateMachine(player.action.isMoving ? RUN : IDLE);
+	}
+	else if (!player.action.isGrounded)
+	{
+		HandleAirAnimation(_dt, movingLeft, movingRight);
+	}
+}
+
+
+void MovePlayer(float _dt)
+{
+	if (player.data.knockBackTimer > 0.f)
+	{
+		player.data.knockBackTimer -= _dt;
+		return;
+	}
+
+	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
+	sfBool movingRight = sfKeyboard_isKeyPressed(sfKeyD);
+	sfBool slideKey = sfKeyboard_isKeyPressed(sfKeyLControl) || sfKeyboard_isKeyPressed(sfKeyRControl);
+	sfBool jumpKey = sfKeyboard_isKeyPressed(sfKeySpace);
+
+	if (player.data.slideCooldownTimer > 0.f)
+	{
+		player.data.slideCooldownTimer -= _dt;
+
+	}
+
+	HandleAttackInput(_dt, movingLeft, movingRight);
+
+	if (HandleAttackState(movingLeft, movingRight))
+	{
+		return;
+
+	}
+
+	if (player.action.isWallJumping)
+		HandleWallJumping(_dt, movingLeft, movingRight);
+	else if (player.action.isSlideJumping)
+	{
+		HandleSlideJumping(_dt, movingLeft, movingRight);
+
+	}
+	else if (player.action.isSliding)
+	{
+		HandleSliding(_dt, movingLeft, movingRight, slideKey);
+
+	}
+	else
+		HandleGroundMovement(movingLeft, movingRight, slideKey);
+
+	HandleJump(_dt, movingLeft, movingRight, jumpKey);
+	HandleAnimationState(_dt, movingLeft, movingRight);
 }
 
 
@@ -738,7 +727,7 @@ void CollisionPlayerPlatformsY(float _dy)
 
 	float previousBottom = player.data.position.y;
 
-	sfFloatRect hitbox = {player.data.position.x - playerHalfWidth,player.data.position.y - playerHeight + _dy,playerWidth,playerHeight};
+	sfFloatRect hitbox = { player.data.position.x - playerHalfWidth,player.data.position.y - playerHeight + _dy,playerWidth,playerHeight };
 	player.action.isGrounded = sfFalse;
 
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
@@ -800,7 +789,7 @@ void CollisionPlayerPlatformsY(float _dy)
 
 	player.data.position.y += _dy;
 	sfSprite_setPosition(player.sprite, player.data.position);
-	sfRectangleShape_setPosition(player.shape.collisionPlayerShape,(sfVector2f) {player.data.position.x - playerHalfWidth, player.data.position.y - playerHeight});
+	sfRectangleShape_setPosition(player.shape.collisionPlayerShape, (sfVector2f) { player.data.position.x - playerHalfWidth, player.data.position.y - playerHeight });
 	player.shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
 	player.shape.playerRect = sfSprite_getGlobalBounds(player.sprite);
 }
@@ -888,7 +877,7 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 	if (player.spikeSide != NOTHING)
 	{
 		player.action.isGrounded = sfFalse;
-	
+
 
 		StateMachine(FALL);
 		if (player.spikeSide == LEFT)
@@ -897,7 +886,7 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 			//player.action.isGrounded = sfFalse;
 			player.data.velocity.y = -SPIKE_VELOCITY;
 			player.data.velocity.x = SPIKE_VELOCITY;
-			sfSprite_setScale(player.sprite, (sfVector2f){GAME_SCALE, GAME_SCALE});
+			sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
 
 		}
@@ -1064,6 +1053,8 @@ void BasePlayer()
 	player.sound.axeSound = sfSound_create();
 	player.sound.buffer = sfSoundBuffer_createFromFile("Assets/Sounds/Axe_Attack_Sound.wav");
 	sfSound_setBuffer(player.sound.axeSound, player.sound.buffer);
+
+	player.data.keyNumber = 0;
 
 }
 

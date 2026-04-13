@@ -3,6 +3,7 @@ Player player;
 HUD hud;
 
 void CreateHealthBarHUD();
+void CreateKeyNumHUD();
 
 void LoadHUD()
 {
@@ -53,5 +54,10 @@ void CreateHealthBarHUD()
 	sfSprite_setTextureRect(hud.healthBarSprite, healthBarRect);
 	sfSprite_setPosition(hud.healthBarSprite, (sfVector2f) { 18 , 33 });
 	sfSprite_setScale(hud.healthBarSprite, (sfVector2f) {2 * GAME_SCALE, 2 * GAME_SCALE});
+
+}
+
+void CreateKeyNumHUD()
+{
 
 }

@@ -128,6 +128,8 @@ typedef struct Stats
 	float health;
 	float maxHealth;
 	char level[20];
+	unsigned keyNumber;
+
 
 	sfBool canWallJump;
 	sfBool canDoubleJump;
