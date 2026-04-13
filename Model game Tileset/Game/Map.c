@@ -1,6 +1,6 @@
 #include "Map.h"
-
-
+#include "player.h"
+Player player;
 sfTexture* tileTexture;
 sfSprite* tileSprite;
 cute_tiled_map_t* map;
@@ -47,6 +47,8 @@ void LoadMap(char* _mapName)
 
 	// Load the layer of collisions and triggers
 	LoadCollisionAndTrigger();
+
+	player.data.keyNumber = 0;
 }
 
 void DrawMap(sfRenderWindow* _renderWindow)

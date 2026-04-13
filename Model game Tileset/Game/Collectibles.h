@@ -6,21 +6,29 @@
 #include "Mob.h"
 #include "Map.h"
 
-typedef struct Orbs
+
+typedef enum ItemType
 {
-	sfSprite* orbSprite;
-	sfTexture* orbTexture;
+	ITEM_HEALTH,
+	ITEM_KEY,
+	ITEM_COUNT
+}ItemType;
 
-	sfVector2f orbPosition;
+typedef struct Items
+{
+	sfSprite* itemSprite;
+	sfTexture* itemTexture;
+
+	sfVector2f itemPosition;
 	sfVector2f velocity;
-
+	ItemType type;
 	sfBool isGrounded;
-}Orbs;
+}Items;
 
-void LoadOrb(void);
-void AddOrb(float _x, float _y);
-void UpdateOrb( float _dt);
-void DrawOrb(sfRenderWindow* _renderWindow);
-void CleanupOrb(void);
+void Loaditem(void);
+void Additem(ItemType _itemType, float _x, float _y);
+void Updateitem( float _dt);
+void Drawitem(sfRenderWindow* _renderWindow);
+void Cleanupitem(void);
 
 #endif // !COLLECTIBLES_H

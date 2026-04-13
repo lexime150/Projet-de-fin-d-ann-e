@@ -1,102 +1,131 @@
 #include "Collectibles.h"
 
-Orbs* orb;
-unsigned orbCount;
-sfTexture* g_orbTexture;
+Items* item;
+unsigned itemCount;
 
-void LoadOrb(void)
+sfTexture* healthTexture;
+sfTexture* keyTexture;
+
+void Loaditem(void)
 {
-	g_orbTexture = sfTexture_createFromFile("Assets/Sprites/heart.png", NULL);
-	if (!g_orbTexture)
+	healthTexture = sfTexture_createFromFile("Assets/Sprites/Collectibles/heart.png", NULL);
+	keyTexture = sfTexture_createFromFile("Assets/Sprites/Collectibles/Keys.png", NULL);
+	if (!healthTexture)
 	{
 		fprintf(stderr, "TEXTURE LOAD FAILURE\n");
 		return;
 	}
-	orb = NULL;
-	orbCount = 0;
+	item = NULL;
+	itemCount = 0;
 }
 
-void AddOrb(float _x, float _y)
+void Additem(ItemType _itemType, float _x, float _y)
 {
-	Orbs* temp = realloc(orb, (orbCount + 1) * sizeof(Orbs));
+	Items* temp = realloc(item, (itemCount + 1) * sizeof(Items));
 	if (!temp)
 	{
 		fprintf(stderr, "REALLOC FAILURE\n");
 		return;
 	}
-	orb = temp;
+	item = temp;
 
-	Orbs newOrb = { 0 };
-	newOrb.isGrounded = sfFalse;
+	Items newitem = { 0 };
+	newitem.isGrounded = sfFalse;
 
 	int direction = (rand() % 2 == 0) ? -1 : 1;
-	newOrb.velocity.x = direction * 120.f;
-	newOrb.velocity.y = -200.f;
+	newitem.velocity.x = direction * (rand() % (120 - 80 + 1) + 80);
+	newitem.velocity.y = -200.f;
+	
 
-	newOrb.orbSprite = sfSprite_create();
-	sfSprite_setTexture(newOrb.orbSprite, g_orbTexture, sfTrue);
-	sfSprite_setScale(newOrb.orbSprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-	sfSprite_setPosition(newOrb.orbSprite, (sfVector2f) { _x, _y });
+	newitem.itemSprite = sfSprite_create();
+	switch (_itemType)
+	{
+	case ITEM_HEALTH:
+		sfSprite_setTexture(newitem.itemSprite, healthTexture, sfTrue);
+		newitem.type = ITEM_HEALTH;
+		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE*1.2, GAME_SCALE*1.2 });
+		break;
+	case ITEM_KEY:
+		sfSprite_setTexture(newitem.itemSprite, keyTexture, sfTrue);
+		unsigned randMult = rand() % 3;
+		sfIntRect keyRect = { 16 * randMult,0,16,16 };
+		sfSprite_setTextureRect(newitem.itemSprite, keyRect);
+		newitem.type = ITEM_KEY;
+		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+		break;
+	default:
+		break;
+	}
 
-	orb[orbCount] = newOrb;
-	orbCount++;
+	
+	sfSprite_setPosition(newitem.itemSprite, (sfVector2f) { _x, _y });
+	newitem.itemPosition = sfSprite_getPosition(newitem.itemSprite);
+
+	item[itemCount] = newitem;
+	itemCount++;
 }
 
-void ApplyPhysicsOrb(unsigned i, float _dt)
+void ApplyPhysicsitem(unsigned i, float _dt)
 {
-	if (!orb[i].isGrounded)
+	if (!item[i].isGrounded)
 	{
-		orb[i].velocity.y += GRAVITY * _dt;
+		item[i].velocity.y += GRAVITY * _dt;
 		float maxFall = GRAVITY * 100.f * _dt;
-		if (orb[i].velocity.y > maxFall)
+		if (item[i].velocity.y > maxFall)
 		{
-			orb[i].velocity.y = maxFall;
+			item[i].velocity.y = maxFall;
 
 		}
 	}
 }
 
-sfBool CollisionOrbX(unsigned i, float _dx)
+sfBool CollisionitemX(unsigned i, float _dx)
 {
-	sfFloatRect bounds = sfSprite_getGlobalBounds(orb[i].orbSprite);
-	sfVector2f  pos = sfSprite_getPosition(orb[i].orbSprite);
-
+	sfFloatRect bounds = sfSprite_getGlobalBounds(item[i].itemSprite);
+	sfVector2f  pos = sfSprite_getPosition(item[i].itemSprite);
 	sfFloatRect hitbox = { pos.x + _dx, pos.y, bounds.width, bounds.height };
 
 	for (unsigned j = 0; j < GetCollisionTabSize(); j++)
 	{
 		sfFloatRect platform = GetMapCollision(j);
 		if (!sfFloatRect_intersects(&hitbox, &platform, NULL))
-		{
 			continue;
 
-		}
+		if (item[i].velocity.x > 0.f)
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { platform.left - bounds.width, pos.y });
+		else if (item[i].velocity.x < 0.f)
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { platform.left + platform.width, pos.y });
 
-		if (orb[i].velocity.x > 0.f)
-		{
-			hitbox.left = platform.left - hitbox.width;
-
-		}
-		else if (orb[i].velocity.x < 0.f)
-		{
-			hitbox.left = platform.left + platform.width;
-
-		}
-
-		orb[i].velocity.x = 0.f;
-		sfSprite_setPosition(orb[i].orbSprite, (sfVector2f) { hitbox.left, hitbox.top });
+		item[i].velocity.x = 0.f;
 		return sfTrue;
 	}
 
-	if (orb[i].isGrounded)
+	// Vérifie les semi-solides aussi
+	for (unsigned j = 0; j < GetSemiSolidCollisionTabSize(); j++)
 	{
-		sfFloatRect groundCheck = { hitbox.left,pos.y + bounds.height + 1.f,bounds.width,2.f };
+		sfFloatRect semi = GetSemiSolidCollisionTab(j);
+		if (!sfFloatRect_intersects(&hitbox, &semi, NULL))
+			continue;
 
+		if (item[i].velocity.x > 0.f)
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { semi.left - bounds.width, pos.y });
+		else if (item[i].velocity.x < 0.f)
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { semi.left + semi.width, pos.y });
+
+		item[i].velocity.x = 0.f;
+		return sfTrue;
+	}
+
+	// Si au sol, vérifie qu'il y a du sol devant avant de bouger
+	if (item[i].isGrounded)
+	{
+		sfFloatRect groundCheck = { pos.x + _dx, pos.y + bounds.height + 1.f, bounds.width, 2.f };
 		sfBool groundFound = sfFalse;
+
 		for (unsigned j = 0; j < GetCollisionTabSize(); j++)
 		{
-			sfFloatRect platform = GetMapCollision(j);
-			if (sfFloatRect_intersects(&groundCheck, &platform, NULL))
+		sfFloatRect collision = GetMapCollision(j);
+			if (sfFloatRect_intersects(&groundCheck, &collision, NULL))
 			{
 				groundFound = sfTrue;
 				break;
@@ -104,34 +133,30 @@ sfBool CollisionOrbX(unsigned i, float _dx)
 		}
 		for (unsigned j = 0; j < GetSemiSolidCollisionTabSize() && !groundFound; j++)
 		{
-			sfFloatRect semi = GetSemiSolidCollisionTab(j);
-			if (sfFloatRect_intersects(&groundCheck, &semi, NULL))
-			{
-
+			sfFloatRect semiSolidCollision = GetSemiSolidCollisionTab(j);
+			if (sfFloatRect_intersects(&groundCheck, &semiSolidCollision, NULL))
 				groundFound = sfTrue;
-			}
 		}
 
 		if (!groundFound)
 		{
-			orb[i].velocity.x = 0.f;
+			item[i].velocity.x = 0.f;
 			return sfTrue;
 		}
 	}
 
-	sfSprite_setPosition(orb[i].orbSprite, (sfVector2f) { pos.x + _dx, pos.y });
+	sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { pos.x + _dx, pos.y });
 	return sfFalse;
 }
-
-sfBool CollisionOrbY(unsigned i, float _dy)
+sfBool CollisionitemY(unsigned i, float _dy)
 {
-	sfFloatRect bounds = sfSprite_getGlobalBounds(orb[i].orbSprite);
-	sfVector2f  pos = sfSprite_getPosition(orb[i].orbSprite);
+	sfFloatRect bounds = sfSprite_getGlobalBounds(item[i].itemSprite);
+	sfVector2f  pos = sfSprite_getPosition(item[i].itemSprite);
 
 	float previousBottom = pos.y + bounds.height;
 
 	sfFloatRect hitbox = { pos.x, pos.y + _dy, bounds.width, bounds.height };
-	orb[i].isGrounded = sfFalse;
+	item[i].isGrounded = sfFalse;
 
 	for (unsigned j = 0; j < GetCollisionTabSize(); j++)
 	{
@@ -142,18 +167,18 @@ sfBool CollisionOrbY(unsigned i, float _dy)
 
 		}
 
-		if (orb[i].velocity.y > 0.f)
+		if (item[i].velocity.y > 0.f)
 		{
 			hitbox.top = platform.top - hitbox.height;
-			orb[i].isGrounded = sfTrue;
+			item[i].isGrounded = sfTrue;
 		}
-		else if (orb[i].velocity.y < 0.f)
+		else if (item[i].velocity.y < 0.f)
 		{
 			hitbox.top = platform.top + platform.height;
 		}
 
-		orb[i].velocity.y = 0.f;
-		sfSprite_setPosition(orb[i].orbSprite, (sfVector2f) { hitbox.left, hitbox.top });
+		item[i].velocity.y = 0.f;
+		sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { hitbox.left, hitbox.top });
 		return sfTrue;
 	}
 
@@ -167,67 +192,67 @@ sfBool CollisionOrbY(unsigned i, float _dy)
 		}
 
 		sfBool wasAbove = (previousBottom <= semi.top);
-		sfBool isFalling = (orb[i].velocity.y > 0.f);
+		sfBool isFalling = (item[i].velocity.y > 0.f);
 
 		if (isFalling && wasAbove)
 		{
 			hitbox.top = semi.top - hitbox.height;
-			orb[i].isGrounded = sfTrue;
-			orb[i].velocity.y = 0.f;
-			sfSprite_setPosition(orb[i].orbSprite, (sfVector2f) { hitbox.left, hitbox.top });
+			item[i].isGrounded = sfTrue;
+			item[i].velocity.y = 0.f;
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { hitbox.left, hitbox.top });
 			return sfTrue;
 		}
 	}
 
-	sfSprite_setPosition(orb[i].orbSprite, (sfVector2f) { pos.x, pos.y + _dy });
+	sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { pos.x, pos.y + _dy });
 	return sfFalse;
 }
 
-void UpdateOrb(float _dt)
+void Updateitem(float _dt)
 {
-	for (unsigned i = 0; i < orbCount; i++)
+	for (unsigned i = 0; i < itemCount; i++)
 	{
-		ApplyPhysicsOrb(i, _dt);
+		ApplyPhysicsitem(i, _dt);
 
-		if (orb[i].isGrounded)
+		if (item[i].isGrounded)
 		{
-			orb[i].velocity.x *= 0.85f;
-			if (fabsf(orb[i].velocity.x) < 1.f)
+			item[i].velocity.x *= 0.85f;
+			if (fabsf(item[i].velocity.x) < 1.f)
 			{
-				orb[i].velocity.x = 0.f;
+				item[i].velocity.x = 0.f;
 
 			}
 		}
 
-		float dx = orb[i].velocity.x * _dt;
-		CollisionOrbX(i, dx);
+		float dx = item[i].velocity.x * _dt;
+		CollisionitemX(i, dx);
 
-		float dy = orb[i].velocity.y * _dt;
-		CollisionOrbY(i, dy);
+		float dy = item[i].velocity.y * _dt;
+		CollisionitemY(i, dy);
 	}
 }
 
-void DrawOrb(sfRenderWindow* _renderWindow)
+void Drawitem(sfRenderWindow* _renderWindow)
 {
-	for (unsigned i = 0; i < orbCount; i++)
+	for (unsigned i = 0; i < itemCount; i++)
 	{
-		sfRenderWindow_drawSprite(_renderWindow, orb[i].orbSprite, NULL);
+		sfRenderWindow_drawSprite(_renderWindow, item[i].itemSprite, NULL);
 
 	}
 }
 
-void CleanupOrb(void)
+void Cleanupitem(void)
 {
-	for (unsigned i = 0; i < orbCount; i++)
+	for (unsigned i = 0; i < itemCount; i++)
 	{
 
-		sfSprite_destroy(orb[i].orbSprite);
+		sfSprite_destroy(item[i].itemSprite);
 	}
 
-	free(orb);
-	orb = NULL;
-	orbCount = 0;
+	free(item);
+	item = NULL;
+	itemCount = 0;
 
-	sfTexture_destroy(g_orbTexture);
-	g_orbTexture = NULL;
+	sfTexture_destroy(healthTexture);
+	healthTexture = NULL;
 }

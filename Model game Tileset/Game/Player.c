@@ -125,7 +125,6 @@ void UpdatePlayer(float _dt)
 
 	CheckPlayerHP();
 	UpdateAnimation(player.currentAnimation, _dt);
-	printf("player key number: %d\n", player.data.keyNumber);
 }
 
 void CheckCollisionPlayerAttackMob(float _dt)

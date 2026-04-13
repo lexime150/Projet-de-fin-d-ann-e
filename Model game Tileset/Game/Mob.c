@@ -97,7 +97,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 		sfRectangleShape_setSize(newMob.attackRect, (sfVector2f) { HITBOX_MUSHROOM_ATTACK_WIDTH, HITBOX_MUSHROOM_HEIGHT });
 		sfRectangleShape_setOrigin(newMob.attackRect, (sfVector2f) { HITBOX_MUSHROOM_ATTACK_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT });
-
+		newMob.mobType = MUSHROOM;
 		break;
 	case SKELETON:
 		sfSprite_setTexture(newMob.sprite, texture[SKELETON], sfTrue);
@@ -123,6 +123,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 		sfRectangleShape_setSize(newMob.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON, HITBOX_SKELETON_WIDTH });
 		sfRectangleShape_setOrigin(newMob.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON / 2, HITBOX_ATTACK_SKELETON });
+		newMob.mobType = SKELETON;
 
 		break;
 	default:
@@ -144,9 +145,9 @@ void AddMob(TypeMob _type, float _x, float _y)
 	sfRectangleShape_setPosition(newMob.rect, sfSprite_getPosition(newMob.sprite));
 
 	sfRectangleShape_setScale(newMob.collisionRect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-	newMob.isDead = sfFalse;
+	newMob.justDied = sfFalse;
 	newMob.act = IS_IDLE;
-
+	newMob.justDied = sfFalse;
 	mob[mobCount] = newMob;
 	mobCount++;
 
@@ -328,7 +329,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		hitMob = mob[_i].hitRect;
 		hitPlat = GetMapCollision(i);
 
-		for(int x = 0; x < GetSemiSolidCollisionTabSize(); x++)
+		for (int x = 0; x < GetSemiSolidCollisionTabSize(); x++)
 		{
 			hitSemiPlat = GetSemiSolidCollisionTab(x);
 			if (sfFloatRect_intersects(&hitMob, &hitPlat, NULL) && sfFloatRect_intersects(&hitMob, &hitSemiPlat, NULL))
@@ -455,7 +456,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		hitSemiPlat = GetSemiSolidCollisionTab(i);
 		hitMob = mob[_i].hitRect;
 		mob[_i].isGrounded = sfFalse;
-	
+
 		if (sfFloatRect_intersects(&hitSemiPlat, &hitMob, &intersection))
 		{
 			if (mob[_i].velocity.y > 0)
@@ -469,8 +470,8 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 			sfSprite_setPosition(mob[_i].sprite, posMob);
 		}
-	
-	
+
+
 	}
 
 
@@ -568,11 +569,15 @@ void StateMob(float _dt, unsigned _i)
 		}
 
 	}
-	else if (mob[_i].hp <= 0 && mob[_i].act != IS_DEATH && mob[_i].currentMobAnimation->isPlaying)
+	else if (mob[_i].hp <= 0 && mob[_i].act != IS_DEATH)
 	{
 		mob[_i].act = IS_DEATH;
-		player.data.keyNumber++;
-
+		sfVector2f mobPos = sfSprite_getPosition(mob[_i].sprite);
+		if (mob[_i].mobType == MUSHROOM)
+		{
+			Additem(ITEM_HEALTH, mobPos.x, mobPos.y - 100);
+		}
+		Additem(ITEM_KEY, mobPos.x, mobPos.y - 125);
 		StateMobMachine(DEATH, _i);
 		mob[_i].velocity.x = 0.f;
 	}

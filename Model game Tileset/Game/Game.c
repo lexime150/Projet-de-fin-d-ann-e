@@ -98,7 +98,7 @@ void UpdateGame(float _dt)
 	UpdateHUD();
 	UpdateTransition(_dt);
 
-	UpdateOrb(_dt);
+	Updateitem(_dt);
 }
 
 void DrawGame(sfRenderWindow* _renderWindow)
@@ -107,7 +107,7 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawMap(_renderWindow);
 	DrawMob(_renderWindow);
 	DrawKey(_renderWindow);
-	DrawOrb(_renderWindow);
+	Drawitem(_renderWindow);
 	DrawPlayer(_renderWindow);
 
 
@@ -144,7 +144,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadMap(save->level);
 		LoadPlayer(save);
 		SetSavedStat(save);
-		LoadOrb();
+		Loaditem();
 		LoadCamera();
 		LoadMob();
 		LoadHUD();
@@ -153,13 +153,12 @@ void CheckSaveAndLoadLevel(int _slot)
 	{
 		LoadMap("level_00");
 		LoadPlayer(save);
-		LoadOrb();
+		Loaditem();
 
 		LoadCamera();
 		LoadMob();
 		LoadHUD();
 	}
-	AddOrb(GetPlayerSpawn().x, GetPlayerSpawn().y - 150);
 }
 
 void ChangeLevel(const char* _level)
