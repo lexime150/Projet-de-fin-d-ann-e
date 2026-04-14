@@ -325,7 +325,7 @@ void VacuumEffect(void)
 	for (int i = 0; i < GetItemCount(); i++)
 	{
 		sfVector2f itemPos = sfSprite_getPosition(item[i].itemSprite);
-		sfVector2f playerPos = sfSprite_getPosition(player.sprite);
+		sfVector2f playerPos = sfSprite_getPosition(player->sprite);
 
 		sfVector2f dir;
 		dir.x = playerPos.x - itemPos.x;
@@ -350,15 +350,15 @@ void VacuumEffect(void)
 		{
 			if (item[i].type == ITEM_KEY)
 			{
-				player.data.keyNumber++;
+				player->data.keyNumber++;
 				RemoveItem(i);
 				i--;
 			}
 			else if (item[i].type == ITEM_HEALTH)
 			{
-				if (player.data.health < player.data.maxHealth)
+				if (player->data.health < player->data.maxHealth)
 				{
-					player.data.health += HEALTH_NUMBER;
+					player->data.health += HEALTH_NUMBER;
 					RemoveItem(i);
 					i--;
 

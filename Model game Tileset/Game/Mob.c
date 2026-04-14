@@ -641,18 +641,19 @@ float GetDistancePlayerMobX(unsigned _i)
 
 	if (mobCount > 0)
 	{
-		
-	float distX = player->data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
 
-	
+		float distX = player->data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
 
-	if (distX < 0.f)
-	{
-		return distX * -1;
-	}
-	else
-	{
-		return distX;
+
+
+		if (distX < 0.f)
+		{
+			return distX * -1;
+		}
+		else
+		{
+			return distX;
+		}
 	}
 }
 
@@ -661,17 +662,18 @@ float GetDistancePlayerMobY(unsigned _i)
 
 	if (mobCount > 0)
 	{
-		
-	float distY = player->data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
- 
 
-	if (distY < 0.f)
-	{
-		return distY * -1;
-	}
-	else
-	{
-		return distY;
+		float distY = player->data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
+
+
+		if (distY < 0.f)
+		{
+			return distY * -1;
+		}
+		else
+		{
+			return distY;
+		}
 	}
 }
 
