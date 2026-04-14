@@ -44,6 +44,7 @@
 #define TIMER_SPIKE 0.3f
 #define	TIMER_PLAYER_MOB 0.5f
 #define TIMER_INVINCIBLE 2.f
+#define TIMER_ATTACK_SIDE 1.3f
 
 #define SPIKE_VELOCITY 500.f
 
@@ -122,6 +123,8 @@ typedef struct Action
 	sfBool damageEnable;
 
 	sfBool isInvincible;
+
+	sfBool isAttackSide;
 	
 }Action;
 
@@ -171,6 +174,8 @@ typedef struct Stats
 	float timerAttack;
 
 	float timerInvincible;
+
+	float timeAttackSide;
 
 }Stats;
 

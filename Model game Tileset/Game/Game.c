@@ -8,7 +8,7 @@ float transitionAlpha = 255;
 
 
 sfRectangleShape* transitionShape;
-Player player;
+Player* player;
 
 
 void LoadGame(void)
@@ -22,7 +22,7 @@ void LoadGame(void)
 
 void UpdateTransition(float _dt)
 {
-	if (!player.action.isTransitioning)
+	if (!player->action.isTransitioning)
 	{
 		return;
 	}
@@ -32,7 +32,7 @@ void UpdateTransition(float _dt)
 	if (transitionAlpha <= 0)
 	{
 		transitionAlpha = 0;
-		player.action.isTransitioning = sfFalse;
+		player->action.isTransitioning = sfFalse;
 		transitionAlpha = 255;
 	}
 
@@ -118,7 +118,7 @@ void DrawGame(sfRenderWindow* _renderWindow)
 
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);
-	if (player.action.isTransitioning)
+	if (player->action.isTransitioning)
 	{
 		sfRenderWindow_drawRectangleShape(_renderWindow, transitionShape, NULL);
 	}
@@ -170,7 +170,7 @@ void CheckSaveAndLoadLevel(int _slot)
 void ChangeLevel(const char* _level)
 {
 
-	snprintf(player.data.level, sizeof(player.data.level), "%s", _level);
+	snprintf(player->data.level, sizeof(player->data.level), "%s", _level);
 
 
 	CleanupMob();
@@ -179,20 +179,20 @@ void ChangeLevel(const char* _level)
 	CleanUpCamera();
 	Cleanupitem();
 
-	LoadMap(player.data.level);
+	LoadMap(player->data.level);
 	LoadCamera();
 	LoadMob();
 	LoadHUD();
 	Loaditem();
 
 
-	player.data.position = GetPlayerSpawn();
-	player.data.velocity.x = 0;
-	player.data.velocity.y = 0;
-	player.action.isGrounded = sfFalse;
-	player.action.isSliding = sfFalse;
-	player.action.isWallJumping = sfFalse;
-	player.action.isSlideJumping = sfFalse;
+	player->data.position = GetPlayerSpawn();
+	player->data.velocity.x = 0;
+	player->data.velocity.y = 0;
+	player->action.isGrounded = sfFalse;
+	player->action.isSliding = sfFalse;
+	player->action.isWallJumping = sfFalse;
+	player->action.isSlideJumping = sfFalse;
 }
 
 void LevelTransition()

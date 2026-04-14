@@ -5,7 +5,7 @@
 Mob* mob = { 0 };
 
 sfTexture* texture[MOB_NUMBER];
-Player player;
+Player* player;
 unsigned mobCount;
 
 void Swap(Mob* _mob, int _i, int _j);
@@ -309,8 +309,8 @@ void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 	{
 
 		StateMob(_dt, i);
-		UpdateMobInfo(_dt, i);
 		CheckCollisionMobEntities(_dt, i);
+		UpdateMobInfo(_dt, i);
 		UpdateAnimation(mob[i].currentMobAnimation, _dt);
 		DeleteMob(&i);
 
@@ -339,7 +339,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		for (unsigned x = 0; x < GetSemiSolidCollisionTabSize(); x++)
 		{
 			hitSemiPlat = GetSemiSolidCollisionTab(x);
-			if (sfFloatRect_intersects(&hitMob, &hitPlat, NULL) && sfFloatRect_intersects(&hitMob, &hitSemiPlat, NULL))
+			if (sfFloatRect_intersects(&hitMob, &hitPlat, NULL) && sfFloatRect_intersects(&hitMob, &hitSemiPlat, NULL) && mob[_i].currentState != DEATH)
 			{
 				platTransition = sfTrue;
 				break;
@@ -356,7 +356,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		hitPlat = GetSemiSolidCollisionTab(i);
 		hitMob = mob[_i].hitRect;
 
-		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection) && mob[_i].act != IS_DEATH)
+		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection) && mob[_i].currentState != DEATH)
 		{
 			if (intersection.width < intersection.height && !platTransition)
 			{
@@ -395,7 +395,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		hitPlat = GetMapCollision(i);
 		hitMob = mob[_i].hitRect;
 
-		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection))
+		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection) && mob[_i].currentState != DEATH)
 		{
 			if (intersection.width < intersection.height && !platTransition)
 			{
@@ -467,7 +467,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		mob[_i].isGrounded = sfFalse;
 
 
-		if (sfFloatRect_intersects(&hitSemiPlat, &hitMob, &intersection))
+		if (sfFloatRect_intersects(&hitSemiPlat, &hitMob, &intersection) && mob[_i].currentState != DEATH)
 		{
 			if (mob[_i].velocity.y > 0)
 			{
@@ -510,7 +510,7 @@ void StateMob(float _dt, unsigned _i)
 
 	if (mob[_i].hp > 0 && mob[_i].act != IS_DEATH)
 	{
-		if (sfSprite_getPosition(player.sprite).x >= mob[_i].position.x)
+		if (sfSprite_getPosition(player->sprite).x >= mob[_i].position.x)
 		{
 
 			sfSprite_setScale(mob[_i].sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
@@ -525,9 +525,9 @@ void StateMob(float _dt, unsigned _i)
 
 		if (mob[_i].currentState != TAKE_HIT && mob[_i].currentMobAnimation->isPlaying)
 		{
-			if (GetDistancePlayerMobVector(_i) < mob[_i].rangeMove && GetDistancePlayerMobY(_i) < (player.shape.collisionPlayerRect.height * 2))
+			if (GetDistancePlayerMobVector(_i) < mob[_i].rangeMove && GetDistancePlayerMobY(_i) < (player->shape.collisionPlayerRect.height * 2))
 			{
-				if (GetDistancePlayerMobX(_i) > (player.shape.collisionPlayerRect.width))
+				if (GetDistancePlayerMobX(_i) > (player->shape.collisionPlayerRect.width))
 				{
 					StateMobMachine(RUN_MOB, _i);
 					mob[_i].act = IS_MOVING;
@@ -538,7 +538,7 @@ void StateMob(float _dt, unsigned _i)
 					mob[_i].act = IS_ATTACK;
 				}
 			}
-			else if (GetDistancePlayerMobY(_i) > (player.shape.collisionPlayerRect.height * 2))
+			else if (GetDistancePlayerMobY(_i) > (player->shape.collisionPlayerRect.height * 2))
 			{
 				StateMobMachine(IDLE_MOB, _i);
 				mob[_i].act = IS_IDLE;
@@ -571,17 +571,18 @@ void StateMob(float _dt, unsigned _i)
 	}
 
 
-	if (player.currentState == SWORD)
+
+	if (player->currentState == SWORD)
 	{
-		sfFloatRect hitPlayer = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
+		sfFloatRect hitPlayer = sfRectangleShape_getGlobalBounds(player->shape.collisionAttackShape);
 		sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].rect);
 		float posMobX = hitMob.left + (hitMob.width / 2);
-		float posAttackPlayerX = sfSprite_getPosition(player.sprite).x;
+		float posAttackPlayerX = sfSprite_getPosition(player->sprite).x;
 
 		if (sfFloatRect_intersects(&hitPlayer, &hitMob, NULL) && mob[_i].currentState != DEATH)
 		{
 
-			if (player.currentState == SWORD && player.currentAnimation->currentFrame == 1)
+			if (player->currentState == SWORD && player->currentAnimation->currentFrame == 1)
 			{
 				mob[_i].timer.timerKnockBack += 0.25f;
 				mob[_i].hp -= (SWORD_DEGATS + rand() % 21);
@@ -638,7 +639,12 @@ void StateMob(float _dt, unsigned _i)
 float GetDistancePlayerMobX(unsigned _i)
 {
 
-	float distX = player.data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
+	if (mobCount > 0)
+	{
+		
+	float distX = player->data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
+
+	
 
 	if (distX < 0.f)
 	{
@@ -653,7 +659,11 @@ float GetDistancePlayerMobX(unsigned _i)
 float GetDistancePlayerMobY(unsigned _i)
 {
 
-	float distY = player.data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
+	if (mobCount > 0)
+	{
+		
+	float distY = player->data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
+ 
 
 	if (distY < 0.f)
 	{
@@ -707,7 +717,7 @@ void SetVelocity(unsigned _i, float _dt)
 	{
 		if (mob[_i].act == IS_MOVING)
 		{
-			if (sfSprite_getPosition(player.sprite).x > mob[_i].position.x)
+			if (sfSprite_getPosition(player->sprite).x > mob[_i].position.x)
 			{
 				mob[_i].velocity.x = mob[_i].speed;
 			}

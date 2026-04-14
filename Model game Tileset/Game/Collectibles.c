@@ -2,7 +2,7 @@
 
 Items* item;
 unsigned itemCount;
-Player player;
+Player* player;
 sfTexture* healthTexture;
 sfTexture* keyTexture;
 void VacuumEffect(void);
@@ -43,7 +43,8 @@ void Additem(ItemType _itemType, float _x, float _y)
 	case ITEM_HEALTH:
 		sfSprite_setTexture(newitem.itemSprite, healthTexture, sfTrue);
 		newitem.type = ITEM_HEALTH;
-		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE * 1.2F, GAME_SCALE * 1.2F });
+
+		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE * 1.2f, GAME_SCALE * 1.2f });
 		break;
 	case ITEM_KEY:
 		sfSprite_setTexture(newitem.itemSprite, keyTexture, sfTrue);
@@ -291,9 +292,10 @@ sfVector2f GetItemDistance(unsigned _index)
 {
 	sfVector2f distance;
 
-	distance.x = sfSprite_getPosition(player.sprite).x - sfSprite_getPosition(item[_index].itemSprite).x;
-	distance.y = sfSprite_getPosition(player.sprite).y - sfSprite_getPosition(item[_index].itemSprite).y;
-	printf("Distance x: %f | Distance y: %f\n", distance.x, distance.y);
+
+	distance.x = sfSprite_getPosition(item[_index].itemSprite).x - sfSprite_getPosition(player->sprite).x;
+	distance.y = sfSprite_getPosition(item[_index].itemSprite).y - sfSprite_getPosition(player->sprite).y;
+
 	return distance;
 }
 
