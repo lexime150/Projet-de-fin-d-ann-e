@@ -8,8 +8,8 @@ sfTexture* keyTexture;
 void VacuumEffect(void);
 void Loaditem(void)
 {
-	healthTexture = sfTexture_createFromFile("Assets/Sprites/Collectibles/heart.png", NULL);
-	keyTexture = sfTexture_createFromFile("Assets/Sprites/Collectibles/Keys.png", NULL);
+	healthTexture = sfTexture_createFromFile("Assets/Sprites/Game/Collectibles/heart.png", NULL);
+	keyTexture = sfTexture_createFromFile("Assets/Sprites/Game/Collectibles/Keys.png", NULL);
 	if (!healthTexture)
 	{
 		fprintf(stderr, "TEXTURE LOAD FAILURE\n");

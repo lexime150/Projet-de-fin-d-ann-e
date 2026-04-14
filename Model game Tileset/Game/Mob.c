@@ -26,8 +26,8 @@ void SetVelocity(unsigned _i, float _dt);
 
 void LoadMob(void)
 {
-	texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Mob/Champignon du Mordhor.png", NULL);
-	texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Mob/skeleton.png", NULL);
+	texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/Champignon du Mordhor.png", NULL);
+	texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/skeleton.png", NULL);
 
 
 	mob = malloc(sizeof(Mob));

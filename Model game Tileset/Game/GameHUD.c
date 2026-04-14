@@ -50,7 +50,7 @@ void CreateHealthBarHUD()
 	hud.healthBarContainerSprite = sfSprite_create();
 	hud.healthBarSprite = sfSprite_create();
 
-	hud.healthBarTexture = sfTexture_createFromFile("Assets/Sprites/HUD/Health bar.png", NULL);
+	hud.healthBarTexture = sfTexture_createFromFile("Assets/Sprites/Game/HUD/Health bar.png", NULL);
 	sfIntRect healthBarContainerRect = { 0 ,6 ,45 ,7 };
 	sfIntRect healthBarRect = { 1 ,0 ,45 , 5 };
 
@@ -71,7 +71,7 @@ void CreateKeyNumHUD()
 {
 
 	hud.keyFragmentSprite = sfSprite_create();
-	hud.keyFragmentTexture = sfTexture_createFromFile("Assets/Sprites/HUD/Keys.png", NULL);
+	hud.keyFragmentTexture = sfTexture_createFromFile("Assets/Sprites/Game/HUD/Keys.png", NULL);
 	sfIntRect keyFragmentRect = { 48,0,16,16 };
 	sfSprite_setTexture(hud.keyFragmentSprite, hud.keyFragmentTexture, sfTrue);
 	sfSprite_setTextureRect(hud.keyFragmentSprite, keyFragmentRect);
