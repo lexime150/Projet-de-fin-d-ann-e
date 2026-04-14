@@ -185,7 +185,7 @@ void ChangeLevel(const char* _level)
 	LoadHUD();
 	Loaditem();
 
-
+	player->data.keyNumber = 0;
 	player->data.position = GetPlayerSpawn();
 	player->data.velocity.x = 0;
 	player->data.velocity.y = 0;

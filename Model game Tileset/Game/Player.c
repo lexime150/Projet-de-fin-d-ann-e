@@ -1210,7 +1210,7 @@ void CollisionPlayerDeathZone()
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
 
-	sfRenderWindow_drawRectangleShape(_renderWindow, player->shape.rectCollisionPlayerMob, NULL);
+	//sfRenderWindow_drawRectangleShape(_renderWindow, player->shape.rectCollisionPlayerMob, NULL);
 	sfRenderWindow_drawSprite(_renderWindow, player->sprite, NULL);
 	//sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionPlayerShape, NULL);
 	if (player->action.isAttacking)

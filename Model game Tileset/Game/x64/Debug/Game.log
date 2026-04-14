@@ -1,19 +1,4 @@
-﻿  Animation.c
-  Camera.c
-  Collectibles.c
-  Game.c
-  GameHUD.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\GameHUD.c(28,47): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-  GameOver.c
-  GameState.c
-  Key.c
-  main.c
-  Map.c
-  Menu.c
-  Mob.c
-  Player.c
-  Save.c
-  Génération de code en cours...
+﻿  Mob.c
 C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(658,1): warning C4715: 'GetDistancePlayerMobX' : les chemins de contrôle ne retournent pas tous une valeur
 C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(678,1): warning C4715: 'GetDistancePlayerMobY' : les chemins de contrôle ne retournent pas tous une valeur
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe

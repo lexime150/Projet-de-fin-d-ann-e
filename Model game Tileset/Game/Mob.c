@@ -339,7 +339,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		for (unsigned x = 0; x < GetSemiSolidCollisionTabSize(); x++)
 		{
 			hitSemiPlat = GetSemiSolidCollisionTab(x);
-			if (sfFloatRect_intersects(&hitMob, &hitPlat, NULL) && sfFloatRect_intersects(&hitMob, &hitSemiPlat, NULL) && mob[_i].currentState != DEATH)
+			if (sfFloatRect_intersects(&hitMob, &hitPlat, NULL) && sfFloatRect_intersects(&hitMob, &hitSemiPlat, NULL))
 			{
 				platTransition = sfTrue;
 				break;
@@ -356,7 +356,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		hitPlat = GetSemiSolidCollisionTab(i);
 		hitMob = mob[_i].hitRect;
 
-		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection) && mob[_i].currentState != DEATH)
+		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection)) 
 		{
 			if (intersection.width < intersection.height && !platTransition)
 			{
@@ -443,7 +443,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection))
 		{
-			if (intersection.width > intersection.height && !platTransition)
+			if (intersection.width > intersection.height) //&& !platTransition)
 			{
 				if (mob[_i].velocity.y >= 0)
 				{
@@ -467,7 +467,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		mob[_i].isGrounded = sfFalse;
 
 
-		if (sfFloatRect_intersects(&hitSemiPlat, &hitMob, &intersection) && mob[_i].currentState != DEATH)
+		if (sfFloatRect_intersects(&hitSemiPlat, &hitMob, &intersection))
 		{
 			if (mob[_i].velocity.y > 0)
 			{
