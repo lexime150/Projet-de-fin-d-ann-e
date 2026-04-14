@@ -46,8 +46,11 @@ void LoadMob(void)
 		AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
 
 	}
+	if (mobCount > 0)
+	{
+		GetDistancePlayerMobVector(0);
 
-	GetDistancePlayerMobVector(0);
+	}
 }
 
 void AddMob(TypeMob _type, float _x, float _y)
@@ -568,7 +571,7 @@ void StateMob(float _dt, unsigned _i)
 	}
 
 
-	if (player.currentState == SWORD) 
+	if (player.currentState == SWORD)
 	{
 		sfFloatRect hitPlayer = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
 		sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].rect);
@@ -634,35 +637,31 @@ void StateMob(float _dt, unsigned _i)
 
 float GetDistancePlayerMobX(unsigned _i)
 {
-	if (mobCount > 0)
-	{
-		float distX = player.data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
 
-		if (distX < 0.f)
-		{
-			return distX * -1;
-		}
-		else
-		{
-			return distX;
-		}
+	float distX = player.data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
+
+	if (distX < 0.f)
+	{
+		return distX * -1;
+	}
+	else
+	{
+		return distX;
 	}
 }
 
 float GetDistancePlayerMobY(unsigned _i)
 {
-	if (mobCount > 0)
-	{
-		float distY = player.data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
 
-		if (distY < 0.f)
-		{
-			return distY * -1;
-		}
-		else
-		{
-			return distY;
-		}
+	float distY = player.data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
+
+	if (distY < 0.f)
+	{
+		return distY * -1;
+	}
+	else
+	{
+		return distY;
 	}
 }
 

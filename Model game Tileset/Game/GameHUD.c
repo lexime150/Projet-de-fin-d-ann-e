@@ -18,13 +18,13 @@ void DrawHUD(sfRenderWindow* _renderWindow)
 	sfRenderWindow_drawSprite(_renderWindow, hud.healthBarContainerSprite, NULL);
 
 	sfRenderWindow_drawSprite(_renderWindow, hud.keyFragmentSprite, NULL);
-	sfRenderWindow_drawSprite(_renderWindow, hud.keyFragmentText, NULL);
+	sfRenderWindow_drawText(_renderWindow, hud.keyFragmentText, NULL);
 }
 
 void UpdateHUD()
 {
 	float ratio = player.data.health / player.data.maxHealth;
-	sfIntRect updatedHealthBar = { 1, 0, (int)45 * ratio, 5 };
+	sfIntRect updatedHealthBar = { 1, 0, 45 * (int)ratio, 5 };
 	sfSprite_setTextureRect(hud.healthBarSprite, updatedHealthBar);
 	if (player.data.health <= 0)
 	{
@@ -73,9 +73,9 @@ void CreateKeyNumHUD()
 	sfIntRect keyFragmentRect = { 48,0,16,16 };
 	sfSprite_setTexture(hud.keyFragmentSprite, hud.keyFragmentTexture, sfTrue);
 	sfSprite_setTextureRect(hud.keyFragmentSprite, keyFragmentRect);
-	sfSprite_setScale(hud.keyFragmentSprite, (sfVector2f) { GAME_SCALE * 1.15, GAME_SCALE * 1.15 });
+	sfSprite_setScale(hud.keyFragmentSprite, (sfVector2f) { GAME_SCALE * 1.15f, GAME_SCALE * 1.15f });
 	sfFloatRect keyFragmentBound = sfSprite_getGlobalBounds(hud.keyFragmentSprite);
-	sfSprite_setPosition(hud.keyFragmentSprite, (sfVector2f) {SCREEN_WIDTH - keyFragmentBound.width * 1.2, 2 * GAME_SCALE});
+	sfSprite_setPosition(hud.keyFragmentSprite, (sfVector2f) {SCREEN_WIDTH - keyFragmentBound.width * 1.2f, 2 * GAME_SCALE});
 	keyFragmentBound = sfSprite_getGlobalBounds(hud.keyFragmentSprite);
 
 	hud.keyFragmentText = sfText_create();

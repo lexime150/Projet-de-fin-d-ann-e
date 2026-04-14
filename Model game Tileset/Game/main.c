@@ -130,7 +130,7 @@ void Cleanup(MainData* _mainData)
 
 void LoadMainData(MainData* _mainData)
 {
-	sfVideoMode videoMode = { SCREEN_WIDTH, SCREEN_HEIGHT, BPP };
+	sfVideoMode videoMode = { (unsigned int) SCREEN_WIDTH, (unsigned int) SCREEN_HEIGHT, BPP };
 	_mainData->renderWindow = sfRenderWindow_create(videoMode, "Game loop", sfDefaultStyle, NULL);
 	sfRenderWindow_setFramerateLimit(_mainData->renderWindow, 60);
 	_mainData->clock = sfClock_create();

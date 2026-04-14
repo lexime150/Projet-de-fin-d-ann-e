@@ -98,7 +98,7 @@ void UpdateHover(sfRenderWindow* window, float _dt)
 
 	for (int i = 0; i < count; i++)
 	{
-		if (sfFloatRect_contains(&buttons[i].bounds, mouse.x, mouse.y))
+		if (sfFloatRect_contains(&buttons[i].bounds, (float)mouse.x, (float)mouse.y))
 		{
 			menu.hoveredIndex = i;
 
@@ -116,7 +116,7 @@ void UpdateHover(sfRenderWindow* window, float _dt)
 
 			for (int i = 0; i < count; i++)
 			{
-				sfBool isHovered = sfFloatRect_contains(&buttons[i].bounds, mouse.x, mouse.y);
+				sfBool isHovered = sfFloatRect_contains(&buttons[i].bounds, (float)mouse.x, (float)mouse.y);
 
 				if (menu.state == MENU_MAIN)
 				{

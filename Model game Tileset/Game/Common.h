@@ -13,8 +13,8 @@
 #include "Save.h"
 
 #define GAME_SCALE 4
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
+#define SCREEN_WIDTH 1920.f
+#define SCREEN_HEIGHT 1080.f
 
 #define GRAVITY 900.f
 #define BPP 32

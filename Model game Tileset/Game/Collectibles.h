@@ -31,5 +31,5 @@ void Updateitem( float _dt);
 void Drawitem(sfRenderWindow* _renderWindow);
 void Cleanupitem(void);
 
-void GetItemDistance(unsigned _index);
+sfVector2f GetItemDistance(unsigned _index);
 #endif // !COLLECTIBLES_H

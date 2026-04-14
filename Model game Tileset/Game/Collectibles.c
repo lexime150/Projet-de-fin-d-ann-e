@@ -33,7 +33,7 @@ void Additem(ItemType _itemType, float _x, float _y)
 	newitem.isGrounded = sfFalse;
 
 	int direction = (rand() % 2 == 0) ? -1 : 1;
-	newitem.velocity.x = direction * (rand() % (120 - 80 + 1) + 80);
+	newitem.velocity.x = (float)direction * (rand() % (120 - 80 + 1) + 80);
 	newitem.velocity.y = -200.f;
 
 
@@ -268,7 +268,7 @@ void Cleanupitem(void)
 
 }
 
-void GetItemDistance(unsigned _index)
+sfVector2f GetItemDistance(unsigned _index)
 {
 	sfVector2f distance;
 
