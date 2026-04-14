@@ -25,7 +25,7 @@
 #define TIMER_ATTACK_MUSHROOM 1.6f
 #define TIMER_TAKE_HIT_MUSHROOM 1.f
 
-#define MUSHROOM_DEGATS 38
+#define MUSHROOM_DAMAGE 38
 
 #define COLLISION_MUSHROOM_WIDTH 1.5f
 #define COLLISION_MUSHROOM_HEIGHT 30
@@ -56,7 +56,7 @@
 #define SKELETON_KNOCKBACK_
 
 
-#define SKELETON_DEGATS 25
+#define SKELETON_DAMAGE 25
 
 
 
@@ -156,7 +156,9 @@ typedef struct Mob
 	float rangeAttack;
 	unsigned damage;
 
-	sfBool justDied;
+	sfSoundBuffer* soundBuffer;
+	sfSound* sound;
+
 	sfBool isGrounded;
 
 }Mob;

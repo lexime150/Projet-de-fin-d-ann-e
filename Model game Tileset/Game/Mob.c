@@ -5,6 +5,8 @@
 Mob* mob = { 0 };
 
 sfTexture* texture[MOB_NUMBER];
+sfSoundBuffer* mushroomHitBuffer;
+
 Player* player;
 unsigned mobCount;
 
@@ -22,7 +24,10 @@ void SetBubbleSort(void);
 void DeleteMob(unsigned* _i);
 void SetVelocity(unsigned _i, float _dt);
 
-
+float RandomFloatMob(float min, float max)
+{
+	return min + (float)rand() / (float)RAND_MAX * (max - min);
+}
 
 void LoadMob(void)
 {
@@ -94,13 +99,16 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.timer.timerAttackLimit = TIMER_ATTACK_MUSHROOM;
 		newMob.timer.timerTakeHitLimit = TIMER_TAKE_HIT_MUSHROOM;
 		newMob.hp = 300;
-		newMob.damage = MUSHROOM_DEGATS;
-
+		newMob.damage = MUSHROOM_DAMAGE;
 		//----AttackRect
 
 		sfRectangleShape_setSize(newMob.attackRect, (sfVector2f) { HITBOX_MUSHROOM_ATTACK_WIDTH, HITBOX_MUSHROOM_HEIGHT });
 		sfRectangleShape_setOrigin(newMob.attackRect, (sfVector2f) { HITBOX_MUSHROOM_ATTACK_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT });
 		newMob.mobType = MUSHROOM;
+		mushroomHitBuffer = sfSoundBuffer_createFromFile("Assets/Audio/Sounds/Mobs/Mushroom hurt.ogg");
+		newMob.sound = sfSound_create();
+
+		sfSound_setBuffer(newMob.sound, mushroomHitBuffer);
 		break;
 	case SKELETON:
 		sfSprite_setTexture(newMob.sprite, texture[SKELETON], sfTrue);
@@ -118,7 +126,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.timer.timerAttackLimit = TIMER_ATTACK_SKELETON;
 		newMob.timer.timerTakeHitLimit = TIMER_TAKE_HIT_SKELETON;
 		newMob.hp = 180;
-		newMob.damage = SKELETON_DEGATS;
+		newMob.damage = SKELETON_DAMAGE;
 
 		newMob.isGrounded = sfFalse;
 
@@ -148,9 +156,9 @@ void AddMob(TypeMob _type, float _x, float _y)
 	sfRectangleShape_setPosition(newMob.rect, sfSprite_getPosition(newMob.sprite));
 
 	sfRectangleShape_setScale(newMob.collisionRect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-	newMob.justDied = sfFalse;
+
 	newMob.act = IS_IDLE;
-	newMob.justDied = sfFalse;
+
 	mob[mobCount] = newMob;
 	mobCount++;
 
@@ -356,7 +364,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		hitPlat = GetSemiSolidCollisionTab(i);
 		hitMob = mob[_i].hitRect;
 
-		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection)) 
+		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection))
 		{
 			if (intersection.width < intersection.height && !platTransition)
 			{
@@ -563,7 +571,10 @@ void StateMob(float _dt, unsigned _i)
 		sfVector2f mobPos = sfSprite_getPosition(mob[_i].sprite);
 		if (mob[_i].mobType == MUSHROOM)
 		{
-			Additem(ITEM_HEALTH, mobPos.x, mobPos.y - 30);
+			if (rand() % 3 == 1)
+			{
+				Additem(ITEM_HEALTH, mobPos.x, mobPos.y - 30);
+			}
 		}
 		Additem(ITEM_KEY, mobPos.x, mobPos.y - 30);
 		StateMobMachine(DEATH, _i);
@@ -589,6 +600,13 @@ void StateMob(float _dt, unsigned _i)
 				mob[_i].timer.timerTakeHit = 0;
 				StateMobMachine(TAKE_HIT, _i);
 				mob[_i].act = IS_TAKE_HIT;
+				if (mob[_i].mobType == MUSHROOM)
+				{
+					sfSound_setPitch(mob[_i].sound, RandomFloatMob(0.80f, 1.2f));
+					sfTime offset = sfSeconds(0.4f);
+					sfSound_setPlayingOffset(mob[_i].sound, offset);
+					sfSound_play(mob[_i].sound);
+				}
 
 				if (posMobX > posAttackPlayerX)
 				{
@@ -655,6 +673,7 @@ float GetDistancePlayerMobX(unsigned _i)
 			return distX;
 		}
 	}
+	return 0;
 }
 
 float GetDistancePlayerMobY(unsigned _i)
@@ -675,6 +694,7 @@ float GetDistancePlayerMobY(unsigned _i)
 			return distY;
 		}
 	}
+	return 0;
 }
 
 float GetDistancePlayerMobVector(unsigned _i)

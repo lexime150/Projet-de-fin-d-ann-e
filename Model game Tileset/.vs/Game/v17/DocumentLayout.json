@@ -3,6 +3,30 @@
   "WorkspaceRootPath": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Mob.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Mob.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Collectibles.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Collectibles.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Menu.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Menu.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -15,24 +39,8 @@
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Map.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Collectibles.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Collectibles.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Mob.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Collectibles.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Collectibles.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -83,16 +91,8 @@
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Key.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Mob.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -102,7 +102,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -114,32 +114,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "GameHUD.c",
-              "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\GameHUD.c",
-              "RelativeDocumentMoniker": "Game\\GameHUD.c",
-              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\GameHUD.c",
-              "RelativeToolTip": "Game\\GameHUD.c",
-              "ViewState": "AgIAADgAAAAAAAAAAAAmwEkAAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-04-13T08:00:15.865Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Key.h",
-              "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Key.h",
-              "RelativeDocumentMoniker": "Game\\Key.h",
-              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Key.h",
-              "RelativeToolTip": "Game\\Key.h",
-              "ViewState": "AgIAABcAAAAAAAAAAAAAAB8AAAAHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-10T07:34:06.779Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 21,
               "Title": "Key.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Key.c",
               "RelativeDocumentMoniker": "Game\\Key.c",
@@ -151,20 +126,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "Player.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c",
               "RelativeDocumentMoniker": "Game\\Player.c",
               "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c",
               "RelativeToolTip": "Game\\Player.c",
-              "ViewState": "AgIAAFoEAAAAAAAAAAAmwGsEAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAAMgEAAAAAAAAAAAwwNoEAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-04-10T07:34:06.846Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 8,
               "Title": "Map.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Map.c",
               "RelativeDocumentMoniker": "Game\\Map.c",
@@ -172,21 +147,81 @@
               "RelativeToolTip": "Game\\Map.c",
               "ViewState": "AgIAACMAAAAAAAAAAAAAACcAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-04-10T07:44:06.245Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-10T07:44:06.245Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "Menu.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Menu.c",
               "RelativeDocumentMoniker": "Game\\Menu.c",
               "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Menu.c",
               "RelativeToolTip": "Game\\Menu.c",
-              "ViewState": "AgIAACMAAAAAAAAAAAAmwC8AAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-04-13T09:09:27.227Z",
+              "WhenOpened": "2026-04-13T09:09:27.227Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Game.c",
+              "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.c",
+              "RelativeDocumentMoniker": "Game\\Game.c",
+              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.c",
+              "RelativeToolTip": "Game\\Game.c",
+              "ViewState": "AgIAABgAAAAAAAAAAAAwwC4AAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-04-10T07:34:06.773Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Game.h",
+              "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.h",
+              "RelativeDocumentMoniker": "Game\\Game.h",
+              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.h",
+              "RelativeToolTip": "Game\\Game.h",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-04-10T07:34:06.776Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Mob.c",
+              "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.c",
+              "RelativeDocumentMoniker": "Game\\Mob.c",
+              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.c",
+              "RelativeToolTip": "Game\\Mob.c",
+              "ViewState": "AgIAAEoCAAAAAAAAAAAwwFcCAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-04-13T11:13:46.085Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Key.h",
+              "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Key.h",
+              "RelativeDocumentMoniker": "Game\\Key.h",
+              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Key.h",
+              "RelativeToolTip": "Game\\Key.h",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAAB8AAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-04-10T07:34:06.779Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "GameHUD.c",
+              "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\GameHUD.c",
+              "RelativeDocumentMoniker": "Game\\GameHUD.c",
+              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\GameHUD.c",
+              "RelativeToolTip": "Game\\GameHUD.c",
+              "ViewState": "AgIAADgAAAAAAAAAAAAmwEkAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-04-13T08:00:15.865Z"
             },
             {
               "$type": "Document",
@@ -196,14 +231,14 @@
               "RelativeDocumentMoniker": "Game\\Collectibles.c",
               "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Collectibles.c",
               "RelativeToolTip": "Game\\Collectibles.c",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAwwBUAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-04-13T09:59:06.72Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "Collectibles.h",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Collectibles.h",
               "RelativeDocumentMoniker": "Game\\Collectibles.h",
@@ -211,37 +246,24 @@
               "RelativeToolTip": "Game\\Collectibles.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-13T10:12:21.395Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-13T10:12:21.395Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Mob.c",
-              "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.c",
-              "RelativeDocumentMoniker": "Game\\Mob.c",
-              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.c",
-              "RelativeToolTip": "Game\\Mob.c",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAkwB0AAAA1AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-04-13T11:13:46.085Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 2,
               "Title": "Mob.h",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.h",
               "RelativeDocumentMoniker": "Game\\Mob.h",
               "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.h",
               "RelativeToolTip": "Game\\Mob.h",
-              "ViewState": "AgIAAJAAAAAAAAAAAAAAAJAAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAAAJ8AAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-10T07:34:06.78Z"
+              "WhenOpened": "2026-04-10T07:34:06.78Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "Common.h",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Common.h",
               "RelativeDocumentMoniker": "Game\\Common.h",
@@ -253,19 +275,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Game.c",
-              "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.c",
-              "RelativeDocumentMoniker": "Game\\Game.c",
-              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.c",
-              "RelativeToolTip": "Game\\Game.c",
-              "ViewState": "AgIAAIsAAAAAAAAAAAAtwLsAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-04-10T07:34:06.773Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "Menu.h",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Menu.h",
               "RelativeDocumentMoniker": "Game\\Menu.h",
@@ -277,7 +287,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "GameOver.h",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\GameOver.h",
               "RelativeDocumentMoniker": "Game\\GameOver.h",
@@ -289,7 +299,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "GameState.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\GameState.c",
               "RelativeDocumentMoniker": "Game\\GameState.c",
@@ -301,7 +311,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "main.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\main.c",
               "RelativeDocumentMoniker": "Game\\main.c",
@@ -313,7 +323,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "Camera.h",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Camera.h",
               "RelativeDocumentMoniker": "Game\\Camera.h",
@@ -325,7 +335,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "Player.h",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.h",
               "RelativeDocumentMoniker": "Game\\Player.h",
@@ -337,7 +347,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "Camera.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Camera.c",
               "RelativeDocumentMoniker": "Game\\Camera.c",
@@ -349,7 +359,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "GameOver.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\GameOver.c",
               "RelativeDocumentMoniker": "Game\\GameOver.c",
@@ -361,7 +371,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "GameHUD.h",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\GameHUD.h",
               "RelativeDocumentMoniker": "Game\\GameHUD.h",
@@ -373,7 +383,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "Map.h",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Map.h",
               "RelativeDocumentMoniker": "Game\\Map.h",
@@ -382,18 +392,6 @@
               "ViewState": "AgIAABEAAAAAAAAAAAAAABEAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-04-10T07:52:31.673Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "Game.h",
-              "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.h",
-              "RelativeDocumentMoniker": "Game\\Game.h",
-              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Game.h",
-              "RelativeToolTip": "Game\\Game.h",
-              "ViewState": "AgIAABYAAAAAAAAAAAAAABYAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-10T07:34:06.776Z"
             }
           ]
         }

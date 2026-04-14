@@ -3,9 +3,10 @@ void CheckSaveAndLoadLevel(int _slot);
 void ChangeLevel(const char* _level);
 void LevelTransition();
 void UpdateTransition(float _dt);
-void GivePlayerKeys();
+void LoadMusic();
 float transitionAlpha = 255;
 
+sfMusic* gameMusic;
 
 sfRectangleShape* transitionShape;
 Player* player;
@@ -17,6 +18,7 @@ void LoadGame(void)
 	int slot = playerSaveData.save;
 	CheckSaveAndLoadLevel(slot);
 	LevelTransition();
+	LoadMusic();
 	//LoadKey();
 }
 
@@ -37,6 +39,12 @@ void UpdateTransition(float _dt)
 	}
 
 	sfRectangleShape_setFillColor(transitionShape,sfColor_fromRGBA(0, 0, 0, (sfUint8)transitionAlpha));
+}
+void LoadMusic()
+{
+	gameMusic = sfMusic_createFromFile("Assets/Audio/Musics/Game music.ogg");
+	sfMusic_play(gameMusic);
+	sfMusic_setLoop(gameMusic, sfTrue);
 }
 void GivePlayerKeys()
 {
