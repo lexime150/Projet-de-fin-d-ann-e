@@ -1,2 +1,4 @@
-﻿  Player.c
+﻿  Mob.c
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(650,1): warning C4715: 'GetDistancePlayerMobX' : les chemins de contrôle ne retournent pas tous une valeur
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(667,1): warning C4715: 'GetDistancePlayerMobY' : les chemins de contrôle ne retournent pas tous une valeur
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe

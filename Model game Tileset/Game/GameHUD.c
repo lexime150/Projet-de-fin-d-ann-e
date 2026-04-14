@@ -1,5 +1,5 @@
 #include "GameHUD.h"
-Player player;
+Player* player;
 HUD hud;
 
 
@@ -23,19 +23,19 @@ void DrawHUD(sfRenderWindow* _renderWindow)
 
 void UpdateHUD()
 {
-	float ratio = player.data.health / player.data.maxHealth;
+	float ratio = player->data.health / player->data.maxHealth;
 	sfIntRect updatedHealthBar = { 1, 0, (int)45 * ratio, 5 };
 	sfSprite_setTextureRect(hud.healthBarSprite, updatedHealthBar);
-	if (player.data.health <= 0)
+	if (player->data.health <= 0)
 	{
-		player.data.health = 0;
+		player->data.health = 0;
 	}
-	else if (player.data.health >= player.data.maxHealth)
+	else if (player->data.health >= player->data.maxHealth)
 	{
-		player.data.health = player.data.maxHealth;
+		player->data.health = player->data.maxHealth;
 	}
 
-	snprintf(hud.buffer, sizeof(hud.buffer), "%d/%d", player.data.keyNumber, GetMobCount());
+	snprintf(hud.buffer, sizeof(hud.buffer), "%d/%d", player->data.keyNumber, GetMobCount());
 	sfText_setString(hud.keyFragmentText, hud.buffer);
 }
 

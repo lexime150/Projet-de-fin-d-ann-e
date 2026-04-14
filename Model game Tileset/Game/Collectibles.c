@@ -2,7 +2,7 @@
 
 Items* item;
 unsigned itemCount;
-Player player;
+Player* player;
 sfTexture* healthTexture;
 sfTexture* keyTexture;
 
@@ -43,7 +43,7 @@ void Additem(ItemType _itemType, float _x, float _y)
 	case ITEM_HEALTH:
 		sfSprite_setTexture(newitem.itemSprite, healthTexture, sfTrue);
 		newitem.type = ITEM_HEALTH;
-		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE * 1.2, GAME_SCALE * 1.2 });
+		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE * 1.2f, GAME_SCALE * 1.2f });
 		break;
 	case ITEM_KEY:
 		sfSprite_setTexture(newitem.itemSprite, keyTexture, sfTrue);
@@ -272,7 +272,7 @@ void GetItemDistance(unsigned _index)
 {
 	sfVector2f distance;
 
-	distance.x = sfSprite_getPosition(item[_index].itemSprite).x - sfSprite_getPosition(player.sprite).x;
-	distance.y = sfSprite_getPosition(item[_index].itemSprite).y - sfSprite_getPosition(player.sprite).y;
+	distance.x = sfSprite_getPosition(item[_index].itemSprite).x - sfSprite_getPosition(player->sprite).x;
+	distance.y = sfSprite_getPosition(item[_index].itemSprite).y - sfSprite_getPosition(player->sprite).y;
 	return distance;
 }
