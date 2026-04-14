@@ -40,10 +40,10 @@ void LoadMob(void)
 
 
 
-	for (unsigned i = 0; i < GetEnemySpawnTabSize(); i++)
+	for (unsigned i = 0; i < GetEnemySpawnTabSize() *1000; i++)
 	{
 		int randMobType = rand() % 2;
-		AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
+		AddMob(randMobType, GetEnemySpawn(0).x, GetEnemySpawn(0).y);
 
 	}
 	if (mobCount > 0)
@@ -331,6 +331,8 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	//-----TRANSITION PLATFORMS-----//
 
+	UpdateMobInfo(_dt, _i);
+
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		hitMob = mob[_i].hitRect;
@@ -344,10 +346,15 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 				platTransition = sfTrue;
 				break;
 			}
+
+			if (platTransition)
+			{
+				break;
+			}
 		}
 
 	}
-
+	
 
 	//-----SEMI-SOLID PLATFORMS-----//
 
@@ -356,7 +363,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		hitPlat = GetSemiSolidCollisionTab(i);
 		hitMob = mob[_i].hitRect;
 
-		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection)) 
+		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection))
 		{
 			if (intersection.width < intersection.height && !platTransition)
 			{
@@ -370,7 +377,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 				}
 
 			}
-			else if (intersection.width > intersection.height && !platTransition)
+			else if (intersection.width > intersection.height)
 			{
 				if (mob[_i].velocity.y < 0.f)
 				{
@@ -395,9 +402,9 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		hitPlat = GetMapCollision(i);
 		hitMob = mob[_i].hitRect;
 
-		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection) && mob[_i].currentState != DEATH)
+		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection) && mob[_i].currentState != DEATH && !platTransition)
 		{
-			if (intersection.width < intersection.height && !platTransition)
+			if (intersection.width < intersection.height)
 			{
 				if (mob[_i].velocity.x < 0.f)
 				{
@@ -413,13 +420,13 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 				StateMobMachine(IDLE_MOB, _i);
 
 			}
-			else if (hitMob.left < hitPlat.left && !platTransition)
+			else if (hitMob.left < hitPlat.left)
 			{
 
 				posMob.x = hitPlat.left + (hitMob.width / 2);
 				StateMobMachine(IDLE_MOB, _i);
 			}
-			else if ((hitMob.left + hitMob.width) > (hitPlat.left + hitPlat.width) && !platTransition)
+			else if ((hitMob.left + hitMob.width) > (hitPlat.left + hitPlat.width))
 			{
 				StateMobMachine(IDLE_MOB, _i);
 
@@ -443,7 +450,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection))
 		{
-			if (intersection.width > intersection.height) //&& !platTransition)
+			if (intersection.width > intersection.height) 
 			{
 				if (mob[_i].velocity.y >= 0)
 				{
@@ -466,7 +473,6 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 		mob[_i].isGrounded = sfFalse;
 
-
 		if (sfFloatRect_intersects(&hitSemiPlat, &hitMob, &intersection))
 		{
 			if (mob[_i].velocity.y > 0)
@@ -481,11 +487,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 			sfSprite_setPosition(mob[_i].sprite, posMob);
 		}
 
-
 	}
-
-
-
 
 }
 
