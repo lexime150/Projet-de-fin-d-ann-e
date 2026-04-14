@@ -24,6 +24,8 @@ void SetBubbleSort(void);
 void DeleteMob(unsigned* _i);
 void SetVelocity(unsigned _i, float _dt);
 
+
+
 float RandomFloatMob(float min, float max)
 {
 	return min + (float)rand() / (float)RAND_MAX * (max - min);
@@ -45,10 +47,10 @@ void LoadMob(void)
 
 
 
-	for (unsigned i = 0; i < GetEnemySpawnTabSize() *1000; i++)
+	for (unsigned i = 0; i < GetEnemySpawnTabSize() ; i++)
 	{
 		int randMobType = rand() % 2;
-		AddMob(randMobType, GetEnemySpawn(0).x, GetEnemySpawn(0).y);
+		AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
 
 	}
 	if (mobCount > 0)
@@ -106,9 +108,11 @@ void AddMob(TypeMob _type, float _x, float _y)
 		sfRectangleShape_setOrigin(newMob.attackRect, (sfVector2f) { HITBOX_MUSHROOM_ATTACK_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT });
 		newMob.mobType = MUSHROOM;
 		mushroomHitBuffer = sfSoundBuffer_createFromFile("Assets/Audio/Sounds/Mobs/Mushroom hurt.ogg");
-		newMob.sound = sfSound_create();
+		newMob.soundBufferAttack = sfSoundBuffer_createFromFile("Assets/Audio/Mobs/Mushroom attack.ogg");
+		
+		newMob.soundTakeHit = sfSound_create();
 
-		sfSound_setBuffer(newMob.sound, mushroomHitBuffer);
+		sfSound_setBuffer(newMob.soundTakeHit, mushroomHitBuffer);
 		break;
 	case SKELETON:
 		sfSprite_setTexture(newMob.sprite, texture[SKELETON], sfTrue);
@@ -119,6 +123,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		sfRectangleShape_setSize(newMob.collisionRect, (sfVector2f) { COLLISION_SKELETON_WIDTH, COLLISION_SKELETON_HEIGHT });
 		sfRectangleShape_setOrigin(newMob.collisionRect, (sfVector2f) { COLLISION_SKELETON_WIDTH / 2, COLLISION_SKELETON_HEIGHT });
 
+		newMob.soundBufferTakeHit = sfSoundBuffer_createFromFile("Assets/Audio/Sounds/Mobs/Skeleton damage");
 
 
 		newMob.rangeMove = DIST_RUN_MUSHROOM;
@@ -135,6 +140,10 @@ void AddMob(TypeMob _type, float _x, float _y)
 		sfRectangleShape_setSize(newMob.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON, HITBOX_SKELETON_WIDTH });
 		sfRectangleShape_setOrigin(newMob.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON / 2, HITBOX_ATTACK_SKELETON });
 		newMob.mobType = SKELETON;
+
+		newMob.soundBufferAttack = sfSoundBuffer_createFromFile("Assets/Audio/Mobs/skeleton attack.mp3");
+
+
 
 		break;
 	default:
@@ -604,10 +613,10 @@ void StateMob(float _dt, unsigned _i)
 				mob[_i].act = IS_TAKE_HIT;
 				if (mob[_i].mobType == MUSHROOM)
 				{
-					sfSound_setPitch(mob[_i].sound, RandomFloatMob(0.80f, 1.2f));
+					sfSound_setPitch(mob[_i].soundTakeHit, RandomFloatMob(0.80f, 1.2f));
 					sfTime offset = sfSeconds(0.4f);
-					sfSound_setPlayingOffset(mob[_i].sound, offset);
-					sfSound_play(mob[_i].sound);
+					sfSound_setPlayingOffset(mob[_i].soundTakeHit, offset);
+					sfSound_play(mob[_i].soundTakeHit);
 				}
 
 				if (posMobX > posAttackPlayerX)

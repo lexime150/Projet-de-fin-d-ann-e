@@ -156,8 +156,14 @@ typedef struct Mob
 	float rangeAttack;
 	unsigned damage;
 
-	sfSoundBuffer* soundBuffer;
-	sfSound* sound;
+	sfSoundBuffer* soundBufferTakeHit;
+	sfSound* soundTakeHit;
+
+	sfSoundBuffer* soundBufferAttack;
+	sfSound* soundAttack;
+
+	sfSoundBuffer* soundBufferDead;
+	sfSound* soundDead;
 
 	sfBool isGrounded;
 
