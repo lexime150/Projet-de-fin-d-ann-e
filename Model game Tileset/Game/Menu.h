@@ -9,6 +9,11 @@ typedef struct
 {
     sfText* text;
     sfFloatRect bounds;
+
+    sfSprite* sprite;
+    sfTexture* texture;
+
+    float scale;
 } Button;
 
 
@@ -25,7 +30,6 @@ typedef struct Menu
     sfSprite* backgroundSprite;
     sfTexture* backgroundTexture;
 
-    // Boutons
     Button mainButtons[3]; // PLAY, SETTING, QUIT
     Button saveButtons[4]; // SAVE 1,2,3, BACK
 
