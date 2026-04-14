@@ -43,7 +43,7 @@ void Additem(ItemType _itemType, float _x, float _y)
 	case ITEM_HEALTH:
 		sfSprite_setTexture(newitem.itemSprite, healthTexture, sfTrue);
 		newitem.type = ITEM_HEALTH;
-		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE * 1.2, GAME_SCALE * 1.2 });
+		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE * 1.2F, GAME_SCALE * 1.2F });
 		break;
 	case ITEM_KEY:
 		sfSprite_setTexture(newitem.itemSprite, keyTexture, sfTrue);
