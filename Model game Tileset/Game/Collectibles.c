@@ -356,7 +356,7 @@ void VacuumEffect(void)
 			{
 				if (player.data.health < player.data.maxHealth)
 				{
-					player.data.health += 20;
+					player.data.health += HEALTH_NUMBER;
 					RemoveItem(i);
 					i--;
 

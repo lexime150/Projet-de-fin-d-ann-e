@@ -6,6 +6,7 @@
 #include "Mob.h"
 #include "Map.h"
 
+#define HEALTH_NUMBER 50
 
 typedef enum ItemType
 {
