@@ -1,18 +1,4 @@
-﻿  Animation.c
-  Camera.c
-  Collectibles.c
-  Game.c
-  GameHUD.c
-  GameOver.c
-  GameState.c
-  Key.c
-  main.c
-  Map.c
-  Menu.c
-  Mob.c
-  Player.c
-  Save.c
-  Génération de code en cours...
+﻿  Collectibles.c
   Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
   'pwsh.exe' n'est pas reconnu en tant que commande interne
   ou externe, un programme exécutable ou un fichier de commandes.

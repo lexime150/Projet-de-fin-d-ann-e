@@ -30,6 +30,6 @@ void Additem(ItemType _itemType, float _x, float _y);
 void Updateitem( float _dt);
 void Drawitem(sfRenderWindow* _renderWindow);
 void Cleanupitem(void);
-
+int GetItemCount(void);
 sfVector2f GetItemDistance(unsigned _index);
 #endif // !COLLECTIBLES_H

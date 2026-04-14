@@ -5,7 +5,7 @@ unsigned itemCount;
 Player player;
 sfTexture* healthTexture;
 sfTexture* keyTexture;
-
+void VacuumEffect(void);
 void Loaditem(void)
 {
 	healthTexture = sfTexture_createFromFile("Assets/Sprites/Collectibles/heart.png", NULL);
@@ -58,6 +58,9 @@ void Additem(ItemType _itemType, float _x, float _y)
 	}
 
 
+	sfFloatRect localBounds = sfSprite_getLocalBounds(newitem.itemSprite);
+	sfSprite_setOrigin(newitem.itemSprite, (sfVector2f) { localBounds.width / 2.f, localBounds.height });
+
 	sfSprite_setPosition(newitem.itemSprite, (sfVector2f) { _x, _y });
 	newitem.itemPosition = sfSprite_getPosition(newitem.itemSprite);
 
@@ -79,22 +82,34 @@ void ApplyPhysicsitem(unsigned i, float _dt)
 	}
 }
 
+
 sfBool CollisionitemX(unsigned i, float _dx)
 {
 	sfFloatRect bounds = sfSprite_getGlobalBounds(item[i].itemSprite);
 	sfVector2f  pos = sfSprite_getPosition(item[i].itemSprite);
-	sfFloatRect hitbox = { pos.x + _dx, pos.y, bounds.width, bounds.height };
+
+
+	sfFloatRect hitbox = { bounds.left + _dx, bounds.top, bounds.width, bounds.height };
 
 	for (unsigned j = 0; j < GetCollisionTabSize(); j++)
 	{
 		sfFloatRect platform = GetMapCollision(j);
 		if (!sfFloatRect_intersects(&hitbox, &platform, NULL))
+		{
 			continue;
 
+		}
+
 		if (item[i].velocity.x > 0.f)
-			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { platform.left - bounds.width, pos.y });
+		{
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { platform.left - bounds.width / 2.f, pos.y });
+
+		}
 		else if (item[i].velocity.x < 0.f)
-			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { platform.left + platform.width, pos.y });
+		{
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { platform.left + platform.width + bounds.width / 2.f, pos.y });
+
+		}
 
 		item[i].velocity.x = 0.f;
 		return sfTrue;
@@ -111,12 +126,12 @@ sfBool CollisionitemX(unsigned i, float _dx)
 
 		if (item[i].velocity.x > 0.f)
 		{
-			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { semi.left - bounds.width, pos.y });
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { semi.left - bounds.width / 2.f, pos.y });
 
 		}
 		else if (item[i].velocity.x < 0.f)
 		{
-			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { semi.left + semi.width, pos.y });
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { semi.left + semi.width + bounds.width / 2.f, pos.y });
 
 		}
 
@@ -126,7 +141,7 @@ sfBool CollisionitemX(unsigned i, float _dx)
 
 	if (item[i].isGrounded)
 	{
-		sfFloatRect groundCheck = { pos.x + _dx, pos.y + bounds.height + 1.f, bounds.width, 2.f };
+		sfFloatRect groundCheck = { bounds.left + _dx, pos.y + 1.f, bounds.width, 2.f };
 		sfBool groundFound = sfFalse;
 
 		for (unsigned j = 0; j < GetCollisionTabSize(); j++)
@@ -142,7 +157,10 @@ sfBool CollisionitemX(unsigned i, float _dx)
 		{
 			sfFloatRect semiSolidCollision = GetSemiSolidCollisionTab(j);
 			if (sfFloatRect_intersects(&groundCheck, &semiSolidCollision, NULL))
+			{
 				groundFound = sfTrue;
+
+			}
 		}
 
 		if (!groundFound)
@@ -155,14 +173,15 @@ sfBool CollisionitemX(unsigned i, float _dx)
 	sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { pos.x + _dx, pos.y });
 	return sfFalse;
 }
+
 sfBool CollisionitemY(unsigned i, float _dy)
 {
 	sfFloatRect bounds = sfSprite_getGlobalBounds(item[i].itemSprite);
 	sfVector2f  pos = sfSprite_getPosition(item[i].itemSprite);
 
-	float previousBottom = pos.y + bounds.height;
+	float previousBottom = pos.y;
 
-	sfFloatRect hitbox = { pos.x, pos.y + _dy, bounds.width, bounds.height };
+	sfFloatRect hitbox = { bounds.left, bounds.top + _dy, bounds.width, bounds.height };
 	item[i].isGrounded = sfFalse;
 
 	for (unsigned j = 0; j < GetCollisionTabSize(); j++)
@@ -176,16 +195,16 @@ sfBool CollisionitemY(unsigned i, float _dy)
 
 		if (item[i].velocity.y > 0.f)
 		{
-			hitbox.top = platform.top - hitbox.height;
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { pos.x, platform.top });
 			item[i].isGrounded = sfTrue;
 		}
 		else if (item[i].velocity.y < 0.f)
 		{
-			hitbox.top = platform.top + platform.height;
+
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { pos.x, platform.top + platform.height + bounds.height });
 		}
 
 		item[i].velocity.y = 0.f;
-		sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { hitbox.left, hitbox.top });
 		return sfTrue;
 	}
 
@@ -203,10 +222,9 @@ sfBool CollisionitemY(unsigned i, float _dy)
 
 		if (isFalling && wasAbove)
 		{
-			hitbox.top = semi.top - hitbox.height;
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { pos.x, semi.top });
 			item[i].isGrounded = sfTrue;
 			item[i].velocity.y = 0.f;
-			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { hitbox.left, hitbox.top });
 			return sfTrue;
 		}
 	}
@@ -237,6 +255,7 @@ void Updateitem(float _dt)
 		float dy = item[i].velocity.y * _dt;
 		CollisionitemY(i, dy);
 	}
+	VacuumEffect();
 }
 
 void Drawitem(sfRenderWindow* _renderWindow)
@@ -272,7 +291,77 @@ sfVector2f GetItemDistance(unsigned _index)
 {
 	sfVector2f distance;
 
-	distance.x = sfSprite_getPosition(item[_index].itemSprite).x - sfSprite_getPosition(player.sprite).x;
-	distance.y = sfSprite_getPosition(item[_index].itemSprite).y - sfSprite_getPosition(player.sprite).y;
+	distance.x = sfSprite_getPosition(player.sprite).x - sfSprite_getPosition(item[_index].itemSprite).x;
+	distance.y = sfSprite_getPosition(player.sprite).y - sfSprite_getPosition(item[_index].itemSprite).y;
+	printf("Distance x: %f | Distance y: %f\n", distance.x, distance.y);
 	return distance;
+}
+
+int GetItemCount(void)
+{
+	return itemCount;
+}
+void RemoveItem(int index)
+{
+	sfSprite_destroy(item[index].itemSprite);
+
+
+	item[index] = item[itemCount - 1];
+
+	itemCount--;
+
+
+	Items* temp = realloc(item, itemCount * sizeof(Items));
+	if (temp || itemCount == 0)
+	{
+		item = temp;
+
+	}
+}
+void VacuumEffect(void)
+{
+	for (int i = 0; i < GetItemCount(); i++)
+	{
+		sfVector2f itemPos = sfSprite_getPosition(item[i].itemSprite);
+		sfVector2f playerPos = sfSprite_getPosition(player.sprite);
+
+		sfVector2f dir;
+		dir.x = playerPos.x - itemPos.x;
+		dir.y = playerPos.y - itemPos.y;
+
+		float distance = sqrtf(dir.x * dir.x + dir.y * dir.y);
+
+		float radius = 200.f;
+
+		if (distance < radius && distance > 0.1f)
+		{
+
+			dir.x /= distance;
+			dir.y /= distance;
+
+			float strength = 25.f;
+
+			item[i].velocity.x += dir.x * strength;
+			item[i].velocity.y += dir.y * strength;
+		}
+		if (distance < 20.f)
+		{
+			if (item[i].type == ITEM_KEY)
+			{
+				player.data.keyNumber++;
+				RemoveItem(i);
+				i--;
+			}
+			else if (item[i].type == ITEM_HEALTH)
+			{
+				if (player.data.health < player.data.maxHealth)
+				{
+					player.data.health += 20;
+					RemoveItem(i);
+					i--;
+
+				}
+			}
+		}
+	}
 }

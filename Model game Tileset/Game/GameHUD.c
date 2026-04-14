@@ -24,7 +24,7 @@ void DrawHUD(sfRenderWindow* _renderWindow)
 void UpdateHUD()
 {
 	float ratio = player.data.health / player.data.maxHealth;
-	sfIntRect updatedHealthBar = { 1, 0, 45 * (int)ratio, 5 };
+	sfIntRect updatedHealthBar = { 1, 0, 45 * ratio, 5 };
 	sfSprite_setTextureRect(hud.healthBarSprite, updatedHealthBar);
 	if (player.data.health <= 0)
 	{

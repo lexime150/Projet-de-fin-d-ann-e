@@ -95,10 +95,15 @@ void UpdateGame(float _dt)
 	UpdatePlayer(_dt);
 	UpdateCamera(_dt);
 	UpdateMob(NULL, _dt);
+	Updateitem(_dt);
+
 	UpdateHUD();
 	UpdateTransition(_dt);
 
-	Updateitem(_dt);
+	for (int i = 0; i < GetItemCount(); i++)
+	{
+		GetItemDistance(i);
+	}
 }
 
 void DrawGame(sfRenderWindow* _renderWindow)
