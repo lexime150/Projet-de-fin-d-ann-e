@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  Camera.c
   Collectibles.c
   Game.c
@@ -13,3 +14,9 @@ C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Gam
   main.c
   Génération de code en cours...
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+=======
+﻿  Player.c
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.
+>>>>>>> 54c472aef35233ba3b47e751f016538dcdefbf59
