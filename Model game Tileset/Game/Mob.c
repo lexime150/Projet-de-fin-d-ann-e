@@ -563,9 +563,9 @@ void StateMob(float _dt, unsigned _i)
 		sfVector2f mobPos = sfSprite_getPosition(mob[_i].sprite);
 		if (mob[_i].mobType == MUSHROOM)
 		{
-			Additem(ITEM_HEALTH, mobPos.x, mobPos.y - 100);
+			Additem(ITEM_HEALTH, mobPos.x, mobPos.y - 30);
 		}
-		Additem(ITEM_KEY, mobPos.x, mobPos.y - 125);
+		Additem(ITEM_KEY, mobPos.x, mobPos.y - 30);
 		StateMobMachine(DEATH, _i);
 		mob[_i].velocity.x = 0.f;
 	}
