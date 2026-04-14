@@ -1031,7 +1031,7 @@ void CheckPlayerHP(void)
 {
 	if (player->data.health <= 0)
 	{
-		ChangeLevel("Level_01");
+		ChangeLevel(player->data.level);
 		player->data.health = player->data.maxHealth;
 	}
 }
