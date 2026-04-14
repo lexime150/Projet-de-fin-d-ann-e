@@ -1129,11 +1129,11 @@ void BasePlayer()
 	player->side = NOTHING_PLAYER;
 
 	player->sound.swordSound = sfSound_create();
-	player->sound.buffer = sfSoundBuffer_createFromFile("Assets/Sounds/Sword_Attack_Sound.wav");
+	player->sound.buffer = sfSoundBuffer_createFromFile("Assets/Audio/Sounds/Sword_Attack_Sound.wav");
 	sfSound_setBuffer(player->sound.swordSound, player->sound.buffer);
 
 	player->sound.axeSound = sfSound_create();
-	player->sound.buffer = sfSoundBuffer_createFromFile("Assets/Sounds/Axe_Attack_Sound.wav");
+	player->sound.buffer = sfSoundBuffer_createFromFile("Assets/Audio/Sounds/Axe_Attack_Sound.wav");
 	sfSound_setBuffer(player->sound.axeSound, player->sound.buffer);
 
 	player->data.keyNumber = 0;
