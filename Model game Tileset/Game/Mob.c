@@ -40,7 +40,7 @@ void LoadMob(void)
 
 
 
-	for (int i = 0; i < GetEnemySpawnTabSize(); i++)
+	for (unsigned i = 0; i < GetEnemySpawnTabSize(); i++)
 	{
 		int randMobType = rand() % 2;
 		AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
@@ -284,7 +284,7 @@ void SetBubbleSort()
 
 void UpdateMobInfo(float _dt, unsigned _i)
 {
-	
+
 
 	sfRectangleShape_setPosition(mob[_i].rect, sfSprite_getPosition(mob[_i].sprite));
 	mob[_i].hitRect = sfRectangleShape_getGlobalBounds(mob[_i].rect);
@@ -297,7 +297,7 @@ void UpdateMobInfo(float _dt, unsigned _i)
 	sfRectangleShape_setPosition(mob[_i].collisionRect, sfSprite_getPosition(mob[_i].sprite));
 	mob[_i].collisionMob = sfRectangleShape_getGlobalBounds(mob[_i].collisionRect);
 
-	
+
 }
 
 void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
@@ -328,12 +328,12 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	//-----TRANSITION PLATFORMS-----//
 
-	for (int i = 0; i < GetCollisionTabSize(); i++)
+	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		hitMob = mob[_i].hitRect;
 		hitPlat = GetMapCollision(i);
 
-		for (int x = 0; x < GetSemiSolidCollisionTabSize(); x++)
+		for (unsigned x = 0; x < GetSemiSolidCollisionTabSize(); x++)
 		{
 			hitSemiPlat = GetSemiSolidCollisionTab(x);
 			if (sfFloatRect_intersects(&hitMob, &hitPlat, NULL) && sfFloatRect_intersects(&hitMob, &hitSemiPlat, NULL))
@@ -344,16 +344,16 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		}
 
 	}
-		
+
 
 	//-----SEMI-SOLID PLATFORMS-----//
 
-	for (int i = 0; i < GetSemiSolidCollisionTabSize(); i++)
+	for (unsigned i = 0; i < GetSemiSolidCollisionTabSize(); i++)
 	{
 		hitPlat = GetSemiSolidCollisionTab(i);
 		hitMob = mob[_i].hitRect;
 
-		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection))
+		if (sfFloatRect_intersects(&hitMob, &hitPlat, &intersection) && mob[_i].act != IS_DEATH)
 		{
 			if (intersection.width < intersection.height && !platTransition)
 			{
@@ -436,7 +436,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 	{
 		hitPlat = GetMapCollision(i);
 		hitMob = mob[_i].hitRect;
-		
+
 
 		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection))
 		{
@@ -456,7 +456,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	UpdateMobInfo(_dt, _i);
 
-	for (int i = 0; i < GetSemiSolidCollisionTabSize(); i++)
+	for (unsigned i = 0; i < GetSemiSolidCollisionTabSize(); i++)
 	{
 		hitSemiPlat = GetSemiSolidCollisionTab(i);
 		hitMob = mob[_i].hitRect;
@@ -489,7 +489,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 void StateMob(float _dt, unsigned _i)
 {
 	//-------MOVE MOB---------//
-	
+
 
 	mob[_i].timer.timerTakeHit += _dt;
 	mob[_i].timer.timerAttack += _dt;
@@ -540,7 +540,7 @@ void StateMob(float _dt, unsigned _i)
 				StateMobMachine(IDLE_MOB, _i);
 				mob[_i].act = IS_IDLE;
 			}
-			
+
 
 
 
@@ -568,29 +568,23 @@ void StateMob(float _dt, unsigned _i)
 	}
 
 
-	if (player.currentState == SWORD || player.currentState == AXE)
+	if (player.currentState == SWORD) 
 	{
-		sfFloatRect hitAttackPlayer = sfRectangleShape_getGlobalBounds(player.shape.collisionPlayerShape);
+		sfFloatRect hitPlayer = sfRectangleShape_getGlobalBounds(player.shape.collisionAttackShape);
 		sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].rect);
 		float posMobX = hitMob.left + (hitMob.width / 2);
-		float posAttackPlayerX = hitAttackPlayer.left + (hitAttackPlayer.width / 2);
+		float posAttackPlayerX = sfSprite_getPosition(player.sprite).x;
 
-		if (sfFloatRect_intersects(&hitAttackPlayer, &hitMob, NULL) && mob[_i].currentState != DEATH)
+		if (sfFloatRect_intersects(&hitPlayer, &hitMob, NULL) && mob[_i].currentState != DEATH)
 		{
-			if (mob[_i].timer.timerTakeHit > mob[_i].timer.timerTakeHitLimit)
+
+			if (player.currentState == SWORD && player.currentAnimation->currentFrame == 1)
 			{
-				mob[_i].timer.timerKnockBack += 0.3f;
-				if (player.currentState == SWORD)
-				{
-					mob[_i].hp -= (SWORD_DEGATS + rand() % 21);
-				}
-				else if (player.currentState == AXE)
-				{
-					mob[_i].hp -= (AXE_DEGATS + rand() % 21);
-				}
+				mob[_i].timer.timerKnockBack += 0.25f;
+				mob[_i].hp -= (SWORD_DEGATS + rand() % 21);
+				mob[_i].timer.timerTakeHit = 0;
 				StateMobMachine(TAKE_HIT, _i);
 				mob[_i].act = IS_TAKE_HIT;
-				mob[_i].timer.timerTakeHit = 0;
 
 				if (posMobX > posAttackPlayerX)
 				{
@@ -602,7 +596,8 @@ void StateMob(float _dt, unsigned _i)
 				}
 
 			}
-			else if (mob[_i].act == IS_TAKE_HIT && mob[_i].timer.timerTakeHit > mob[_i].timer.timerTakeHitLimit)
+
+			if (mob[_i].act == IS_TAKE_HIT && !mob[_i].currentMobAnimation->isPlaying)
 			{
 				StateMobMachine(IDLE_MOB, _i);
 				mob[_i].act = IS_IDLE;

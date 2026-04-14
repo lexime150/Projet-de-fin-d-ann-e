@@ -94,6 +94,10 @@ typedef enum PlayerState
 	AXE,
 	SWORD,
 	DASH,
+	SWORD_UP,
+	SWORD_DOWN,
+	AXE_UP,
+	AXE_DOWN,
 	STATE_NUMBER
 
 }PlayerState;
@@ -197,7 +201,7 @@ typedef struct Player
 	PlayerState currentState;
 	PlayerState lastState;
 
-	Animation animationPlayer[17];
+	Animation animationPlayer[25];
 	Animation* currentAnimation;
 
 	SpikeSide spikeSide;

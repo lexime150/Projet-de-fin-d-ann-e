@@ -18,7 +18,7 @@ void CollisionPlayerPlatformsX(float _dx);
 void CollisionPlayerPlatformsY(float _dy);
 
 sfBool CheckCollisionPlayerPlatformsX(float _dx);
-void CheckCollisionPlayerSpike(unsigned _index, float _dt);
+void CheckCollisionPlayerSpike(float _dt);
 void CheckCollisionPlayerPlatforms(float _dt);
 void CheckCollisionPlayerAttackMob(float _dt);
 void CheckCollisionPlayerMob(float _dt);
@@ -33,6 +33,8 @@ void SetSavedStat(PlayerSaveData* save);
 
 void UpdateAttackShape();
 void CheckPlayerHP(void);
+
+void StateAttackPlayer(void);
 
 
 void LoadPlayer(PlayerSaveData* save)
@@ -95,6 +97,18 @@ void LoadAnimationPlayer(void)
 	firstFrame = (sfIntRect){ 0, 9 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player.animationPlayer[DASH] = CreateAnimation(player.sprite, 2, 7, sfTrue, sfFalse, firstFrame);
 
+	firstFrame.top += PLAYER_HEIGHT;
+	player.animationPlayer[SWORD_UP] = CreateAnimation(player.sprite, 4, 9, sfTrue, sfFalse, firstFrame);
+
+	firstFrame.top += PLAYER_HEIGHT;
+	player.animationPlayer[SWORD_DOWN] = CreateAnimation(player.sprite, 4, 9, sfTrue, sfFalse, firstFrame);
+
+	firstFrame.top += PLAYER_HEIGHT;
+	player.animationPlayer[AXE_UP] = CreateAnimation(player.sprite, 10, 21, sfTrue, sfFalse, firstFrame);
+
+	firstFrame.top += PLAYER_HEIGHT;
+	player.animationPlayer[AXE_DOWN] = CreateAnimation(player.sprite, 10, 21, sfTrue, sfFalse, firstFrame);
+
 	SetAnimation(IDLE);
 }
 
@@ -115,11 +129,11 @@ void UpdatePlayer(float _dt)
 
 	UpdateAttackShape();
 
-
+	StateAttackPlayer();
 	MovePlayer(_dt);
 
 	CheckCollisionPlayerPlatforms(_dt);
-	CheckCollisionPlayerSpike(NULL, _dt);
+	CheckCollisionPlayerSpike(_dt);
 	CollisionPlayerTrigger();
 	CheckCollisionPlayerAttackMob(_dt);
 	CheckCollisionPlayerMob(_dt);
@@ -129,11 +143,52 @@ void UpdatePlayer(float _dt)
 	UpdateAnimation(player.currentAnimation, _dt);
 }
 
+void StateAttackPlayer(void)
+{
+	sfBool attackUp = sfKeyboard_isKeyPressed(sfKeyZ);
+	sfBool attackDown = sfKeyboard_isKeyPressed(sfKeyS);
+	
+	sfBool attackSword = sfMouse_isButtonPressed(sfMouseLeft);
+	sfBool attackAxe = sfMouse_isButtonPressed(sfMouseRight);
+
+	if (player.currentAnimation->isPlaying)
+	{
+		if (attackUp)
+		{
+			StateMachine(SWORD_UP);
+
+			if (attackSword)
+			{
+			}
+			else if (attackAxe)
+			{
+				StateMachine(AXE_UP);
+			}
+		}
+		else if (attackDown)
+		{
+			if (attackSword)
+			{
+				StateMachine(SWORD_DOWN);
+			}
+			else if (attackAxe)
+			{
+				StateMachine(AXE_DOWN);
+			}
+		}
+	}
+	else
+	{
+		StateMachine(IDLE);
+	}
+
+}
+
 void CheckCollisionPlayerAttackMob(float _dt)
 {
 
 
-	for (int i = 0; i < GetMobCount(); i++)
+	for (unsigned i = 0; i < GetMobCount(); i++)
 	{
 		if (mob[i].act != IS_DEATH)
 		{
@@ -156,7 +211,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 	sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player.sprite);
 	sfFloatRect hitMob = { 0 };
 	sfFloatRect intersection;
-	for (int i = 0; i < GetMobCount(); i++)
+	for (unsigned i = 0; i < GetMobCount(); i++)
 	{
 		hitMob = sfRectangleShape_getGlobalBounds(mob[i].rect);
 
@@ -204,7 +259,7 @@ void CheckCollisionPlayerMob(float _dt)
 	float playerCenterX = hitPlayer.left + (hitPlayer.width * 0.5f);
 	float mobCenterX;
 
-	for (int i = 0; i < GetMobCount(); i++)
+	for (unsigned i = 0; i < GetMobCount(); i++)
 	{
 		hitMob = mob[i].collisionMob;
 		mobCenterX = hitMob.left + (hitMob.width * 0.5f);
@@ -361,7 +416,7 @@ sfBool HandleAttackState(sfBool movingLeft, sfBool movingRight)
 
 	if (player.currentState == AXE)
 	{
-		player.data.velocity.x = 300 * player.data.lastDirection;
+		player.data.velocity.x = 300.f * player.data.lastDirection;
 
 		if (player.currentAnimation->currentFrame >= player.currentAnimation->frameCount - 1)
 		{
@@ -521,7 +576,7 @@ void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey
 			float dx = player.data.velocity.x * _dt;
 			if (CheckCollisionPlayerPlatformsX(dx))
 			{
-				player.data.currentWallTouched = player.action.isTouchingRightWall ? 1 : -1;
+				player.data.currentWallTouched = player.action.isTouchingRightWall ? 1.f : -1.f;
 
 				float wallJumpHX = 550.f;
 
@@ -843,7 +898,7 @@ sfBool CheckCollisionPlayerPlatformsX(float _dx)
 }
 
 
-void CheckCollisionPlayerSpike(unsigned _index, float _dt)
+void CheckCollisionPlayerSpike(float _dt)
 {
 	player.data.timerSpikeWidth += _dt;
 	player.data.timerSpikeHeight += _dt;
@@ -913,7 +968,7 @@ void CheckCollisionPlayerSpike(unsigned _index, float _dt)
 	float spikeCenterY = 0;
 
 
-	for (int i = 0; i < GetSpikeTabSize(); i++)
+	for (unsigned i = 0; i < GetSpikeTabSize(); i++)
 	{
 		hitSpike = GetSpikeTab(i);
 		spikeCenterY = hitSpike.top + (hitSpike.height / 2);
@@ -980,7 +1035,7 @@ void BasePlayer()
 {
 	player.action.isTransitioning = sfTrue;
 	player.sprite = sfSprite_create();
-	player.texture = sfTexture_createFromFile("Assets/Sprites/Player/PlayerState.png", NULL);
+	player.texture = sfTexture_createFromFile("Assets/Sprites/Player/PlayerUpD.png", NULL);
 	sfSprite_setTexture(player.sprite, player.texture, sfTrue);
 	sfSprite_setScale(player.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfSprite_setPosition(player.sprite, GetPlayerSpawn());
@@ -1097,7 +1152,7 @@ void CollisionPlayerTrigger()
 {
 	sfBool keyIsPressed = sfKeyboard_isKeyPressed(sfKeyE);
 
-	for (int i = 0; i < GetTriggerTabSize(); i++)
+	for (unsigned i = 0; i < GetTriggerTabSize(); i++)
 	{
 		sfFloatRect trigger = {
 			GetMapTrigger(i).left,
@@ -1124,7 +1179,7 @@ void CollisionPlayerTrigger()
 
 void CollisionPlayerDeathZone()
 {
-	for (int i = 0; i < GetDeathZoneTabSize(); i++)
+	for (unsigned i = 0; i < GetDeathZoneTabSize(); i++)
 	{
 		sfFloatRect deathZone = GetDeathZoneTab(i);
 
@@ -1137,7 +1192,7 @@ void CollisionPlayerDeathZone()
 
 void DrawPlayer(sfRenderWindow* _renderWindow)
 {
-	sfRenderWindow_drawSprite(_renderWindow, player.shape.rectCollisionPlayerMob, NULL);
+	sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.rectCollisionPlayerMob, NULL);
 	sfRenderWindow_drawSprite(_renderWindow, player.sprite, NULL);
 	//sfRenderWindow_drawRectangleShape(_renderWindow, player.shape.collisionPlayerShape, NULL);
 	if (player.action.isAttacking)
