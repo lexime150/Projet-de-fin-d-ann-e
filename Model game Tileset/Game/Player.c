@@ -204,6 +204,14 @@ void CheckCollisionPlayerAttackMob(float _dt)
 			{
 
 				StateMobMachine(ATTACK_MOB, i);
+                
+				if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
+				{
+					sfSound_setPlayingOffset(mob[i].soundAttack, sfSeconds(0.5f));
+					sfSound_play(mob[i].soundAttack);
+				}
+				
+				
 				mob[i].timer.timerAttack = 0;
 			}
 			else if (!mob[i].currentMobAnimation->isPlaying && mob[i].act != IS_TAKE_HIT)

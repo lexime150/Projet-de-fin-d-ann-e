@@ -30,6 +30,8 @@
 #define COLLISION_MUSHROOM_WIDTH 1.5f
 #define COLLISION_MUSHROOM_HEIGHT 30
 
+#define MUSHROOM_ATTACK_SOUND 5
+
 //-------Skeleton
 
 //Range
@@ -63,6 +65,8 @@
 
 #define MOB_ATTACK_PLAYER_VELOCITY_X 450.f
 #define MOB_ATTACK_PLAYER_VELOCITY_Y 50.f 
+
+#define SKELETON_ATTACK_SOUND 2
 
 
 typedef enum MobState
@@ -166,6 +170,8 @@ typedef struct Mob
 	sfSound* soundDead;
 
 	sfBool isGrounded;
+
+	short frameAttackSound;
 
 }Mob;
 
