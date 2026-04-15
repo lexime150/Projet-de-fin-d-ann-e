@@ -34,7 +34,6 @@ void SetSavedStat(PlayerSaveData* save);
 void UpdateAttackShape();
 void CheckPlayerHP(void);
 
-void StateAttackPlayer(void);
 
 
 void LoadPlayer(PlayerSaveData* save)
@@ -143,54 +142,6 @@ void UpdatePlayer(float _dt)
 	UpdateAnimation(player->currentAnimation, _dt);
 }
 
-void StateAttackPlayer(void)
-{
-	//sfBool attackUp = sfKeyboard_isKeyPressed(sfKeyZ);
-	//sfBool attackDown = sfKeyboard_isKeyPressed(sfKeyS);
-	//
-	//sfBool attackSword = sfMouse_isButtonPressed(sfMouseLeft);
-	//sfBool attackAxe = sfMouse_isButtonPressed(sfMouseRight);
-
-	//if (player->currentAnimation->isPlaying && player->data.timeAttackSide > TIMER_ATTACK_SIDE)
-	//{
-	//	if (attackUp)
-	//	{
-
-	//		if (attackSword)
-	//		{
-	//			player->data.timeAttackSide = 0;
-	//			player->action.isAttacking = sfTrue;
-	//			StateMachine(SWORD_UP);
-	//		}
-	//		else if (attackAxe)
-	//		{
-	//			player->data.timeAttackSide = 0;
-	//			player->action.isAttacking = sfTrue;
-	//			StateMachine(AXE_UP);
-	//		}
-	//	}
-	//	else if (attackDown)
-	//	{
-	//		if (attackSword)
-	//		{
-	//			player->data.timeAttackSide = 0;
-	//			player->action.isAttacking = sfTrue;
-	//			StateMachine(SWORD_DOWN);
-	//		}
-	//		else if (attackAxe)
-	//		{
-	//			player->data.timeAttackSide = 0;
-	//			player->action.isAttacking = sfTrue;
-	//			StateMachine(AXE_DOWN);
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	//StateMachine(IDLE);
-	//}
-
-}
 
 void CheckCollisionPlayerAttackMob(float _dt)
 {
@@ -254,10 +205,63 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 	}
 
+
+	//----MOB ATTACK INFLUENCED PLAYER----//
+
+
+	PlayerSide playerSide = NOTHING_PLAYER;
+
+	float mobCenterX = 0;
+	float playerCenterX = hitPlayer.left + (hitPlayer.width / 2);
+
+	for (int i = 0; i < mobCount; i++)
+	{
+		hitMob = sfRectangleShape_getGlobalBounds(mob[i].attackRect);
+		mobCenterX = hitMob.left + (hitMob.width / 2);
+		
+
+		if (sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection) && player->data.knockBackTimer <= 0)
+		{
+			if (mob[i].currentState == ATTACK_MOB &&  mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
+			{
+				player->data.knockBackTimer += 0.2f;
+
+				if (playerCenterX < mobCenterX)
+				{
+					playerSide = LEFT_PLAYER;
+				}
+				else if (playerCenterX > mobCenterX)
+				{
+					playerSide = WIDTH_PLAYER;
+				}
+				
+			}
+		
+		}
+
+	}
+
+
+	if (playerSide != NOTHING_PLAYER)
+	{
+		player->action.isGrounded = sfFalse;
+		player->data.velocity.y = -300.f;
+
+		if (playerSide == LEFT_PLAYER)
+		{
+			player->data.velocity.x = -500.f;
+		}
+		else if (playerSide == WIDTH_PLAYER)
+		{
+			player->data.velocity.x = 500.f;
+		}
+	}
+
 }
 
 void CheckCollisionPlayerMob(float _dt)
 {
+
 	player->data.timerInvincible += _dt;
 
 	sfRectangleShape_setPosition(player->shape.rectCollisionPlayerMob, sfSprite_getPosition(player->sprite));

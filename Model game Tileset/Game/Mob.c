@@ -104,7 +104,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.rangeAttack = DIST_ATTACK_MUSHROOM;
 		newMob.timer.timerAttackLimit = TIMER_ATTACK_MUSHROOM;
 		newMob.timer.timerTakeHitLimit = TIMER_TAKE_HIT_MUSHROOM;
-		newMob.hp = 3000000;
+		newMob.hp = 300;
 		newMob.damage = MUSHROOM_DAMAGE;
 		//----AttackRect
 
@@ -136,7 +136,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.rangeAttack = DIST_ATTACK_SKELETON;
 		newMob.timer.timerAttackLimit = TIMER_ATTACK_SKELETON;
 		newMob.timer.timerTakeHitLimit = TIMER_TAKE_HIT_SKELETON;
-		newMob.hp = 18000000;
+		newMob.hp = 180;
 		newMob.damage = SKELETON_DAMAGE;
 
 		newMob.isGrounded = sfFalse;
