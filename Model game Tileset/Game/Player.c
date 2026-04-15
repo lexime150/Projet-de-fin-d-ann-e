@@ -224,7 +224,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 		{
 			if (mob[i].currentState == ATTACK_MOB &&  mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
 			{
-				player->data.knockBackTimer += 0.2f;
+				player->data.knockBackTimer += 0.4f;
 
 				if (playerCenterX < mobCenterX)
 				{
@@ -245,6 +245,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 	if (playerSide != NOTHING_PLAYER)
 	{
 		player->action.isGrounded = sfFalse;
+		StateMachine(FALL);
 		player->data.velocity.y = -300.f;
 
 		if (playerSide == LEFT_PLAYER)

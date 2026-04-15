@@ -120,7 +120,7 @@
               "RelativeDocumentMoniker": "Game\\Player.c",
               "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Player.c",
               "RelativeToolTip": "Game\\Player.c",
-              "ViewState": "AgIAANEAAAAAAAAAAAApwOAAAABwAAAAAAAAAA==",
+              "ViewState": "AgIAANQAAAAAAAAAAAApwPcAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-04-10T07:34:06.846Z",
               "EditorCaption": ""
@@ -157,7 +157,7 @@
               "RelativeDocumentMoniker": "Game\\Mob.c",
               "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Model game Tileset\\Game\\Mob.c",
               "RelativeToolTip": "Game\\Mob.c",
-              "ViewState": "AgIAAFUCAAAAAAAAAAAAAIoAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAFgBAAAAAAAAAAAtwO4AAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-04-13T11:13:46.085Z",
               "EditorCaption": ""
@@ -292,8 +292,7 @@
               "RelativeToolTip": "Game\\Player.h",
               "ViewState": "AgIAACkAAAAAAAAAAAAAAKwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-10T07:34:06.781Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-10T07:34:06.781Z"
             },
             {
               "$type": "Document",

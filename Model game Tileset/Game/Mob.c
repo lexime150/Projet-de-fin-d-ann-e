@@ -220,7 +220,7 @@ void LoadMobAnimation(unsigned _i)
 	{
 	case MUSHROOM:
 		firstFrame = (sfIntRect){ 0, 0, MUSHROOM_SIZE_SPRITE, MUSHROOM_SIZE_SPRITE };
-		mob[_i].mobAnimation[IDLE_MOB] = CreateAnimation(mob[_i].sprite, 4, 7, sfTrue, sfTrue, firstFrame);
+		mob[_i].mobAnimation[IDLE_MOB] = CreateAnimation(mob[_i].sprite, 4, 8, sfTrue, sfTrue, firstFrame);
 
 		firstFrame.top += MUSHROOM_SIZE_SPRITE;
 		mob[_i].mobAnimation[RUN_MOB] = CreateAnimation(mob[_i].sprite, 8, 10, sfTrue, sfTrue, firstFrame);
@@ -236,7 +236,7 @@ void LoadMobAnimation(unsigned _i)
 		break;
 	case SKELETON:
 		firstFrame = (sfIntRect){ 0, 0, HITBOX_SKELETON_WIDTH, HITBOX_SKELETON_WIDTH };
-		mob[_i].mobAnimation[IDLE_MOB] = CreateAnimation(mob[_i].sprite, 3, 6, sfTrue, sfTrue, firstFrame);
+		mob[_i].mobAnimation[IDLE_MOB] = CreateAnimation(mob[_i].sprite, 3, 10, sfTrue, sfTrue, firstFrame);
 
 		firstFrame.top += HITBOX_SKELETON_WIDTH;
 		mob[_i].mobAnimation[RUN_MOB] = CreateAnimation(mob[_i].sprite, 4, 11, sfTrue, sfTrue, firstFrame);
