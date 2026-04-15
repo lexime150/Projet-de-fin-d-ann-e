@@ -34,7 +34,6 @@ void SetSavedStat(PlayerSaveData* save);
 void UpdateAttackShape();
 void CheckPlayerHP(void);
 
-void StateAttackPlayer(void);
 
 
 void LoadPlayer(PlayerSaveData* save)
@@ -143,54 +142,6 @@ void UpdatePlayer(float _dt)
 	UpdateAnimation(player->currentAnimation, _dt);
 }
 
-void StateAttackPlayer(void)
-{
-	//sfBool attackUp = sfKeyboard_isKeyPressed(sfKeyZ);
-	//sfBool attackDown = sfKeyboard_isKeyPressed(sfKeyS);
-	//
-	//sfBool attackSword = sfMouse_isButtonPressed(sfMouseLeft);
-	//sfBool attackAxe = sfMouse_isButtonPressed(sfMouseRight);
-
-	//if (player->currentAnimation->isPlaying && player->data.timeAttackSide > TIMER_ATTACK_SIDE)
-	//{
-	//	if (attackUp)
-	//	{
-
-	//		if (attackSword)
-	//		{
-	//			player->data.timeAttackSide = 0;
-	//			player->action.isAttacking = sfTrue;
-	//			StateMachine(SWORD_UP);
-	//		}
-	//		else if (attackAxe)
-	//		{
-	//			player->data.timeAttackSide = 0;
-	//			player->action.isAttacking = sfTrue;
-	//			StateMachine(AXE_UP);
-	//		}
-	//	}
-	//	else if (attackDown)
-	//	{
-	//		if (attackSword)
-	//		{
-	//			player->data.timeAttackSide = 0;
-	//			player->action.isAttacking = sfTrue;
-	//			StateMachine(SWORD_DOWN);
-	//		}
-	//		else if (attackAxe)
-	//		{
-	//			player->data.timeAttackSide = 0;
-	//			player->action.isAttacking = sfTrue;
-	//			StateMachine(AXE_DOWN);
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	//StateMachine(IDLE);
-	//}
-
-}
 
 void CheckCollisionPlayerAttackMob(float _dt)
 {
