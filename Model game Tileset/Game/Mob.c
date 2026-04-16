@@ -364,6 +364,22 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 	sfFloatRect intersection = { 0 };
 	sfVector2f posMob = sfSprite_getPosition(mob[_i].sprite);
 	
+	hitMob = mob[_i].hitRect;
+	sfFloatRect hitDeathZone;
+
+	for (int i = 0; i < GetDeathZoneTabSize(); i++)
+	{
+		hitDeathZone = GetDeathZoneTab(i);
+
+		if (sfFloatRect_intersects(&hitMob, &hitDeathZone, NULL))
+		{
+			mob[_i].hp = 0;
+			break;
+		}
+
+
+	}
+
 
 
 
@@ -374,7 +390,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
-		hitMob = mob[_i].hitRect;
+		
 		hitPlat = GetMapCollision(i);
 
 		for (unsigned x = 0; x < GetSemiSolidCollisionTabSize(); x++)
@@ -526,6 +542,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		}
 
 	}
+	
 
 }
 
