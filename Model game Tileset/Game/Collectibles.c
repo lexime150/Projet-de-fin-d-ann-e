@@ -1,4 +1,4 @@
-#include "Collectibles.h"
+﻿#include "Collectibles.h"
 
 Items* item;
 unsigned itemCount;
@@ -238,23 +238,28 @@ void Updateitem(float _dt)
 {
 	for (unsigned i = 0; i < itemCount; i++)
 	{
-		ApplyPhysicsitem(i, _dt);
-
-		if (item[i].isGrounded)
+		if (item[i].type == ITEM_HEALTH)
 		{
-			item[i].velocity.x *= 0.85f;
-			if (fabsf(item[i].velocity.x) < 1.f)
+			ApplyPhysicsitem(i, _dt);
+
+			if (item[i].isGrounded)
 			{
-				item[i].velocity.x = 0.f;
-
+				item[i].velocity.x *= 0.85f;
+				if (fabsf(item[i].velocity.x) < 1.f)
+					item[i].velocity.x = 0.f;
 			}
+
+			float dx = item[i].velocity.x * _dt;
+			CollisionitemX(i, dx);
+
+			float dy = item[i].velocity.y * _dt;
+			CollisionitemY(i, dy);
 		}
-
-		float dx = item[i].velocity.x * _dt;
-		CollisionitemX(i, dx);
-
-		float dy = item[i].velocity.y * _dt;
-		CollisionitemY(i, dy);
+		else if (item[i].type == ITEM_KEY)
+		{
+			sfVector2f pos = sfSprite_getPosition(item[i].itemSprite);
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) {pos.x + item[i].velocity.x * _dt,pos.y + item[i].velocity.y * _dt});
+		}
 	}
 	VacuumEffect();
 }
@@ -333,35 +338,43 @@ void VacuumEffect(void)
 
 		float distance = sqrtf(dir.x * dir.x + dir.y * dir.y);
 
-		float radius = 200.f;
-
-		if (distance < radius && distance > 0.1f)
+		if (distance > 0.1f)
 		{
-
 			dir.x /= distance;
 			dir.y /= distance;
 
-			float strength = 25.f;
-
-			item[i].velocity.x += dir.x * strength;
-			item[i].velocity.y += dir.y * strength;
-		}
-		if (distance < 20.f)
-		{
 			if (item[i].type == ITEM_KEY)
 			{
-				player->data.keyNumber++;
-				RemoveItem(i);
-				i--;
-			}
-			else if (item[i].type == ITEM_HEALTH)
-			{
-				if (player->data.health < player->data.maxHealth)
+				float strength = 12.55f;
+				item[i].velocity.x += dir.x * strength;
+				item[i].velocity.y += dir.y * 2 * strength;
+
+				if (distance < 125.f)
 				{
-					player->data.health += HEALTH_NUMBER;
+					player->data.keyNumber++;
 					RemoveItem(i);
 					i--;
+					continue;
+				}
+			}
+			else
+			{
+				float radius = 200.f;
+				if (distance < radius)
+				{
+					float strength = 25.f;
+					item[i].velocity.x += dir.x * strength;
+					item[i].velocity.y += dir.y * strength;
+				}
 
+				if (distance < 20.f)
+				{
+					if (player->data.health < player->data.maxHealth)
+					{
+						player->data.health += HEALTH_NUMBER;
+						RemoveItem(i);
+						i--;
+					}
 				}
 			}
 		}
