@@ -158,7 +158,6 @@ void AddMob(TypeMob _type, float _x, float _y)
 	}
 
 	//---Attack Rect
-
 	sfRectangleShape_setFillColor(newMob.attackRect, sfTransparent);
 	sfRectangleShape_setOutlineColor(newMob.attackRect, sfMagenta);
 	sfRectangleShape_setOutlineThickness(newMob.attackRect, 1.f);
@@ -172,6 +171,12 @@ void AddMob(TypeMob _type, float _x, float _y)
 	sfRectangleShape_setPosition(newMob.rect, sfSprite_getPosition(newMob.sprite));
 
 	sfRectangleShape_setScale(newMob.collisionRect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+
+	newMob.floorSecurity = sfRectangleShape_create();
+	sfRectangleShape_setSize(newMob.floorSecurity, FLOOR_SECURITY_SIZE);
+	sfRectangleShape_setOrigin(newMob.floorSecurity, (sfVector2f){FLOOR_SECURITY_SIZE.x / 2, 0});
+	sfRectangleShape_setScale(newMob.floorSecurity, (sfVector2f){GAME_SCALE, GAME_SCALE});
+	
 
 	sfSound_setBuffer(newMob.soundTakeHit, newMob.soundBufferTakeHit);
 	sfSound_setBuffer(newMob.soundAttack, newMob.soundBufferAttack);
@@ -316,19 +321,20 @@ void SetBubbleSort()
 
 void UpdateMobInfo(float _dt, unsigned _i)
 {
+	sfVector2f posPlayer = sfSprite_getPosition(mob[_i].sprite);
 
-
-	sfRectangleShape_setPosition(mob[_i].rect, sfSprite_getPosition(mob[_i].sprite));
+	sfRectangleShape_setPosition(mob[_i].rect, posPlayer);
 	mob[_i].hitRect = sfRectangleShape_getGlobalBounds(mob[_i].rect);
 	mob[_i].position = sfSprite_getPosition(mob[_i].sprite);
 
 	//----AttackRect
-	sfRectangleShape_setPosition(mob[_i].attackRect, sfSprite_getPosition(mob[_i].sprite));
-	mob[_i].hitAttack = sfRectangleShape_getGlobalBounds(mob[_i].attackRect);
+	sfRectangleShape_setPosition(mob[_i].attackRect, posPlayer);
+	//mob[_i].hitAttack = sfRectangleShape_getGlobalBounds(mob[_i].attackRect);
 
-	sfRectangleShape_setPosition(mob[_i].collisionRect, sfSprite_getPosition(mob[_i].sprite));
-	mob[_i].collisionMob = sfRectangleShape_getGlobalBounds(mob[_i].collisionRect);
+	sfRectangleShape_setPosition(mob[_i].collisionRect, posPlayer);
+	//mob[_i].collisionMob = sfRectangleShape_getGlobalBounds(mob[_i].collisionRect);
 
+	sfRectangleShape_setPosition(mob[_i].floorSecurity, posPlayer);
 
 }
 
@@ -357,6 +363,10 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 	sfFloatRect hitSemiPlat = { 0 };
 	sfFloatRect intersection = { 0 };
 	sfVector2f posMob = sfSprite_getPosition(mob[_i].sprite);
+	
+
+
+
 
 	//-----TRANSITION PLATFORMS-----//
 
@@ -426,6 +436,11 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	//-----PLATFORMS-----//
 
+	//à corriger : les conditions liés à la hitFloor ne sont pas bonnes à cause du left qui est tout le temps vrai car le left est souvent inférieur au autre HitPos
+
+	sfFloatRect hitFloorMob = sfRectangleShape_getGlobalBounds(mob[_i].floorSecurity);
+
+
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		hitPlat = GetMapCollision(i);
@@ -433,35 +448,22 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection) && mob[_i].currentState != DEATH && !platTransition)
 		{
-			if (intersection.width < intersection.height)
+			
+			if (mob[_i].currentState == RUN_MOB && mob[_i].timer.timerTakeHit > 2.5f) //&& mob[_i].lastState != IDLE_MOB)
 			{
-				if (mob[_i].velocity.x < 0.f)
+				if (hitMob.left < hitPlat.left && (hitFloorMob.left + hitFloorMob.width) > hitPlat.left)
 				{
-					posMob.x += intersection.width;
-
+					printf("d");
+					posMob.x = hitPlat.left + (hitMob.width / 2);
+					StateMobMachine(IDLE_MOB, _i);
 				}
-				else if (mob[_i].velocity.x > 0.f)
+				else if ((hitMob.left + hitMob.width) > (hitPlat.left + hitPlat.width) && (hitFloorMob.left < (hitPlat.left + hitPlat.width)))
 				{
+					StateMobMachine(IDLE_MOB, _i);
 
-					posMob.x -= intersection.width;
-
+					posMob.x = (hitPlat.left + hitPlat.width) - (hitMob.width / 2);
 				}
-				StateMobMachine(IDLE_MOB, _i);
-
 			}
-			else if (hitMob.left < hitPlat.left)
-			{
-
-				posMob.x = hitPlat.left + (hitMob.width / 2);
-				StateMobMachine(IDLE_MOB, _i);
-			}
-			else if ((hitMob.left + hitMob.width) > (hitPlat.left + hitPlat.width))
-			{
-				StateMobMachine(IDLE_MOB, _i);
-
-				posMob.x = (hitPlat.left + hitPlat.width) - (hitMob.width / 2);
-			}
-
 
 			sfSprite_setPosition(mob[_i].sprite, posMob);
 		}
@@ -732,6 +734,7 @@ void DrawMob(sfRenderWindow* _renderWindow)
 	{
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].attackRect, NULL);
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
+		sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].floorSecurity, NULL);
 		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].collisionRect, NULL);
 	}

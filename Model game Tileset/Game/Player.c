@@ -93,22 +93,23 @@ void LoadAnimationPlayer(void)
 	firstFrame = (sfIntRect){ 0, 8 * PLAYER_HEIGHT, 48, PLAYER_HEIGHT };
 	player->animationPlayer[SWORD] = CreateAnimation(player->sprite, 4, 18, sfTrue, sfFalse, firstFrame);
 
-	firstFrame = (sfIntRect){ 0, 9 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
-	player->animationPlayer[DASH] = CreateAnimation(player->sprite, 2, 7, sfTrue, sfFalse, firstFrame);
+	//firstFrame = (sfIntRect){ 0, 9 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	//player->animationPlayer[DASH] = CreateAnimation(player->sprite, 2, 7, sfTrue, sfFalse, firstFrame);
 
-	firstFrame.top += PLAYER_HEIGHT;
+	firstFrame = (sfIntRect){0, 9 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT};
 	player->animationPlayer[SWORD_UP] = CreateAnimation(player->sprite, 4, 9, sfTrue, sfFalse, firstFrame);
 
-	firstFrame.top += PLAYER_HEIGHT;
+	firstFrame.top += PLAYER_HEIGHT + 16;
+	firstFrame.height += 16;
 	player->animationPlayer[SWORD_DOWN] = CreateAnimation(player->sprite, 4, 9, sfTrue, sfFalse, firstFrame);
 
-	firstFrame.top += PLAYER_HEIGHT;
-	player->animationPlayer[AXE_UP] = CreateAnimation(player->sprite, 10, 21, sfTrue, sfFalse, firstFrame);
+	firstFrame.top += PLAYER_HEIGHT + 16;
+	player->animationPlayer[AXE_UP] = CreateAnimation(player->sprite, 10, 15, sfTrue, sfFalse, firstFrame);
 
-	firstFrame.top += PLAYER_HEIGHT;
-	player->animationPlayer[AXE_DOWN] = CreateAnimation(player->sprite, 10, 21, sfTrue, sfFalse, firstFrame);
+	firstFrame.top += PLAYER_HEIGHT + 16;
+	player->animationPlayer[AXE_DOWN ] = CreateAnimation(player->sprite, 10, 15, sfTrue, sfFalse, firstFrame);
 
-	SetAnimation(IDLE);
+	SetAnimation(IDLE_MOB);
 }
 
 void SetAnimation(PlayerState _state)
@@ -407,7 +408,7 @@ void HandleAttackInput(float _dt, sfBool movingLeft, sfBool movingRight)
 		player->data.velocity.x = 0;
 		sfSound_setPitch(player->sound.axeSound, RandomFloat(0.8f, 1.2f));
 		sfSound_play(player->sound.axeSound);
-		StateMachine(AXE);
+		StateMachine(AXE_UP);
 	}
 
 	if (sfMouse_isButtonPressed(sfMouseRight) &&

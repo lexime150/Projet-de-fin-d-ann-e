@@ -69,6 +69,9 @@
 #define SKELETON_ATTACK_SOUND 2
 
 
+#define FLOOR_SECURITY_SIZE (sfVector2f){1.f, 5.f}
+
+
 typedef enum MobState
 {
 	IDLE_MOB,
@@ -151,6 +154,7 @@ typedef struct Mob
 	sfRectangleShape* rect;
 	sfRectangleShape* collisionRect;
 	sfRectangleShape* attackRect;
+	sfRectangleShape* floorSecurity;
 
 	int hp;
 

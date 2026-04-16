@@ -94,7 +94,6 @@ typedef enum PlayerState
 	WALL_JUMP,
 	AXE,
 	SWORD,
-	DASH,
 	SWORD_UP,
 	SWORD_DOWN,
 	AXE_UP,
