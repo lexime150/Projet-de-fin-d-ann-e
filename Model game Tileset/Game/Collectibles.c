@@ -347,7 +347,7 @@ void VacuumEffect(void)
 			{
 				float strength = 12.55f;
 				item[i].velocity.x += dir.x * strength;
-				item[i].velocity.y += dir.y * strength;
+				item[i].velocity.y += dir.y * 2 * strength;
 
 				if (distance < 125.f)
 				{

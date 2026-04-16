@@ -599,7 +599,7 @@ void StateMob(float _dt, unsigned _i)
 				Additem(ITEM_HEALTH, mobPos.x, mobPos.y - 30);
 			}
 		}
-		Additem(ITEM_KEY, mobPos.x, mobPos.y - 15);
+		Additem(ITEM_KEY, mobPos.x, mobPos.y - 5);
 		StateMobMachine(DEATH, _i);
 		sfSound_play(mob[_i].soundDead);
 		mob[_i].velocity.x = 0.f;
