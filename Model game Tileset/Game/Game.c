@@ -38,7 +38,7 @@ void UpdateTransition(float _dt)
 		transitionAlpha = 255;
 	}
 
-	sfRectangleShape_setFillColor(transitionShape,sfColor_fromRGBA(0, 0, 0, (sfUint8)transitionAlpha));
+	sfRectangleShape_setFillColor(transitionShape, sfColor_fromRGBA(0, 0, 0, (sfUint8)transitionAlpha));
 }
 void LoadMusic()
 {
@@ -70,7 +70,7 @@ void PollEventGame(sfRenderWindow* _renderWindow)
 			break;
 		}
 	}
-	
+
 }
 
 void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
@@ -98,20 +98,25 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
 	}
 }
 
-void UpdateGame(float _dt)
+void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 {
-	UpdatePlayer(_dt);
-	UpdateCamera(_dt);
-	UpdateMob(NULL, _dt);
-	Updateitem(_dt);
-
-	UpdateHUD();
-	UpdateTransition(_dt);
-
-	for (int i = 0; i < GetItemCount(); i++)
+	if (sfRenderWindow_hasFocus(_renderWindow))
 	{
-		GetItemDistance(i);
+		UpdatePlayer(_renderWindow, _dt);
+		UpdateCamera(_dt);
+		UpdateMob(NULL, _dt);
+		Updateitem(_dt);
+
+		UpdateHUD();
+		UpdateTransition(_dt);
+
+		for (int i = 0; i < GetItemCount(); i++)
+		{
+			GetItemDistance(i);
+		}
 	}
+
+
 }
 
 void DrawGame(sfRenderWindow* _renderWindow)

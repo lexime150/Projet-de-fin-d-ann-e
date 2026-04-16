@@ -216,7 +216,7 @@ typedef struct Player
 
 
 void LoadPlayer(PlayerSaveData* save);
-void UpdatePlayer(float _dt);
+void UpdatePlayer(sfRenderWindow* _renderWindow, float _dt);
 void SetSavedStat(PlayerSaveData* save);
 void DrawPlayer(sfRenderWindow* _renderWindow);
 void CleanUpPlayer(void);

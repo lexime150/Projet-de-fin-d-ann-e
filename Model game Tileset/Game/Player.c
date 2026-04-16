@@ -10,9 +10,9 @@ void LoadAnimationPlayer(void);
 void SetAnimation(PlayerState _state);
 void createCollisionAttack();
 
-void UpdatePlayer(float _dt);
+void UpdatePlayer(sfRenderWindow* _renderWindow, float _dt);
 void ApplyPhysic(float _dt);
-void MovePlayer(float _dt);
+void MovePlayer(sfRenderWindow* _renderWindow, float _dt);
 
 void CollisionPlayerPlatformsX(float _dx);
 void CollisionPlayerPlatformsY(float _dy);
@@ -121,7 +121,7 @@ void SetAnimation(PlayerState _state)
 	player->currentState = _state;
 }
 
-void UpdatePlayer(float _dt)
+void UpdatePlayer(sfRenderWindow* _renderWindow, float _dt)
 {
 	ApplyPhysic(_dt);
 
@@ -129,7 +129,7 @@ void UpdatePlayer(float _dt)
 	UpdateAttackShape();
 
 	//StateAttackPlayer();
-	MovePlayer(_dt);
+	MovePlayer(_renderWindow, _dt);
 
 	CheckCollisionPlayerPlatforms(_dt);
 	CheckCollisionPlayerSpike(_dt);
@@ -155,14 +155,14 @@ void CheckCollisionPlayerAttackMob(float _dt)
 			{
 
 				StateMobMachine(ATTACK_MOB, i);
-                
+
 				if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
 				{
 					sfSound_setPlayingOffset(mob[i].soundAttack, sfSeconds(0.5f));
 					sfSound_play(mob[i].soundAttack);
 				}
-				
-				
+
+
 				mob[i].timer.timerAttack = 0;
 			}
 			else if (!mob[i].currentMobAnimation->isPlaying && mob[i].act != IS_TAKE_HIT)
@@ -192,7 +192,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 					player->data.health -= mob[i].damage + rand() % mob[i].damage;
 
 					player->data.health -= mob[i].damage + rand() % mob[i].damage;
-					
+
 
 				}
 				else if (mob[i].currentMobAnimation->currentFrame != (mob[i].currentMobAnimation->frameCount - 2))
@@ -218,11 +218,11 @@ void CheckCollisionPlayerAttackMob(float _dt)
 	{
 		hitMob = sfRectangleShape_getGlobalBounds(mob[i].attackRect);
 		mobCenterX = hitMob.left + (hitMob.width / 2);
-		
+
 
 		if (sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection) && player->data.knockBackTimer <= 0)
 		{
-			if (mob[i].currentState == ATTACK_MOB &&  mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
+			if (mob[i].currentState == ATTACK_MOB && mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
 			{
 				player->data.knockBackTimer += 0.4f;
 
@@ -234,9 +234,9 @@ void CheckCollisionPlayerAttackMob(float _dt)
 				{
 					playerSide = WIDTH_PLAYER;
 				}
-				
+
 			}
-		
+
 		}
 
 	}
@@ -368,27 +368,32 @@ void createCollisionAttack()
 
 }
 
-void ApplyHorizontalInput(sfBool movingLeft, sfBool movingRight)
+void ApplyHorizontalInput(sfRenderWindow* _renderWindow,sfBool movingLeft, sfBool movingRight)
 {
-	if (movingRight)
+	if (sfRenderWindow_hasFocus(_renderWindow))
 	{
-		player->data.velocity.x = player->data.speed;
-		player->data.lastDirection = 1;
-		player->action.isMoving = sfTrue;
-		sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+		if (movingRight)
+		{
+			player->data.velocity.x = player->data.speed;
+			player->data.lastDirection = 1;
+			player->action.isMoving = sfTrue;
+			sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+		}
+		else if (movingLeft)
+		{
+			player->data.velocity.x = -player->data.speed;
+			player->data.lastDirection = -1;
+			player->action.isMoving = sfTrue;
+			sfSprite_setScale(player->sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+		}
+
+		else
+		{
+			player->data.velocity.x = 0;
+			player->action.isMoving = sfFalse;
+		}
 	}
-	else if (movingLeft)
-	{
-		player->data.velocity.x = -player->data.speed;
-		player->data.lastDirection = -1;
-		player->action.isMoving = sfTrue;
-		sfSprite_setScale(player->sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
-	}
-	else
-	{
-		player->data.velocity.x = 0;
-		player->action.isMoving = sfFalse;
-	}
+
 }
 
 
@@ -424,9 +429,9 @@ void HandleAttackInput(float _dt, sfBool movingLeft, sfBool movingRight)
 }
 
 
-sfBool HandleAttackState(sfBool movingLeft, sfBool movingRight)
+sfBool HandleAttackState(sfRenderWindow* _renderWindow,sfBool movingLeft, sfBool movingRight)
 {
-	
+
 	if (!player->action.isAttacking || player->data.timeAttackSide < TIMER_ATTACK_SIDE)
 	{
 		return sfFalse;
@@ -551,9 +556,10 @@ void HandleSliding(float _dt, sfBool movingLeft, sfBool movingRight, sfBool slid
 	}
 }
 
-void HandleGroundMovement(sfBool movingLeft, sfBool movingRight, sfBool slideKey)
+void HandleGroundMovement(sfRenderWindow* _renderWindow, sfBool movingLeft, sfBool movingRight, sfBool slideKey)
 {
-	ApplyHorizontalInput(movingLeft, movingRight);
+
+	ApplyHorizontalInput(_renderWindow, movingLeft, movingRight);
 
 	if (slideKey && player->action.isGrounded && !player->action.isSliding && player->data.slideCooldownTimer <= 0.f)
 	{
@@ -700,13 +706,15 @@ void HandleAnimationState(float _dt, sfBool movingLeft, sfBool movingRight)
 }
 
 
-void MovePlayer(float _dt)
+void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 {
+
 	if (player->data.knockBackTimer > 0.f)
 	{
 		player->data.knockBackTimer -= _dt;
 		return;
 	}
+
 
 	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
 	sfBool movingRight = sfKeyboard_isKeyPressed(sfKeyD);
@@ -719,9 +727,13 @@ void MovePlayer(float _dt)
 
 	}
 
-	HandleAttackInput(_dt, movingLeft, movingRight);
+	if (sfRenderWindow_hasFocus(_renderWindow))
+	{
 
-	if (HandleAttackState(movingLeft, movingRight))
+		HandleAttackInput(_dt, movingLeft, movingRight);
+	}
+
+	if (HandleAttackState(_renderWindow,movingLeft, movingRight))
 	{
 		return;
 
@@ -740,7 +752,7 @@ void MovePlayer(float _dt)
 
 	}
 	else
-		HandleGroundMovement(movingLeft, movingRight, slideKey);
+		HandleGroundMovement(_renderWindow,movingLeft, movingRight, slideKey);
 
 	HandleJump(_dt, movingLeft, movingRight, jumpKey);
 	HandleAnimationState(_dt, movingLeft, movingRight);
@@ -1079,7 +1091,7 @@ void BasePlayer()
 	sfRectangleShape_setOutlineColor(player->shape.collisionPlayerShape, sfRed);
 	sfRectangleShape_setFillColor(player->shape.collisionPlayerShape, sfColor_fromRGBA(255, 255, 255, 50));
 
-	
+
 
 
 	player->lastState = IDLE;
@@ -1104,9 +1116,9 @@ void BasePlayer()
 	player->shape.playerRect = sfSprite_getGlobalBounds(player->sprite);
 
 	player->shape.rectCollisionPlayerMob = sfRectangleShape_create();
-	sfRectangleShape_setSize(player->shape.rectCollisionPlayerMob, (sfVector2f){PLAYER_COLLISION_WIDTH, PLAYER_COLLISION_HEIGHT});
-	sfRectangleShape_setOrigin(player->shape.rectCollisionPlayerMob, (sfVector2f){PLAYER_COLLISION_WIDTH / 2, PLAYER_COLLISION_HEIGHT});
-	sfRectangleShape_setScale(player->shape.rectCollisionPlayerMob, (sfVector2f){GAME_SCALE, GAME_SCALE});
+	sfRectangleShape_setSize(player->shape.rectCollisionPlayerMob, (sfVector2f) { PLAYER_COLLISION_WIDTH, PLAYER_COLLISION_HEIGHT });
+	sfRectangleShape_setOrigin(player->shape.rectCollisionPlayerMob, (sfVector2f) { PLAYER_COLLISION_WIDTH / 2, PLAYER_COLLISION_HEIGHT });
+	sfRectangleShape_setScale(player->shape.rectCollisionPlayerMob, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
 
 	snprintf(player->data.level, sizeof(player->data.level), "level_00");
