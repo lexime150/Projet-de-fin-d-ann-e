@@ -18,7 +18,7 @@
 
 void LoadGame(void);
 void PollEventGame(sfRenderWindow* _renderWindow);
-void UpdateGame(float _dt);
+void UpdateGame(sfRenderWindow* _renderWindow, float _dt);
 void DrawGame(sfRenderWindow* _renderWindow);
 void CleanupGame(void);
 
