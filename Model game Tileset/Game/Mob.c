@@ -446,23 +446,30 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		hitPlat = GetMapCollision(i);
 		hitMob = mob[_i].hitRect;
 
-		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection) && mob[_i].currentState != DEATH && !platTransition)
+		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection) && mob[_i].currentState != DEATH)
 		{
 			
-			if (mob[_i].currentState == RUN_MOB && mob[_i].timer.timerTakeHit > 2.5f) //&& mob[_i].lastState != IDLE_MOB)
+			if (intersection.width > intersection.height)
 			{
-				if (hitMob.left < hitPlat.left && (hitFloorMob.left + hitFloorMob.width) > hitPlat.left)
+				if (mob[_i].currentState == RUN_MOB && mob[_i].timer.timerTakeHit > 2.5f)
 				{
-					printf("d");
-					posMob.x = hitPlat.left + (hitMob.width / 2);
-					StateMobMachine(IDLE_MOB, _i);
-				}
-				else if ((hitMob.left + hitMob.width) > (hitPlat.left + hitPlat.width) && (hitFloorMob.left < (hitPlat.left + hitPlat.width)))
-				{
-					StateMobMachine(IDLE_MOB, _i);
+					if (mob[_i].velocity.x < 0 && hitMob.left < hitPlat.left && (hitFloorMob.left + hitFloorMob.width) > hitPlat.left)
+					{
+						printf("d");
+						posMob.x = hitPlat.left + (hitMob.width / 2);
+						StateMobMachine(IDLE_MOB, _i);
+					}
+					else if (mob[_i].velocity.x > 0 && (hitMob.left + hitMob.width) > (hitPlat.left + hitPlat.width) && (hitFloorMob.left < (hitPlat.left + hitPlat.width)))
+					{
+						StateMobMachine(IDLE_MOB, _i);
 
-					posMob.x = (hitPlat.left + hitPlat.width) - (hitMob.width / 2);
+						posMob.x = (hitPlat.left + hitPlat.width) - (hitMob.width / 2);
+					}
 				}
+			}
+			else
+			{
+				posMob.x += intersection.width;
 			}
 
 			sfSprite_setPosition(mob[_i].sprite, posMob);
