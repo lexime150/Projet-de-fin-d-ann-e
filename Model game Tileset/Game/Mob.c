@@ -633,7 +633,7 @@ void StateMob(float _dt, unsigned _i)
 
 
 
-	if (player->currentState == SWORD)
+	if (player->currentState == SWORD || player->currentState == SWORD_UP)
 	{
 		sfFloatRect hitPlayer = sfRectangleShape_getGlobalBounds(player->shape.collisionAttackShape);
 		sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].rect);
@@ -643,7 +643,7 @@ void StateMob(float _dt, unsigned _i)
 		if (sfFloatRect_intersects(&hitPlayer, &hitMob, NULL) && mob[_i].currentState != DEATH)
 		{
 
-			if (player->currentState == SWORD && player->currentAnimation->currentFrame == 1)
+			if (player->currentState == SWORD || player->currentState == SWORD_UP && player->currentAnimation->currentFrame == 1)
 			{
 				mob[_i].timer.timerKnockBack += 0.25f;
 				mob[_i].hp -= (SWORD_DEGATS + rand() % 21);

@@ -76,7 +76,7 @@ void Update(MainData _mainData)
 		UpdateMenu(_mainData.renderWindow,dt);
 		break;
 	case GAME:
-		UpdateGame(dt);
+		UpdateGame(_mainData.renderWindow, dt);
 		break;
 	case GAME_OVER:
 		UpdateGameOver(dt);
