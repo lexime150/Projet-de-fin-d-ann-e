@@ -52,9 +52,9 @@ void LoadMenu(void)
 
 	menu.font = sfFont_createFromFile("Assets/Fonts/Arcade.ttf");
 	menu.backgroundSprite = sfSprite_create();
-	menu.backgroundTexture = sfTexture_createFromFile("Assets/Sprites/Menu/Background.png", NULL);
+	menu.backgroundTexture = sfTexture_createFromFile("Assets/Sprites/Menu/background.png", NULL);
 	sfSprite_setTexture(menu.backgroundSprite, menu.backgroundTexture, sfTrue);
-	sfSprite_setScale(menu.backgroundSprite, (sfVector2f) { 5.6f, 5.6f });
+	//sfSprite_setScale(menu.backgroundSprite, (sfVector2f) { 5.6f, 5.6f });
 
 
 	sfSprite_setPosition(menu.backgroundSprite, (sfVector2f) { 0 });
