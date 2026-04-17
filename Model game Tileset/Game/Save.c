@@ -1,18 +1,13 @@
 #include "Save.h"
 #include "Player.h"
 
-extern Player player;
-
+extern Player* player;
 PlayerSaveData playerSaveData;
-
-
 
 void GetSavePath(int slot, char* path)
 {
 	snprintf(path, 32, SAVE_PATH_FMT, slot);
 }
-
-
 
 static sfBool IsValidSlot(int slot)
 {
@@ -24,12 +19,14 @@ static sfBool IsValidSlot(int slot)
 	return sfTrue;
 }
 
-
-
 sfBool SavePlayer(int slot)
 {
 	if (!IsValidSlot(slot))
+		return sfFalse;
+
+	if (!player)
 	{
+		printf("[Save] Erreur : pointeur player NULL.\n");
 		return sfFalse;
 	}
 
@@ -45,14 +42,10 @@ sfBool SavePlayer(int slot)
 
 	PlayerSaveData save;
 	save.save = SAVE_VERSION;
-	save.health = player.data.health;
-
-	snprintf(save.level, sizeof(save.level), "%s", player.data.level);
-
-	save.canDoubleJump = player.data.canDoubleJump;
-	save.canWallJump = player.data.canWallJump;
-
-
+	save.health = player->data.health;
+	save.canDoubleJump = player->data.canDoubleJump;
+	save.canWallJump = player->data.canWallJump;
+	snprintf(save.level, sizeof(save.level), "%s", player->data.level);
 
 	size_t written = fwrite(&save, sizeof(PlayerSaveData), 1, f);
 	fclose(f);
@@ -62,13 +55,14 @@ sfBool SavePlayer(int slot)
 		printf("[Save] Erreur : écriture incomplète dans %s.\n", path);
 		return sfFalse;
 	}
+
 	return sfTrue;
 }
 
-
 PlayerSaveData* LoadSave(int slot)
 {
-	if (!IsValidSlot(slot)) return NULL;
+	if (!IsValidSlot(slot))
+		return NULL;
 
 	char path[32];
 	GetSavePath(slot, path);
@@ -97,65 +91,47 @@ PlayerSaveData* LoadSave(int slot)
 		return NULL;
 	}
 
-
 	playerSaveData = tmp;
 	playerSaveData.save = slot;
 
-
-	snprintf(player.data.level, sizeof(player.data.level), "%s", playerSaveData.level);
-	player.data.health = playerSaveData.health;
-	player.data.canDoubleJump = playerSaveData.canDoubleJump;
-	player.data.canWallJump = playerSaveData.canWallJump;
-
+	if (player)
+	{
+		snprintf(player->data.level, sizeof(player->data.level), "%s", playerSaveData.level);
+		player->data.health = playerSaveData.health;
+		player->data.canDoubleJump = playerSaveData.canDoubleJump;
+		player->data.canWallJump = playerSaveData.canWallJump;
+	}
 
 	printf("[Save] Slot %d chargé. (hp=%.0f)\n", slot, playerSaveData.health);
-
 	return &playerSaveData;
 }
-
-
 
 void DeleteSave(int slot)
 {
 	if (!IsValidSlot(slot))
-	{
 		return;
-	}
 
 	char path[32];
 	GetSavePath(slot, path);
 
 	if (remove(path) == 0)
-	{
-
 		printf("[Save] Slot %d supprimé (%s).\n", slot, path);
-	}
 	else
-	{
 		printf("[Save] Slot %d : aucun fichier à supprimer.\n", slot);
-
-	}
 }
-
-
 
 sfBool SaveExists(int slot)
 {
 	if (!IsValidSlot(slot))
-	{
 		return sfFalse;
-
-	}
 
 	char path[32];
 	GetSavePath(slot, path);
 
 	FILE* f = fopen(path, "rb");
 	if (!f)
-	{
 		return sfFalse;
 
-	}
 	fclose(f);
 	return sfTrue;
 }
