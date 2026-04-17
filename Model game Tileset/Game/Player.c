@@ -155,17 +155,17 @@ void CheckCollisionPlayerAttackMob(float _dt)
 		{
 			if (mob[i].act == IS_ATTACK)
 			{
-
+				
 				StateMobMachine(ATTACK_MOB, i);
 
 				if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
 				{
-					sfSound_setPlayingOffset(mob[i].soundAttack, sfSeconds(0.5f));
-					sfSound_play(mob[i].soundAttack);
+					sfSound_setPlayingOffset(mob[i].soundMob.soundAttack, sfSeconds(0.5f));
+					sfSound_play(mob[i].soundMob.soundAttack);
 				}
 
+				mob[i].data.timerAttack = 0;
 
-				mob[i].timer.timerAttack = 0;
 			}
 			else if (!mob[i].currentMobAnimation->isPlaying && mob[i].act != IS_TAKE_HIT)
 			{
@@ -180,24 +180,25 @@ void CheckCollisionPlayerAttackMob(float _dt)
 	sfFloatRect intersection;
 	for (unsigned i = 0; i < GetMobCount(); i++)
 	{
-		hitMob = sfRectangleShape_getGlobalBounds(mob[i].rect);
+		hitMob = sfRectangleShape_getGlobalBounds(mob[i].shape.rect);
 
 		if (player->data.health > 0)
 		{
 
 			if (mob[i].currentState == ATTACK_MOB && player->data.timerInvincible > TIMER_INVINCIBLE)
 			{
-				if (mob[i].currentMobAnimation->currentFrame == (mob[i].currentMobAnimation->frameCount - 2) && !player->action.damageEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
+				if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound && !player->action.damageEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 				{
+					player->data.timerInvincible = 0;
 					player->action.damageEnable = sfTrue;
 
 					player->data.health -= mob[i].damage + rand() % mob[i].damage;
 
-					player->data.health -= mob[i].damage + rand() % mob[i].damage;
+					//player->data.health -= mob[i].damage + rand() % mob[i].damage;
 
 
 				}
-				else if (mob[i].currentMobAnimation->currentFrame != (mob[i].currentMobAnimation->frameCount - 2))
+				else //if (player->data.timerInvincible )//!mob[i].currentMobAnimation->isPlaying)
 				{
 					player->action.damageEnable = sfFalse;
 				}
@@ -218,7 +219,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 	for (int i = 0; i < mobCount; i++)
 	{
-		hitMob = sfRectangleShape_getGlobalBounds(mob[i].attackRect);
+		hitMob = sfRectangleShape_getGlobalBounds(mob[i].shape.attackRect);
 		mobCenterX = hitMob.left + (hitMob.width / 2);
 
 
@@ -280,7 +281,7 @@ void CheckCollisionPlayerMob(float _dt)
 
 	for (unsigned i = 0; i < GetMobCount(); i++)
 	{
-		hitMob = mob[i].collisionMob;
+		hitMob = mob[i].shape.collisionMob;
 		mobCenterX = hitMob.left + (hitMob.width * 0.5f);
 
 		if (player->currentState != AXE && player->currentState != SWORD && player->currentState != SWORD_UP && !player->action.isInvincible && mob[i].currentState != DEATH)
@@ -292,7 +293,7 @@ void CheckCollisionPlayerMob(float _dt)
 				player->action.isSlideJumping = sfFalse;
 				player->action.isTouchingWall = sfFalse;
 				player->action.isInvincible = sfTrue;
-				player->data.timerInvincible = 0;
+				//player->data.timerInvincible = 0;
 				player->data.health -= 15;
 
 				if (playerCenterX > (mobCenterX)+PLAYER_MOB_MARGE)
@@ -1012,7 +1013,7 @@ void CheckCollisionPlayerSpike(float _dt)
 		StateMachine(FALL);
 		if (player->spikeSide == LEFT)
 		{
-			printf("LEFT\n");
+			//printf("LEFT\n");
 			//player.action.isGrounded = sfFalse;
 			player->data.velocity.y = -SPIKE_VELOCITY;
 			player->data.velocity.x = SPIKE_VELOCITY;
@@ -1022,7 +1023,7 @@ void CheckCollisionPlayerSpike(float _dt)
 		}
 		else if (player->spikeSide == WIDTH)
 		{
-			printf("RIGHT\n");
+			//printf("RIGHT\n");
 			//player.action.isGrounded = sfFalse;
 			player->data.velocity.y = -SPIKE_VELOCITY;
 			player->data.velocity.x = -SPIKE_VELOCITY;
@@ -1072,12 +1073,12 @@ void CheckCollisionPlayerSpike(float _dt)
 
 		if (player->spikeSide == TOP)
 		{
-			printf("TOP\n");
+			//printf("TOP\n");
 			player->data.velocity.y = -SPIKE_VELOCITY;
 		}
 		else if (player->spikeSide == HEIGHT)
 		{
-			printf("HEIGHT\n");
+			//printf("HEIGHT\n");
 			player->data.velocity.y = SPIKE_VELOCITY;
 		}
 
@@ -1164,7 +1165,7 @@ void BasePlayer()
 
 
 	snprintf(player->data.level, sizeof(player->data.level), "level_00");
-	printf("player level: %s\n", player->data.level);
+//	printf("player level: %s\n", player->data.level);
 	player->data.attackCooldownTimer = 0.5f;
 
 
@@ -1184,6 +1185,7 @@ void BasePlayer()
 
 	player->data.canDoubleJump = 0;
 	player->data.canWallJump = 0;
+	
 
 	player->data.timerTakeIt = 0;
 	player->data.timerSpikeWidth = 0;
@@ -1215,7 +1217,7 @@ void SetSavedStat(PlayerSaveData* save)
 	player->data.canWallJump = save->canWallJump;
 
 	snprintf(player->data.level, sizeof(player->data.level), "%s", save->level);
-	printf("buffer: %s\n", player->data.level);
+	//printf("buffer: %s\n", player->data.level);
 }
 
 void UpdateAttackShape()

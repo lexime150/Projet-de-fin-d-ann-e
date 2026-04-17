@@ -111,7 +111,7 @@ typedef enum MobSide
 }MobSide;
 
 
-typedef struct Timer
+typedef struct Data
 {
 	float timerAttack;
 	float timerTakeHit;
@@ -122,17 +122,47 @@ typedef struct Timer
 	float timerKnockBack;
 	float timerKnockBackLimit;
 
-}Timer;
+	float speed;
+	sfVector2f velocity;
+	sfVector2f position;
 
+	int hp;
+
+}Data;
+
+typedef struct HitBox
+{
+
+	sfRectangleShape* rect;
+	sfRectangleShape* collisionRect;
+	sfRectangleShape* attackRect;
+	sfRectangleShape* floorSecurity;
+
+	sfFloatRect hitbox;
+	sfFloatRect hitRect;
+	sfFloatRect hitAttack;
+	sfFloatRect collisionMob;
+
+}HitBox;
+
+typedef struct SoundMob
+{
+	sfSoundBuffer* soundBufferTakeHit;
+	sfSound* soundTakeHit;
+
+	sfSoundBuffer* soundBufferAttack;
+	sfSound* soundAttack;
+
+	sfSoundBuffer* soundBufferDead;
+	sfSound* soundDead;
+
+}SoundMob;
 
 typedef struct Mob
 {
 	sfSprite* sprite;
 
-	float speed;
-	sfVector2f velocity;
-	sfVector2f position;
-	
+	HitBox shape;
 
 	Animation mobAnimation[STATE_MOB_NUMBER];
 	Animation* currentMobAnimation;
@@ -144,19 +174,7 @@ typedef struct Mob
 	MobState lastState;
 	MobState currentState;
 
-	sfFloatRect hitbox;
-	sfFloatRect hitRect;
-	sfFloatRect hitAttack;
-	sfFloatRect collisionMob;
-
-	Timer timer;
-
-	sfRectangleShape* rect;
-	sfRectangleShape* collisionRect;
-	sfRectangleShape* attackRect;
-	sfRectangleShape* floorSecurity;
-
-	int hp;
+	Data data;
 
 	TypeMob mobType;
 
@@ -164,17 +182,8 @@ typedef struct Mob
 	float rangeAttack;
 	unsigned damage;
 
-	sfSoundBuffer* soundBufferTakeHit;
-	sfSound* soundTakeHit;
-
-	sfSoundBuffer* soundBufferAttack;
-	sfSound* soundAttack;
-
-	sfSoundBuffer* soundBufferDead;
-	sfSound* soundDead;
-
+	SoundMob soundMob;
 	sfBool isGrounded;
-
 	short frameAttackSound;
 
 }Mob;
