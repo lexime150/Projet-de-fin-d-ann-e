@@ -346,9 +346,12 @@ void VacuumEffect(void)
 			if (item[i].type == ITEM_KEY)
 			{
 				float strength = 12.55f;
-				item[i].velocity.x += dir.x * strength;
+				item[i].velocity.x += dir.x * 2 *strength;
 				item[i].velocity.y += dir.y * 2 * strength;
-
+				if (distance < 300.f)
+				{
+					sfSprite_setPosition(item[i].itemSprite, playerPos);
+				}
 				if (distance < 125.f)
 				{
 					player->data.keyNumber++;

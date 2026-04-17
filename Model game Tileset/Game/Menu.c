@@ -51,6 +51,13 @@ void LoadMenu(void)
 	menu.hoveredIndex = -1;
 
 	menu.font = sfFont_createFromFile("Assets/Fonts/Arcade.ttf");
+	menu.backgroundSprite = sfSprite_create();
+	menu.backgroundTexture = sfTexture_createFromFile("Assets/Sprites/Menu/Background.png", NULL);
+	sfSprite_setTexture(menu.backgroundSprite, menu.backgroundTexture, sfTrue);
+	sfSprite_setScale(menu.backgroundSprite, (sfVector2f) { 5.6f, 5.6f });
+
+
+	sfSprite_setPosition(menu.backgroundSprite, (sfVector2f) { 0 });
 
 	InitMainButton(&menu.mainButtons[0], "Assets/Sprites/Menu/Play.png", (SCREEN_HEIGHT / 2) - 25);
 	InitMainButton(&menu.mainButtons[1], "Assets/Sprites/Menu/Settings.png", SCREEN_HEIGHT / 2 + 132);
@@ -249,7 +256,7 @@ void DrawMenu(sfRenderWindow* window)
 	{
 		buttons = menu.mainButtons;
 		count = 4;
-
+		sfRenderWindow_drawSprite(window, menu.backgroundSprite, NULL);
 		for (int i = 0; i < count; i++)
 		{
 			sfRenderWindow_drawSprite(window, buttons[i].sprite, NULL);
