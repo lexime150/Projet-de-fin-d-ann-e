@@ -56,6 +56,8 @@
 #define PLAYER_COLLISION_WIDTH 4.f
 #define PLAYER_COLLISION_HEIGHT 32.f
 
+#define GROUND_PROXIMITY_THRESHOLD 80
+
 typedef enum SpikeSide
 {
 	LEFT,
