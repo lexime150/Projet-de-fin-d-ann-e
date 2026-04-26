@@ -261,6 +261,13 @@ void Updateitem(float _dt)
 			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) {pos.x + item[i].velocity.x * _dt,pos.y + item[i].velocity.y * _dt});
 		}
 	}
+
+
+	if (sfKeyboard_isKeyPressed(sfKeyW) && )
+	{
+		Additem(ITEM_KEY, sfSprite_getPosition(player->sprite).x, sfSprite_getPosition(player->sprite).y);
+	}
+
 	VacuumEffect();
 }
 

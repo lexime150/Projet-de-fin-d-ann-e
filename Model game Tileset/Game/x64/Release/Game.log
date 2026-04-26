@@ -1,10 +1,6 @@
-﻿  main.c
-LINK : warning C4742: 'save' a un alignement différent dans 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\player.c' et 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\menu.c' : 4 et 8
-LINK : warning C4743: 'save' a une taille différente dans 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\player.c' et 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\menu.c' : 44 et 8 octets
-LINK : warning C4744: 'save' a un type différent dans 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\player.c' et 'c:\users\etudiant4\documents\github\projet-de-fin-d-ann-e\model game tileset\game\menu.c' : 'struct (44 bytes)' et 'pointer'
-  Génération de code en cours
-  3 of 210 functions ( 1.4%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
-  Fin de la génération du code
-  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Release\Game.exe
+﻿  Player.c
+C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(125,95): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(125,136): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(225,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(544,15): warning C4101: 'aRect' : variable locale non référencée
+LINK : fatal error LNK1104: impossible d'ouvrir le fichier 'C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Release\Game.exe'

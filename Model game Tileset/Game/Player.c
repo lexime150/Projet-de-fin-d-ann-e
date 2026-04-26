@@ -127,6 +127,8 @@ void UpdatePlayer(sfRenderWindow* _renderWindow, float _dt)
 
 
 
+
+
 	//StateAttackPlayer();
 	MovePlayer(_renderWindow, _dt);
 
@@ -145,120 +147,128 @@ void UpdatePlayer(sfRenderWindow* _renderWindow, float _dt)
 
 void CheckCollisionPlayerAttackMob(float _dt)
 {
-
-
-	for (unsigned i = 0; i < GetMobCount(); i++)
+	if (sfKeyboard_isKeyPressed(sfKeyF))
 	{
-		if (mob[i].act != IS_DEATH)
-		{
-			if (mob[i].act == IS_ATTACK)
-			{
-				
-				StateMobMachine(ATTACK_MOB, i);
-
-				if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
-				{
-					sfSound_setPlayingOffset(mob[i].soundMob.soundAttack, sfSeconds(0.5f));
-					sfSound_play(mob[i].soundMob.soundAttack);
-				}
-
-				mob[i].data.timerAttack = 0;
-
-			}
-			else if (!mob[i].currentMobAnimation->isPlaying && mob[i].act != IS_TAKE_HIT)
-			{
-				mob[i].act = IS_IDLE;
-				StateMobMachine(IDLE_MOB, i);
-			}
-		}
+		player->data.timerInvincible = -2.f;
+		player->action.isInvincible = sfTrue;
 	}
 
-	sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player->sprite);
-	sfFloatRect hitMob = { 0 };
-	sfFloatRect intersection;
-	for (unsigned i = 0; i < GetMobCount(); i++)
-	{
-		hitMob = sfRectangleShape_getGlobalBounds(mob[i].shape.rect);
-
-		if (player->data.health > 0)
+	
+		for (unsigned i = 0; i < GetMobCount(); i++)
 		{
-
-			if (mob[i].currentState == ATTACK_MOB && player->data.timerInvincible > TIMER_INVINCIBLE)
+			if (mob[i].act != IS_DEATH)
 			{
-				if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound && !player->action.damageEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
+				if (mob[i].act == IS_ATTACK)
 				{
-					player->data.timerInvincible = 0;
-					player->action.damageEnable = sfTrue;
 
-					player->data.health -= mob[i].damage + rand() % mob[i].damage;
+					StateMobMachine(ATTACK_MOB, i);
 
-					//player->data.health -= mob[i].damage + rand() % mob[i].damage;
+					if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
+					{
+						sfSound_setPlayingOffset(mob[i].soundMob.soundAttack, sfSeconds(0.5f));
+						sfSound_play(mob[i].soundMob.soundAttack);
+					}
 
+					mob[i].data.timerAttack = 0;
 
 				}
-				else //if (player->data.timerInvincible )//!mob[i].currentMobAnimation->isPlaying)
+				else if (!mob[i].currentMobAnimation->isPlaying && mob[i].act != IS_TAKE_HIT)
 				{
-					player->action.damageEnable = sfFalse;
+					mob[i].act = IS_IDLE;
+					StateMobMachine(IDLE_MOB, i);
 				}
 			}
-
 		}
 
-	}
-
-
-	//----MOB ATTACK INFLUENCED PLAYER----//
-
-
-	PlayerSide playerSide = NOTHING_PLAYER;
-
-	float mobCenterX = 0;
-	float playerCenterX = hitPlayer.left + (hitPlayer.width / 2);
-
-	for (int i = 0; i < mobCount; i++)
-	{
-		hitMob = sfRectangleShape_getGlobalBounds(mob[i].shape.attackRect);
-		mobCenterX = hitMob.left + (hitMob.width / 2);
-
-
-		if (sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection) && player->data.knockBackTimer <= 0)
+		if (!player->action.isInvincible && player->data.timerInvincible > 0)
 		{
-			if (mob[i].currentState == ATTACK_MOB && mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
-			{
-				player->data.knockBackTimer += 0.4f;
 
-				if (playerCenterX < mobCenterX)
+		sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player->sprite);
+		sfFloatRect hitMob = { 0 };
+		sfFloatRect intersection;
+		for (unsigned i = 0; i < GetMobCount(); i++)
+		{
+			hitMob = sfRectangleShape_getGlobalBounds(mob[i].shape.rect);
+
+			if (player->data.health > 0)
+			{
+
+				if (mob[i].currentState == ATTACK_MOB && player->data.timerInvincible > TIMER_INVINCIBLE)
 				{
-					playerSide = LEFT_PLAYER;
-				}
-				else if (playerCenterX > mobCenterX)
-				{
-					playerSide = WIDTH_PLAYER;
+					if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound && !player->action.damageEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
+					{
+						player->data.timerInvincible = 0;
+						player->action.damageEnable = sfTrue;
+
+						player->data.health -= mob[i].damage + rand() % mob[i].damage;
+
+						//player->data.health -= mob[i].damage + rand() % mob[i].damage;
+
+
+					}
+					else //if (player->data.timerInvincible )//!mob[i].currentMobAnimation->isPlaying)
+					{
+						player->action.damageEnable = sfFalse;
+					}
 				}
 
 			}
 
 		}
 
-	}
+
+		//----MOB ATTACK INFLUENCED PLAYER----//
 
 
-	if (playerSide != NOTHING_PLAYER)
-	{
-		player->action.isGrounded = sfFalse;
-		StateMachine(FALL);
-		player->data.velocity.y = -300.f;
+		PlayerSide playerSide = NOTHING_PLAYER;
 
-		if (playerSide == LEFT_PLAYER)
+		float mobCenterX = 0;
+		float playerCenterX = hitPlayer.left + (hitPlayer.width / 2);
+
+		for (int i = 0; i < mobCount; i++)
 		{
-			player->data.velocity.x = -500.f;
+			hitMob = sfRectangleShape_getGlobalBounds(mob[i].shape.attackRect);
+			mobCenterX = hitMob.left + (hitMob.width / 2);
+
+
+			if (sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection) && player->data.knockBackTimer <= 0)
+			{
+				if (mob[i].currentState == ATTACK_MOB && mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
+				{
+					player->data.knockBackTimer += 0.4f;
+
+					if (playerCenterX < mobCenterX)
+					{
+						playerSide = LEFT_PLAYER;
+					}
+					else if (playerCenterX > mobCenterX)
+					{
+						playerSide = WIDTH_PLAYER;
+					}
+
+				}
+
+			}
+
 		}
-		else if (playerSide == WIDTH_PLAYER)
+
+
+		if (playerSide != NOTHING_PLAYER)
 		{
-			player->data.velocity.x = 500.f;
+			player->action.isGrounded = sfFalse;
+			StateMachine(FALL);
+			player->data.velocity.y = -300.f;
+
+			if (playerSide == LEFT_PLAYER)
+			{
+				player->data.velocity.x = -500.f;
+			}
+			else if (playerSide == WIDTH_PLAYER)
+			{
+				player->data.velocity.x = 500.f;
+			}
 		}
 	}
-
 }
 
 void CheckCollisionPlayerMob(float _dt)
