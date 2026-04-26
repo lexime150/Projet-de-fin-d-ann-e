@@ -754,13 +754,31 @@ float GetDistancePlayerMobVector(unsigned _i)
 
 void DrawMob(sfRenderWindow* _renderWindow)
 {
+	sfBool drawHitbox;
 	for (unsigned i = 0; i < mobCount; i++)
 	{
+		
+		drawHitbox = sfFalse;
+
+		if(sfKeyboard_isKeyPressed(sfKeyC))
+		{
+			drawHitbox = sfTrue;
+		}
+
+		if (drawHitbox)
+		{
+			sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.rect, NULL);
+			sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.attackRect, NULL);
+			sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.collisionRect, NULL);
+			sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.floorSecurity, NULL);
+		}
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].attackRect, NULL);
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].floorSecurity, NULL);
-		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].collisionRect, NULL);
+	
+		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
+	
 	}
 
 }
