@@ -45,12 +45,11 @@
               "Title": "Game.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c",
               "RelativeDocumentMoniker": "Game\\Game.c",
-              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c*",
-              "RelativeToolTip": "Game\\Game.c*",
+              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c",
+              "RelativeToolTip": "Game\\Game.c",
               "ViewState": "AgIAAGAAAAAAAAAAAAAAAGwAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-04-27T13:12:21.021Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-27T13:12:21.021Z"
             },
             {
               "$type": "Document",
@@ -60,8 +59,7 @@
               "ToolTip": "D:\\SVN\\Cours\\Prog1\\Programmation\\Programmation CSFML\\16 - Tiled\\Tiled\\Map.h",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-27T13:11:22.153Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-27T13:11:22.153Z"
             },
             {
               "$type": "Document",
@@ -69,12 +67,11 @@
               "Title": "Map.h",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Map.h",
               "RelativeDocumentMoniker": "Game\\Map.h",
-              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Map.h*",
-              "RelativeToolTip": "Game\\Map.h*",
+              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Map.h",
+              "RelativeToolTip": "Game\\Map.h",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAABsAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-04-27T13:11:16.406Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-27T13:11:16.406Z"
             },
             {
               "$type": "Document",
@@ -82,9 +79,9 @@
               "Title": "Map.c",
               "DocumentMoniker": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Map.c",
               "RelativeDocumentMoniker": "Game\\Map.c",
-              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Map.c*",
-              "RelativeToolTip": "Game\\Map.c*",
-              "ViewState": "AgIAAFEAAAAAAAAAAAAAAGMAAAA2AAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Etudiant1\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Map.c",
+              "RelativeToolTip": "Game\\Map.c",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAAAGUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-04-27T13:06:31.98Z",
               "EditorCaption": ""
@@ -99,8 +96,7 @@
               "RelativeToolTip": "Game\\main.c",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAI0AAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-04-27T08:35:04.795Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-27T08:35:04.795Z"
             }
           ]
         }
