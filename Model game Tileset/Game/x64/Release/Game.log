@@ -1,6 +1,0 @@
-﻿  Player.c
-C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(125,95): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(125,136): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(225,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(544,15): warning C4101: 'aRect' : variable locale non référencée
-LINK : fatal error LNK1104: impossible d'ouvrir le fichier 'C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Release\Game.exe'

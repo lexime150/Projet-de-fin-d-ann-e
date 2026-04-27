@@ -1,0 +1,25 @@
+﻿  Animation.c
+  Camera.c
+  Collectibles.c
+  Game.c
+  GameHUD.c
+  GameOver.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\GameHUD.c(28,42): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+  GameState.c
+  Key.c
+  main.c
+  Map.c
+  Menu.c
+  Mob.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(370,20): warning C4018: '<' : incompatibilité signed/unsigned
+  Player.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(125,95): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(125,136): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(228,21): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(547,15): warning C4101: 'aRect' : variable locale non référencée
+  Save.c
+  Génération de code en cours...
+MSVCRTD.lib(initializers.obj) : warning LNK4098: conflit entre la bibliothèque par défaut 'libcmt.lib' et les autres bibliothèques ; utilisez /NODEFAULTLIB:library
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.
