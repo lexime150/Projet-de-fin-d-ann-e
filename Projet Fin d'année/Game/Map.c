@@ -24,31 +24,87 @@ unsigned int semiSolidCollisionTabSize;
 
 sfVector2f playerSpawn;
 
+AnimatedTile* animatedTileList;
+unsigned int animatedTileCount;
+
 void LoadCollisionAndTrigger(void);
 void DrawTileLayer(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer);
 void DrawObjectGroup(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer);
 
+void LoadAnimatedTiles(void)
+{
+	animatedTileCount = 0;
+	cute_tiled_tile_descriptor_t* tiles = map->tilesets->tiles;
+	while (tiles) { animatedTileCount++; tiles = tiles->next; }
+
+	animatedTileList = calloc(animatedTileCount, sizeof(AnimatedTile));
+	if (!animatedTileList) return;
+
+	tiles = map->tilesets->tiles;
+	unsigned int i = 0;
+	while (tiles)
+	{
+		AnimatedTile* a = &animatedTileList[i];
+		a->tileId = tiles->tile_index + map->tilesets->firstgid;
+		a->frameCount = tiles->frame_count;
+		a->frames = calloc(a->frameCount, sizeof(int));
+		a->durations = calloc(a->frameCount, sizeof(float));
+
+		for (unsigned int f = 0; f < a->frameCount; f++)
+		{
+			a->frames[f] = tiles->animation[f].tileid + map->tilesets->firstgid;
+			a->durations[f] = tiles->animation[f].duration / 1000.0f;
+		}
+
+		i++;
+		tiles = tiles->next;
+	}
+
+}
+int GetAnimationTile(int _tileId)
+{
+	for (unsigned int i = 0; i < animatedTileCount; i++)
+	{
+		if (animatedTileList[i].tileId == _tileId)
+			return animatedTileList[i].frames[animatedTileList[i].currentFrame];
+	}
+	return _tileId;
+}
+void UpdateMap(float _dt)
+{
+	for (unsigned int i = 0; i < animatedTileCount; i++)
+	{
+		AnimatedTile* a = &animatedTileList[i];
+		a->timer += _dt;
+		if (a->timer > a->durations[a->currentFrame])
+		{
+			a->timer -= a->durations[a->currentFrame];
+			a->currentFrame = (a->currentFrame + 1) % a->frameCount;
+		}
+	}
+}
 void LoadMap(char* _mapName)
 {
 	char filename[FILENAME_MAX];
 
-	// Load the map
+
 	sprintf_s(filename, FILENAME_MAX, "Assets/Map/Levels/%s.json", _mapName);
 	map = cute_tiled_load_map_from_file(filename, NULL);
 
-	// Load the texture used as Tileset
+
 	sprintf_s(filename, FILENAME_MAX, "Assets/Map/Tilesets/%s", map->tilesets->image.ptr);
 	tileTexture = sfTexture_createFromFile(filename, NULL);
 
-	// Create the sprite used to draw each tile
+
 	tileSprite = sfSprite_create();
 	sfSprite_setTexture(tileSprite, tileTexture, sfTrue);
 	sfSprite_setScale(tileSprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
-	// Load the layer of collisions and triggers
-	LoadCollisionAndTrigger();
 
-	
+	LoadAnimatedTiles();
+
+
+	LoadCollisionAndTrigger();
 }
 
 void DrawMap(sfRenderWindow* _renderWindow)
@@ -100,6 +156,14 @@ void CleanupMap(void)
 
 	free(semiSolidCollisionTab);
 	semiSolidCollisionTab = NULL;
+
+	for (unsigned int i = 0; i < animatedTileCount; i++) {
+		free(animatedTileList[i].frames);
+		free(animatedTileList[i].durations);
+	}
+	free(animatedTileList);
+	animatedTileList = NULL;
+	animatedTileCount = 0;
 
 }
 
@@ -302,7 +366,9 @@ void DrawTileLayer(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer)
 	{
 		for (int column = 0; column < _layer->width; column++)
 		{
+			
 			int tileId = _layer->data[line * _layer->width + column] - 1;
+			tileId = GetAnimationTile(tileId + 1) - 1;
 			if (tileId >= 0)
 			{
 				int tileX = (tileId % map->tilesets->columns) * tileWidth;

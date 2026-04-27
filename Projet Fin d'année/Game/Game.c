@@ -106,7 +106,7 @@ void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 		UpdateCamera(_dt);
 		UpdateMob(NULL, _dt);
 		Updateitem(_dt);
-
+		UpdateMap(_dt);
 		UpdateHUD();
 		UpdateTransition(_dt);
 

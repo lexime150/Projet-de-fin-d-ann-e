@@ -3,6 +3,17 @@
 
 #include "Common.h"
 #include "cute_tiled.h"
+typedef struct AnimatedTile
+{
+	int tileId;
+
+	unsigned frameCount;
+	int* frames;
+	int currentFrame;
+
+	float timer;
+	float* durations;
+} AnimatedTile;
 
 typedef struct Trigger
 {
@@ -14,6 +25,7 @@ typedef struct Trigger
 }Trigger;
 
 void LoadMap(char* _mapName);
+void UpdateMap(float _dt);
 void DrawMap(sfRenderWindow* _renderWindow);
 void CleanupMap(void);
 
