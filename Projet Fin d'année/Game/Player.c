@@ -854,14 +854,11 @@ static void HandleDash(float _dt, sfBool _dashGround, sfBool _dashUp, sfBool _da
 		player->data.knockBackTimer += 0.48f;
 
 	}
-	else if (!player->currentAnimation->isPlaying) //&& player->action.isDashing)
+	else if (!player->currentAnimation->isPlaying) 
 	{
 		player->data.knockBackTimer -= player->data.knockBackTimer;
 		player->action.isDashing = sfFalse;
-
 	}
-
-
 
 }
 
