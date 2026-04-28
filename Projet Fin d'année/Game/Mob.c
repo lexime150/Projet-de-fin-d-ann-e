@@ -352,6 +352,77 @@ void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 	}
 }
 
+static void CheckMobSpikeCollision(float _dt, unsigned _i)
+{
+	sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].shape.collisionRect);
+	sfFloatRect hitSpike = { 0 };
+	sfFloatRect intersects = { 0 };
+	MobSide side = NOTHING_MOB;
+	float posMobY = hitMob.top + hitMob.height;
+	float posMobX = 0;
+
+
+
+	for (int i = 0; i < GetSpikeTabSize(); i++)
+	{
+		hitSpike = GetSpikeTab(i);
+
+		if (sfFloatRect_intersects(&hitSpike, &hitMob, &intersects))
+		{
+			sfBool condition1 = (hitMob.left + hitMob.width) < hitSpike.left;
+			sfBool condition2 = hitMob.left < (hitSpike.left + hitSpike.width);
+
+			posMobX = hitMob.left + (hitMob.width / 2);
+			//if (mob[_i].isGrounded)
+			{
+				if (condition1)
+				{
+					posMobX += (intersects.width + (hitMob.width + 30.f));
+				}
+				else if (!condition1 && condition2)
+				{
+					posMobX -= (intersects.width + (hitMob.width + 30.f));
+				}
+
+
+				sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { posMobX, sfSprite_getPosition(mob[_i].sprite).y });
+				mob[_i].data.hp = 0;
+				break;
+			}
+		}
+
+	}
+
+	UpdateMobInfo(_dt, _i);
+
+
+
+	for (int i = 0; i < GetSpikeTabSize(); i++)
+	{
+		hitSpike = GetSpikeTab(i);
+		
+
+		if (sfFloatRect_intersects(&hitMob, &hitSpike, &intersects))
+		{
+			if ((hitSpike.top + (hitSpike.height / 2) > (hitMob.top + hitMob.height)))
+			{
+				side = HEIGHT_MOB;
+				posMobY -= intersects.height;
+				break;
+			}
+		}
+		
+	}
+	
+	if (side == HEIGHT_MOB)
+	{
+		player->data.velocity.y = 0;
+		sfSprite_setPosition(player->sprite, (sfVector2f) { sfSprite_getPosition(player->sprite).x, posMobY });
+		mob[_i].data.hp = 0;
+	}
+
+}
+
 
 void CheckCollisionMobEntities(float _dt, unsigned _i)
 {
@@ -388,28 +459,33 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	UpdateMobInfo(_dt, _i);
 
-	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
+	if (mob[_i].currentState != DEATH)
 	{
-		
-		hitPlat = GetMapCollision(i);
-
-		for (unsigned x = 0; x < GetSemiSolidCollisionTabSize(); x++)
+		for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 		{
-			hitSemiPlat = GetSemiSolidCollisionTab(x);
-			if (sfFloatRect_intersects(&hitMob, &hitPlat, NULL) && sfFloatRect_intersects(&hitMob, &hitSemiPlat, NULL))
+
+			hitPlat = GetMapCollision(i);
+
+			for (unsigned x = 0; x < GetSemiSolidCollisionTabSize(); x++)
 			{
-				platTransition = sfTrue;
-				break;
+				hitSemiPlat = GetSemiSolidCollisionTab(x);
+				if (sfFloatRect_intersects(&hitMob, &hitPlat, NULL) && sfFloatRect_intersects(&hitMob, &hitSemiPlat, NULL))
+				{
+					platTransition = sfTrue;
+					break;
+				}
+
+				if (platTransition)
+				{
+					break;
+				}
 			}
 
-			if (platTransition)
-			{
-				break;
-			}
 		}
-
 	}
 
+	UpdateMobInfo(_dt, _i);
+	CheckMobSpikeCollision(_dt, _i);
 
 	//-----SEMI-SOLID PLATFORMS-----//
 
@@ -461,11 +537,12 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 	{
 		hitPlat = GetMapCollision(i);
 		hitMob = mob[_i].shape.hitRect;
+		float dy = (hitMob.top + hitMob.height) - hitPlat.top;
 
 		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection) && mob[_i].currentState != DEATH)
 		{
 			
-			if (intersection.width > intersection.height)
+			if (intersection.width > intersection.height && dy < 20.f)
 			{
 				if (mob[_i].currentState == RUN_MOB && mob[_i].data.timerTakeHit > 1.5f)
 				{
@@ -631,9 +708,10 @@ void StateMob(float _dt, unsigned _i)
 		mob[_i].data.velocity.x = 0.f;
 	}
 
+	sfBool swordAttack = player->currentState == SWORD || player->currentState == SWORD_UP || player->currentState == SWORD_DOWN;
+	sfBool axeAttack = player->currentState == AXE || player->currentState == AXE_UP || player->currentState == AXE_DOWN;
 
-
-	if (player->currentState == SWORD || player->currentState == SWORD_UP || player->currentState == SWORD_DOWN || player->currentState == AXE || player->currentState == AXE_UP || player->currentState == AXE_DOWN)
+	if (swordAttack || axeAttack)
 	{
 		sfFloatRect hitPlayer = sfRectangleShape_getGlobalBounds(player->shape.collisionAttackShape);
 		sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].shape.rect);
@@ -643,7 +721,7 @@ void StateMob(float _dt, unsigned _i)
 		if (sfFloatRect_intersects(&hitPlayer, &hitMob, NULL) && mob[_i].currentState != DEATH)
 		{
 
-			if (player->currentState == SWORD || player->currentState == SWORD_UP || player->currentState == SWORD_DOWN && player->currentAnimation->currentFrame == 1)
+			if (swordAttack && player->currentAnimation->currentFrame == 1)
 			{
 				mob[_i].data.timerKnockBack += 0.25f;
 				mob[_i].data.hp -= (SWORD_DAMAGES + rand() % 21);
@@ -651,7 +729,7 @@ void StateMob(float _dt, unsigned _i)
 				StateMobMachine(TAKE_HIT, _i);
 				mob[_i].act = IS_TAKE_HIT;
 			}
-			if (player->currentState == AXE || player->currentState == AXE_UP || player->currentState == AXE_DOWN)
+			if (axeAttack)
 			{
 				mob[_i].data.timerKnockBack += 0.25f;
 				mob[_i].data.hp -= (AXE_DAMAGES + rand() % 21);

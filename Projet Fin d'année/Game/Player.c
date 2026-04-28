@@ -958,18 +958,11 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 			state = DASH_GROUND;
 		}
 
-		player->data.knockBackTimer += 0.48f;
+	
 		StateMachine(state);
 
-		if (playerScale < 0)
-		{
-			playerVelocity.x = -DASH_HORIZONTAL;
-		}
-		else
-		{
-			playerVelocity.x = DASH_HORIZONTAL;
-		}
-		//state = DASH_GROUND;
+	
+		
 	}
 
 
@@ -1092,11 +1085,6 @@ void HandleAnimationState(float _dt, sfBool movingLeft, sfBool movingRight)
 
 void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 {
-
-
-
-
-
 	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
 	sfBool movingRight = sfKeyboard_isKeyPressed(sfKeyD);
 	sfBool slideKey = sfKeyboard_isKeyPressed(sfKeyLControl) || sfKeyboard_isKeyPressed(sfKeyRControl);
