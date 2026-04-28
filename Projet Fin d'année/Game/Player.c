@@ -25,7 +25,6 @@ void CheckCollisionPlayerMob(float _dt);
 void CollisionPlayerTrigger();
 void CollisionPlayerDeathZone();
 
-void CollisionPlayerItems(unsigned index);
 float RandomFloat(float min, float max);
 
 void BasePlayer();
@@ -98,13 +97,13 @@ void LoadAnimationPlayer(void)
 	firstFrame = (sfIntRect){ 0, (10 * PLAYER_HEIGHT) + 16, 32, 48 };
 	player->animationPlayer[SWORD_DOWN] = CreateAnimation(player->sprite, 4, 9, sfTrue, sfFalse, firstFrame);
 
-	firstFrame = (sfIntRect){ 0, (11 * PLAYER_HEIGHT) + 16, 32, 48 };
+	firstFrame = (sfIntRect){ 0, (11 * PLAYER_HEIGHT) + 32, 32, 48 };
 	player->animationPlayer[AXE_UP] = CreateAnimation(player->sprite, 10, 15, sfTrue, sfFalse, firstFrame);
 
-	firstFrame = (sfIntRect){ 0, (12 * PLAYER_HEIGHT) + 16, 32, 48 };
-	player->animationPlayer[AXE_DOWN] = CreateAnimation(player->sprite, 10, 15, sfTrue, sfFalse, firstFrame);
+	firstFrame = (sfIntRect){ 0, (12 * PLAYER_HEIGHT) + 48, 32, 48 };
+	player->animationPlayer[AXE_DOWN] = CreateAnimation(player->sprite, 10, 12, sfTrue, sfFalse, firstFrame);
 
-	SetAnimation(IDLE_MOB);
+	SetAnimation(IDLE);
 }
 
 void SetAnimation(PlayerState _state)
@@ -119,7 +118,6 @@ void SetAnimation(PlayerState _state)
 
 void UpdatePlayer(sfRenderWindow* _renderWindow, float _dt)
 {
-	sfSprite_setOrigin(player->sprite, (sfVector2f) { (float)player->currentAnimation->firstFrame.width / 2, (float)player->currentAnimation->firstFrame.height });
 	ApplyPhysic(_dt);
 
 
@@ -288,7 +286,7 @@ void CheckCollisionPlayerMob(float _dt)
 		hitMob = mob[i].shape.collisionMob;
 		mobCenterX = hitMob.left + (hitMob.width * 0.5f);
 
-		if (player->currentState != AXE && player->currentState != SWORD && player->currentState != SWORD_UP && player->currentState != SWORD_DOWN && !player->action.isInvincible && mob[i].currentState != DEATH)
+		if (player->currentState != AXE && player->currentState != AXE_UP && player->currentState != AXE_DOWN && player->currentState != SWORD && player->currentState != SWORD_UP && player->currentState != SWORD_DOWN && !player->action.isInvincible && mob[i].currentState != DEATH)
 		{
 			if (sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 			{
@@ -297,7 +295,6 @@ void CheckCollisionPlayerMob(float _dt)
 				player->action.isSlideJumping = sfFalse;
 				player->action.isTouchingWall = sfFalse;
 				player->action.isInvincible = sfTrue;
-				//player->data.timerInvincible = 0;
 				player->data.health -= 15;
 
 				if (playerCenterX > (mobCenterX)+PLAYER_MOB_MARGE)
@@ -330,7 +327,6 @@ void CheckCollisionPlayerMob(float _dt)
 			sfSprite_setScale(player->sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
 			player->data.velocity.x = -PLAYER_MOB_VELOCITY_X;
 		}
-
 		player->side = NOTHING_PLAYER;
 	}
 
@@ -346,19 +342,16 @@ void ApplyPhysic(float _dt)
 {
 	if (!player->action.isGrounded)
 	{
-		if (!player->action.isDashing && player->currentState == DASH_GROUND)
+		if (player->action.isDashing && player->currentState == DASH_GROUND)
 		{
 			player->data.velocity.y = 0;
 			return;
 		}
-
-
 		player->data.velocity.y += GRAVITY * _dt;
 		if (player->data.velocity.y >= GRAVITY * 100 * _dt)
 		{
 			player->data.velocity.y = GRAVITY * 100 * _dt;
 		}
-
 	}
 	else
 	{
@@ -379,17 +372,11 @@ void createCollisionSideAttack()
 
 	if (player->data.lastDirection == -1) // gauche
 	{
-		sfRectangleShape_setPosition(player->shape.collisionAttackShape,
-			(sfVector2f) {
-			p.left - width, y
-		});
+		sfRectangleShape_setPosition(player->shape.collisionAttackShape, (sfVector2f) { p.left - width, y });
 	}
 	else // droite
 	{
-		sfRectangleShape_setPosition(player->shape.collisionAttackShape,
-			(sfVector2f) {
-			p.left + p.width, y
-		});
+		sfRectangleShape_setPosition(player->shape.collisionAttackShape, (sfVector2f) { p.left + p.width, y });
 	}
 
 	player->shape.collisionAttackRect = sfRectangleShape_getGlobalBounds(player->shape.collisionAttackShape);
@@ -463,19 +450,43 @@ void HandleAttackInput(sfRenderWindow* _renderWindow, float _dt, sfBool movingLe
 	player->data.attackCooldownTimer += _dt;
 	player->data.timeAttackSide += _dt;
 
-	//if (sfMouse_isButtonPressed(sfMouseLeft) &&
-	//	player->data.attackCooldownTimer >= ATTACK_AXE_COOLDOWN &&
-	//	player->action.isGrounded)
-	//{
-	//	player->action.isAttacking = sfTrue;
-	//	player->data.attackCooldownTimer = 0.f;
-	//	player->data.velocity.x = 0;
+	if (sfMouse_isButtonPressed(sfMouseLeft) &&
+		player->data.attackCooldownTimer >= ATTACK_AXE_COOLDOWN &&
+		player->action.isGrounded)
+	{
 
-	//	sfSound_setPitch(player->sound.axeSound, RandomFloat(0.8f, 1.2f));
-	//	sfSound_play(player->sound.axeSound);
-	//	StateMachine(AXE);
-	//	return;
-	//}
+		sfVector2i mousePos = sfMouse_getPositionRenderWindow(_renderWindow);
+		sfBool attackTriggered = sfFalse;
+
+		if (mousePos.y > SCREEN_HEIGHT / 2 + 200)
+		{
+			player->data.velocity.x = 0;
+			StateMachine(AXE_DOWN);
+			attackTriggered = sfTrue;
+		}
+		else if (mousePos.y < SCREEN_HEIGHT / 2 - 200)
+		{
+			player->data.velocity.x = 0;
+			StateMachine(AXE_UP);
+			attackTriggered = sfTrue;
+		}
+		else
+		{
+			player->data.velocity.x = 0;
+			sfSound_setPitch(player->sound.axeSound, RandomFloat(0.8f, 1.2f));
+			sfSound_play(player->sound.axeSound);
+			StateMachine(AXE);
+			attackTriggered = sfTrue;
+		}
+
+
+		if (attackTriggered)
+		{
+			player->action.isAttacking = sfTrue;
+			player->data.attackCooldownTimer = 0.f;
+			return;
+		}
+	}
 
 	if (sfMouse_isButtonPressed(sfMouseRight) &&
 		player->data.attackCooldownTimer >= ATTACK_SWORD_COOLDOWN)
@@ -551,7 +562,6 @@ sfBool HandleAttackState(sfRenderWindow* _renderWindow, sfBool movingLeft, sfBoo
 	if (player->shape.collisionAttackShape != NULL)
 	{
 		sfFloatRect pRect = player->shape.collisionPlayerRect;
-		//sfFloatRect aRect = sfRectangleShape_getGlobalBounds(player->shape.collisionAttackShape);
 		sfVector2f attackPos = { 0 };
 
 		if (player->currentState == SWORD_DOWN)
@@ -564,19 +574,77 @@ sfBool HandleAttackState(sfRenderWindow* _renderWindow, sfBool movingLeft, sfBoo
 		}
 		else if (player->currentState == SWORD_UP)
 		{
-			sfVector2f sizeUp = { player->shape.collisionPlayerRect.width - 40, player->shape.collisionPlayerRect.height };
-			sfRectangleShape_setSize(player->shape.collisionAttackShape, sizeUp);
+			if (player->currentAnimation->currentFrame >= 1)
+			{
+				sfVector2f sizeUp = { player->shape.collisionPlayerRect.width - 40, player->shape.collisionPlayerRect.height };
+				sfRectangleShape_setSize(player->shape.collisionAttackShape, sizeUp);
 
-			attackPos.x = player->shape.collisionPlayerRect.left + player->shape.collisionPlayerRect.width - 20;
-			attackPos.y = player->shape.collisionPlayerRect.top;
+				attackPos.x = player->shape.collisionPlayerRect.left + player->shape.collisionPlayerRect.width - 20;
+				attackPos.y = player->shape.collisionPlayerRect.top;
+			}
+			else
+			{
+				sfRectangleShape_setSize(player->shape.collisionAttackShape, (sfVector2f) { 0.f, 0.f });
+			}
 		}
 		else if (player->currentState == SWORD)
 		{
-			sfVector2f sizeSide = { 60, 20 };
-			sfRectangleShape_setSize(player->shape.collisionAttackShape, sizeSide);
+			if (player->currentAnimation->currentFrame >= 2)
+			{
+				sfVector2f sizeSide = { 60, 20 };
+				sfRectangleShape_setSize(player->shape.collisionAttackShape, sizeSide);
 
-			attackPos.x = player->shape.collisionPlayerRect.left + player->shape.collisionPlayerRect.width;
-			attackPos.y = player->shape.collisionPlayerRect.top + player->shape.collisionPlayerRect.height / 2 - 14;
+				attackPos.x = player->shape.collisionPlayerRect.left + player->shape.collisionPlayerRect.width;
+				attackPos.y = player->shape.collisionPlayerRect.top + player->shape.collisionPlayerRect.height / 2 - 14;
+			}
+			else
+			{
+				sfRectangleShape_setSize(player->shape.collisionAttackShape, (sfVector2f) { 0.f, 0.f });
+			}
+
+		}
+
+		else if (player->currentState == AXE)
+		{
+			if (player->currentAnimation->currentFrame >= 5)
+			{
+				sfVector2f size = { player->shape.collisionPlayerRect.width + 20.f, player->shape.collisionPlayerRect.height };
+				sfRectangleShape_setSize(player->shape.collisionAttackShape, size);
+				attackPos.x = player->shape.collisionPlayerRect.left - 10.f;
+				attackPos.y = player->shape.collisionPlayerRect.top;
+			}
+			else
+			{
+				sfRectangleShape_setSize(player->shape.collisionAttackShape, (sfVector2f) { 0.f, 0.f });
+			}
+		}
+		else if (player->currentState == AXE_UP)
+		{
+			if (player->currentAnimation->currentFrame >= 4)
+			{
+				sfVector2f size = { player->shape.collisionPlayerRect.width + 20.f, player->shape.collisionPlayerRect.height + 20.f };
+				sfRectangleShape_setSize(player->shape.collisionAttackShape, size);
+				attackPos.x = player->shape.collisionPlayerRect.left - 10.f;
+				attackPos.y = player->shape.collisionPlayerRect.top - 20.f;
+			}
+			else
+			{
+				sfRectangleShape_setSize(player->shape.collisionAttackShape, (sfVector2f) { 0.f, 0.f });
+			}
+		}
+		else if (player->currentState == AXE_DOWN)
+		{
+			if (player->currentAnimation->currentFrame >= 5)
+			{
+				sfVector2f size = { player->shape.collisionPlayerRect.width + 30.f, player->shape.collisionPlayerRect.height + 20.f };
+				sfRectangleShape_setSize(player->shape.collisionAttackShape, size);
+				attackPos.x = player->shape.collisionPlayerRect.left - 15.f;
+				attackPos.y = player->shape.collisionPlayerRect.top + 20.f;
+			}
+			else
+			{
+				sfRectangleShape_setSize(player->shape.collisionAttackShape, (sfVector2f) { 0.f, 0.f });
+			}
 		}
 		if (player->data.lastDirection == 1)
 		{
@@ -634,8 +702,14 @@ sfBool HandleAttackState(sfRenderWindow* _renderWindow, sfBool movingLeft, sfBoo
 	else if (player->currentState == SWORD || player->currentState == SWORD_UP || player->currentState == SWORD_DOWN)
 	{
 		float horizontalInput = 0.f;
-		if (movingRight && player->data.lastDirection == 1) horizontalInput = player->data.speed;
-		else if (movingLeft && player->data.lastDirection == -1) horizontalInput = -player->data.speed;
+		if (movingRight && player->data.lastDirection == 1)
+		{
+			horizontalInput = player->data.speed;
+		}
+		else if (movingLeft && player->data.lastDirection == -1)
+		{
+			horizontalInput = -player->data.speed;
+		}
 
 		player->data.velocity.x = (player->currentState == SWORD_UP) ? 0.f : horizontalInput;
 		player->action.isMoving = (horizontalInput != 0.f);
@@ -655,15 +729,21 @@ void HandleWallJumping(float _dt, sfBool movingLeft, sfBool movingRight)
 	player->data.wallJumpVelocityX -= sign * WALL_JUMP_FRICTION * _dt;
 
 	if (sign > 0 && player->data.wallJumpVelocityX < MIN_WALL_JUMP_SPEED)
+	{
 		player->data.wallJumpVelocityX = MIN_WALL_JUMP_SPEED;
+	}
 	if (sign < 0 && player->data.wallJumpVelocityX > -MIN_WALL_JUMP_SPEED)
+	{
 		player->data.wallJumpVelocityX = -MIN_WALL_JUMP_SPEED;
+	}
 
 	float inputVelocity = movingRight ? player->data.speed : (movingLeft ? -player->data.speed : 0);
 	player->data.velocity.x = player->data.wallJumpVelocityX + inputVelocity * 0.3f;
 
 	if (player->action.isGrounded)
+	{
 		player->action.isWallJumping = sfFalse;
+	}
 }
 
 void HandleSlideJumping(float _dt, sfBool movingLeft, sfBool movingRight)
@@ -672,15 +752,21 @@ void HandleSlideJumping(float _dt, sfBool movingLeft, sfBool movingRight)
 	player->data.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
 
 	if (sign > 0 && player->data.slideVelocityX < MIN_SLIDE_JUMP_SPEED)
+	{
 		player->data.slideVelocityX = MIN_SLIDE_JUMP_SPEED;
+	}
 	if (sign < 0 && player->data.slideVelocityX > -MIN_SLIDE_JUMP_SPEED)
+	{
 		player->data.slideVelocityX = -MIN_SLIDE_JUMP_SPEED;
+	}
 
 	float inputVelocity = movingRight ? player->data.speed : (movingLeft ? -player->data.speed : 0);
 	player->data.velocity.x = player->data.slideVelocityX + inputVelocity * 0.4f;
 
 	if (player->action.isGrounded)
+	{
 		player->action.isSlideJumping = sfFalse;
+	}
 }
 
 void HandleSliding(float _dt, sfBool movingLeft, sfBool movingRight, sfBool slideKey)
@@ -690,8 +776,14 @@ void HandleSliding(float _dt, sfBool movingLeft, sfBool movingRight, sfBool slid
 	float sign = (player->data.lastDirection > 0) ? 1.f : -1.f;
 	player->data.slideVelocityX -= sign * SLIDE_FRICTION * _dt;
 
-	if (sign > 0 && player->data.slideVelocityX < 0) player->data.slideVelocityX = 0;
-	if (sign < 0 && player->data.slideVelocityX > 0) player->data.slideVelocityX = 0;
+	if (sign > 0 && player->data.slideVelocityX < 0)
+	{
+		player->data.slideVelocityX = 0;
+	}
+	if (sign < 0 && player->data.slideVelocityX > 0)
+	{
+		player->data.slideVelocityX = 0;
+	}
 
 	float inputVelocity = 0;
 	if (movingRight)
@@ -794,7 +886,10 @@ void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey
 	}
 
 	if (!jumpKey)
+	{
 		jumpPressed = sfFalse;
+
+	}
 }
 
 static void HandleDash(float _dt, sfBool _dashGround, sfBool _dashUp, sfBool _dashDiagonal)
@@ -802,60 +897,68 @@ static void HandleDash(float _dt, sfBool _dashGround, sfBool _dashUp, sfBool _da
 	player->data.timerDash += _dt;
 
 	sfBool dashEnable = _dashDiagonal || _dashUp || _dashGround;
-	sfVector2f playerVelocity = player->data.velocity;
 	float playerScale = sfSprite_getScale(player->sprite).x;
 	PlayerState state = player->currentState;
 
 	if (dashEnable && player->data.timerDash > TIMER_DASH && !player->action.isDashing)
 	{
 		player->action.isDashing = sfTrue;
-		player->data.timerDash -= player->data.timerDash;
+		player->data.timerDash = 0.f;
 
 		if (_dashDiagonal)
 		{
-			playerVelocity.y = -550.f;
-
-			if (playerScale < 0)
-			{
-				playerVelocity.x = -550.f;
-			}
-			else
-			{
-				playerVelocity.x = 550.f;
-			}
+			player->data.dashVelocityX = (playerScale < 0) ? -550.f : 550.f;
+			player->data.dashVelocityY = -550.f;
 			state = DASH_DIAGONAL;
 		}
 		else if (_dashUp)
 		{
-			playerVelocity.y = -550.f;
+			player->data.dashVelocityX = 0.f;
+			player->data.dashVelocityY = -550.f;
 			state = DASH_UP;
 		}
 		else if (_dashGround)
 		{
-			if (playerScale < 0)
-			{
-				playerVelocity.x = -950.f;
-			}
-			else
-			{
-				playerVelocity.x = 950.f;
-			}
+			player->data.dashVelocityX = (playerScale < 0) ? -950.f : 950.f;
+			player->data.dashVelocityY = 0.f;
 			state = DASH_GROUND;
 		}
 
-		
-
-		player->data.velocity = playerVelocity;
-		StateMachine(state);
 		player->data.knockBackTimer += 0.48f;
-
+		StateMachine(state);
 	}
-	else if (!player->currentAnimation->isPlaying) 
+
+	if (player->action.isDashing)
 	{
-		player->data.knockBackTimer -= player->data.knockBackTimer;
-		player->action.isDashing = sfFalse;
-	}
+		float friction = 1.f;
 
+		player->data.dashVelocityX -= player->data.dashVelocityX * friction * _dt;
+		player->data.dashVelocityY -= player->data.dashVelocityY * friction * _dt;
+
+		if (fabsf(player->data.dashVelocityX) < 10.f)
+		{
+			player->data.dashVelocityX = 0.f;
+
+		}
+		if (fabsf(player->data.dashVelocityY) < 10.f)
+		{
+			player->data.dashVelocityY = 0.f;
+		}
+
+		player->data.velocity.x = player->data.dashVelocityX;
+		if (_dashUp || _dashDiagonal)
+		{
+			player->data.velocity.y = player->data.dashVelocityY;
+		}
+
+		if (!player->currentAnimation->isPlaying)
+		{
+			player->data.knockBackTimer = 0.f;
+			player->action.isDashing = sfFalse;
+			player->data.dashVelocityX = 0.f;
+			player->data.dashVelocityY = 0.f;
+		}
+	}
 }
 
 void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
@@ -934,11 +1037,7 @@ void HandleAnimationState(float _dt, sfBool movingLeft, sfBool movingRight)
 void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 {
 
-	if (player->data.knockBackTimer > 0.f)
-	{
-		player->data.knockBackTimer -= _dt;
-		return;
-	}
+
 
 
 
@@ -950,13 +1049,13 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 	sfBool dashUp = sfKeyboard_isKeyPressed(sfKeyZ) && sfKeyboard_isKeyPressed(sfKeyLShift);
 	sfBool dashDiagonal = dashUp && (movingLeft || movingRight);
 
+	HandleDash(_dt, dashGround, dashUp, dashDiagonal);
 
 	if (player->data.slideCooldownTimer > 0.f)
 	{
 		player->data.slideCooldownTimer -= _dt;
 
 	}
-
 	if (sfRenderWindow_hasFocus(_renderWindow))
 	{
 
@@ -986,7 +1085,6 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 		HandleGroundMovement(_renderWindow, movingLeft, movingRight, slideKey);
 	}
 
-	HandleDash(_dt, dashGround, dashUp, dashDiagonal);
 
 	HandleJump(_dt, movingLeft, movingRight, jumpKey);
 	HandleAnimationState(_dt, movingLeft, movingRight);
@@ -1173,12 +1271,10 @@ void CheckCollisionPlayerSpike(float _dt)
 	float playerCenterX = hitPlayer.left + (hitPlayer.width / 2);
 
 
-
 	for (unsigned i = 0; i < GetSpikeTabSize(); i++)
 	{
 		hitSpike = GetSpikeTab(i);
 		float spikeCenterX = hitSpike.left + (hitSpike.width / 2);
-
 		if (sfFloatRect_intersects(&hitSpike, &hitPlayer, &intersection) && player->data.timerSpikeWidth > TIMER_SPIKE)
 		{
 			player->data.knockBackTimer += 0.15f;
@@ -1191,35 +1287,25 @@ void CheckCollisionPlayerSpike(float _dt)
 
 				player->spikeSide = LEFT;
 			}
-
 		}
-
 	}
 
 	if (player->spikeSide != NOTHING)
 	{
 		player->action.isGrounded = sfFalse;
 
-
 		StateMachine(FALL);
 		if (player->spikeSide == LEFT)
 		{
-			//printf("LEFT\n");
-			//player.action.isGrounded = sfFalse;
 			player->data.velocity.y = -SPIKE_VELOCITY;
 			player->data.velocity.x = SPIKE_VELOCITY;
 			sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-
-
 		}
 		else if (player->spikeSide == WIDTH)
 		{
-			//printf("RIGHT\n");
-			//player.action.isGrounded = sfFalse;
 			player->data.velocity.y = -SPIKE_VELOCITY;
 			player->data.velocity.x = -SPIKE_VELOCITY;
 			sfSprite_setScale(player->sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
-
 		}
 
 		player->data.timerSpikeHeight = 0.f;
@@ -1250,8 +1336,6 @@ void CheckCollisionPlayerSpike(float _dt)
 			{
 				player->spikeSide = HEIGHT;
 			}
-
-
 		}
 	}
 
@@ -1264,12 +1348,10 @@ void CheckCollisionPlayerSpike(float _dt)
 
 		if (player->spikeSide == TOP)
 		{
-			//printf("TOP\n");
 			player->data.velocity.y = -SPIKE_VELOCITY;
 		}
 		else if (player->spikeSide == HEIGHT)
 		{
-			//printf("HEIGHT\n");
 			player->data.velocity.y = SPIKE_VELOCITY;
 		}
 
@@ -1345,12 +1427,12 @@ void BasePlayer()
 	player->data.attackCooldownTimer = 0.5f;
 
 
+	player->data.maxHealth = 200;
 	player->data.health = player->data.maxHealth;
 
 
 
 
-	player->data.maxHealth = 200;
 	player->data.lastDirection = 1;
 	player->data.speed = 350.f;
 
@@ -1371,13 +1453,9 @@ void BasePlayer()
 
 	player->shape.collisionAttackShape = sfRectangleShape_create();
 
-	sfRectangleShape_setSize(player->shape.collisionAttackShape,
-		(sfVector2f) {
-		ATTACK_HITBOX_WIDTH* GAME_SCALE, ATTACK_HITBOX_HEIGHT* GAME_SCALE
-	});
+	sfRectangleShape_setSize(player->shape.collisionAttackShape, (sfVector2f) { ATTACK_HITBOX_WIDTH* GAME_SCALE, ATTACK_HITBOX_HEIGHT* GAME_SCALE });
 
-	sfRectangleShape_setFillColor(player->shape.collisionAttackShape,
-		sfColor_fromRGBA(255, 0, 0, 150));
+	sfRectangleShape_setFillColor(player->shape.collisionAttackShape, sfColor_fromRGBA(255, 0, 0, 150));
 
 	player->action.isAttacking = sfFalse;
 
@@ -1472,11 +1550,6 @@ void StateMachine(PlayerState _state)
 		return;
 	}
 	SetAnimation(_state);
-}
-
-void CollisionPlayerItems(unsigned index)
-{
-
 }
 
 float RandomFloat(float min, float max)

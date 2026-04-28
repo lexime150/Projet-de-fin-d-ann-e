@@ -26,8 +26,8 @@
 #define MAX_GRIP_WALL_SPEED 600.f
 
 
-#define SWORD_DEGATS 66
-#define AXE_DEGATS 90
+#define SWORD_DAMAGES 66
+#define AXE_DAMAGES 90
 
 
 #define PLAYER_HITBOX_WIDTH  20
@@ -182,6 +182,9 @@ typedef struct Stats
 	float timeAttackSide;
 
 	float timerDash;
+
+	float dashVelocityX;
+	float dashVelocityY;
 
 }Stats;
 

@@ -633,7 +633,7 @@ void StateMob(float _dt, unsigned _i)
 
 
 
-	if (player->currentState == SWORD || player->currentState == SWORD_UP || player->currentState == SWORD_DOWN)
+	if (player->currentState == SWORD || player->currentState == SWORD_UP || player->currentState == SWORD_DOWN || player->currentState == AXE || player->currentState == AXE_UP || player->currentState == AXE_DOWN)
 	{
 		sfFloatRect hitPlayer = sfRectangleShape_getGlobalBounds(player->shape.collisionAttackShape);
 		sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].shape.rect);
@@ -646,11 +646,19 @@ void StateMob(float _dt, unsigned _i)
 			if (player->currentState == SWORD || player->currentState == SWORD_UP || player->currentState == SWORD_DOWN && player->currentAnimation->currentFrame == 1)
 			{
 				mob[_i].data.timerKnockBack += 0.25f;
-				mob[_i].data.hp -= (SWORD_DEGATS + rand() % 21);
+				mob[_i].data.hp -= (SWORD_DAMAGES + rand() % 21);
 				mob[_i].data.timerTakeHit = 0;
 				StateMobMachine(TAKE_HIT, _i);
 				mob[_i].act = IS_TAKE_HIT;
-				
+			}
+			if (player->currentState == AXE || player->currentState == AXE_UP || player->currentState == AXE_DOWN)
+			{
+				mob[_i].data.timerKnockBack += 0.25f;
+				mob[_i].data.hp -= (AXE_DAMAGES + rand() % 21);
+				mob[_i].data.timerTakeHit = 0;
+				StateMobMachine(TAKE_HIT, _i);
+				mob[_i].act = IS_TAKE_HIT;
+			}
 
 				sfSound_setPitch(mob[_i].soundMob.soundTakeHit, RandomFloatMob(0.80f, 1.2f));
 				sfTime offset = sfSeconds(0.4f);
@@ -667,7 +675,6 @@ void StateMob(float _dt, unsigned _i)
 					mob[_i].side = WIDTH_MOB;
 				}
 
-			}
 
 			if (mob[_i].act == IS_TAKE_HIT && !mob[_i].currentMobAnimation->isPlaying)
 			{

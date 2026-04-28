@@ -1,5 +1,7 @@
 #include "Animation.h"
+#include "Player.h"
 
+Player* player;
 Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _frameSpeed, sfBool _isPlaying, sfBool _isLooping, sfIntRect _firstFrame)
 {
     Animation createAnim = { 0 };
@@ -53,6 +55,8 @@ void UpdateAnimation(Animation* _animation, float _dt)
     sfIntRect frame = _animation->firstFrame;
     frame.left = frame.left + _animation->currentFrame * frame.width;
     sfSprite_setTextureRect(_animation->sprite, frame);
+    sfSprite_setOrigin(player->sprite, (sfVector2f) { (float)player->currentAnimation->firstFrame.width / 2, (float)player->currentAnimation->firstFrame.height });
+
 
 }
 
