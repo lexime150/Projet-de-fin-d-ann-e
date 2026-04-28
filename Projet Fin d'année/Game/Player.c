@@ -826,7 +826,7 @@ void HandleGroundMovement(sfRenderWindow* _renderWindow, sfBool movingLeft, sfBo
 
 static void HandleDoubleJump(float _dt, sfBool _spaceTouching)
 {
-	if (_spaceTouching && !player->action.isGrounded)  
+	if (_spaceTouching && !player->action.isGrounded)
 	{
 		StateMachine(D_JUMP);
 		player->data.velocity.y = -550.f;
@@ -841,7 +841,7 @@ static void HandleDoubleJump(float _dt, sfBool _spaceTouching)
 
 }
 
-void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey)
+static void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey)
 {
 	static sfBool jumpPressed = sfFalse;
 
@@ -908,7 +908,7 @@ void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey
 				HandleDoubleJump(_dt, jumpKey);
 			}
 		}
-	
+
 
 
 	}
@@ -961,24 +961,24 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 		player->data.knockBackTimer += 0.48f;
 		StateMachine(state);
 
-			if (playerScale < 0)
-			{
-				playerVelocity.x = -DASH_HORIZONTAL;
-			}
-			else
-			{
-				playerVelocity.x = DASH_HORIZONTAL;
-			}
-			state = DASH_GROUND;
+		if (playerScale < 0)
+		{
+			playerVelocity.x = -DASH_HORIZONTAL;
 		}
-
-		
-
-		player->data.velocity = playerVelocity;
-		StateMachine(state);
-		
-
+		else
+		{
+			playerVelocity.x = DASH_HORIZONTAL;
+		}
+		//state = DASH_GROUND;
 	}
+
+
+
+	player->data.velocity = playerVelocity;
+	StateMachine(state);
+
+
+
 
 	if (player->action.isDashing)
 	{
@@ -1141,7 +1141,7 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 	}
 
 
-	HandleDash(_dt, dashGround, dashUp, dashDiagonal);
+	//HandleDash(_dt, dashGround, dashUp, dashDiagonal);
 	HandleJump(_dt, movingLeft, movingRight, jumpKey);
 
 
