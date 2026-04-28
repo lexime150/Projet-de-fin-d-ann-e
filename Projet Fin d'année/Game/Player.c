@@ -832,7 +832,6 @@ static void HandleDash(float _dt, sfBool _dashGround, sfBool _dashUp, sfBool _da
 		}
 		else if (_dashGround)
 		{
-			//	playerVelocity.y = 0;
 			if (playerScale < 0)
 			{
 				playerVelocity.x = -950.f;
