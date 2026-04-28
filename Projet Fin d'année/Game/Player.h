@@ -59,6 +59,10 @@
 
 #define GROUND_PROXIMITY_THRESHOLD 80
 
+#define DASH_Y 550.f
+#define DIAGONAL_DASH_X 550.f
+#define DASH_HORIZONTAL 950.f
+
 typedef enum SpikeSide
 {
 	LEFT,
@@ -129,6 +133,9 @@ typedef struct Action
 	sfBool isAttackSide;
 
 	sfBool isDashing;
+
+	sfBool jumpOne;
+	sfBool jumpTwo;
 	
 }Action;
 

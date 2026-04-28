@@ -58,7 +58,7 @@ void LoadAnimationPlayer(void)
 	firstFrame = (sfIntRect){ 3 * PLAYER_WIDTH, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player->animationPlayer[FALL] = CreateAnimation(player->sprite, 3, 6, sfTrue, sfTrue, firstFrame);
 
-	firstFrame = (sfIntRect){ 0, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
+	firstFrame = (sfIntRect){ PLAYER_WIDTH * 6, 2 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT };
 	player->animationPlayer[D_JUMP] = CreateAnimation(player->sprite, 3, 6, sfTrue, sfTrue, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, PLAYER_HEIGHT * 3 , PLAYER_WIDTH, PLAYER_HEIGHT };
@@ -824,6 +824,22 @@ void HandleGroundMovement(sfRenderWindow* _renderWindow, sfBool movingLeft, sfBo
 	}
 }
 
+static void HandleDoubleJump(float _dt, sfBool _spaceTouching)
+{
+	if (_spaceTouching && !player->action.isGrounded)  
+	{
+		StateMachine(D_JUMP);
+		player->data.velocity.y = -550.f;
+		player->action.jumpOne = sfFalse;
+		player->action.jumpTwo = sfTrue;
+	}
+	else if (player->action.jumpTwo && player->data.velocity.y > 0)
+	{
+		StateMachine(FALL);
+		player->action.jumpTwo = sfFalse;
+	}
+
+}
 
 void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey)
 {
@@ -848,7 +864,12 @@ void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey
 
 			player->data.velocity.y = -JUMP_FORCE;
 			player->action.isGrounded = sfFalse;
-			StateMachine(JUMP);
+			if (!player->action.jumpOne && !player->action.jumpTwo && player->currentState != D_JUMP)
+			{
+				StateMachine(JUMP);
+			}
+
+			player->action.jumpOne = sfTrue;
 		}
 		else
 		{
@@ -882,7 +903,14 @@ void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey
 				player->action.isSlideJumping = sfFalse;
 				StateMachine(WALL_JUMP);
 			}
+			else if (player->action.jumpOne)
+			{
+				HandleDoubleJump(_dt, jumpKey);
+			}
 		}
+	
+
+
 	}
 
 	if (!jumpKey)
@@ -892,11 +920,13 @@ void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey
 	}
 }
 
-static void HandleDash(float _dt, sfBool _dashGround, sfBool _dashUp, sfBool _dashDiagonal)
+static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool _dashDiagonal)
 {
 	player->data.timerDash += _dt;
 
-	sfBool dashEnable = _dashDiagonal || _dashUp || _dashGround;
+
+	sfBool dashEnable = _dashDiagonal || _dashUp || _dashHorizontal;
+	sfVector2f playerVelocity = player->data.velocity;
 	float playerScale = sfSprite_getScale(player->sprite).x;
 	PlayerState state = player->currentState;
 
@@ -909,15 +939,19 @@ static void HandleDash(float _dt, sfBool _dashGround, sfBool _dashUp, sfBool _da
 		{
 			player->data.dashVelocityX = (playerScale < 0) ? -550.f : 550.f;
 			player->data.dashVelocityY = -550.f;
+
 			state = DASH_DIAGONAL;
 		}
 		else if (_dashUp)
 		{
 			player->data.dashVelocityX = 0.f;
 			player->data.dashVelocityY = -550.f;
+
+			playerVelocity.y = -DASH_Y;
+
 			state = DASH_UP;
 		}
-		else if (_dashGround)
+		else if (_dashHorizontal)
 		{
 			player->data.dashVelocityX = (playerScale < 0) ? -950.f : 950.f;
 			player->data.dashVelocityY = 0.f;
@@ -926,6 +960,24 @@ static void HandleDash(float _dt, sfBool _dashGround, sfBool _dashUp, sfBool _da
 
 		player->data.knockBackTimer += 0.48f;
 		StateMachine(state);
+
+			if (playerScale < 0)
+			{
+				playerVelocity.x = -DASH_HORIZONTAL;
+			}
+			else
+			{
+				playerVelocity.x = DASH_HORIZONTAL;
+			}
+			state = DASH_GROUND;
+		}
+
+		
+
+		player->data.velocity = playerVelocity;
+		StateMachine(state);
+		
+
 	}
 
 	if (player->action.isDashing)
@@ -961,6 +1013,8 @@ static void HandleDash(float _dt, sfBool _dashGround, sfBool _dashUp, sfBool _da
 	}
 }
 
+
+
 void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
 {
 	float dx = player->data.velocity.x * _dt;
@@ -987,8 +1041,10 @@ void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
 			}
 		}
 
-		if (player->currentState != JUMP && player->currentState != WALL_JUMP)
+		if (player->currentState != JUMP && player->currentState != WALL_JUMP && player->currentState != D_JUMP)
+		{
 			StateMachine(JUMP);
+		}
 	}
 	else
 	{
@@ -1058,7 +1114,6 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 	}
 	if (sfRenderWindow_hasFocus(_renderWindow))
 	{
-
 		HandleAttackInput(_renderWindow, _dt, movingLeft, movingRight);
 	}
 
@@ -1086,7 +1141,11 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 	}
 
 
+	HandleDash(_dt, dashGround, dashUp, dashDiagonal);
 	HandleJump(_dt, movingLeft, movingRight, jumpKey);
+
+
+
 	HandleAnimationState(_dt, movingLeft, movingRight);
 }
 
