@@ -844,10 +844,7 @@ static void HandleDash(float _dt, sfBool _dashGround, sfBool _dashUp, sfBool _da
 			state = DASH_GROUND;
 		}
 
-		if (player->data.velocity.x > playerVelocity.x)
-		{
-			playerVelocity.x *= 2.f;
-		}
+		
 
 		player->data.velocity = playerVelocity;
 		StateMachine(state);
