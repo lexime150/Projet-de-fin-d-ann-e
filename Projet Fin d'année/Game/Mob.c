@@ -24,6 +24,7 @@ void SetBubbleSort(void);
 void DeleteMob(unsigned* _i);
 void SetVelocity(unsigned _i, float _dt);
 
+sfBool GetDistanceMobSpike(unsigned _mob, unsigned _spike);
 
 
 float RandomFloatMob(float min, float max)
@@ -354,19 +355,13 @@ void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 
 static void CheckMobSpikeCollision(float _dt, unsigned _i)
 {
+	MobSide side = NOTHING_MOB;
 	sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].shape.collisionRect);
 	sfFloatRect hitSpike = { 0 };
 	sfFloatRect intersects = { 0 };
-	MobSide side = NOTHING_MOB;
 	float posMobY = hitMob.top + hitMob.height;
 	float posMobX = 0;
 
-
-
-	for (int i = 0; i < GetSpikeTabSize(); i++)
-	{
-
-	}
 
 	UpdateMobInfo(_dt, _i);
 
@@ -634,26 +629,45 @@ void StateMob(float _dt, unsigned _i)
 
 		if (mob[_i].currentState != TAKE_HIT && mob[_i].currentMobAnimation->isPlaying)
 		{
-			if (GetDistancePlayerMobVector(_i) < mob[_i].rangeMove && GetDistancePlayerMobY(_i) < (player->shape.collisionPlayerRect.height * 2))
+			sfBool blockedBySpike = sfFalse;
+			for (int i = 0; i < GetSpikeTabSize(); i++)
 			{
-				if (GetDistancePlayerMobX(_i) > (player->shape.collisionPlayerRect.width))
-				{
-					StateMobMachine(RUN_MOB, _i);
-					mob[_i].act = IS_MOVING;
 
-				}
-				else
+				if (GetDistanceMobSpike(_i, i))
 				{
-					mob[_i].act = IS_ATTACK;
+					blockedBySpike = sfTrue;
+					break;
 				}
-			}
-			else if (GetDistancePlayerMobY(_i) > (player->shape.collisionPlayerRect.height * 2))
-			{
-				StateMobMachine(IDLE_MOB, _i);
-				mob[_i].act = IS_IDLE;
+
 			}
 
-
+				if (GetDistancePlayerMobX(_i) < mob[_i].rangeMove && GetDistancePlayerMobY(_i) < (player->shape.collisionPlayerRect.height * 2))
+				{
+					if (GetDistancePlayerMobX(_i) > (player->shape.collisionPlayerRect.width))
+					{
+						if (!blockedBySpike)
+						{
+							StateMobMachine(RUN_MOB, _i);
+							mob[_i].act = IS_MOVING;
+						}
+						else
+						{
+							mob[_i].act = IS_IDLE;
+							StateMobMachine(IDLE_MOB, _i);
+						}
+					}
+					else
+					{
+						mob[_i].act = IS_ATTACK;
+					}
+				}
+				else if (GetDistancePlayerMobY(_i) > (player->shape.collisionPlayerRect.height * 2))
+				{
+					StateMobMachine(IDLE_MOB, _i);
+					mob[_i].act = IS_IDLE;
+				}
+			
+			
 
 
 			//---------TAKE IT---------//
@@ -695,6 +709,7 @@ void StateMob(float _dt, unsigned _i)
 
 		if (sfFloatRect_intersects(&hitPlayer, &hitMob, NULL) && mob[_i].currentState != DEATH)
 		{
+
 
 			if (swordAttack)
 			{
@@ -900,4 +915,23 @@ void SetVelocity(unsigned _i, float _dt)
 unsigned GetMobCount(void)
 {
 	return mobCount;
+}
+
+sfBool GetDistanceMobSpike(unsigned _mob, unsigned _spike)
+{
+	float posPlayer = sfSprite_getPosition(player->sprite).x;
+	sfFloatRect hitMob = sfSprite_getGlobalBounds(mob[_mob].sprite);
+	float posMobX = hitMob.left + (hitMob.width / 2);
+	sfFloatRect hitSpike = GetSpikeTab(_spike);
+	float spikeOrigin = hitSpike.left + (hitSpike.width / 2);
+	
+	float minX = fminf(posPlayer, posMobX);
+	float maxX = fmaxf(posPlayer, posMobX);
+
+	if (spikeOrigin > minX && spikeOrigin < maxX)
+	{
+		return sfTrue;
+	}
+	return sfFalse;
+
 }
