@@ -202,6 +202,8 @@ void ChangeLevel(const char* _level)
 	player->data.position = GetPlayerSpawn();
 	player->data.velocity.x = 0;
 	player->data.velocity.y = 0;
+	player->data.health = player->data.maxHealth;
+
 	player->action.isGrounded = sfFalse;
 	player->action.isSliding = sfFalse;
 	player->action.isWallJumping = sfFalse;

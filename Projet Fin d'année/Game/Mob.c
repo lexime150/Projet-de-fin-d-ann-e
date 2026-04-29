@@ -144,7 +144,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 		//----Attack Rect
 
 		sfRectangleShape_setSize(newMob.shape.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON, HITBOX_SKELETON_HEIGHT });
-		sfRectangleShape_setOrigin(newMob.shape.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON / 2, HITBOX_SKELETON_HEIGHT});
+		sfRectangleShape_setOrigin(newMob.shape.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON / 2, HITBOX_SKELETON_HEIGHT });
 		newMob.mobType = SKELETON;
 
 		//newMob.soundBufferAttack = sfSoundBuffer_createFromFile("Assets/Audio/Mobs/skeleton attack.ogg");
@@ -174,9 +174,9 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 	newMob.shape.floorSecurity = sfRectangleShape_create();
 	sfRectangleShape_setSize(newMob.shape.floorSecurity, FLOOR_SECURITY_SIZE);
-	sfRectangleShape_setOrigin(newMob.shape.floorSecurity, (sfVector2f){FLOOR_SECURITY_SIZE.x / 2, 0});
-	sfRectangleShape_setScale(newMob.shape.floorSecurity, (sfVector2f){GAME_SCALE, GAME_SCALE});
-	
+	sfRectangleShape_setOrigin(newMob.shape.floorSecurity, (sfVector2f) { FLOOR_SECURITY_SIZE.x / 2, 0 });
+	sfRectangleShape_setScale(newMob.shape.floorSecurity, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+
 
 	sfSound_setBuffer(newMob.soundMob.soundTakeHit, newMob.soundMob.soundBufferTakeHit);
 	sfSound_setBuffer(newMob.soundMob.soundAttack, newMob.soundMob.soundBufferAttack);
@@ -365,31 +365,6 @@ static void CheckMobSpikeCollision(float _dt, unsigned _i)
 
 	for (int i = 0; i < GetSpikeTabSize(); i++)
 	{
-		hitSpike = GetSpikeTab(i);
-
-		if (sfFloatRect_intersects(&hitSpike, &hitMob, &intersects))
-		{
-			sfBool condition1 = (hitMob.left + hitMob.width) < hitSpike.left;
-			sfBool condition2 = hitMob.left < (hitSpike.left + hitSpike.width);
-
-			posMobX = hitMob.left + (hitMob.width / 2);
-			//if (mob[_i].isGrounded)
-			{
-				if (condition1)
-				{
-					posMobX += (intersects.width + (hitMob.width + 30.f));
-				}
-				else if (!condition1 && condition2)
-				{
-					posMobX -= (intersects.width + (hitMob.width + 30.f));
-				}
-
-
-				sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { posMobX, sfSprite_getPosition(mob[_i].sprite).y });
-				mob[_i].data.hp = 0;
-				break;
-			}
-		}
 
 	}
 
@@ -400,7 +375,7 @@ static void CheckMobSpikeCollision(float _dt, unsigned _i)
 	for (int i = 0; i < GetSpikeTabSize(); i++)
 	{
 		hitSpike = GetSpikeTab(i);
-		
+
 
 		if (sfFloatRect_intersects(&hitMob, &hitSpike, &intersects))
 		{
@@ -411,9 +386,9 @@ static void CheckMobSpikeCollision(float _dt, unsigned _i)
 				break;
 			}
 		}
-		
+
 	}
-	
+
 	if (side == HEIGHT_MOB)
 	{
 		player->data.velocity.y = 0;
@@ -434,7 +409,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 	sfFloatRect hitSemiPlat = { 0 };
 	sfFloatRect intersection = { 0 };
 	sfVector2f posMob = sfSprite_getPosition(mob[_i].sprite);
-	
+
 	hitMob = mob[_i].shape.hitRect;
 	sfFloatRect hitDeathZone;
 
@@ -541,7 +516,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 		if (sfFloatRect_intersects(&hitPlat, &hitMob, &intersection) && mob[_i].currentState != DEATH)
 		{
-			
+
 			if (intersection.width > intersection.height && dy < 20.f)
 			{
 				if (mob[_i].currentState == RUN_MOB && mob[_i].data.timerTakeHit > 1.5f)
@@ -619,7 +594,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 		}
 
 	}
-	
+
 
 }
 
@@ -721,9 +696,10 @@ void StateMob(float _dt, unsigned _i)
 		if (sfFloatRect_intersects(&hitPlayer, &hitMob, NULL) && mob[_i].currentState != DEATH)
 		{
 
-			if (swordAttack && player->currentAnimation->currentFrame == 1)
+			if (swordAttack)
 			{
 				mob[_i].data.timerKnockBack += 0.25f;
+				printf("test");
 				mob[_i].data.hp -= (SWORD_DAMAGES + rand() % 21);
 				mob[_i].data.timerTakeHit = 0;
 				StateMobMachine(TAKE_HIT, _i);
@@ -738,20 +714,20 @@ void StateMob(float _dt, unsigned _i)
 				mob[_i].act = IS_TAKE_HIT;
 			}
 
-				sfSound_setPitch(mob[_i].soundMob.soundTakeHit, RandomFloatMob(0.80f, 1.2f));
-				sfTime offset = sfSeconds(0.4f);
-				sfSound_setPlayingOffset(mob[_i].soundMob.soundTakeHit, offset);
-				sfSound_play(mob[_i].soundMob.soundTakeHit);
+			sfSound_setPitch(mob[_i].soundMob.soundTakeHit, RandomFloatMob(0.80f, 1.2f));
+			sfTime offset = sfSeconds(0.4f);
+			sfSound_setPlayingOffset(mob[_i].soundMob.soundTakeHit, offset);
+			sfSound_play(mob[_i].soundMob.soundTakeHit);
 
 
-				if (posMobX > posAttackPlayerX)
-				{
-					mob[_i].side = LEFT_MOB;
-				}
-				else if (posMobX < posAttackPlayerX)
-				{
-					mob[_i].side = WIDTH_MOB;
-				}
+			if (posMobX > posAttackPlayerX)
+			{
+				mob[_i].side = LEFT_MOB;
+			}
+			else if (posMobX < posAttackPlayerX)
+			{
+				mob[_i].side = WIDTH_MOB;
+			}
 
 
 			if (mob[_i].act == IS_TAKE_HIT && !mob[_i].currentMobAnimation->isPlaying)
@@ -842,10 +818,10 @@ void DrawMob(sfRenderWindow* _renderWindow)
 	sfBool drawHitbox;
 	for (unsigned i = 0; i < mobCount; i++)
 	{
-		
+
 		drawHitbox = sfFalse;
 
-		if(sfKeyboard_isKeyPressed(sfKeyC))
+		if (sfKeyboard_isKeyPressed(sfKeyC))
 		{
 			drawHitbox = sfTrue;
 		}
@@ -861,9 +837,9 @@ void DrawMob(sfRenderWindow* _renderWindow)
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].floorSecurity, NULL);
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].collisionRect, NULL);
-	
+
 		sfRenderWindow_drawSprite(_renderWindow, mob[i].sprite, NULL);
-	
+
 	}
 
 }

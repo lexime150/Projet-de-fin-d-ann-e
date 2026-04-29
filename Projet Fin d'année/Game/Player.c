@@ -532,6 +532,7 @@ void HandleAttackInput(sfRenderWindow* _renderWindow, float _dt, sfBool movingLe
 				sfSound_setPitch(player->sound.swordSound, RandomFloat(0.9f, 1.2f));
 				sfSound_play(player->sound.swordSound);
 				StateMachine(SWORD);
+				printf("SWORD\n");
 				attackTriggered = sfTrue;
 			}
 		}
@@ -924,9 +925,7 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 {
 	player->data.timerDash += _dt;
 
-
 	sfBool dashEnable = _dashDiagonal || _dashUp || _dashHorizontal;
-	sfVector2f playerVelocity = player->data.velocity;
 	float playerScale = sfSprite_getScale(player->sprite).x;
 	PlayerState state = player->currentState;
 
@@ -935,20 +934,21 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 		player->action.isDashing = sfTrue;
 		player->data.timerDash = 0.f;
 
+		player->data.velocity.x = 0.f;
+		player->data.velocity.y = 0.f;
+		player->action.isWallJumping = sfFalse;
+		player->action.isSlideJumping = sfFalse;
+
 		if (_dashDiagonal)
 		{
 			player->data.dashVelocityX = (playerScale < 0) ? -550.f : 550.f;
 			player->data.dashVelocityY = -550.f;
-
 			state = DASH_DIAGONAL;
 		}
 		else if (_dashUp)
 		{
 			player->data.dashVelocityX = 0.f;
-			player->data.dashVelocityY = -550.f;
-
-			playerVelocity.y = -DASH_Y;
-
+			player->data.dashVelocityY = -DASH_Y;
 			state = DASH_UP;
 		}
 		else if (_dashHorizontal)
@@ -958,20 +958,8 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 			state = DASH_GROUND;
 		}
 
-	
 		StateMachine(state);
-
-	
-		
 	}
-
-
-
-	player->data.velocity = playerVelocity;
-	StateMachine(state);
-
-
-
 
 	if (player->action.isDashing)
 	{
@@ -983,7 +971,6 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 		if (fabsf(player->data.dashVelocityX) < 10.f)
 		{
 			player->data.dashVelocityX = 0.f;
-
 		}
 		if (fabsf(player->data.dashVelocityY) < 10.f)
 		{

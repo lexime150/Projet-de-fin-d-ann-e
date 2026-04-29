@@ -42,7 +42,6 @@ sfBool SavePlayer(int slot)
 
 	PlayerSaveData save;
 	save.save = SAVE_VERSION;
-	save.health = player->data.health;
 	save.canDoubleJump = player->data.canDoubleJump;
 	save.canWallJump = player->data.canWallJump;
 	snprintf(save.level, sizeof(save.level), "%s", player->data.level);
@@ -97,7 +96,6 @@ PlayerSaveData* LoadSave(int slot)
 	if (player)
 	{
 		snprintf(player->data.level, sizeof(player->data.level), "%s", playerSaveData.level);
-		player->data.health = playerSaveData.health;
 		player->data.canDoubleJump = playerSaveData.canDoubleJump;
 		player->data.canWallJump = playerSaveData.canWallJump;
 	}
