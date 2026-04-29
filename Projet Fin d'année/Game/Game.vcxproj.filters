@@ -75,6 +75,9 @@
     <ClCompile Include="Collectibles.c">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Tool.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Collectibles.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

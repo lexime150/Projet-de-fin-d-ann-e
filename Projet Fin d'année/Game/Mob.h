@@ -18,7 +18,7 @@
 //Range
 
 #define DIST_ATTACK_MUSHROOM 150.f
-#define DIST_RUN_MUSHROOM 400.f
+#define DIST_RUN_MUSHROOM 600.f
 
 //Timer
 
@@ -36,7 +36,7 @@
 
 //Range
 
-#define DIST_RUN_SKELETON 300.f
+#define DIST_RUN_SKELETON 500.f
 #define DIST_ATTACK_SKELETON 100.f
 
 //Hitbox
@@ -52,7 +52,7 @@
 
 //Timer
 
-#define TIMER_ATTACK_SKELETON 0.4f
+#define TIMER_ATTACK_SKELETON 0.55f
 #define TIMER_TAKE_HIT_SKELETON 0.3f
 
 #define SKELETON_KNOCKBACK_

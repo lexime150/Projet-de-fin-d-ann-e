@@ -153,7 +153,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 	{
 		if (mob[i].act != IS_DEATH)
 		{
-			if (mob[i].act == IS_ATTACK)
+			if (mob[i].act == IS_ATTACK && mob[i].data.timerAttack > mob[i].data.timerAttackLimit)
 			{
 
 				StateMobMachine(ATTACK_MOB, i);
@@ -164,13 +164,12 @@ void CheckCollisionPlayerAttackMob(float _dt)
 					sfSound_play(mob[i].soundMob.soundAttack);
 				}
 
-				mob[i].data.timerAttack = 0;
 
 			}
-			else if (!mob[i].currentMobAnimation->isPlaying && mob[i].act != IS_TAKE_HIT)
+			else if (!mob[i].currentMobAnimation->isPlaying && mob[i].act != IS_TAKE_HIT && mob[i].currentState == ATTACK_MOB)
 			{
 				mob[i].act = IS_IDLE;
-				StateMobMachine(IDLE_MOB, i);
+				//StateMobMachine(IDLE_MOB, i);
 			}
 		}
 	}
@@ -205,6 +204,8 @@ void CheckCollisionPlayerAttackMob(float _dt)
 						player->action.damageEnable = sfFalse;
 					}
 				}
+			
+				
 
 			}
 
@@ -1429,13 +1430,11 @@ void BasePlayer()
 	player->data = (Stats){ 0 };
 	player->action = (Action){ 0 };
 
-	player->action.isTransitioning = sfTrue;
-	player->sprite = sfSprite_create();
-	player->texture = sfTexture_createFromFile("Assets/Sprites/Game/Player/PlayerUpD.png", NULL);
-	sfSprite_setTexture(player->sprite, player->texture, sfTrue);
-	sfSprite_setOrigin(player->sprite, (sfVector2f) { PLAYER_WIDTH / 2.f, PLAYER_HEIGHT });
+
+	CreateSprite(&player->texture, "Assets/Sprites/Game/Player/PlayerUpD.png", &player->sprite, ORIGIN_CENTER_X, GetPlayerSpawn());
 	sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-	sfSprite_setPosition(player->sprite, GetPlayerSpawn());
+
+	player->action.isTransitioning = sfTrue;
 
 	player->shape.collisionPlayerShape = sfRectangleShape_create();
 	sfRectangleShape_setSize(player->shape.collisionPlayerShape, (sfVector2f) { PLAYER_HITBOX_WIDTH* GAME_SCALE, PLAYER_HITBOX_HEIGHT* GAME_SCALE });

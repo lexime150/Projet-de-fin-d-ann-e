@@ -1,5 +1,10 @@
 ﻿  Mob.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(370,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(411,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(633,22): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(385,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(426,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(655,22): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(673,72): warning C4047: 'fonction' : les niveaux d'indirection de 'const sfFloatRect *' et de 'sfRectangleShape **' sont différents
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(673,72): warning C4024: 'sfFloatRect_intersects' : types différents pour le paramètre formel et réel 1
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(673,93): warning C4047: 'fonction' : les niveaux d'indirection de 'const sfFloatRect *' et de 'sfRectangleShape **' sont différents
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(673,93): warning C4024: 'sfFloatRect_intersects' : types différents pour le paramètre formel et réel 2
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(962,15): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe

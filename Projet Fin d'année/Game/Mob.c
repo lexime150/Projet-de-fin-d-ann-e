@@ -9,6 +9,7 @@ sfSoundBuffer* mushroomHitBuffer;
 
 Player* player;
 unsigned mobCount;
+char* adresse[MOB_NUMBER];
 
 void Swap(Mob* _mob, int _i, int _j);
 void BubbleSort(Mob* _mob, int _i);
@@ -34,8 +35,18 @@ float RandomFloatMob(float min, float max)
 
 void LoadMob(void)
 {
-	texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/Champignon du Mordhor.png", NULL);
-	texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/skeleton.png", NULL);
+	//texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/Champignon du Mordhor.png", NULL);
+	//texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/skeleton.png", NULL);
+	//char* textureMushroom = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";
+	//char* textureSkeleton = "Assets/Sprites/Game/Mob/skeleton.png";
+
+	//adresseTexture = malloc(2 * sizeof(char*));
+	//adresseTexture[MUSHROOM] = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";;
+	//adresseTexture[SKELETON] = "Assets/Sprites/Game/Mob/skeleton.png";
+
+	adresse[MUSHROOM] = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";
+	adresse[SKELETON] = "Assets/Sprites/Game/Mob/skeleton.png";
+
 
 
 	mob = malloc(sizeof(Mob));
@@ -77,7 +88,9 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 	newMob.mobType = _type;
 
-	newMob.sprite = sfSprite_create();
+	CreateSprite(&texture[_type], adresse[_type], &newMob.sprite, ORIGIN_CENTER_X, (sfVector2f) { _x, _y });
+
+	//newMob.sprite = sfSprite_create();
 
 	newMob.shape.rect = sfRectangleShape_create();
 	newMob.shape.attackRect = sfRectangleShape_create();
@@ -93,10 +106,10 @@ void AddMob(TypeMob _type, float _x, float _y)
 	switch (newMob.mobType)
 	{
 	case MUSHROOM:
-		sfSprite_setTexture(newMob.sprite, texture[MUSHROOM], sfTrue);
+		//sfSprite_setTexture(newMob.sprite, texture[MUSHROOM], sfTrue);
 		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { MUSHROOM_SIZE_SPRITE / 2, MUSHROOM_SIZE_SPRITE });
 		sfRectangleShape_setSize(newMob.shape.rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT });
-		sfRectangleShape_setOrigin(newMob.shape.rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH / 2, HITBOX_MUSHROOM_HEIGHT });
+		sfRectangleShape_setOrigin(newMob.shape.rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH / 2.f, HITBOX_MUSHROOM_HEIGHT });
 		sfRectangleShape_setSize(newMob.shape.collisionRect, (sfVector2f) { COLLISION_MUSHROOM_WIDTH, COLLISION_MUSHROOM_HEIGHT });
 		sfRectangleShape_setOrigin(newMob.shape.collisionRect, (sfVector2f) { COLLISION_MUSHROOM_WIDTH / 2, COLLISION_MUSHROOM_HEIGHT });
 
@@ -121,13 +134,13 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 		break;
 	case SKELETON:
-		sfSprite_setTexture(newMob.sprite, texture[SKELETON], sfTrue);
+		//sfSprite_setTexture(newMob.sprite, texture[SKELETON], sfTrue);
 		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { HITBOX_SKELETON_WIDTH / 2.f, HITBOX_SKELETON_WIDTH });
-		sfRectangleShape_setSize(newMob.shape.rect, (sfVector2f) { HITBOX_SKELETON_WIDTH - 10, HITBOX_SKELETON_HEIGHT });
-		sfRectangleShape_setOrigin(newMob.shape.rect, (sfVector2f) { HITBOX_SKELETON_WIDTH / 2.f, HITBOX_SKELETON_HEIGHT });
+		sfRectangleShape_setSize(newMob.shape.rect, (sfVector2f) { HITBOX_SKELETON_WIDTH - 10.f, HITBOX_SKELETON_HEIGHT });
+		sfRectangleShape_setOrigin(newMob.shape.rect, (sfVector2f) { (HITBOX_SKELETON_WIDTH - 10.f) / 2.f, HITBOX_SKELETON_HEIGHT });
 		sfSprite_setTextureRect(newMob.sprite, (sfIntRect) { 0, 0, 32, 32 });
 		sfRectangleShape_setSize(newMob.shape.collisionRect, (sfVector2f) { COLLISION_SKELETON_WIDTH, COLLISION_SKELETON_HEIGHT });
-		sfRectangleShape_setOrigin(newMob.shape.collisionRect, (sfVector2f) { COLLISION_SKELETON_WIDTH / 2, COLLISION_SKELETON_HEIGHT });
+		sfRectangleShape_setOrigin(newMob.shape.collisionRect, (sfVector2f) { COLLISION_SKELETON_WIDTH / 2.f, COLLISION_SKELETON_HEIGHT });
 
 		newMob.soundMob.soundBufferAttack = sfSoundBuffer_createFromFile("Assets/Audio/Sounds/Mobs/skeleton attack.ogg");
 		newMob.soundMob.soundBufferTakeHit = sfSoundBuffer_createFromFile("Assets/Audio/Sounds/Mobs/Skeleton damage.ogg");
@@ -158,6 +171,8 @@ void AddMob(TypeMob _type, float _x, float _y)
 		break;
 	}
 
+	newMob.data.timerAttack = newMob.data.timerAttackLimit;
+
 	//---Attack Rect
 	sfRectangleShape_setFillColor(newMob.shape.attackRect, sfTransparent);
 	sfRectangleShape_setOutlineColor(newMob.shape.attackRect, sfMagenta);
@@ -168,7 +183,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 	sfSprite_setScale(newMob.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfRectangleShape_setScale(newMob.shape.rect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-	sfSprite_setPosition(newMob.sprite, (sfVector2f) { _x, _y });
+	//sfSprite_setPosition(newMob.sprite, (sfVector2f) { _x, _y });
 	sfRectangleShape_setPosition(newMob.shape.rect, sfSprite_getPosition(newMob.sprite));
 
 	sfRectangleShape_setScale(newMob.shape.collisionRect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
@@ -248,7 +263,7 @@ void LoadMobAnimation(unsigned _i)
 		mob[_i].mobAnimation[RUN_MOB] = CreateAnimation(mob[_i].sprite, 4, 11, sfTrue, sfTrue, firstFrame);
 
 		firstFrame.top += HITBOX_SKELETON_WIDTH; firstFrame.width = HITBOX_ATTACK_STATE_SKELETON_WIDTH;
-		mob[_i].mobAnimation[ATTACK_MOB] = CreateAnimation(mob[_i].sprite, 6, 10, sfTrue, sfFalse, firstFrame);
+		mob[_i].mobAnimation[ATTACK_MOB] = CreateAnimation(mob[_i].sprite, 6, 8, sfTrue, sfFalse, firstFrame);
 
 		firstFrame.top += HITBOX_SKELETON_WIDTH; firstFrame.width = HITBOX_SKELETON_WIDTH;
 		mob[_i].mobAnimation[TAKE_HIT] = CreateAnimation(mob[_i].sprite, 4, 9, sfTrue, sfFalse, firstFrame);
@@ -322,20 +337,20 @@ void SetBubbleSort()
 
 void UpdateMobInfo(float _dt, unsigned _i)
 {
-	sfVector2f posPlayer = sfSprite_getPosition(mob[_i].sprite);
+	sfVector2f posMob = sfSprite_getPosition(mob[_i].sprite);
 
-	sfRectangleShape_setPosition(mob[_i].shape.rect, posPlayer);
+	sfRectangleShape_setPosition(mob[_i].shape.rect, posMob);
 	mob[_i].shape.hitRect = sfRectangleShape_getGlobalBounds(mob[_i].shape.rect);
 	mob[_i].data.position = sfSprite_getPosition(mob[_i].sprite);
 
 	//----AttackRect
-	sfRectangleShape_setPosition(mob[_i].shape.attackRect, posPlayer);
+	sfRectangleShape_setPosition(mob[_i].shape.attackRect, posMob);
 	//mob[_i].hitAttack = sfRectangleShape_getGlobalBounds(mob[_i].attackRect);
 
-	sfRectangleShape_setPosition(mob[_i].shape.collisionRect, posPlayer);
+	sfRectangleShape_setPosition(mob[_i].shape.collisionRect, posMob);
 	//mob[_i].collisionMob = sfRectangleShape_getGlobalBounds(mob[_i].collisionRect);
 
-	sfRectangleShape_setPosition(mob[_i].shape.floorSecurity, posPlayer);
+	sfRectangleShape_setPosition(mob[_i].shape.floorSecurity, posMob);
 
 }
 
@@ -597,6 +612,7 @@ void StateMob(float _dt, unsigned _i)
 {
 	//-------MOVE MOB---------//
 
+	
 
 	mob[_i].data.timerTakeHit += _dt;
 	mob[_i].data.timerAttack += _dt;
@@ -610,6 +626,12 @@ void StateMob(float _dt, unsigned _i)
 		SetVelocity(_i, _dt);
 		return;
 	}
+
+	if (mob[_i].act == IS_IDLE)
+	{
+		StateMobMachine(IDLE_MOB, _i);
+	}
+
 
 
 	if (mob[_i].data.hp > 0 && mob[_i].act != IS_DEATH)
@@ -647,9 +669,16 @@ void StateMob(float _dt, unsigned _i)
 
 				if (distPlayerMobX < mob[_i].rangeMove && distPlayerMobY < (player->shape.collisionPlayerRect.height * 2))
 				{
+
+					if (mob[_i].currentState == ATTACK_MOB && !sfFloatRect_intersects(&mob[_i].shape.rect, &player->shape.collisionAttackShape, NULL))
+					{
+						SetVelocity(_i, _dt);
+						return;
+					}
+
 					if (distPlayerMobX > (player->shape.collisionPlayerRect.width))
 					{
-						if (!blockedBySpike)
+						if (!blockedBySpike && mob[_i].data.timerAttack > mob[_i].data.timerAttackLimit || mob[_i].act != IS_ATTACK)
 						{
 							StateMobMachine(RUN_MOB, _i);
 							mob[_i].act = IS_MOVING;
@@ -657,7 +686,7 @@ void StateMob(float _dt, unsigned _i)
 						else
 						{
 							mob[_i].act = IS_IDLE;
-							StateMobMachine(IDLE_MOB, _i);
+							//StateMobMachine(IDLE_MOB, _i);
 						}
 					}
 					else
@@ -665,21 +694,18 @@ void StateMob(float _dt, unsigned _i)
 						mob[_i].act = IS_ATTACK;
 					}
 				}
-				else if (distPlayerMobY > (player->shape.collisionPlayerRect.height * 2))
+				else if (distPlayerMobY > (player->shape.collisionPlayerRect.height * 2) && mob[_i].act != IS_ATTACK)
 				{
-					StateMobMachine(IDLE_MOB, _i);
+					//StateMobMachine(IDLE_MOB, _i);
 					mob[_i].act = IS_IDLE;
 				}
 			
-			
-
-
 			//---------TAKE IT---------//
 
 		}
 		else if ((mob[_i].currentState == TAKE_HIT || mob[_i].currentState == ATTACK_MOB) && !mob[_i].currentMobAnimation->isPlaying)
 		{
-			StateMobMachine(IDLE_MOB, _i);
+			//StateMobMachine(IDLE_MOB, _i);
 			mob[_i].act = IS_IDLE;
 		}
 
@@ -749,9 +775,9 @@ void StateMob(float _dt, unsigned _i)
 			}
 
 
-			if (mob[_i].act == IS_TAKE_HIT && !mob[_i].currentMobAnimation->isPlaying)
+			if (mob[_i].act == IS_TAKE_HIT || mob[_i].act == IS_ATTACK && !mob[_i].currentMobAnimation->isPlaying)
 			{
-				StateMobMachine(IDLE_MOB, _i);
+				//StateMobMachine(IDLE_MOB, _i);
 				mob[_i].act = IS_IDLE;
 			}
 
@@ -848,9 +874,9 @@ void DrawMob(sfRenderWindow* _renderWindow)
 		if (drawHitbox)
 		{
 			sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.rect, NULL);
-			sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.attackRect, NULL);
-			sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.collisionRect, NULL);
-			sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.floorSecurity, NULL);
+			//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.attackRect, NULL);
+			//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.collisionRect, NULL);
+			//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].shape.floorSecurity, NULL);
 		}
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].attackRect, NULL);
 		//sfRenderWindow_drawRectangleShape(_renderWindow, mob[i].rect, NULL);
@@ -926,13 +952,16 @@ sfBool GetDistanceMobSpike(unsigned _mob, unsigned _spike)
 	float posPlayer = sfSprite_getPosition(player->sprite).x;
 	sfFloatRect hitMob = sfSprite_getGlobalBounds(mob[_mob].sprite);
 	float posMobX = hitMob.left + (hitMob.width / 2);
+	float posMobY = hitMob.top + (hitMob.height / 2);
 	sfFloatRect hitSpike = GetSpikeTab(_spike);
-	float spikeOrigin = hitSpike.left + (hitSpike.width / 2);
-	
+	float spikeOriginX = hitSpike.left + (hitSpike.width / 2);
+	float spikeOriginY = hitSpike.top + (hitSpike.height / 2);
+
 	float minX = fminf(posPlayer, posMobX);
 	float maxX = fmaxf(posPlayer, posMobX);
+	float minY = fabs(posMobY - spikeOriginY);
 
-	if (spikeOrigin > minX && spikeOrigin < maxX)
+	if (spikeOriginX > minX && spikeOriginX < maxX && minY < 100.f)
 	{
 		return sfTrue;
 	}
