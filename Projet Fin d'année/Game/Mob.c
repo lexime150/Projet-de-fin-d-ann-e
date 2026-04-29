@@ -641,9 +641,13 @@ void StateMob(float _dt, unsigned _i)
 
 			}
 
-				if (GetDistancePlayerMobX(_i) < mob[_i].rangeMove && GetDistancePlayerMobY(_i) < (player->shape.collisionPlayerRect.height * 2))
+			float distPlayerMobX = GetDistancePlayerMobX(_i);
+			float distPlayerMobY = GetDistancePlayerMobY(_i);
+			float distPlayerMob = GetDistancePlayerMobVector(_i);
+
+				if (distPlayerMobX < mob[_i].rangeMove && distPlayerMobY < (player->shape.collisionPlayerRect.height * 2))
 				{
-					if (GetDistancePlayerMobX(_i) > (player->shape.collisionPlayerRect.width))
+					if (distPlayerMobX > (player->shape.collisionPlayerRect.width))
 					{
 						if (!blockedBySpike)
 						{
@@ -661,7 +665,7 @@ void StateMob(float _dt, unsigned _i)
 						mob[_i].act = IS_ATTACK;
 					}
 				}
-				else if (GetDistancePlayerMobY(_i) > (player->shape.collisionPlayerRect.height * 2))
+				else if (distPlayerMobY > (player->shape.collisionPlayerRect.height * 2))
 				{
 					StateMobMachine(IDLE_MOB, _i);
 					mob[_i].act = IS_IDLE;

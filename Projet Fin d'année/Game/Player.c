@@ -286,7 +286,10 @@ void CheckCollisionPlayerMob(float _dt)
 		hitMob = mob[i].shape.collisionMob;
 		mobCenterX = hitMob.left + (hitMob.width * 0.5f);
 
-		if (player->currentState != AXE && player->currentState != AXE_UP && player->currentState != AXE_DOWN && player->currentState != SWORD && player->currentState != SWORD_UP && player->currentState != SWORD_DOWN && !player->action.isInvincible && mob[i].currentState != DEATH)
+		sfBool attackAxe = player->currentState == AXE || player->currentState == AXE_UP || player->currentState == AXE_DOWN;
+		sfBool attackSword = player->currentState == SWORD || player->currentState == SWORD_UP || player->currentState == SWORD_DOWN;
+
+		if (!attackAxe && !attackSword && !player->action.isInvincible && mob[i].currentState != DEATH)
 		{
 			if (sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 			{
