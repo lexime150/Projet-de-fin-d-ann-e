@@ -155,7 +155,6 @@ void CheckCollisionPlayerAttackMob(float _dt)
 		{
 			if (mob[i].act == IS_ATTACK && mob[i].data.timerAttack > mob[i].data.timerAttackLimit)
 			{
-
 				StateMobMachine(ATTACK_MOB, i);
 
 				if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound)
@@ -164,12 +163,11 @@ void CheckCollisionPlayerAttackMob(float _dt)
 					sfSound_play(mob[i].soundMob.soundAttack);
 				}
 
-
 			}
-			else if (!mob[i].currentMobAnimation->isPlaying && mob[i].act != IS_TAKE_HIT && mob[i].currentState == ATTACK_MOB)
+			else if ((!mob[i].currentMobAnimation->isPlaying && mob[i].act == IS_ATTACK) || mob[i].act == IS_TAKE_HIT)
 			{
+				mob[i].data.timerAttack = 0;
 				mob[i].act = IS_IDLE;
-				//StateMobMachine(IDLE_MOB, i);
 			}
 		}
 	}

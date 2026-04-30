@@ -28,6 +28,7 @@ void SetVelocity(unsigned _i, float _dt);
 sfBool GetDistanceMobSpike(unsigned _mob, unsigned _spike);
 
 
+
 float RandomFloatMob(float min, float max)
 {
 	return min + (float)rand() / (float)RAND_MAX * (max - min);
@@ -373,8 +374,6 @@ static void CheckMobSpikeCollision(float _dt, unsigned _i)
 	for (int i = 0; i < GetSpikeTabSize(); i++)
 	{
 		hitSpike = GetSpikeTab(i);
-
-
 		if (sfFloatRect_intersects(&hitMob, &hitSpike, &intersects))
 		{
 			if ((hitSpike.top + (hitSpike.height / 2) > (hitMob.top + hitMob.height)))
@@ -395,7 +394,6 @@ static void CheckMobSpikeCollision(float _dt, unsigned _i)
 	}
 
 }
-
 
 void CheckCollisionMobEntities(float _dt, unsigned _i)
 {
@@ -795,16 +793,9 @@ float GetDistancePlayerMobX(unsigned _i)
 
 		float distX = player->data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
 
-
-
-		if (distX < 0.f)
-		{
-			return distX * -1;
-		}
-		else
-		{
-			return distX;
-		}
+		return fabs(distX);
+		
+		
 	}
 	return 0;
 }
@@ -817,15 +808,9 @@ float GetDistancePlayerMobY(unsigned _i)
 
 		float distY = player->data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
 
-
-		if (distY < 0.f)
-		{
-			return distY * -1;
-		}
-		else
-		{
-			return distY;
-		}
+		return fabs(distY);
+		
+	
 	}
 	return 0;
 }
@@ -928,15 +913,11 @@ sfBool GetDistanceMobSpike(unsigned _mob, unsigned _spike)
 {
 	float posPlayer = sfSprite_getPosition(player->sprite).x;
 	sfFloatRect hitMob = sfSprite_getGlobalBounds(mob[_mob].sprite);
-	float posMobX = hitMob.left + (hitMob.width / 2);
-	float posMobY = hitMob.top + (hitMob.height / 2);
+	float posMobX = hitMob.left + (hitMob.width / 2), posMobY = hitMob.top + (hitMob.height / 2);
 	sfFloatRect hitSpike = GetSpikeTab(_spike);
-	float spikeOriginX = hitSpike.left + (hitSpike.width / 2);
-	float spikeOriginY = hitSpike.top + (hitSpike.height / 2);
+	float spikeOriginX = hitSpike.left + (hitSpike.width / 2), spikeOriginY = hitSpike.top + (hitSpike.height / 2);
 
-	float minX = fminf(posPlayer, posMobX);
-	float maxX = fmaxf(posPlayer, posMobX);
-	float minY = fabs(posMobY - spikeOriginY);
+	float minX = fminf(posPlayer, posMobX), maxX = fmaxf(posPlayer, posMobX), minY = fabs(posMobY - spikeOriginY);
 
 	if (spikeOriginX > minX && spikeOriginX < maxX && minY < 100.f)
 	{

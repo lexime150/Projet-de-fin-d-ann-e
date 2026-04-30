@@ -1,14 +1,2 @@
-﻿  Mob.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(134,221): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(134,227): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(134,233): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(134,240): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(373,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(410,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(632,22): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(650,72): warning C4047: 'fonction' : les niveaux d'indirection de 'const sfFloatRect *' et de 'sfRectangleShape **' sont différents
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(650,72): warning C4024: 'sfFloatRect_intersects' : types différents pour le paramètre formel et réel 1
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(650,93): warning C4047: 'fonction' : les niveaux d'indirection de 'const sfFloatRect *' et de 'sfRectangleShape **' sont différents
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(650,93): warning C4024: 'sfFloatRect_intersects' : types différents pour le paramètre formel et réel 2
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(939,15): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+﻿  Player.c
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
