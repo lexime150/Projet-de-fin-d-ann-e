@@ -90,11 +90,8 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 	CreateSprite(&texture[_type], adresse[_type], &newMob.sprite, ORIGIN_CENTER_X, (sfVector2f) { _x, _y });
 
-	//newMob.sprite = sfSprite_create();
-
-	newMob.shape.rect = sfRectangleShape_create();
+	
 	newMob.shape.attackRect = sfRectangleShape_create();
-	newMob.shape.collisionRect = sfRectangleShape_create();
 
 	newMob.soundMob.soundAttack = sfSound_create();
 	newMob.soundMob.soundDead = sfSound_create();
@@ -106,13 +103,11 @@ void AddMob(TypeMob _type, float _x, float _y)
 	switch (newMob.mobType)
 	{
 	case MUSHROOM:
-		//sfSprite_setTexture(newMob.sprite, texture[MUSHROOM], sfTrue);
 		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { MUSHROOM_SIZE_SPRITE / 2, MUSHROOM_SIZE_SPRITE });
-		sfRectangleShape_setSize(newMob.shape.rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT });
-		sfRectangleShape_setOrigin(newMob.shape.rect, (sfVector2f) { HITBOX_MUSHROOM_WIDTH / 2.f, HITBOX_MUSHROOM_HEIGHT });
-		sfRectangleShape_setSize(newMob.shape.collisionRect, (sfVector2f) { COLLISION_MUSHROOM_WIDTH, COLLISION_MUSHROOM_HEIGHT });
-		sfRectangleShape_setOrigin(newMob.shape.collisionRect, (sfVector2f) { COLLISION_MUSHROOM_WIDTH / 2, COLLISION_MUSHROOM_HEIGHT });
 
+		newMob.shape.rect = CreateRectangle((sfVector2f) { HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT }, (sfVector2f){ HITBOX_MUSHROOM_WIDTH / 2.f, HITBOX_MUSHROOM_HEIGHT }, (sfVector2f) { GAME_SCALE, GAME_SCALE }, sfYellow);
+		newMob.shape.collisionRect = CreateRectangle((sfVector2f) { COLLISION_MUSHROOM_WIDTH, COLLISION_MUSHROOM_HEIGHT }, (sfVector2f){ COLLISION_MUSHROOM_WIDTH / 2.f, COLLISION_MUSHROOM_HEIGHT }, (sfVector2f){GAME_SCALE}, sfMagenta);
+	
 
 		newMob.rangeMove = DIST_RUN_MUSHROOM;
 		newMob.rangeAttack = DIST_ATTACK_MUSHROOM;
@@ -134,13 +129,12 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 		break;
 	case SKELETON:
-		//sfSprite_setTexture(newMob.sprite, texture[SKELETON], sfTrue);
+
+		newMob.shape.rect = CreateRectangle((sfVector2f){ HITBOX_SKELETON_WIDTH - 10.f, HITBOX_SKELETON_HEIGHT }, (sfVector2f){ (HITBOX_SKELETON_WIDTH - 10.f) / 2.f, HITBOX_SKELETON_HEIGHT }, (sfVector2f) { GAME_SCALE, GAME_SCALE }, sfYellow);
+		newMob.shape.collisionRect = CreateRectangle((sfVector2f){ HITBOX_SKELETON_WIDTH, HITBOX_SKELETON_WIDTH }, (sfVector2f){ HITBOX_SKELETON_WIDTH / 2.f, HITBOX_SKELETON_WIDTH }, (sfVector2f){GAME_SCALE}, sfColor_fromRGBA(24.f, 72.f, 185.f, 125.f));
+
 		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { HITBOX_SKELETON_WIDTH / 2.f, HITBOX_SKELETON_WIDTH });
-		sfRectangleShape_setSize(newMob.shape.rect, (sfVector2f) { HITBOX_SKELETON_WIDTH - 10.f, HITBOX_SKELETON_HEIGHT });
-		sfRectangleShape_setOrigin(newMob.shape.rect, (sfVector2f) { (HITBOX_SKELETON_WIDTH - 10.f) / 2.f, HITBOX_SKELETON_HEIGHT });
 		sfSprite_setTextureRect(newMob.sprite, (sfIntRect) { 0, 0, 32, 32 });
-		sfRectangleShape_setSize(newMob.shape.collisionRect, (sfVector2f) { COLLISION_SKELETON_WIDTH, COLLISION_SKELETON_HEIGHT });
-		sfRectangleShape_setOrigin(newMob.shape.collisionRect, (sfVector2f) { COLLISION_SKELETON_WIDTH / 2.f, COLLISION_SKELETON_HEIGHT });
 
 		newMob.soundMob.soundBufferAttack = sfSoundBuffer_createFromFile("Assets/Audio/Sounds/Mobs/skeleton attack.ogg");
 		newMob.soundMob.soundBufferTakeHit = sfSoundBuffer_createFromFile("Assets/Audio/Sounds/Mobs/Skeleton damage.ogg");
@@ -182,8 +176,8 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 
 	sfSprite_setScale(newMob.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-	sfRectangleShape_setScale(newMob.shape.rect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-	//sfSprite_setPosition(newMob.sprite, (sfVector2f) { _x, _y });
+//	sfRectangleShape_setScale(newMob.shape.rect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+	sfSprite_setPosition(newMob.sprite, (sfVector2f) { _x, _y });
 	sfRectangleShape_setPosition(newMob.shape.rect, sfSprite_getPosition(newMob.sprite));
 
 	sfRectangleShape_setScale(newMob.shape.collisionRect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
@@ -345,11 +339,7 @@ void UpdateMobInfo(float _dt, unsigned _i)
 
 	//----AttackRect
 	sfRectangleShape_setPosition(mob[_i].shape.attackRect, posMob);
-	//mob[_i].hitAttack = sfRectangleShape_getGlobalBounds(mob[_i].attackRect);
-
 	sfRectangleShape_setPosition(mob[_i].shape.collisionRect, posMob);
-	//mob[_i].collisionMob = sfRectangleShape_getGlobalBounds(mob[_i].collisionRect);
-
 	sfRectangleShape_setPosition(mob[_i].shape.floorSecurity, posMob);
 
 }
@@ -372,10 +362,8 @@ static void CheckMobSpikeCollision(float _dt, unsigned _i)
 {
 	MobSide side = NOTHING_MOB;
 	sfFloatRect hitMob = sfRectangleShape_getGlobalBounds(mob[_i].shape.collisionRect);
-	sfFloatRect hitSpike = { 0 };
-	sfFloatRect intersects = { 0 };
-	float posMobY = hitMob.top + hitMob.height;
-	float posMobX = 0;
+	sfFloatRect hitSpike = { 0 }, intersects = { 0 };
+	float posMobY = hitMob.top + hitMob.height, posMobX = 0;
 
 
 	UpdateMobInfo(_dt, _i);
@@ -414,14 +402,10 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 	mob[_i].isGrounded = sfFalse;
 
 	sfBool platTransition = sfFalse;
-	sfFloatRect hitMob = { 0 };
-	sfFloatRect hitPlat = { 0 };
-	sfFloatRect hitSemiPlat = { 0 };
-	sfFloatRect intersection = { 0 };
+	sfFloatRect hitMob = { 0 }, hitPlat = { 0 }, hitSemiPlat = { 0 }, intersection = { 0 }, hitDeathZone = { 0 };
 	sfVector2f posMob = sfSprite_getPosition(mob[_i].sprite);
 
 	hitMob = mob[_i].shape.hitRect;
-	sfFloatRect hitDeathZone;
 
 	for (int i = 0; i < GetDeathZoneTabSize(); i++)
 	{
@@ -435,10 +419,6 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 
 	}
-
-
-
-
 
 	//-----TRANSITION PLATFORMS-----//
 
@@ -493,7 +473,8 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 				}
 
 			}
-			else if (intersection.width > intersection.height)
+
+			if (intersection.width > intersection.height)
 			{
 				if (mob[_i].data.velocity.y < 0.f)
 				{
@@ -513,8 +494,6 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	//-----PLATFORMS-----//
 
-	//à corriger : les conditions liés à la hitFloor ne sont pas bonnes à cause du left qui est tout le temps vrai car le left est souvent inférieur au autre HitPos
-
 	sfFloatRect hitFloorMob = sfRectangleShape_getGlobalBounds(mob[_i].shape.floorSecurity);
 
 
@@ -533,14 +512,12 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 				{
 					if (mob[_i].data.velocity.x < 0 && hitMob.left < hitPlat.left && (hitFloorMob.left + hitFloorMob.width) > hitPlat.left)
 					{
-						//printf("d");
 						posMob.x = hitPlat.left + (hitMob.width / 2);
 						//StateMobMachine(IDLE_MOB, _i);
 					}
 					else if (mob[_i].data.velocity.x > 0 && (hitMob.left + hitMob.width) > (hitPlat.left + hitPlat.width) && (hitFloorMob.left < (hitPlat.left + hitPlat.width)))
 					{
 						//StateMobMachine(IDLE_MOB, _i);
-
 						posMob.x = (hitPlat.left + hitPlat.width) - (hitMob.width / 2);
 					}
 				}

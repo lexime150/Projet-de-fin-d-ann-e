@@ -30,5 +30,15 @@ void CreateSprite(sfTexture** _texture, char* _char, sfSprite** _sprite, OriginS
 	sfSprite_setOrigin(*_sprite, sizeSprite);
 	sfSprite_setPosition(*_sprite, _pos);
 
-	
+}
+
+sfRectangleShape* CreateRectangle(sfVector2f _size, sfVector2f _origin, sfVector2f _scale, sfColor _color)
+{
+	sfRectangleShape* rect = sfRectangleShape_create();
+	sfRectangleShape_setSize(rect, _size);
+	sfRectangleShape_setOrigin(rect, _origin);
+	sfRectangleShape_setScale(rect, _scale);
+
+	return rect;
+
 }
