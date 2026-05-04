@@ -342,10 +342,14 @@ void ApplyPhysic(float _dt)
 			player->data.velocity.y = 0;
 			return;
 		}
+
+
+
 		player->data.velocity.y += GRAVITY * _dt;
-		if (player->data.velocity.y >= GRAVITY * 100 * _dt)
+
+		if (player->data.velocity.y > MAX_FALL_SPEED)
 		{
-			player->data.velocity.y = GRAVITY * 100 * _dt;
+			player->data.velocity.y = MAX_FALL_SPEED;
 		}
 	}
 	else
@@ -967,8 +971,9 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 	{
 		float friction = 1.f;
 
-		player->data.dashVelocityX -= player->data.dashVelocityX * friction * _dt;
-		player->data.dashVelocityY -= player->data.dashVelocityY * friction * _dt;
+		float decay = expf(-friction * _dt);
+		player->data.dashVelocityX *= decay;
+		player->data.dashVelocityY *= decay;
 
 		if (fabsf(player->data.dashVelocityX) < 10.f)
 		{
@@ -1034,14 +1039,14 @@ void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
 		{
 			if (movingLeft && player->action.isTouchingLeftWall)
 			{
-				player->data.velocity.y -= 10;
+				player->data.velocity.y -= 600.f * _dt;
 				if (player->data.velocity.y >= MAX_GRIP_WALL_SPEED)
 					player->data.velocity.y = MAX_GRIP_WALL_SPEED;
 				StateMachine(WALL_GRIP_FALL);
 			}
 			else if (movingRight && player->action.isTouchingRightWall)
 			{
-				player->data.velocity.y -= 10;
+				player->data.velocity.y -= 600.f * _dt;
 				if (player->data.velocity.y >= MAX_GRIP_WALL_SPEED)
 					player->data.velocity.y = MAX_GRIP_WALL_SPEED;
 				StateMachine(WALL_GRIP_FALL);
