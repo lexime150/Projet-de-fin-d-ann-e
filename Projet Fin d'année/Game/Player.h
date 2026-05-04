@@ -63,6 +63,7 @@
 #define DIAGONAL_DASH_X 550.f
 #define DASH_HORIZONTAL 950.f
 
+#define MAX_FALL_SPEED 1500.f
 typedef enum SpikeSide
 {
 	LEFT,

@@ -69,7 +69,7 @@ void Update(MainData _mainData)
 	{
 		dt = 0.03f;
 	}
-
+	printf("FPS: %.2f\n", 1.f / dt);
 	switch (GetGameState())
 	{
 	case MENU:
@@ -132,7 +132,7 @@ void LoadMainData(MainData* _mainData)
 {
 	sfVideoMode videoMode = { (unsigned int) SCREEN_WIDTH, (unsigned int) SCREEN_HEIGHT, BPP };
 	_mainData->renderWindow = sfRenderWindow_create(videoMode, "Crown of Set", sfDefaultStyle, NULL);
-	sfRenderWindow_setFramerateLimit(_mainData->renderWindow, 60);
+	sfRenderWindow_setFramerateLimit(_mainData->renderWindow, 200);
 	sfRenderWindow_setVerticalSyncEnabled(_mainData->renderWindow, sfTrue);
 	_mainData->clock = sfClock_create();
 }
