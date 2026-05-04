@@ -50,5 +50,9 @@ sfFloatRect GetSemiSolidCollisionTab(unsigned int _index);
 
 void ChangeLevel(const char* level);
 
+sfFloatRect GetKeyTab(unsigned _index);
+unsigned int GetKeyTabSize();
+sfVector2f GetKeySpawn(void);
+
 
 #endif

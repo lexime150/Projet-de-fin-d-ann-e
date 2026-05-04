@@ -36,8 +36,8 @@ float RandomFloatMob(float min, float max)
 
 void LoadMob(void)
 {
-	//texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/Champignon du Mordhor.png", NULL);
-	//texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/skeleton.png", NULL);
+	texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/Champignon du Mordhor.png", NULL);
+	texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/skeleton.png", NULL);
 	//char* textureMushroom = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";
 	//char* textureSkeleton = "Assets/Sprites/Game/Mob/skeleton.png";
 
@@ -45,8 +45,8 @@ void LoadMob(void)
 	//adresseTexture[MUSHROOM] = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";;
 	//adresseTexture[SKELETON] = "Assets/Sprites/Game/Mob/skeleton.png";
 
-	adresse[MUSHROOM] = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";
-	adresse[SKELETON] = "Assets/Sprites/Game/Mob/skeleton.png";
+	//adresse[MUSHROOM] = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";
+	//adresse[SKELETON] = "Assets/Sprites/Game/Mob/skeleton.png";
 
 
 
@@ -89,7 +89,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 	newMob.mobType = _type;
 
-	CreateSprite(&texture[_type], adresse[_type], &newMob.sprite, ORIGIN_CENTER_X, (sfVector2f) { _x, _y });
+	CreateSprite(texture[_type], &newMob.sprite, ORIGIN_CENTER_X, (sfVector2f) { _x, _y });
 
 	
 	newMob.shape.attackRect = sfRectangleShape_create();

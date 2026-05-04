@@ -95,6 +95,39 @@
         }, 
         {
          "draworder":"topdown",
+         "id":10,
+         "name":"Key",
+         "objects":[
+                {
+                 "height":16,
+                 "id":142,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":320,
+                 "y":656
+                }, 
+                {
+                 "height":16,
+                 "id":143,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":368,
+                 "y":656
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":8,
          "name":"Spike",
          "objects":[
@@ -890,8 +923,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":10,
- "nextobjectid":140,
+ "nextlayerid":11,
+ "nextobjectid":145,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

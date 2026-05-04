@@ -24,6 +24,9 @@ unsigned int semiSolidCollisionTabSize;
 
 sfVector2f playerSpawn;
 
+sfFloatRect* keyTab;
+unsigned keyTabSize;
+
 AnimatedTile* animatedTileList;
 unsigned int animatedTileCount;
 
@@ -206,7 +209,12 @@ void LoadCollisionAndTrigger(void)
 		return;
 	}
 
-
+	keyTab = calloc(1, sizeof(sfFloatRect));
+	keyTabSize = 0;
+	if (deathZoneTab == NULL)
+	{
+		return;
+	}
 
 
 
@@ -318,6 +326,24 @@ void LoadCollisionAndTrigger(void)
 					semiSolidCollisionTabSize++;
 
 				}
+				else if (strcmp(layer->name.ptr, "Key") == 0)
+				{
+					sfFloatRect* keyTemp = realloc(keyTab, (unsigned long long)(keyTabSize + 1) * sizeof(sfFloatRect));
+
+					if (keyTemp == NULL)
+					{
+						return;
+					}
+					keyTab = keyTemp;
+
+					keyTab[keyTabSize] = (sfFloatRect){
+						object->x* GAME_SCALE,
+						object->y* GAME_SCALE,
+						object->width* GAME_SCALE,
+						object->height* GAME_SCALE };
+					keyTabSize++;
+					
+				}
 
 
 			}
@@ -366,7 +392,7 @@ void DrawTileLayer(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer)
 	{
 		for (int column = 0; column < _layer->width; column++)
 		{
-			
+
 			int tileId = _layer->data[line * _layer->width + column] - 1;
 			tileId = GetAnimationTile(tileId + 1) - 1;
 			if (tileId >= 0)
@@ -465,6 +491,11 @@ sfVector2f GetPlayerSpawn(void)
 	return playerSpawn;
 }
 
+sfVector2f GetKeySpawn(void)
+{
+	
+}
+
 sfFloatRect GetSpikeTab(unsigned _index)
 {
 	if (_index < spikeTabSize)
@@ -511,4 +542,21 @@ sfFloatRect GetSemiSolidCollisionTab(unsigned int _index)
 	{
 		return (sfFloatRect) { 0, 0, 0, 0 };
 	}
+}
+
+sfFloatRect GetKeyTab(unsigned _index)
+{
+	if (_index < keyTabSize)
+	{
+		return keyTab[_index];
+	}
+	else
+	{
+		return (sfFloatRect) { 0, 0, 0, 0 };
+	}
+}
+
+unsigned int GetKeyTabSize()
+{
+	return keyTabSize;
 }

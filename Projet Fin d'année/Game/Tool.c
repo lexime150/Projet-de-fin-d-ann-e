@@ -1,13 +1,13 @@
 #include "Tool.h"
 
 
-void CreateSprite(sfTexture** _texture, char* _char, sfSprite** _sprite, OriginSprite _origin, sfVector2f _pos)
+void CreateSprite(sfTexture* _texture, sfSprite** _sprite, OriginSprite _origin, sfVector2f _pos)
 {
 
-	*_texture = sfTexture_createFromFile(_char, NULL);
+	//*_texture = sfTexture_createFromFile(_char, NULL);
 	*_sprite = sfSprite_create();
 
-	sfSprite_setTexture(*_sprite, *_texture, sfTrue);
+	sfSprite_setTexture(*_sprite, _texture, sfTrue);
 	//sfSprite_setTextureRect(*_sprite, _textureRect);
 	
 	sfVector2f sizeSprite = { sfSprite_getGlobalBounds(*_sprite).width, sfSprite_getGlobalBounds(*_sprite).height};
