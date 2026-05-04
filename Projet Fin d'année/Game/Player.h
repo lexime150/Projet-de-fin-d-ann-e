@@ -156,7 +156,8 @@ typedef struct Stats
 
 
 	sfBool canWallJump;
-	sfBool canDoubleJump;
+	sfBool doubleJumpUnlocked;
+	sfBool dashUnlocked;
 
 	sfVector2f velocity;
 	sfVector2f position;

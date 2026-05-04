@@ -828,7 +828,7 @@ void HandleGroundMovement(sfRenderWindow* _renderWindow, sfBool movingLeft, sfBo
 
 static void HandleDoubleJump(float _dt, sfBool _spaceTouching)
 {
-	if (_spaceTouching && !player->action.isGrounded)
+	if (_spaceTouching && !player->action.isGrounded && player->data.doubleJumpUnlocked)
 	{
 		StateMachine(D_JUMP);
 		player->data.velocity.y = -550.f;
@@ -930,7 +930,7 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 	float playerScale = sfSprite_getScale(player->sprite).x;
 	PlayerState state = player->currentState;
 
-	if (dashEnable && player->data.timerDash > TIMER_DASH && !player->action.isDashing)
+	if (dashEnable && player->data.timerDash > TIMER_DASH && !player->action.isDashing && player->data.dashUnlocked)
 	{
 		player->action.isDashing = sfTrue;
 		player->data.timerDash = 0.f;
@@ -1469,6 +1469,8 @@ void BasePlayer()
 	player->data.lastDirection = 1;
 	player->data.speed = 350.f;
 
+	player->data.doubleJumpUnlocked = sfFalse;
+	player->data.dashUnlocked = sfFalse;
 
 
 	player->spikeSide = NOTHING;
@@ -1498,7 +1500,8 @@ void SetSavedStat(PlayerSaveData* save)
 {
 
 	player->data.health = save->health;
-	player->data.canDoubleJump = save->canDoubleJump;
+	player->data.doubleJumpUnlocked = save->doubleJumpUnlocked;
+	player->data.dashUnlocked = save->dashUnlocked;
 	player->data.canWallJump = save->canWallJump;
 
 	snprintf(player->data.level, sizeof(player->data.level), "%s", save->level);

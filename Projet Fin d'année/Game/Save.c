@@ -42,8 +42,9 @@ sfBool SavePlayer(int slot)
 
 	PlayerSaveData save;
 	save.save = SAVE_VERSION;
-	save.canDoubleJump = player->data.canDoubleJump;
+	save.doubleJumpUnlocked = player->data.doubleJumpUnlocked;
 	save.canWallJump = player->data.canWallJump;
+	save.dashUnlocked = player->data.dashUnlocked;
 	snprintf(save.level, sizeof(save.level), "%s", player->data.level);
 
 	size_t written = fwrite(&save, sizeof(PlayerSaveData), 1, f);
@@ -96,8 +97,9 @@ PlayerSaveData* LoadSave(int slot)
 	if (player)
 	{
 		snprintf(player->data.level, sizeof(player->data.level), "%s", playerSaveData.level);
-		player->data.canDoubleJump = playerSaveData.canDoubleJump;
+		player->data.doubleJumpUnlocked = playerSaveData.doubleJumpUnlocked;
 		player->data.canWallJump = playerSaveData.canWallJump;
+		player->data.dashUnlocked = playerSaveData.dashUnlocked;
 	}
 
 	printf("[Save] Slot %d chargé. (hp=%.0f)\n", slot, playerSaveData.health);

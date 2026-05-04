@@ -16,7 +16,8 @@ typedef struct
     char level[20];
     float health;
     sfBool canWallJump;
-    sfBool canDoubleJump;
+    sfBool doubleJumpUnlocked;
+	sfBool dashUnlocked;
     sfVector2f position;
 
 } PlayerSaveData;
