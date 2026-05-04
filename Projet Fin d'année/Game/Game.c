@@ -19,7 +19,7 @@ void LoadGame(void)
 	CheckSaveAndLoadLevel(slot);
 	LevelTransition();
 	LoadMusic();
-	//LoadKey();
+	LoadKey();
 }
 
 void UpdateTransition(float _dt)
@@ -109,6 +109,7 @@ void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 		UpdateMap(_dt);
 		UpdateHUD();
 		UpdateTransition(_dt);
+		UpdateKey(_dt);
 
 		for (int i = 0; i < GetItemCount(); i++)
 		{

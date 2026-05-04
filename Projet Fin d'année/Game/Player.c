@@ -1426,9 +1426,9 @@ void BasePlayer()
 
 	player->data = (Stats){ 0 };
 	player->action = (Action){ 0 };
+	player->texture = sfTexture_createFromFile("Assets/Sprites/Game/Player/playerUpD.png", NULL);
 
-
-	CreateSprite(&player->texture, "Assets/Sprites/Game/Player/PlayerUpD.png", &player->sprite, ORIGIN_CENTER_X, GetPlayerSpawn());
+	CreateSprite(player->texture, &player->sprite, ORIGIN_CENTER_X, GetPlayerSpawn());
 	sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
 	player->action.isTransitioning = sfTrue;
