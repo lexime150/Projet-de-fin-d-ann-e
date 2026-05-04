@@ -930,36 +930,44 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 	float playerScale = sfSprite_getScale(player->sprite).x;
 	PlayerState state = player->currentState;
 
-	if (dashEnable && player->data.timerDash > TIMER_DASH && !player->action.isDashing && player->data.dashUnlocked)
+	if (dashEnable && player->data.timerDash > TIMER_DASH && !player->action.isDashing && player->data.dashUnlocked && !player->action.isAttacking)
 	{
-		player->action.isDashing = sfTrue;
-		player->data.timerDash = 0.f;
+		sfBool validDash = sfFalse;
+		PlayerState state = player->currentState;
+		float playerScale = sfSprite_getScale(player->sprite).x;
 
-		player->data.velocity.x = 0.f;
-		player->data.velocity.y = 0.f;
-		player->action.isWallJumping = sfFalse;
-		player->action.isSlideJumping = sfFalse;
-
-		if (_dashDiagonal)
+		if (_dashDiagonal && player->data.diagonalDashUnlocked)
 		{
 			player->data.dashVelocityX = (playerScale < 0) ? -550.f : 550.f;
 			player->data.dashVelocityY = -550.f;
 			state = DASH_DIAGONAL;
+			validDash = sfTrue;
 		}
-		else if (_dashUp)
+		else if (_dashUp && player->data.upDashUnlocked)
 		{
 			player->data.dashVelocityX = 0.f;
 			player->data.dashVelocityY = -DASH_Y;
 			state = DASH_UP;
+			validDash = sfTrue;
 		}
-		else if (_dashHorizontal)
+		else if (_dashHorizontal && player->data.horizontalDashUnlocked)
 		{
 			player->data.dashVelocityX = (playerScale < 0) ? -950.f : 950.f;
 			player->data.dashVelocityY = 0.f;
 			state = DASH_GROUND;
+			validDash = sfTrue;
 		}
 
-		StateMachine(state);
+		if (validDash)
+		{
+			player->action.isDashing = sfTrue;
+			player->data.timerDash = 0.f;
+			player->data.velocity.x = 0.f;
+			player->data.velocity.y = 0.f;
+			player->action.isWallJumping = sfFalse;
+			player->action.isSlideJumping = sfFalse;
+			StateMachine(state);
+		}
 	}
 
 	if (player->action.isDashing)
@@ -1471,7 +1479,9 @@ void BasePlayer()
 
 	player->data.doubleJumpUnlocked = sfFalse;
 	player->data.dashUnlocked = sfFalse;
-
+	player->data.upDashUnlocked = sfFalse;
+	player->data.diagonalDashUnlocked = sfFalse;
+	player->data.horizontalDashUnlocked = sfFalse;
 
 	player->spikeSide = NOTHING;
 	player->side = NOTHING_PLAYER;
@@ -1501,8 +1511,13 @@ void SetSavedStat(PlayerSaveData* save)
 
 	player->data.health = save->health;
 	player->data.doubleJumpUnlocked = save->doubleJumpUnlocked;
-	player->data.dashUnlocked = save->dashUnlocked;
 	player->data.canWallJump = save->canWallJump;
+	
+	player->data.dashUnlocked = save->dashUnlocked;
+	player->data.upDashUnlocked = save->upDashUnlocked;
+	player->data.diagonalDashUnlocked = save->diagonalDashUnlocked;
+	player->data.horizontalDashUnlocked = save->horizontalDashUnlocked;
+
 
 	snprintf(player->data.level, sizeof(player->data.level), "%s", save->level);
 	//printf("buffer: %s\n", player->data.level);

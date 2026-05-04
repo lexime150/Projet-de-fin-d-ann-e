@@ -17,7 +17,13 @@ typedef struct
     float health;
     sfBool canWallJump;
     sfBool doubleJumpUnlocked;
-	sfBool dashUnlocked;
+
+	
+    sfBool dashUnlocked;
+	sfBool upDashUnlocked;
+	sfBool diagonalDashUnlocked;
+	sfBool horizontalDashUnlocked;
+
     sfVector2f position;
 
 } PlayerSaveData;

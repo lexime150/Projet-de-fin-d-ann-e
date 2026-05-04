@@ -157,7 +157,11 @@ typedef struct Stats
 
 	sfBool canWallJump;
 	sfBool doubleJumpUnlocked;
+
 	sfBool dashUnlocked;
+	sfBool diagonalDashUnlocked;
+	sfBool upDashUnlocked;
+	sfBool horizontalDashUnlocked;
 
 	sfVector2f velocity;
 	sfVector2f position;
