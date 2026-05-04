@@ -37,6 +37,10 @@ void CheckPlayerHP(void);
 void LoadPlayer(PlayerSaveData* save)
 {
 	BasePlayer();
+	if (save != NULL)
+	{
+		SetSavedStat(save);
+	}
 	LoadAnimationPlayer();
 
 }
@@ -202,8 +206,8 @@ void CheckCollisionPlayerAttackMob(float _dt)
 						player->action.damageEnable = sfFalse;
 					}
 				}
-			
-				
+
+
 
 			}
 
@@ -1512,7 +1516,7 @@ void SetSavedStat(PlayerSaveData* save)
 	player->data.health = save->health;
 	player->data.doubleJumpUnlocked = save->doubleJumpUnlocked;
 	player->data.canWallJump = save->canWallJump;
-	
+
 	player->data.dashUnlocked = save->dashUnlocked;
 	player->data.upDashUnlocked = save->upDashUnlocked;
 	player->data.diagonalDashUnlocked = save->diagonalDashUnlocked;
