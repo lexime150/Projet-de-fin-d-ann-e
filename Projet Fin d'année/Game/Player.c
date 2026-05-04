@@ -32,8 +32,6 @@ void SetSavedStat(PlayerSaveData* save);
 
 void CheckPlayerHP(void);
 
-
-
 void LoadPlayer(PlayerSaveData* save)
 {
 	BasePlayer();
@@ -42,7 +40,6 @@ void LoadPlayer(PlayerSaveData* save)
 		SetSavedStat(save);
 	}
 	LoadAnimationPlayer();
-
 }
 
 void LoadAnimationPlayer(void)
@@ -123,15 +120,7 @@ void SetAnimation(PlayerState _state)
 void UpdatePlayer(sfRenderWindow* _renderWindow, float _dt)
 {
 	ApplyPhysic(_dt);
-
-
-
-
-
-	//StateAttackPlayer();
 	MovePlayer(_renderWindow, _dt);
-
-
 	CheckCollisionPlayerPlatforms(_dt);
 	CheckCollisionPlayerSpike(_dt);
 	CollisionPlayerTrigger();
@@ -1467,7 +1456,7 @@ void BasePlayer()
 	sfRectangleShape_setScale(player->shape.rectCollisionPlayerMob, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
 
-	snprintf(player->data.level, sizeof(player->data.level), "level_00");
+	snprintf(player->data.level, sizeof(player->data.level), "Level_00");
 	//	printf("player level: %s\n", player->data.level);
 	player->data.attackCooldownTimer = 0.5f;
 

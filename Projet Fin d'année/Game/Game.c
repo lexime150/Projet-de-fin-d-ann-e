@@ -100,6 +100,9 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
 
 void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 {
+	float fps = 1.0f / _dt;
+
+	printf("FPS: %.2f\n", fps);
 	if (sfRenderWindow_hasFocus(_renderWindow))
 	{
 		UpdatePlayer(_renderWindow, _dt);
@@ -145,6 +148,7 @@ void CleanupGame(void)
 	CleanUpPlayer();
 	CleanUpCamera();
 	Cleanupitem();
+	CleanupKey();
 	SavePlayer(playerSaveData.save);
 }
 
@@ -165,18 +169,20 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadPlayer(save);
 		SetSavedStat(save);
 		Loaditem();
+		LoadKey();
 		LoadCamera();
 		LoadMob();
 		LoadHUD();
 	}
 	else
 	{
-		LoadMap("level_00");
+		LoadMap("Level_00");
 		LoadPlayer(save);
 		Loaditem();
 
 		LoadCamera();
 		LoadMob();
+		LoadKey();
 		LoadHUD();
 	}
 }
@@ -189,6 +195,7 @@ void ChangeLevel(const char* _level)
 
 	CleanupMob();
 	CleanupMap();
+	CleanupKey();
 	CleanupHUD();
 	CleanUpCamera();
 	Cleanupitem();
@@ -196,6 +203,7 @@ void ChangeLevel(const char* _level)
 	LoadMap(player->data.level);
 	LoadCamera();
 	LoadMob();
+	LoadKey();
 	LoadHUD();
 	Loaditem();
 

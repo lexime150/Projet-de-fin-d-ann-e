@@ -156,9 +156,6 @@ void AddMob(TypeMob _type, float _x, float _y)
 		sfRectangleShape_setOrigin(newMob.shape.attackRect, (sfVector2f) { HITBOX_ATTACK_SKELETON / 2, HITBOX_SKELETON_HEIGHT });
 		newMob.mobType = SKELETON;
 
-		//newMob.soundBufferAttack = sfSoundBuffer_createFromFile("Assets/Audio/Mobs/skeleton attack.ogg");
-		//newMob.soundBufferTakeHit = sfSoundBuffer_createFromFile("Assets/Audio/Mobs/Skeleton damage.ogg");
-
 		newMob.frameAttackSound = SKELETON_ATTACK_SOUND;
 
 		break;
@@ -274,8 +271,6 @@ void LoadMobAnimation(unsigned _i)
 	{
 		SetAnimationMob(IDLE_MOB, i);
 	}
-
-
 }
 
 void SetAnimationMob(MobState _state, unsigned _i)
@@ -286,7 +281,6 @@ void SetAnimationMob(MobState _state, unsigned _i)
 	mob[_i].currentMobAnimation->currentFrame = 0;
 	mob[_i].currentMobAnimation->isPlaying = sfTrue;
 	mob[_i].currentMobAnimation->timer = 0.f;
-
 }
 
 void StateMobMachine(MobState _state, unsigned _i)
