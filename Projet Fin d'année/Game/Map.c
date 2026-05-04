@@ -491,10 +491,6 @@ sfVector2f GetPlayerSpawn(void)
 	return playerSpawn;
 }
 
-sfVector2f GetKeySpawn(void)
-{
-	
-}
 
 sfFloatRect GetSpikeTab(unsigned _index)
 {

@@ -23,7 +23,7 @@ void LoadKey(void)
 		sfTexture* texturePlayer = sfTexture_createFromFile("Assets/Sprites/Game/Player/playerUpD.png", NULL);
 
 		CreateSprite(texturePlayer, &playerSprite, ORIGIN_VANILLA, (sfVector2f) { GetKeyTab(0).left, GetKeyTab(0).top + 100.f });
-		sfSprite_setTextureRect(playerSprite, (sfIntRect) { 1 * 32.f, 1 * 32.f, 32.f, 32.f });
+		sfSprite_setTextureRect(playerSprite, (sfIntRect) { 1 * 32, 1 * 32, 32, 32 });
 		sfSprite_setScale(playerSprite, (sfVector2f) { 2.5f, 2.5f });
 
 
@@ -95,8 +95,8 @@ void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, sfKeyCode _i)
 {
 	int mod = 4;
 	float scale = sfSprite_getScale(extraKey[_keyNumber].keySprite).x;
-	float width = (_i % mod) * EXTRAS_KEY_SIZE.x;
-	float height = 0;
+	int width = (_i % mod) * EXTRAS_KEY_SIZE.x;
+	int height = 0;
 
 	if (_i >= mod)
 	{
@@ -104,16 +104,16 @@ void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, sfKeyCode _i)
 		{
 			if (_i >= mod * 3)
 			{
-				height = 3 * EXTRAS_KEY_SIZE.y;
+				height = 3 * (int)EXTRAS_KEY_SIZE.y;
 			}
 			else
 			{
-				height = 2 * EXTRAS_KEY_SIZE.y;
+				height = 2 * (int)EXTRAS_KEY_SIZE.y;
 			}
 		}
 		else
 		{
-			height = scale * EXTRAS_KEY_SIZE.y;
+			height = scale * (int)EXTRAS_KEY_SIZE.y;
 		}
 
 	}
