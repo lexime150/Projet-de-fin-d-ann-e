@@ -132,7 +132,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 	case SKELETON:
 
 		newMob.shape.rect = CreateRectangle((sfVector2f){ HITBOX_SKELETON_WIDTH - 10.f, HITBOX_SKELETON_HEIGHT }, (sfVector2f){ (HITBOX_SKELETON_WIDTH - 10.f) / 2.f, HITBOX_SKELETON_HEIGHT }, (sfVector2f) { GAME_SCALE, GAME_SCALE }, sfYellow);
-		newMob.shape.collisionRect = CreateRectangle((sfVector2f){ HITBOX_SKELETON_WIDTH, HITBOX_SKELETON_WIDTH }, (sfVector2f){ HITBOX_SKELETON_WIDTH / 2.f, HITBOX_SKELETON_WIDTH }, (sfVector2f){GAME_SCALE}, sfColor_fromRGBA(24.f, 72.f, 185.f, 125.f));
+		newMob.shape.collisionRect = CreateRectangle((sfVector2f){ HITBOX_SKELETON_WIDTH, HITBOX_SKELETON_WIDTH }, (sfVector2f){ HITBOX_SKELETON_WIDTH / 2.f, HITBOX_SKELETON_WIDTH }, (sfVector2f){GAME_SCALE}, sfColor_fromRGBA(24, 72, 185, 125));
 
 		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { HITBOX_SKELETON_WIDTH / 2.f, HITBOX_SKELETON_WIDTH });
 		sfSprite_setTextureRect(newMob.sprite, (sfIntRect) { 0, 0, 32, 32 });
@@ -371,7 +371,7 @@ static void CheckMobSpikeCollision(float _dt, unsigned _i)
 
 
 
-	for (int i = 0; i < GetSpikeTabSize(); i++)
+	for (unsigned i = 0; i < GetSpikeTabSize(); i++)
 	{
 		hitSpike = GetSpikeTab(i);
 		if (sfFloatRect_intersects(&hitMob, &hitSpike, &intersects))
@@ -405,7 +405,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 
 	hitMob = mob[_i].shape.hitRect;
 
-	for (int i = 0; i < GetDeathZoneTabSize(); i++)
+	for (unsigned i = 0; i < GetDeathZoneTabSize(); i++)
 	{
 		hitDeathZone = GetDeathZoneTab(i);
 
@@ -627,7 +627,7 @@ void StateMob(float _dt, unsigned _i)
 		if (mob[_i].currentState != TAKE_HIT && mob[_i].currentMobAnimation->isPlaying)
 		{
 			sfBool blockedBySpike = sfFalse;
-			for (int i = 0; i < GetSpikeTabSize(); i++)
+			for (unsigned i = 0; i < GetSpikeTabSize(); i++)
 			{
 
 				if (GetDistanceMobSpike(_i, i))
@@ -645,7 +645,7 @@ void StateMob(float _dt, unsigned _i)
 				if (distPlayerMobX < mob[_i].rangeMove && distPlayerMobY < (player->shape.collisionPlayerRect.height * 2))
 				{
 
-					if (mob[_i].currentState == ATTACK_MOB && !sfFloatRect_intersects(&mob[_i].shape.rect, &player->shape.collisionAttackShape, NULL))
+					if (mob[_i].currentState == ATTACK_MOB && !sfFloatRect_intersects(&mob[_i].shape.hitRect, &player->shape.collisionAttackRect, NULL))
 					{
 						SetVelocity(_i, _dt);
 						return;
@@ -719,7 +719,6 @@ void StateMob(float _dt, unsigned _i)
 			if (swordAttack)
 			{
 				mob[_i].data.timerKnockBack += 0.25f;
-				printf("test");
 				mob[_i].data.hp -= (SWORD_DAMAGES + rand() % 21);
 				mob[_i].data.timerTakeHit = 0;
 				StateMobMachine(TAKE_HIT, _i);
@@ -793,7 +792,7 @@ float GetDistancePlayerMobX(unsigned _i)
 
 		float distX = player->data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
 
-		return fabs(distX);
+		return (float)fabs(distX);
 		
 		
 	}
@@ -808,7 +807,7 @@ float GetDistancePlayerMobY(unsigned _i)
 
 		float distY = player->data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
 
-		return fabs(distY);
+		return (float)fabs(distY);
 		
 	
 	}
@@ -917,7 +916,7 @@ sfBool GetDistanceMobSpike(unsigned _mob, unsigned _spike)
 	sfFloatRect hitSpike = GetSpikeTab(_spike);
 	float spikeOriginX = hitSpike.left + (hitSpike.width / 2), spikeOriginY = hitSpike.top + (hitSpike.height / 2);
 
-	float minX = fminf(posPlayer, posMobX), maxX = fmaxf(posPlayer, posMobX), minY = fabs(posMobY - spikeOriginY);
+	float minX = fminf(posPlayer, posMobX), maxX = fmaxf(posPlayer, posMobX), minY = (float)fabs(posMobY - spikeOriginY);
 
 	if (spikeOriginX > minX && spikeOriginX < maxX && minY < 100.f)
 	{

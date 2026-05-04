@@ -107,28 +107,38 @@ PlayerSaveData* LoadSave(int slot)
 void DeleteSave(int slot)
 {
 	if (!IsValidSlot(slot))
+	{
 		return;
+	}
 
 	char path[32];
 	GetSavePath(slot, path);
 
 	if (remove(path) == 0)
+	{
 		printf("[Save] Slot %d supprimé (%s).\n", slot, path);
+	}
 	else
+	{
 		printf("[Save] Slot %d : aucun fichier à supprimer.\n", slot);
+	}
 }
 
 sfBool SaveExists(int slot)
 {
 	if (!IsValidSlot(slot))
+	{
 		return sfFalse;
+	}
 
 	char path[32];
 	GetSavePath(slot, path);
 
 	FILE* f = fopen(path, "rb");
 	if (!f)
+	{
 		return sfFalse;
+	}
 
 	fclose(f);
 	return sfTrue;

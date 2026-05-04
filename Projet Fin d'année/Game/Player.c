@@ -534,7 +534,6 @@ void HandleAttackInput(sfRenderWindow* _renderWindow, float _dt, sfBool movingLe
 				sfSound_setPitch(player->sound.swordSound, RandomFloat(0.9f, 1.2f));
 				sfSound_play(player->sound.swordSound);
 				StateMachine(SWORD);
-				printf("SWORD\n");
 				attackTriggered = sfTrue;
 			}
 		}
