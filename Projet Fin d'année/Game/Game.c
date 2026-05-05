@@ -102,7 +102,7 @@ void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 {
 	float fps = 1.0f / _dt;
 
-	printf("FPS: %.2f\n", fps);
+	//printf("FPS: %.2f\n", fps);
 	if (sfRenderWindow_hasFocus(_renderWindow))
 	{
 		UpdatePlayer(_renderWindow, _dt);
@@ -176,7 +176,7 @@ void CheckSaveAndLoadLevel(int _slot)
 	}
 	else
 	{
-		LoadMap("Level_00");
+		LoadMap("Level_04");
 		LoadPlayer(save);
 		Loaditem();
 

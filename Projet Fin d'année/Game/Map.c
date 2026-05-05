@@ -93,6 +93,7 @@ void LoadMap(char* _mapName)
 
 	sprintf_s(filename, FILENAME_MAX, "Assets/Map/Levels/%s.json", _mapName);
 	map = cute_tiled_load_map_from_file(filename, NULL);
+	
 
 
 	sprintf_s(filename, FILENAME_MAX, "Assets/Map/Tilesets/%s", map->tilesets->image.ptr);

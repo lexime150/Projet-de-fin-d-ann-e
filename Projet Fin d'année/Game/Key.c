@@ -91,7 +91,7 @@ void KeyPosition(sfVector2f _pos, int _keyNumber, sfKeyCode _i)
 	sfSprite_setPosition(key[_keyNumber].keySprite, _pos);
 }
 
-void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, sfKeyCode _i)
+void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, ExtraKey _i)
 {
 	int mod = 4;
 	float scale = sfSprite_getScale(extraKey[_keyNumber].keySprite).x;
