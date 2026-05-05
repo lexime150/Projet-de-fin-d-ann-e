@@ -38,15 +38,6 @@ void LoadMob(void)
 {
 	texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/Champignon du Mordhor.png", NULL);
 	texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/skeleton.png", NULL);
-	//char* textureMushroom = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";
-	//char* textureSkeleton = "Assets/Sprites/Game/Mob/skeleton.png";
-
-	//adresseTexture = malloc(2 * sizeof(char*));
-	//adresseTexture[MUSHROOM] = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";;
-	//adresseTexture[SKELETON] = "Assets/Sprites/Game/Mob/skeleton.png";
-
-	//adresse[MUSHROOM] = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";
-	//adresse[SKELETON] = "Assets/Sprites/Game/Mob/skeleton.png";
 
 
 
@@ -60,11 +51,20 @@ void LoadMob(void)
 
 
 
-	for (unsigned i = 0; i < GetEnemySpawnTabSize(); i++)
-	{
-		int randMobType = rand() % 2;
-		AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
+	//for (unsigned i = 0; i < GetEnemySpawnTabSize(); i++)
+	//{
+	//	int randMobType = rand() % 2;
+	//	AddMob(randMobType, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
+	//}
 
+	for (unsigned i = 0; i < GetMushroomSpawnTabSize(); i++)
+	{
+		AddMob(MUSHROOM, GetMushroomSpawn(i).x, GetMushroomSpawn(i).y);
+	}
+
+	for (unsigned i = 0; i < GetSkeletonSpawnTabSize(); i++)
+	{
+		AddMob(SKELETON, GetSkeletonSpawn(i).x, GetSkeletonSpawn(i).y);
 	}
 	if (mobCount > 0)
 	{

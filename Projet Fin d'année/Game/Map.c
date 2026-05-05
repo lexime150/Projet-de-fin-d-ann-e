@@ -7,17 +7,24 @@ cute_tiled_map_t* map;
 
 sfFloatRect* collisionTab;
 unsigned int collisionTabSize;
+
 Trigger* triggerTab;
 unsigned int triggerTabSize;
 
 sfFloatRect* spikeTab;
 unsigned spikeTabSize;
+
 sfFloatRect* deathZoneTab;
 unsigned int deathZoneTabSize;
 
 sfVector2f* enemySpawnTab;
 unsigned int enemySpawnTabSize;
 
+sfVector2f* skeletonSpawnTab;
+unsigned int skeletonSpawnTabSize;
+
+sfVector2f* mushroomSpawnTab;
+unsigned int mushroomSpawnTabSize;
 
 sfFloatRect* semiSolidCollisionTab;
 unsigned int semiSolidCollisionTabSize;
@@ -144,21 +151,70 @@ void CleanupMap(void)
 	cute_tiled_free_map(map);
 	map = NULL;
 
-	free(collisionTab);
-	collisionTab = NULL;
+	if (collisionTabSize > 0)
+	{
+		free(collisionTab);
+		collisionTab = NULL;
 
-	free(spikeTab);
-	spikeTab = NULL;
-	spikeTabSize = 0;
+	}
 
-	free(triggerTab);
-	triggerTab = NULL;
+	if (spikeTabSize > 0)
+	{
+		free(spikeTab);
+		spikeTab = NULL;
+		spikeTabSize = 0;
 
-	free(enemySpawnTab);
-	enemySpawnTab = NULL;
+	}
 
-	free(semiSolidCollisionTab);
-	semiSolidCollisionTab = NULL;
+	if (triggerTabSize > 0)
+	{
+		free(triggerTab);
+		triggerTab = NULL;
+
+	}
+
+	if (enemySpawnTabSize > 0)
+	{
+		free(enemySpawnTab);
+		enemySpawnTab = NULL;
+
+	}
+
+
+	if (semiSolidCollisionTabSize > 0)
+	{
+		free(semiSolidCollisionTab);
+		semiSolidCollisionTab = NULL;
+
+	}
+
+	if (deathZoneTabSize > 0)
+	{
+		free(deathZoneTab);
+		deathZoneTab = NULL;
+		deathZoneTabSize = 0;
+	}
+
+	if (keyTabSize > 0) 
+	{
+		free(keyTab);
+		keyTab = NULL;
+		keyTabSize = 0;
+	}
+
+	if (skeletonSpawnTabSize > 0) 
+	{
+		free(skeletonSpawnTab);
+		skeletonSpawnTab = NULL;
+		skeletonSpawnTabSize = 0;
+	}
+
+	if (mushroomSpawnTabSize > 0) 
+	{
+		free(mushroomSpawnTab);
+		mushroomSpawnTab = NULL;
+		mushroomSpawnTabSize = 0;
+	}
 
 	for (unsigned int i = 0; i < animatedTileCount; i++) {
 		free(animatedTileList[i].frames);
@@ -216,7 +272,11 @@ void LoadCollisionAndTrigger(void)
 		return;
 	}
 
+	skeletonSpawnTab = calloc(1, sizeof(sfVector2f));
+	skeletonSpawnTabSize = 0;
 
+	mushroomSpawnTab = calloc(1, sizeof(sfVector2f));
+	mushroomSpawnTabSize = 0;
 
 
 	enemySpawnTab = calloc(1, sizeof(sfVector2f));
@@ -337,12 +397,12 @@ void LoadCollisionAndTrigger(void)
 					keyTab = keyTemp;
 
 					keyTab[keyTabSize] = (sfFloatRect){
-						object->x* GAME_SCALE,
-						object->y* GAME_SCALE,
-						object->width* GAME_SCALE,
-						object->height* GAME_SCALE };
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE,
+						object->width * GAME_SCALE,
+						object->height * GAME_SCALE };
 					keyTabSize++;
-					
+
 				}
 
 
@@ -353,7 +413,7 @@ void LoadCollisionAndTrigger(void)
 
 			if (object->point == 1)
 			{
-				if (strcmp(layer->name.ptr, "Enemy-Spawn") == 0)
+				if (strcmp(layer->name.ptr, "Random-Enemy-Spawn") == 0)
 				{
 					sfVector2f* enemySpawnTabTemp = realloc(enemySpawnTab, (unsigned long long)(enemySpawnTabSize + 1) * sizeof(sfVector2f));
 					if (enemySpawnTabTemp == NULL) return;
@@ -371,6 +431,28 @@ void LoadCollisionAndTrigger(void)
 						object->x * GAME_SCALE,
 						object->y * GAME_SCALE
 					};
+				}
+				else if (strcmp(layer->name.ptr, "Skeleton-Enemy-Spawn") == 0)
+				{
+					sfVector2f* skeletonSpawnTabTemp = realloc(skeletonSpawnTab, (unsigned long long)(skeletonSpawnTabSize + 1) * sizeof(sfVector2f));
+					if (skeletonSpawnTabTemp == NULL) return;
+					skeletonSpawnTab = skeletonSpawnTabTemp;
+					skeletonSpawnTab[skeletonSpawnTabSize] = (sfVector2f){
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE
+					};
+					skeletonSpawnTabSize++;
+				}
+				else if (strcmp(layer->name.ptr, "Mushroom-Enemy-Spawn") == 0)
+				{
+					sfVector2f* mushroomSpawnTabTemp = realloc(mushroomSpawnTab, (unsigned long long)(mushroomSpawnTabSize + 1) * sizeof(sfVector2f));
+					if (mushroomSpawnTabTemp == NULL) return;
+					mushroomSpawnTab = mushroomSpawnTabTemp;
+					mushroomSpawnTab[mushroomSpawnTabSize] = (sfVector2f){
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE
+					};
+					mushroomSpawnTabSize++;
 				}
 			}
 			// Next object
@@ -486,6 +568,22 @@ sfVector2f GetEnemySpawn(unsigned int _index)
 		return (sfVector2f) { 0, 0 };
 }
 
+sfVector2f GetSkeletonSpawn(unsigned int _index)
+{
+	if (_index < skeletonSpawnTabSize)
+		return skeletonSpawnTab[_index];
+	else
+		return (sfVector2f) { 0, 0 };
+}
+
+sfVector2f GetMushroomSpawn(unsigned int _index)
+{
+	if (_index < mushroomSpawnTabSize)
+		return mushroomSpawnTab[_index];
+	else
+		return (sfVector2f) { 0, 0 };
+}
+
 sfVector2f GetPlayerSpawn(void)
 {
 	return playerSpawn;
@@ -555,4 +653,14 @@ sfFloatRect GetKeyTab(unsigned _index)
 unsigned int GetKeyTabSize()
 {
 	return keyTabSize;
+}
+
+unsigned int GetSkeletonSpawnTabSize()
+{
+	return skeletonSpawnTabSize;
+}
+
+unsigned int GetMushroomSpawnTabSize()
+{
+	return mushroomSpawnTabSize;
 }

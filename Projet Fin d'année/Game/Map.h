@@ -37,6 +37,10 @@ Trigger GetMapTrigger(unsigned int _index);
 unsigned int GetEnemySpawnTabSize(void);
 sfVector2f GetEnemySpawn(unsigned int _index);
 
+sfVector2f GetSkeletonSpawn(unsigned int _index);
+sfVector2f GetMushroomSpawn(unsigned int _index);
+unsigned int GetSkeletonSpawnTabSize();
+unsigned int GetMushroomSpawnTabSize();
 sfVector2f GetPlayerSpawn(void);
 
 
@@ -52,7 +56,5 @@ void ChangeLevel(const char* level);
 
 sfFloatRect GetKeyTab(unsigned _index);
 unsigned int GetKeyTabSize();
-sfVector2f GetKeySpawn(void);
-
 
 #endif

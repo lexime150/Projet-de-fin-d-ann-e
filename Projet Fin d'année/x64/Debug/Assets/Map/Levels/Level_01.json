@@ -198,7 +198,29 @@
         {
          "draworder":"topdown",
          "id":5,
-         "name":"Enemy-Spawn",
+         "name":"Random-Enemy-Spawn",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":8,
+         "name":"Mushroom-Enemy-Spawn",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":9,
+         "name":"Skeleton-Enemy-Spawn",
          "objects":[],
          "opacity":1,
          "type":"objectgroup",
@@ -228,7 +250,7 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":8,
+ "nextlayerid":10,
  "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",

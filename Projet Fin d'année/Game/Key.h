@@ -17,17 +17,17 @@
 
 typedef enum ExtraKey
 {
-	CONTROL_L = 8,
-	SHIFT = 4,
-	SPACE = 10,
+    CONTROL_L = 8,
+    SHIFT = 4,
+    SPACE = 10,
 
 }ExtraKey;
 
 typedef struct Key
 {
-	sfSprite* keySprite;
-	float cooldownAnimation;
-	sfBool isKeyPressed;
+    sfSprite* keySprite;
+    float cooldownAnimation;
+    sfBool isKeyPressed;
 
 }Key;
 
@@ -37,7 +37,7 @@ void DrawKey(sfRenderWindow* _renderWindow);
 void CleanupKey(void);
 
 
-void KeyPosition(sfVector2f _pos, int _keyNumber, ExtraKey _i);
+void KeyPosition(sfVector2f _pos, int _keyNumber, sfKeyCode _i);
 void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, ExtraKey _i);
 
-#endif 
+#endif
