@@ -1033,7 +1033,7 @@
         {
          "columns":14,
          "firstgid":1,
-         "image":"..\/..\/..\/..\/..\/..\/..\/..\/..\/Desktop\/Debug\/Assets\/Map\/Tilesets\/tilesheet.png",
+         "image":"..\/Tilesets\/tilesheet.png",
          "imageheight":160,
          "imagewidth":224,
          "margin":0,
