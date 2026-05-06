@@ -94,7 +94,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 	newMob.mobType = _type;
 
-	CreateSprite(texture[_type], &newMob.sprite, ORIGIN_CENTER_X, (sfVector2f) { _x, _y });
+	CreateSprite(&texture[_type], &newMob.sprite, ORIGIN_CENTER_X, (sfVector2f) { _x, _y });
 
 	
 	newMob.shape.attackRect = sfRectangleShape_create();

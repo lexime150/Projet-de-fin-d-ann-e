@@ -4,7 +4,7 @@
 #include "common.h"
 #include "Map.h"
 
-#define KEY_NUMBER 2
+#define KEY_NUMBER 6
 #define KEY_SIZE 16
 
 #define KEY_HEIGHT_MIN 2
@@ -13,7 +13,7 @@
 #define KEY_WIDTH_MAX 7
 
 #define EXTRAS_KEY_SIZE (sfVector2f){32.f, 16.f}
-#define EXTRAS_KEY_NUMBER 3
+#define EXTRAS_KEY_NUMBER 5
 
 typedef enum ExtraKey
 {
@@ -28,7 +28,6 @@ typedef struct Key
     sfSprite* keySprite;
     float cooldownAnimation;
     sfBool isKeyPressed;
-
 }Key;
 
 void LoadKey(void);

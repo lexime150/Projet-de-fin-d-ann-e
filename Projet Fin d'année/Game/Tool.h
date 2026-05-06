@@ -15,7 +15,7 @@ typedef enum OriginSprite
 
 }OriginSprite;
 
-void CreateSprite(sfTexture** _texture, sfSprite** _sprite, OriginSprite _origin, sfVector2f _pos);
+void CreateSprite(sfTexture* _texture, sfSprite** _sprite, OriginSprite _origin, sfVector2f _pos);
 sfRectangleShape* CreateRectangle(sfVector2f _size, sfVector2f _origin, sfVector2f _scale, sfColor _color);
 
 #endif 
