@@ -69,7 +69,7 @@ void Update(MainData _mainData)
 	{
 		dt = 0.03f;
 	}
-	printf("FPS: %.2f\n", 1.f / dt);
+	//printf("FPS: %.2f\n", 1.f / dt);
 	switch (GetGameState())
 	{
 	case MENU:

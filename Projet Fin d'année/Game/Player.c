@@ -1461,7 +1461,7 @@ void BasePlayer()
 	sfRectangleShape_setScale(player->shape.rectCollisionPlayerMob, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
 
-	snprintf(player->data.level, sizeof(player->data.level), "Level_00");
+	snprintf(player->data.level, sizeof(player->data.level), "Level_04");
 	//	printf("player level: %s\n", player->data.level);
 	player->data.attackCooldownTimer = 0.5f;
 
