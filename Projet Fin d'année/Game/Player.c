@@ -1276,7 +1276,14 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	float dy = player->data.velocity.y * _dt;
 	CollisionPlayerPlatformsY(dy);
 
-	sfRectangleShape_setPosition(player->shape.collisionPlayerShape, (sfVector2f) { player->data.position.x - (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f, player->data.position.y - (PLAYER_HITBOX_HEIGHT * GAME_SCALE) });
+
+	float playerWidth, playerHeight;
+	GetPlayerHitboxSize(&playerWidth, &playerHeight);
+
+	sfRectangleShape_setSize(player->shape.collisionPlayerShape,(sfVector2f) {playerWidth, playerHeight});
+
+	sfRectangleShape_setPosition(player->shape.collisionPlayerShape,(sfVector2f) {player->data.position.x - playerWidth / 2.f,player->data.position.y - playerHeight});
+
 	player->shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
 	player->shape.playerRect = sfSprite_getGlobalBounds(player->sprite);
 }
