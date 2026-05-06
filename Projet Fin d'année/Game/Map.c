@@ -60,6 +60,10 @@ void LoadAnimatedTiles(void)
 		a->frames = calloc(a->frameCount, sizeof(int));
 		a->durations = calloc(a->frameCount, sizeof(float));
 
+		if (!a->frameCount)
+		{
+			return;
+		}
 		for (unsigned int f = 0; f < a->frameCount; f++)
 		{
 			a->frames[f] = tiles->animation[f].tileid + map->tilesets->firstgid;
@@ -100,7 +104,7 @@ void LoadMap(char* _mapName)
 
 	sprintf_s(filename, FILENAME_MAX, "Assets/Map/Levels/%s.json", _mapName);
 	map = cute_tiled_load_map_from_file(filename, NULL);
-	
+
 
 
 	sprintf_s(filename, FILENAME_MAX, "Assets/Map/Tilesets/%s", map->tilesets->image.ptr);
@@ -196,21 +200,21 @@ void CleanupMap(void)
 		deathZoneTabSize = 0;
 	}
 
-	if (keyTabSize > 0) 
+	if (keyTabSize > 0)
 	{
 		free(keyTab);
 		keyTab = NULL;
 		keyTabSize = 0;
 	}
 
-	if (skeletonSpawnTabSize > 0) 
+	if (skeletonSpawnTabSize > 0)
 	{
 		free(skeletonSpawnTab);
 		skeletonSpawnTab = NULL;
 		skeletonSpawnTabSize = 0;
 	}
 
-	if (mushroomSpawnTabSize > 0) 
+	if (mushroomSpawnTabSize > 0)
 	{
 		free(mushroomSpawnTab);
 		mushroomSpawnTab = NULL;
