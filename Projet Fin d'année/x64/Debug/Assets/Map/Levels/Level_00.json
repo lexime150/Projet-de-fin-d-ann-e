@@ -95,6 +95,40 @@
         }, 
         {
          "draworder":"topdown",
+         "id":11,
+         "name":"Skeleton-Enemy-Spawn",
+         "objects":[
+                {
+                 "height":0,
+                 "id":157,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":800,
+                 "y":752
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":12,
+         "name":"Mushroom-Enemy-Spawn",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":10,
          "name":"Key",
          "objects":[
@@ -882,54 +916,6 @@
                  "width":0,
                  "x":2432,
                  "y":880
-                }, 
-                {
-                 "height":0,
-                 "id":152,
-                 "name":"",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":471.666666666667,
-                 "y":714
-                }, 
-                {
-                 "height":0,
-                 "id":153,
-                 "name":"",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":440.333333333333,
-                 "y":706.666666666667
-                }, 
-                {
-                 "height":0,
-                 "id":154,
-                 "name":"",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":426.333333333333,
-                 "y":680.666666666667
-                }, 
-                {
-                 "height":0,
-                 "id":155,
-                 "name":"",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":493.666666666667,
-                 "y":684.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -982,8 +968,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":11,
- "nextobjectid":157,
+ "nextlayerid":13,
+ "nextobjectid":158,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

@@ -66,6 +66,11 @@ void LoadMob(void)
 	{
 		AddMob(SKELETON, GetSkeletonSpawn(i).x, GetSkeletonSpawn(i).y);
 	}
+
+	for (unsigned i = 0; i < GetEnemySpawnTabSize(); i++)
+	{
+		AddMob(rand() % 2, GetEnemySpawn(i).x, GetEnemySpawn(i).y);
+	}
 	if (mobCount > 0)
 	{
 		GetDistancePlayerMobVector(0);

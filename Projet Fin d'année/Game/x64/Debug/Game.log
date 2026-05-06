@@ -1,14 +1,6 @@
-﻿  Key.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(26,16): warning C4047: 'fonction' : les niveaux d'indirection de 'sfTexture **' et de 'sfTexture *' sont différents
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(26,16): warning C4024: 'CreateSprite' : types différents pour le paramètre formel et réel 1
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(27,57): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(27,67): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(27,75): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(27,81): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(42,17): warning C4047: 'fonction' : les niveaux d'indirection de 'sfTexture **' et de 'sfTexture *' sont différents
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(42,17): warning C4024: 'CreateSprite' : types différents pour le paramètre formel et réel 1
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(122,72): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(122,79): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(122,102): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(122,121): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
+﻿  Player.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(1457,21): warning C4047: 'fonction' : les niveaux d'indirection de 'sfTexture **' et de 'sfTexture *' sont différents
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(1457,21): warning C4024: 'CreateSprite' : types différents pour le paramètre formel et réel 1
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.

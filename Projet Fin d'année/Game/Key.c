@@ -13,6 +13,7 @@ void UpdateExtraKey(float _dt);
 void LoadKey(void)
 {
 
+
 	if (strcmp(player->data.level, "Level_04") == 0) //|| strcmp(player->data.level, "Level_04") == 0)
 	{
 		printf("test\n");
