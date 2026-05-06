@@ -32,6 +32,19 @@ void SetSavedStat(PlayerSaveData* save);
 
 void CheckPlayerHP(void);
 
+static void GetPlayerHitboxSize(float* outWidth, float* outHeight)
+{
+	if (player->action.isSliding)
+	{
+		*outWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
+		*outHeight = (PLAYER_HITBOX_HEIGHT * GAME_SCALE) * 0.5f;
+	}
+	else
+	{
+		*outWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
+		*outHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
+	}
+}
 void LoadPlayer(PlayerSaveData* save)
 {
 	BasePlayer();
@@ -1139,8 +1152,8 @@ void CollisionPlayerPlatformsX(float _dx)
 	player->action.isTouchingRightWall = sfFalse;
 
 	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
-	float playerWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
-	float playerHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
+	float playerWidth, playerHeight;
+	GetPlayerHitboxSize(&playerWidth, &playerHeight);
 
 	sfFloatRect hitbox = { player->data.position.x - playerHalfWidth + _dx, player->data.position.y - playerHeight, playerWidth, playerHeight };
 
@@ -1184,8 +1197,8 @@ void CollisionPlayerPlatformsY(float _dy)
 {
 	sfBool sKey = sfKeyboard_isKeyPressed(sfKeyS);
 	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
-	float playerWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
-	float playerHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
+	float playerWidth, playerHeight;
+	GetPlayerHitboxSize(&playerWidth, &playerHeight);
 
 	float previousBottom = player->data.position.y;
 
@@ -1273,8 +1286,8 @@ sfBool CheckCollisionPlayerPlatformsX(float _dx)
 	player->action.isTouchingRightWall = sfFalse;
 
 	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
-	float playerWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
-	float playerHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
+	float playerWidth, playerHeight;
+	GetPlayerHitboxSize(&playerWidth, &playerHeight);
 
 	sfFloatRect hitbox = { player->data.position.x - playerHalfWidth + _dx, player->data.position.y - playerHeight, playerWidth, playerHeight };
 
@@ -1461,7 +1474,7 @@ void BasePlayer()
 	sfRectangleShape_setScale(player->shape.rectCollisionPlayerMob, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
 
-	snprintf(player->data.level, sizeof(player->data.level), "Level_00");
+	snprintf(player->data.level, sizeof(player->data.level), "Level_04");
 	//	printf("player level: %s\n", player->data.level);
 	player->data.attackCooldownTimer = 0.5f;
 

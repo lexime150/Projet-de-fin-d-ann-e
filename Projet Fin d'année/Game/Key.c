@@ -15,7 +15,7 @@ void UpdateExtraKey(float _dt);
 void LoadKey(void)
 {
 
-	if (strcmp(player->data.level, "Level_00") == 0)
+	if (strcmp(player->data.level, "Level_04") == 0)
 	{
 
 		sfTexture* texture = sfTexture_createFromFile("Assets/Sprites/Game/Key/Key.png", NULL);
