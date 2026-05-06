@@ -20,6 +20,7 @@ void LoadGame(void)
 	LevelTransition();
 	LoadMusic();
 	LoadKey();
+	LoadBoss();
 }
 
 void UpdateTransition(float _dt)
@@ -115,6 +116,7 @@ void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 		UpdateHUD();
 		UpdateTransition(_dt);
 		UpdateKey(_dt);
+		UpdateBoss(_dt);
 
 		for (int i = 0; i < GetItemCount(); i++)
 		{
@@ -133,7 +135,7 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawKey(_renderWindow);
 	Drawitem(_renderWindow);
 	DrawPlayer(_renderWindow);
-
+	DrawBoss(_renderWindow);
 
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);

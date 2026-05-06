@@ -14,6 +14,7 @@
 
 #include "Key.h"
 #include "Collectibles.h"
+#include "Boss.h"
 
 
 void LoadGame(void);

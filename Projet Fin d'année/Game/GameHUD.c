@@ -6,6 +6,7 @@ HUD hud;
 void CreateHealthBarHUD();
 void CreateKeyNumHUD();
 
+
 void LoadHUD()
 {
 	CreateHealthBarHUD();
