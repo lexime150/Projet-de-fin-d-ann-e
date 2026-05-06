@@ -8,13 +8,13 @@ Animation animPlayer;
 Player* player;
 void UpdateNormalKey(float _dt);
 void UpdateExtraKey(float _dt);
-
+sfBool loadKey = sfTrue;
 
 void LoadKey(void)
 {
 
 
-	if (strcmp(player->data.level, "Level_04") == 0) //|| strcmp(player->data.level, "Level_00") == 0)
+	if (strcmp(player->data.level, "Level_00") == 0 && loadKey) //|| strcmp(player->data.level, "Level_00") == 0)
 	{
 		printf("test\n");
 		sfTexture* texture = sfTexture_createFromFile("Assets/Sprites/Game/Key/Key.png", NULL);
@@ -62,6 +62,7 @@ void LoadKey(void)
 		KeyPosition((sfVector2f) { GetKeyTab(9).left, GetKeyTab(9).top }, 5, sfKeyS);
 
 		sfSprite_setPosition(playerSprite, (sfVector2f) { 1360.f, 2660.f });
+		loadKey = sfFalse;
 	}
 }
 
@@ -132,7 +133,7 @@ void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, ExtraKey _i)
 
 void UpdateKey(float _dt)
 {
-	if (strcmp(player->data.level, "Level_04") == 0)
+	if (strcmp(player->data.level, "Level_00") == 0)
 	{
 		UpdateNormalKey(_dt);
 		UpdateExtraKey(_dt);
