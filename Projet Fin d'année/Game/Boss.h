@@ -29,6 +29,14 @@ typedef struct Timer
 
 }Timer;
 
+typedef enum BossSide
+{
+	LEFT_BOSS,
+	WIDTH_BOSS,
+	TOP_BOSS,
+	HEIGHT_BOSS,
+	NOTHING_BOSS
+}BossSide;
 
 typedef struct Boss
 {
@@ -45,10 +53,16 @@ typedef struct Boss
 
 	sfVector2f distWalk;
 	sfVector2f distRun;
-
+	int direction;
 	sfBool isGrounded;
 
 	Timer timer;
+
+	BossState lastAttack;
+
+	sfRectangleShape* attackShape;
+	sfRectangleShape* hurtShape;
+
 
 }Boss;
 

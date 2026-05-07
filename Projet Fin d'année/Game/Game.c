@@ -96,6 +96,8 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
 		break;
 	case sfKeyNum5:
 		ChangeLevel("Level_04");
+	case sfKeyNum6:
+		ChangeLevel("Level_05");
 	default:
 		break;
 	}
@@ -153,6 +155,7 @@ void CleanupGame(void)
 	CleanUpCamera();
 	Cleanupitem();
 	CleanupKey();
+	CleanupBoss();
 	SavePlayer(playerSaveData.save);
 }
 
@@ -177,6 +180,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadCamera();
 		LoadMob();
 		LoadHUD();
+		LoadBoss();
 	}
 	else
 	{
@@ -187,6 +191,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadCamera();
 		LoadMob();
 		LoadKey();
+		LoadBoss();
 		LoadHUD();
 	}
 }
@@ -203,6 +208,7 @@ void ChangeLevel(const char* _level)
 	CleanupHUD();
 	CleanUpCamera();
 	Cleanupitem();
+	CleanupBoss();
 
 	LoadMap(player->data.level);
 	LoadCamera();
@@ -210,6 +216,7 @@ void ChangeLevel(const char* _level)
 	LoadKey();
 	LoadHUD();
 	Loaditem();
+	LoadBoss();
 
 	player->data.keyNumber = 0;
 	player->data.position = GetPlayerSpawn();

@@ -38,6 +38,7 @@ sfRectangleShape* CreateRectangle(sfVector2f _size, sfVector2f _origin, sfVector
 	sfRectangleShape_setSize(rect, _size);
 	sfRectangleShape_setOrigin(rect, _origin);
 	sfRectangleShape_setScale(rect, _scale);
+	sfRectangleShape_setFillColor(rect, _color);
 
 	return rect;
 
