@@ -387,8 +387,8 @@ static void CheckMobSpikeCollision(float _dt, unsigned _i)
 
 	if (side == HEIGHT_MOB)
 	{
-		player->data.velocity.y = 0;
-		sfSprite_setPosition(player->sprite, (sfVector2f) { sfSprite_getPosition(player->sprite).x, posMobY });
+		mob[_i].data.velocity.y = 0;
+		sfSprite_setPosition(mob[_i].sprite, (sfVector2f) { sfSprite_getPosition(mob[_i].sprite).x, posMobY });
 		mob[_i].data.hp = 0;
 	}
 

@@ -20,6 +20,7 @@ void LoadGame(void)
 	LevelTransition();
 	LoadMusic();
 	LoadKey();
+	LoadBoss();
 }
 
 void UpdateTransition(float _dt)
@@ -93,6 +94,12 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
 	case sfKeyNum4:
 		ChangeLevel("Level_03");
 		break;
+	case sfKeyNum5:
+		ChangeLevel("Level_04");
+		break;
+	case sfKeyNum6:
+		ChangeLevel("Level_05");
+		break;
 	default:
 		break;
 	}
@@ -113,6 +120,7 @@ void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 		UpdateHUD();
 		UpdateTransition(_dt);
 		UpdateKey(_dt);
+		UpdateBoss(_dt);
 
 		for (int i = 0; i < GetItemCount(); i++)
 		{
@@ -131,7 +139,7 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawKey(_renderWindow);
 	Drawitem(_renderWindow);
 	DrawPlayer(_renderWindow);
-
+	DrawBoss(_renderWindow);
 
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);
@@ -149,6 +157,7 @@ void CleanupGame(void)
 	CleanUpCamera();
 	Cleanupitem();
 	CleanupKey();
+	CleanupBoss();
 	SavePlayer(playerSaveData.save);
 }
 
@@ -173,6 +182,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadCamera();
 		LoadMob();
 		LoadHUD();
+		LoadBoss();
 	}
 	else
 	{
@@ -183,6 +193,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadCamera();
 		LoadMob();
 		LoadKey();
+		LoadBoss();
 		LoadHUD();
 	}
 }
@@ -199,6 +210,7 @@ void ChangeLevel(const char* _level)
 	CleanupHUD();
 	CleanUpCamera();
 	Cleanupitem();
+	CleanupBoss();
 
 	LoadMap(player->data.level);
 	LoadCamera();
@@ -206,6 +218,7 @@ void ChangeLevel(const char* _level)
 	LoadKey();
 	LoadHUD();
 	Loaditem();
+	LoadBoss();
 
 	player->data.keyNumber = 0;
 	player->data.position = GetPlayerSpawn();

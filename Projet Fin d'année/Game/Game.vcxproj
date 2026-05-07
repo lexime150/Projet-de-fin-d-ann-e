@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.c" />
+    <ClCompile Include="Boss.c" />
     <ClCompile Include="Camera.c" />
     <ClCompile Include="Collectibles.c" />
     <ClCompile Include="Game.c" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collectibles.h" />
     <ClInclude Include="Common.h" />
