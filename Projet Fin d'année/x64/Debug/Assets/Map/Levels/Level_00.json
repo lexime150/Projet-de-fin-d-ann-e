@@ -661,18 +661,18 @@
                 {
                  "height":16,
                  "id":64,
-                 "name":"",
+                 "name":"sfKeyS",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":448,
+                 "x":352,
                  "y":384
                 }, 
                 {
                  "height":16,
                  "id":65,
-                 "name":"",
+                 "name":"sfKeyCtrl",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -683,7 +683,7 @@
                 {
                  "height":16,
                  "id":66,
-                 "name":"",
+                 "name":"sfKeySpace",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -694,18 +694,18 @@
                 {
                  "height":16,
                  "id":69,
-                 "name":"",
+                 "name":"sfKeyQ",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":992,
+                 "x":1008,
                  "y":1264
                 }, 
                 {
                  "height":16,
                  "id":70,
-                 "name":"",
+                 "name":"sfKeyD",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -716,7 +716,7 @@
                 {
                  "height":16,
                  "id":71,
-                 "name":"",
+                 "name":"sfKeySpace",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -727,7 +727,7 @@
                 {
                  "height":16,
                  "id":72,
-                 "name":"",
+                 "name":"sfKeySpace",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -738,7 +738,7 @@
                 {
                  "height":16,
                  "id":73,
-                 "name":"",
+                 "name":"sfKeyCtrl",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -749,7 +749,7 @@
                 {
                  "height":16,
                  "id":74,
-                 "name":"",
+                 "name":"sfKeyD",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -760,13 +760,24 @@
                 {
                  "height":16,
                  "id":75,
-                 "name":"",
+                 "name":"sfKeyQ",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
                  "x":240,
                  "y":1392
+                }, 
+                {
+                 "height":16,
+                 "id":76,
+                 "name":"sfKeyS",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":386,
+                 "y":556
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1024,7 +1035,7 @@
          "y":0
         }],
  "nextlayerid":10,
- "nextobjectid":76,
+ "nextobjectid":77,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

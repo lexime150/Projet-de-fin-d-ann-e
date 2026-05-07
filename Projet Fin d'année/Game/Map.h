@@ -24,6 +24,15 @@ typedef struct Trigger
 	float height;
 }Trigger;
 
+typedef struct KeyStruct
+{
+	char name[FILENAME_MAX];
+	float left;
+	float top;
+	float width;
+	float height;
+}KeyStruct;
+
 void LoadMap(char* _mapName);
 void UpdateMap(float _dt);
 void DrawMap(sfRenderWindow* _renderWindow);
@@ -54,5 +63,5 @@ sfFloatRect GetSemiSolidCollisionTab(unsigned int _index);
 
 void ChangeLevel(const char* level);
 unsigned int GetKeyTabSize();
-sfFloatRect GetKeyTab(unsigned _index);
+KeyStruct GetKeyTab(unsigned _index);
 #endif

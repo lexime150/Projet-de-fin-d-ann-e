@@ -12,11 +12,11 @@ sfBool loadKey = sfTrue;
 
 void LoadKey(void)
 {
-
-
-	if (strcmp(player->data.level, "Level_00") == 0 && loadKey) //|| strcmp(player->data.level, "Level_00") == 0)
+	if (strcmp(player->data.level, "Level_00") == 0 && loadKey)
 	{
-		printf("test\n");
+		int keyIndex = 0;
+		int extraKeyIndex = 0;
+
 		sfTexture* texture = sfTexture_createFromFile("Assets/Sprites/Game/Key/Key.png", NULL);
 		sfTexture* textureExtraKey = sfTexture_createFromFile("Assets/Sprites/Game/Key/Keyboard Extras.png", NULL);
 		sfTexture* texturePlayer = sfTexture_createFromFile("Assets/Sprites/Game/Player/playerUpD.png", NULL);
@@ -24,7 +24,6 @@ void LoadKey(void)
 		CreateSprite(texturePlayer, &playerSprite, ORIGIN_VANILLA, (sfVector2f) { GetKeyTab(0).left, GetKeyTab(0).top + 100.f });
 		sfSprite_setTextureRect(playerSprite, (sfIntRect) { 1 * 32.f, 1 * 32.f, 32.f, 32.f });
 		sfSprite_setScale(playerSprite, (sfVector2f) { 2.5f, 2.5f });
-
 
 		for (int i = 0; i < KEY_NUMBER; i++)
 		{
@@ -37,32 +36,49 @@ void LoadKey(void)
 
 		for (int i = 0; i < EXTRAS_KEY_NUMBER; i++)
 		{
-			//CreateSprite(textureExtraKey, &extraKey[i].keySprite, ORIGIN_VANILLA, (sfVector2f) { GetKeyTab((EXTRAS_KEY_NUMBER - 1) + i).left, GetKeyTab((EXTRAS_KEY_NUMBER - 1) + i).top });
 			extraKey[i].keySprite = sfSprite_create();
 			sfSprite_setTexture(extraKey[i].keySprite, textureExtraKey, sfTrue);
 			sfSprite_setOrigin(extraKey[i].keySprite, (sfVector2f) { KEY_SIZE / 2, KEY_SIZE / 2 });
 			sfSprite_setScale(extraKey[i].keySprite, (sfVector2f) { GAME_SCALE + 1.f, GAME_SCALE + 1.f });
 			extraKey[i].isKeyPressed = sfFalse;
-			
-			//sfSprite_setScale(extraKey[i].keySprite, (sfVector2f) { GAME_SCALE + 1.f, GAME_SCALE + 1.f });
-			//extraKey[i].isKeyPressed = sfFalse;
 		}
 
 		animPlayer = CreateAnimation(playerSprite, 5, 8, sfTrue, sfTrue, (sfIntRect) { 1 * PLAYER_WIDTH, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT });
 
-		KeyPosition((sfVector2f) { GetKeyTab(0).left, GetKeyTab(0).top }, 0, sfKeyQ);
-		KeyPosition((sfVector2f) { GetKeyTab(1).left, GetKeyTab(1).top }, 1, sfKeyD);
-		ExtraKeyPosition((sfVector2f) { GetKeyTab(2).left, GetKeyTab(2).top }, 0, CONTROL_L);
-		ExtraKeyPosition((sfVector2f) { GetKeyTab(3).left, GetKeyTab(3).top }, 1, SPACE);
-		ExtraKeyPosition((sfVector2f) { GetKeyTab(4).left, GetKeyTab(4).top }, 2, SPACE);
-		KeyPosition((sfVector2f) { GetKeyTab(5).left, GetKeyTab(5).top }, 3, sfKeyQ);
-		KeyPosition((sfVector2f) { GetKeyTab(6).left, GetKeyTab(6).top }, 4, sfKeyD);
-		ExtraKeyPosition((sfVector2f) { GetKeyTab(7).left, GetKeyTab(7).top }, 3, CONTROL_L);
-		ExtraKeyPosition((sfVector2f) { GetKeyTab(8).left, GetKeyTab(8).top }, 4, SPACE);
-		KeyPosition((sfVector2f) { GetKeyTab(9).left, GetKeyTab(9).top }, 5, sfKeyS);
+		for (int i = 0; i < GetKeyTabSize(); i++)
+		{
+			KeyStruct k = GetKeyTab(i);
+			printf("%s\n", k.name);
+			sfVector2f pos = (sfVector2f){ k.left, k.top };
+
+			if (strcmp(k.name, "sfKeyQ") == 0)
+			{
+				KeyPosition(pos, keyIndex++, sfKeyQ);
+
+			}
+			else if (strcmp(k.name, "sfKeyD") == 0)
+			{
+				KeyPosition(pos, keyIndex++, sfKeyD);
+
+			}
+			else if (strcmp(k.name, "sfKeyS") == 0)
+			{
+				KeyPosition(pos, keyIndex++, sfKeyS);
+
+			}
+			else if (strcmp(k.name, "sfKeyCtrl") == 0)
+			{
+				ExtraKeyPosition(pos, extraKeyIndex++, CONTROL_L);
+
+			}
+			else if (strcmp(k.name, "sfKeySpace") == 0)
+			{
+				ExtraKeyPosition(pos, extraKeyIndex++, SPACE);
+
+			}
+		}
 
 		sfSprite_setPosition(playerSprite, (sfVector2f) { 1360.f, 2660.f });
-		loadKey = sfFalse;
 	}
 }
 
@@ -78,12 +94,13 @@ void KeyPosition(sfVector2f _pos, int _keyNumber, sfKeyCode _i)
 		{
 			if (_i >= mod * 3)
 			{
-
 				height = (KEY_HEIGHT_MIN + 3) * KEY_SIZE;
+
 			}
 			else
 			{
 				height = (KEY_HEIGHT_MIN + 2) * KEY_SIZE;
+
 			}
 		}
 		else
@@ -103,7 +120,6 @@ void KeyPosition(sfVector2f _pos, int _keyNumber, sfKeyCode _i)
 void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, ExtraKey _i)
 {
 	int mod = 4;
-	float scale = sfSprite_getScale(extraKey[_keyNumber].keySprite).x;
 	float width = (_i % mod) * EXTRAS_KEY_SIZE.x;
 	float height = 0;
 
@@ -114,10 +130,12 @@ void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, ExtraKey _i)
 			if (_i >= mod * 3)
 			{
 				height = 3 * EXTRAS_KEY_SIZE.y;
+
 			}
 			else
 			{
 				height = 2 * EXTRAS_KEY_SIZE.y;
+
 			}
 		}
 		else
@@ -128,7 +146,6 @@ void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, ExtraKey _i)
 
 	sfSprite_setTextureRect(extraKey[_keyNumber].keySprite, (sfIntRect) { width, height, EXTRAS_KEY_SIZE.x, EXTRAS_KEY_SIZE.y });
 	sfSprite_setPosition(extraKey[_keyNumber].keySprite, _pos);
-
 }
 
 void UpdateKey(float _dt)
@@ -158,10 +175,12 @@ void UpdateNormalKey(float _dt)
 				if (key[i].isKeyPressed == sfTrue)
 				{
 					sfSprite_setTextureRect(key[i].keySprite, (sfIntRect) { temp.left, temp.top + (temp.height * 7), temp.width, temp.height });
+
 				}
 				else if (key[i].isKeyPressed == sfFalse)
 				{
 					sfSprite_setTextureRect(key[i].keySprite, (sfIntRect) { temp.left, temp.top - (temp.height * 7), temp.width, temp.height });
+
 				}
 			}
 		}
@@ -175,6 +194,7 @@ void UpdateExtraKey(float _dt)
 		if (extraKey[i].keySprite)
 		{
 			extraKey[i].cooldownAnimation += _dt;
+
 			if (extraKey[i].cooldownAnimation > 1.f)
 			{
 				extraKey[i].isKeyPressed = !extraKey[i].isKeyPressed;
@@ -184,21 +204,20 @@ void UpdateExtraKey(float _dt)
 				if (extraKey[i].isKeyPressed == sfTrue)
 				{
 					sfSprite_setTextureRect(extraKey[i].keySprite, (sfIntRect) { temp.left, temp.top + (temp.height * 4), temp.width, temp.height });
+
 				}
 				else if (extraKey[i].isKeyPressed == sfFalse)
 				{
 					sfSprite_setTextureRect(extraKey[i].keySprite, (sfIntRect) { temp.left, temp.top - (temp.height * 4), temp.width, temp.height });
+
 				}
 			}
 		}
 	}
-
-
 }
 
 void DrawKey(sfRenderWindow* _renderWindow)
 {
-
 	if (playerSprite)
 	{
 		sfRenderWindow_drawSprite(_renderWindow, playerSprite, NULL);
@@ -219,24 +238,23 @@ void DrawKey(sfRenderWindow* _renderWindow)
 		if (extraKey[i].keySprite)
 		{
 			sfRenderWindow_drawSprite(_renderWindow, extraKey[i].keySprite, NULL);
+
 		}
 	}
 }
 
 void CleanupKey(void)
 {
-	if (key != NULL)
+	for (int i = 0; i < KEY_NUMBER; i++)
 	{
-		for (int i = 0; i < KEY_NUMBER; i++)
-		{
-			sfSprite_destroy(key[i].keySprite);
-			key[i].keySprite = NULL;
-		}
-		for (int i = 0; i < EXTRAS_KEY_NUMBER; i++)
-		{
-			sfSprite_destroy(extraKey[i].keySprite);
-			extraKey[i].keySprite = NULL;
-		}
+		sfSprite_destroy(key[i].keySprite);
+		key[i].keySprite = NULL;
+	}
+
+	for (int i = 0; i < EXTRAS_KEY_NUMBER; i++)
+	{
+		sfSprite_destroy(extraKey[i].keySprite);
+		extraKey[i].keySprite = NULL;
 	}
 
 	sfSprite_destroy(playerSprite);

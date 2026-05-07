@@ -31,7 +31,7 @@ unsigned int semiSolidCollisionTabSize;
 
 sfVector2f playerSpawn;
 
-sfFloatRect* keyTab;
+KeyStruct* keyTab;
 unsigned keyTabSize;
 
 AnimatedTile* animatedTileList;
@@ -270,7 +270,7 @@ void LoadCollisionAndTrigger(void)
 		return;
 	}
 
-	keyTab = calloc(1, sizeof(sfFloatRect));
+	keyTab = calloc(1, sizeof(KeyStruct));
 	keyTabSize = 0;
 	if (deathZoneTab == NULL)
 	{
@@ -393,21 +393,16 @@ void LoadCollisionAndTrigger(void)
 				}
 				else if (strcmp(layer->name.ptr, "Key") == 0)
 				{
-					sfFloatRect* keyTemp = realloc(keyTab, (unsigned long long)(keyTabSize + 1) * sizeof(sfFloatRect));
-
-					if (keyTemp == NULL)
-					{
-						return;
-					}
+					KeyStruct* keyTemp = realloc(keyTab, (unsigned long long)(keyTabSize + 1) * sizeof(KeyStruct));
+					if (keyTemp == NULL) return;
 					keyTab = keyTemp;
 
-					keyTab[keyTabSize] = (sfFloatRect){
-						object->x * GAME_SCALE,
-						object->y * GAME_SCALE,
-						object->width * GAME_SCALE,
-						object->height * GAME_SCALE };
+					strcpy_s(keyTab[keyTabSize].name, FILENAME_MAX, object->name.ptr);
+					keyTab[keyTabSize].left = object->x * GAME_SCALE;
+					keyTab[keyTabSize].top = object->y * GAME_SCALE;
+					keyTab[keyTabSize].width = object->width * GAME_SCALE;
+					keyTab[keyTabSize].height = object->height * GAME_SCALE;
 					keyTabSize++;
-
 				}
 
 
@@ -643,7 +638,7 @@ sfFloatRect GetSemiSolidCollisionTab(unsigned int _index)
 	}
 }
 
-sfFloatRect GetKeyTab(unsigned _index)
+KeyStruct GetKeyTab(unsigned _index)
 {
 	if (_index < keyTabSize)
 	{
@@ -651,7 +646,7 @@ sfFloatRect GetKeyTab(unsigned _index)
 	}
 	else
 	{
-		return (sfFloatRect) { 0, 0, 0, 0 };
+		return (KeyStruct) {"No Name", 0, 0, 0, 0 };
 	}
 }
 
