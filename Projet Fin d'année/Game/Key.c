@@ -48,7 +48,6 @@ void LoadKey(void)
 		for (int i = 0; i < GetKeyTabSize(); i++)
 		{
 			KeyStruct k = GetKeyTab(i);
-			printf("%s\n", k.name);
 			sfVector2f pos = (sfVector2f){ k.left, k.top };
 
 			if (strcmp(k.name, "sfKeyQ") == 0)

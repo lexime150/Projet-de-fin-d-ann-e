@@ -1,6 +1,7 @@
 ﻿#include "Player.h"
 
 Player* player;
+Items* item;
 PlayerSaveData save;
 sfBool keyWasPressed = sfFalse;
 unsigned mobCount;
@@ -1396,6 +1397,7 @@ void CheckCollisionPlayerSpike(float _dt)
 			else if (playerCenterY > spikeCenterY && (hitPlayer.left < (hitSpike.left + hitSpike.width)) && (hitPlayer.left + hitPlayer.width) > hitSpike.left)
 			{
 				player->spikeSide = HEIGHT;
+				
 			}
 		}
 	}
@@ -1501,6 +1503,13 @@ void BasePlayer()
 	player->data.diagonalDashUnlocked = sfFalse;
 	player->data.horizontalDashUnlocked = sfFalse;
 
+	player->data.isOrbUpgradeLevel00Collected = sfFalse;
+	player->data.isOrbUpgradeLevel01Collected = sfFalse;
+	player->data.isOrbUpgradeLevel02Collected = sfFalse;
+	player->data.isOrbUpgradeLevel03Collected = sfFalse;
+	player->data.orbUpgradeCount = 0;
+
+
 	player->spikeSide = NOTHING;
 	player->side = NOTHING_PLAYER;
 
@@ -1536,6 +1545,13 @@ void SetSavedStat(PlayerSaveData* save)
 	player->data.diagonalDashUnlocked = save->diagonalDashUnlocked;
 	player->data.horizontalDashUnlocked = save->horizontalDashUnlocked;
 
+	player->data.isOrbUpgradeLevel00Collected = save->isOrbUpgradeLevel00Collected;
+	player->data.isOrbUpgradeLevel01Collected = save->isOrbUpgradeLevel01Collected;
+	player->data.isOrbUpgradeLevel02Collected = save->isOrbUpgradeLevel02Collected;
+	player->data.isOrbUpgradeLevel03Collected = save->isOrbUpgradeLevel03Collected;
+	player->data.orbUpgradeCount = save->orbUpgradeCount;
+
+
 
 	snprintf(player->data.level, sizeof(player->data.level), "%s", save->level);
 	//printf("buffer: %s\n", player->data.level);
@@ -1556,7 +1572,30 @@ void CollisionPlayerTrigger()
 
 		if (sfFloatRect_intersects(&player->shape.collisionPlayerRect, &trigger, NULL))
 		{
-			if (keyIsPressed && !keyWasPressed && player->data.keyNumber >= GetMobCount())
+			if (strcmp(GetMapTrigger(i).name, "Upgrade-Orb") == 0)
+			{
+				int itemIndex = GetItemIndexByTrigger(i);
+				if (itemIndex != -1)
+				{
+					RemoveItem(itemIndex);
+					player->data.orbUpgradeCount++;
+					if (strcmp(player->data.level, "Level_00") == 0)
+					{
+						player->data.isOrbUpgradeLevel00Collected = sfTrue;
+					}if (strcmp(player->data.level, "Level_01") == 0)
+					{
+						player->data.isOrbUpgradeLevel01Collected = sfTrue;
+					}if (strcmp(player->data.level, "Level_02") == 0)
+					{
+						player->data.isOrbUpgradeLevel02Collected = sfTrue;
+					}if (strcmp(player->data.level, "Level_03") == 0)
+					{
+						player->data.isOrbUpgradeLevel03Collected = sfTrue;
+					}
+					printf("%d\n",player->data.orbUpgradeCount);
+				}
+			}
+			else if (keyIsPressed && !keyWasPressed && player->data.keyNumber >= GetMobCount())
 			{
 				player->data.velocity.x = 0;
 				player->data.velocity.y = 0;

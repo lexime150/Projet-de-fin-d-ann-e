@@ -4,6 +4,7 @@
 #include "Common.h"
 #include "Map.h"
 #include "Game.h"
+#include "Collectibles.h"
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
@@ -199,6 +200,13 @@ typedef struct Stats
 	float dashVelocityX;
 	float dashVelocityY;
 
+
+	sfBool isOrbUpgradeLevel00Collected;
+	sfBool isOrbUpgradeLevel01Collected;
+	sfBool isOrbUpgradeLevel02Collected;
+	sfBool isOrbUpgradeLevel03Collected;
+
+	int orbUpgradeCount;
 }Stats;
 
 typedef struct Shape

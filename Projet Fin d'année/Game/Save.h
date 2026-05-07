@@ -26,6 +26,13 @@ typedef struct
 
     sfVector2f position;
 
+	sfBool isOrbUpgradeLevel00Collected;
+	sfBool isOrbUpgradeLevel01Collected;
+	sfBool isOrbUpgradeLevel02Collected;
+	sfBool isOrbUpgradeLevel03Collected;
+
+	int orbUpgradeCount;
+
 } PlayerSaveData;
 
 

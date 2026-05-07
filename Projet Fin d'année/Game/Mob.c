@@ -692,10 +692,10 @@ void StateMob(float _dt, unsigned _i)
 		{
 			if (rand() % 3 == 1)
 			{
-				Additem(ITEM_HEALTH, mobPos.x, mobPos.y - 30);
+				Additem(ITEM_HEALTH, mobPos.x, mobPos.y - 30, 0);
 			}
 		}
-		Additem(ITEM_KEY, mobPos.x, mobPos.y - 5);
+		Additem(ITEM_KEY, mobPos.x, mobPos.y - 5, 0);
 		StateMobMachine(DEATH, _i);
 		sfSound_play(mob[_i].soundMob.soundDead);
 		mob[_i].data.velocity.x = 0.f;

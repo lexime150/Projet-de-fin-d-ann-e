@@ -5,11 +5,14 @@ unsigned itemCount;
 Player* player;
 sfTexture* healthTexture;
 sfTexture* keyTexture;
+sfTexture* orbUpgradeTexture;
+
 void VacuumEffect(void);
 void Loaditem(void)
 {
 	healthTexture = sfTexture_createFromFile("Assets/Sprites/Game/Collectibles/heart.png", NULL);
 	keyTexture = sfTexture_createFromFile("Assets/Sprites/Game/Collectibles/Keys.png", NULL);
+	orbUpgradeTexture = sfTexture_createFromFile("Assets/Sprites/Game/Collectibles/Upgrade-orb.png", NULL);
 	if (!healthTexture)
 	{
 		fprintf(stderr, "TEXTURE LOAD FAILURE\n");
@@ -17,9 +20,31 @@ void Loaditem(void)
 	}
 	item = NULL;
 	itemCount = 0;
+	for (int i = 0; i < GetTriggerTabSize(); i++)
+	{
+		if (strcmp(GetMapTrigger(i).name, "Upgrade-Orb") == 0)
+		{
+			if (strcmp(player->data.level, "Level_00") == 0 && !player->data.isOrbUpgradeLevel00Collected)
+			{
+				Additem(ITEM_ORB_UPGRADE, GetMapTrigger(i).left + GetMapTrigger(i).width / 2.f, GetMapTrigger(i).top + GetMapTrigger(i).height, i);
+			}
+			if (strcmp(player->data.level, "Level_01") == 0 && !player->data.isOrbUpgradeLevel01Collected)
+			{
+				Additem(ITEM_ORB_UPGRADE, GetMapTrigger(i).left + GetMapTrigger(i).width / 2.f, GetMapTrigger(i).top + GetMapTrigger(i).height, i);
+			}
+			if (strcmp(player->data.level, "Level_02") == 0 && !player->data.isOrbUpgradeLevel02Collected)
+			{
+				Additem(ITEM_ORB_UPGRADE, GetMapTrigger(i).left + GetMapTrigger(i).width / 2.f, GetMapTrigger(i).top + GetMapTrigger(i).height, i);
+			}
+			if (strcmp(player->data.level, "Level_03") == 0 && !player->data.isOrbUpgradeLevel03Collected)
+			{
+				Additem(ITEM_ORB_UPGRADE, GetMapTrigger(i).left + GetMapTrigger(i).width / 2.f, GetMapTrigger(i).top + GetMapTrigger(i).height, i);
+			}
+		}
+	}
 }
 
-void Additem(ItemType _itemType, float _x, float _y)
+void Additem(ItemType _itemType, float _x, float _y, int _triggerIndex)
 {
 	Items* temp = realloc(item, (itemCount + 1) * sizeof(Items));
 	if (!temp)
@@ -54,6 +79,12 @@ void Additem(ItemType _itemType, float _x, float _y)
 		newitem.type = ITEM_KEY;
 		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 		break;
+	case ITEM_ORB_UPGRADE:
+		sfSprite_setTexture(newitem.itemSprite, orbUpgradeTexture, sfTrue);
+		sfSprite_setScale(newitem.itemSprite, (sfVector2f) { 0.5f, 0.5f });
+		newitem.type = ITEM_ORB_UPGRADE;
+		newitem.triggerIndex = _triggerIndex;
+
 	default:
 		break;
 	}
@@ -234,6 +265,18 @@ sfBool CollisionitemY(unsigned i, float _dy)
 	return sfFalse;
 }
 
+int GetItemIndexByTrigger(int _triggerIndex)
+{
+	for (int i = 0; i < itemCount; i++)
+	{
+		if (item[i].triggerIndex == _triggerIndex)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
 void Updateitem(float _dt)
 {
 	for (unsigned i = 0; i < itemCount; i++)
@@ -258,7 +301,17 @@ void Updateitem(float _dt)
 		else if (item[i].type == ITEM_KEY)
 		{
 			sfVector2f pos = sfSprite_getPosition(item[i].itemSprite);
-			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) {pos.x + item[i].velocity.x * _dt,pos.y + item[i].velocity.y * _dt});
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { pos.x + item[i].velocity.x * _dt, pos.y + item[i].velocity.y * _dt });
+		}
+		else if (item[i].type == ITEM_ORB_UPGRADE)
+		{
+			item[i].floatTimer += _dt;
+
+			float baseY = item[i].itemPosition.y;
+			float offsetY = sinf(item[i].floatTimer * 2.f) * 8.f;
+
+			sfSprite_setPosition(item[i].itemSprite, (sfVector2f) { item[i].itemPosition.x, baseY + offsetY });
+
 		}
 	}
 
@@ -266,7 +319,7 @@ void Updateitem(float _dt)
 
 	if (sfKeyboard_isKeyPressed(sfKeyW))
 	{
-		Additem(ITEM_KEY, sfSprite_getPosition(player->sprite).x, sfSprite_getPosition(player->sprite).y);
+		Additem(ITEM_KEY, sfSprite_getPosition(player->sprite).x, sfSprite_getPosition(player->sprite).y, 0);
 		//itemCount--;
 	}
 
@@ -355,7 +408,7 @@ void VacuumEffect(void)
 			if (item[i].type == ITEM_KEY)
 			{
 				float strength = 12.55f;
-				item[i].velocity.x += dir.x * 2 *strength;
+				item[i].velocity.x += dir.x * 2 * strength;
 				item[i].velocity.y += dir.y * 2 * strength;
 				if (distance < 300.f)
 				{

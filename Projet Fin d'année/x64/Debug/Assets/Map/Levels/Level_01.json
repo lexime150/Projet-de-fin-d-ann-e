@@ -938,6 +938,17 @@
                  "width":16,
                  "x":3392,
                  "y":912
+                }, 
+                {
+                 "height":16,
+                 "id":158,
+                 "name":"Upgrade-Orb",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":2080,
+                 "y":768
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -969,7 +980,7 @@
          "y":0
         }],
  "nextlayerid":13,
- "nextobjectid":158,
+ "nextobjectid":159,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

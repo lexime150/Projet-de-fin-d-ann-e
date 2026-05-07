@@ -50,6 +50,13 @@ sfBool SavePlayer(int slot)
 	save.diagonalDashUnlocked = player->data.diagonalDashUnlocked;
 	save.horizontalDashUnlocked = player->data.horizontalDashUnlocked;
 
+
+	save.isOrbUpgradeLevel00Collected = player->data.isOrbUpgradeLevel00Collected;
+	save.isOrbUpgradeLevel01Collected = player->data.isOrbUpgradeLevel01Collected;
+	save.isOrbUpgradeLevel02Collected = player->data.isOrbUpgradeLevel02Collected;
+	save.isOrbUpgradeLevel03Collected = player->data.isOrbUpgradeLevel03Collected;
+	save.orbUpgradeCount = player->data.orbUpgradeCount;
+
 	snprintf(save.level, sizeof(save.level), "%s", player->data.level);
 
 	size_t written = fwrite(&save, sizeof(PlayerSaveData), 1, f);
@@ -110,6 +117,11 @@ PlayerSaveData* LoadSave(int slot)
 		player->data.upDashUnlocked = playerSaveData.upDashUnlocked;
 		player->data.diagonalDashUnlocked = playerSaveData.diagonalDashUnlocked;
 		player->data.horizontalDashUnlocked = playerSaveData.horizontalDashUnlocked;
+
+		player->data.isOrbUpgradeLevel00Collected = playerSaveData.isOrbUpgradeLevel00Collected;
+		player->data.isOrbUpgradeLevel01Collected = playerSaveData.isOrbUpgradeLevel01Collected;
+		player->data.isOrbUpgradeLevel02Collected = playerSaveData.isOrbUpgradeLevel02Collected;
+		player->data.isOrbUpgradeLevel03Collected = playerSaveData.isOrbUpgradeLevel03Collected;
 	}
 
 	printf("[Save] Slot %d chargé. (hp=%.0f)\n", slot, playerSaveData.health);

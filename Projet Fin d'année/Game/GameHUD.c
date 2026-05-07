@@ -17,8 +17,13 @@ void DrawHUD(sfRenderWindow* _renderWindow)
 	sfRenderWindow_drawSprite(_renderWindow, hud.healthBarSprite, NULL);
 	sfRenderWindow_drawSprite(_renderWindow, hud.healthBarContainerSprite, NULL);
 
-	sfRenderWindow_drawSprite(_renderWindow, hud.keyFragmentSprite, NULL);
-	sfRenderWindow_drawText(_renderWindow, hud.keyFragmentText, NULL);
+
+	if (GetEnemySpawnTabSize() > 0)
+	{
+		sfRenderWindow_drawSprite(_renderWindow, hud.keyFragmentSprite, NULL);
+		sfRenderWindow_drawText(_renderWindow, hud.keyFragmentText, NULL);
+
+	}
 }
 
 void UpdateHUD()
@@ -57,13 +62,13 @@ void CreateHealthBarHUD()
 	sfSprite_setTexture(hud.healthBarContainerSprite, hud.healthBarTexture, sfTrue);
 	sfSprite_setTextureRect(hud.healthBarContainerSprite, healthBarContainerRect);
 	sfSprite_setPosition(hud.healthBarContainerSprite, (sfVector2f) { 10, 25 });
-	sfSprite_setScale(hud.healthBarContainerSprite, (sfVector2f) {2 * GAME_SCALE, 2 * GAME_SCALE});
+	sfSprite_setScale(hud.healthBarContainerSprite, (sfVector2f) { 2 * GAME_SCALE, 2 * GAME_SCALE });
 
 
 	sfSprite_setTexture(hud.healthBarSprite, hud.healthBarTexture, sfTrue);
 	sfSprite_setTextureRect(hud.healthBarSprite, healthBarRect);
-	sfSprite_setPosition(hud.healthBarSprite, (sfVector2f) { 18 , 33 });
-	sfSprite_setScale(hud.healthBarSprite, (sfVector2f) {2 * GAME_SCALE, 2 * GAME_SCALE});
+	sfSprite_setPosition(hud.healthBarSprite, (sfVector2f) { 18, 33 });
+	sfSprite_setScale(hud.healthBarSprite, (sfVector2f) { 2 * GAME_SCALE, 2 * GAME_SCALE });
 
 }
 
@@ -77,7 +82,7 @@ void CreateKeyNumHUD()
 	sfSprite_setTextureRect(hud.keyFragmentSprite, keyFragmentRect);
 	sfSprite_setScale(hud.keyFragmentSprite, (sfVector2f) { GAME_SCALE * 1.15f, GAME_SCALE * 1.15f });
 	sfFloatRect keyFragmentBound = sfSprite_getGlobalBounds(hud.keyFragmentSprite);
-	sfSprite_setPosition(hud.keyFragmentSprite, (sfVector2f) {SCREEN_WIDTH - keyFragmentBound.width * 1.2f, 2 * GAME_SCALE});
+	sfSprite_setPosition(hud.keyFragmentSprite, (sfVector2f) { SCREEN_WIDTH - keyFragmentBound.width * 1.2f, 2 * GAME_SCALE });
 	keyFragmentBound = sfSprite_getGlobalBounds(hud.keyFragmentSprite);
 
 	hud.keyFragmentText = sfText_create();
@@ -88,5 +93,5 @@ void CreateKeyNumHUD()
 	sfText_setString(hud.keyFragmentText, "0/mobCount");
 	sfText_getGlobalBounds(hud.keyFragmentText);
 	sfFloatRect keyFragmentTextBound = sfText_getGlobalBounds(hud.keyFragmentText);
-	sfText_setPosition(hud.keyFragmentText, (sfVector2f) {keyFragmentBound.left - keyFragmentTextBound.width / 2, keyFragmentBound.top + keyFragmentTextBound.height /2 + 10});
+	sfText_setPosition(hud.keyFragmentText, (sfVector2f) { keyFragmentBound.left - keyFragmentTextBound.width / 2, keyFragmentBound.top + keyFragmentTextBound.height / 2 + 10 });
 }
