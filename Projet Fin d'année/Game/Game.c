@@ -219,7 +219,6 @@ void ChangeLevel(const char* _level)
 	LoadHUD();
 	Loaditem();
 	LoadBoss();
-
 	player->data.keyNumber = 0;
 	player->data.position = GetPlayerSpawn();
 	player->data.velocity.x = 0;
@@ -230,6 +229,7 @@ void ChangeLevel(const char* _level)
 	player->action.isSliding = sfFalse;
 	player->action.isWallJumping = sfFalse;
 	player->action.isSlideJumping = sfFalse;
+	SnapCamera();
 }
 
 void LevelTransition()

@@ -2,7 +2,7 @@
 
 Camera camera;
 Player* player;
-void CenterCamera();
+void CenterCamera(float _dt);
 void LoadCamera()
 {
 	camera.cameraView = sfView_create();
@@ -12,9 +12,12 @@ void LoadCamera()
 
 void UpdateCamera(float _dt)
 {
-	CenterCamera();
+	CenterCamera(_dt);
 }
-
+void SnapCamera()
+{
+	sfView_setCenter(camera.cameraView, player->data.position);
+}
 void DrawCamera(sfRenderWindow* _renderWindow)
 {
 	sfRenderWindow_setView(_renderWindow, camera.cameraView);
@@ -25,11 +28,13 @@ void CleanUpCamera()
 	sfView_destroy(camera.cameraView);
 }
 
-void CenterCamera()
+void CenterCamera(float _dt)
 {
 	sfVector2f camPos = sfView_getCenter(camera.cameraView);
-	camPos.x += (player->data.position.x - camPos.x) * 0.1f;
-	camPos.y += (player->data.position.y - camPos.y) * 0.1f;
+	float speed = 45.0f;
+	float t = 1.0f - powf(1.0f - 0.1f, speed * _dt);
 
+	camPos.x += (player->data.position.x - camPos.x) * t;
+	camPos.y += (player->data.position.y - camPos.y) * t;
 	sfView_setCenter(camera.cameraView, camPos);
 }

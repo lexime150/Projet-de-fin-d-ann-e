@@ -1,3 +1,4 @@
-﻿  Boss.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(244,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
+﻿  Game.c
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.

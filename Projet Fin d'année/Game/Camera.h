@@ -15,5 +15,6 @@ typedef struct Camera
 void LoadCamera();
 void UpdateCamera(float _dt);
 void DrawCamera(sfRenderWindow* _renderWindow);
+void SnapCamera();
 void CleanUpCamera();
 #endif // !CAMERA_H
