@@ -10,7 +10,7 @@ sfMusic* gameMusic;
 
 sfRectangleShape* transitionShape;
 Player* player;
-
+AngelStatue angelStatue;
 
 void LoadGame(void)
 {
@@ -21,6 +21,7 @@ void LoadGame(void)
 	LoadMusic();
 	LoadKey();
 	LoadBoss();
+	LoadAngelStatue();
 }
 
 void UpdateTransition(float _dt)
@@ -121,7 +122,7 @@ void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 		UpdateTransition(_dt);
 		UpdateKey(_dt);
 		UpdateBoss(_dt);
-
+		UpdateAngelStatue(_dt);
 		for (int i = 0; i < GetItemCount(); i++)
 		{
 			GetItemDistance(i);
@@ -138,9 +139,9 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawMob(_renderWindow);
 	DrawKey(_renderWindow);
 	Drawitem(_renderWindow);
+	DrawAngelStatue(_renderWindow);
 	DrawPlayer(_renderWindow);
 	DrawBoss(_renderWindow);
-
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);
 	if (player->action.isTransitioning)
@@ -158,6 +159,8 @@ void CleanupGame(void)
 	Cleanupitem();
 	CleanupKey();
 	CleanupBoss();
+	CleanupAngelStatue();
+	sfMusic_destroy(gameMusic);
 	SavePlayer(playerSaveData.save);
 }
 
@@ -183,6 +186,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadMob();
 		LoadHUD();
 		LoadBoss();
+		LoadAngelStatue();
 	}
 	else
 	{
@@ -195,6 +199,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadKey();
 		LoadBoss();
 		LoadHUD();
+		LoadAngelStatue();
 	}
 }
 
@@ -211,6 +216,7 @@ void ChangeLevel(const char* _level)
 	CleanUpCamera();
 	Cleanupitem();
 	CleanupBoss();
+	CleanupAngelStatue();
 
 	LoadMap(player->data.level);
 	LoadCamera();
@@ -219,6 +225,8 @@ void ChangeLevel(const char* _level)
 	LoadHUD();
 	Loaditem();
 	LoadBoss();
+	LoadAngelStatue();
+
 	player->data.keyNumber = 0;
 	player->data.position = GetPlayerSpawn();
 	player->data.velocity.x = 0;

@@ -7,14 +7,15 @@
 #include "GameState.h"
 
 #include "Map.h"
-#include "Player.h"
-#include "Camera.h"
-#include "Mob.h"
 #include "GameHUD.h"
-
 #include "Key.h"
+
+#include "Camera.h"
+#include "Player.h"
+#include "Mob.h"
 #include "Collectibles.h"
 #include "Boss.h"
+#include "Angel_Statue.h"
 
 
 void LoadGame(void);

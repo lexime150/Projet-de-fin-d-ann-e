@@ -1281,9 +1281,9 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	float playerWidth, playerHeight;
 	GetPlayerHitboxSize(&playerWidth, &playerHeight);
 
-	sfRectangleShape_setSize(player->shape.collisionPlayerShape,(sfVector2f) {playerWidth, playerHeight});
+	sfRectangleShape_setSize(player->shape.collisionPlayerShape, (sfVector2f) { playerWidth, playerHeight });
 
-	sfRectangleShape_setPosition(player->shape.collisionPlayerShape,(sfVector2f) {player->data.position.x - playerWidth / 2.f,player->data.position.y - playerHeight});
+	sfRectangleShape_setPosition(player->shape.collisionPlayerShape, (sfVector2f) { player->data.position.x - playerWidth / 2.f, player->data.position.y - playerHeight });
 
 	player->shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
 	player->shape.playerRect = sfSprite_getGlobalBounds(player->sprite);
@@ -1397,7 +1397,7 @@ void CheckCollisionPlayerSpike(float _dt)
 			else if (playerCenterY > spikeCenterY && (hitPlayer.left < (hitSpike.left + hitSpike.width)) && (hitPlayer.left + hitPlayer.width) > hitSpike.left)
 			{
 				player->spikeSide = HEIGHT;
-				
+
 			}
 		}
 	}
@@ -1592,7 +1592,37 @@ void CollisionPlayerTrigger()
 					{
 						player->data.isOrbUpgradeLevel03Collected = sfTrue;
 					}
-					printf("%d\n",player->data.orbUpgradeCount);
+					printf("%d\n", player->data.orbUpgradeCount);
+				}
+			}
+			else if (strcmp(GetMapTrigger(i).name, "Angel_Statue") == 0 && keyIsPressed && !keyWasPressed)
+			{
+				if (player->data.orbUpgradeCount >= 3)
+				{
+					player->data.orbUpgradeCount -= 3;
+
+					
+					if (player->data.horizontalDashUnlocked == sfFalse)
+					{
+						player->data.dashUnlocked = sfTrue;
+						player->data.horizontalDashUnlocked = sfTrue;
+						printf("You have unlocked HorizontalDash press SHIFT\n");
+					}
+					else if (player->data.upDashUnlocked == sfFalse)
+					{
+						player->data.upDashUnlocked = sfTrue;
+						printf("You have unlocked UpDash press SHIFT + Z\n");
+					}
+					else if (player->data.diagonalDashUnlocked == sfFalse)
+					{
+						player->data.diagonalDashUnlocked = sfTrue;
+						printf("You have unlocked DiagonalDash press SHIFT + Z + D\n");
+					}
+				}
+				else
+				{
+					printf("You don't have enough come back to me when you collected %d more upgrade orbs\n", 3 - player->data.orbUpgradeCount);
+
 				}
 			}
 			else if (keyIsPressed && !keyWasPressed && player->data.keyNumber >= GetMobCount())
@@ -1636,7 +1666,7 @@ void DrawPlayer(sfRenderWindow* _renderWindow)
 	{
 		sfRenderWindow_drawRectangleShape(_renderWindow, player->shape.rectCollisionPlayerMob, NULL);
 		sfRenderWindow_drawRectangleShape(_renderWindow, player->shape.collisionPlayerShape, NULL);
-		//if (player->action.isAttacking)
+		if (player->action.isAttacking)
 		{
 			sfRenderWindow_drawRectangleShape(_renderWindow, player->shape.collisionAttackShape, NULL);
 		}
