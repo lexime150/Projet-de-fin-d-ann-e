@@ -22,6 +22,8 @@ void LoadGame(void)
 	LoadKey();
 	LoadBoss();
 	LoadAngelStatue();
+	LoadTalkbox();
+
 }
 
 void UpdateTransition(float _dt)
@@ -123,6 +125,7 @@ void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 		UpdateKey(_dt);
 		UpdateBoss(_dt);
 		UpdateAngelStatue(_dt);
+		UpdateTalkbox(_dt);
 		for (int i = 0; i < GetItemCount(); i++)
 		{
 			GetItemDistance(i);
@@ -144,6 +147,7 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawBoss(_renderWindow);
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);
+	DrawTalkbox(_renderWindow);
 	if (player->action.isTransitioning)
 	{
 		sfRenderWindow_drawRectangleShape(_renderWindow, transitionShape, NULL);
@@ -160,6 +164,7 @@ void CleanupGame(void)
 	CleanupKey();
 	CleanupBoss();
 	CleanupAngelStatue();
+	CleanupTalkbox();
 	sfMusic_destroy(gameMusic);
 	SavePlayer(playerSaveData.save);
 }

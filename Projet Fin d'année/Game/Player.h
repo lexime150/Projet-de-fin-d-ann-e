@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "Game.h"
 #include "Collectibles.h"
+#include "Talkbox.h"
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32

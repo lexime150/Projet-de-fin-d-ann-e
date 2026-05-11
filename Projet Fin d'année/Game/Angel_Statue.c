@@ -40,5 +40,6 @@ void CleanupAngelStatue(void)
 	if (angelStatue.sprite)
 	{
 		sfSprite_destroy(angelStatue.sprite);
+		angelStatue.sprite = NULL;
 	}
 }

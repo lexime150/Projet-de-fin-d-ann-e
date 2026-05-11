@@ -1582,13 +1582,16 @@ void CollisionPlayerTrigger()
 					if (strcmp(player->data.level, "Level_00") == 0)
 					{
 						player->data.isOrbUpgradeLevel00Collected = sfTrue;
-					}if (strcmp(player->data.level, "Level_01") == 0)
+					}
+					if (strcmp(player->data.level, "Level_01") == 0)
 					{
 						player->data.isOrbUpgradeLevel01Collected = sfTrue;
-					}if (strcmp(player->data.level, "Level_02") == 0)
+					}
+					if (strcmp(player->data.level, "Level_02") == 0)
 					{
 						player->data.isOrbUpgradeLevel02Collected = sfTrue;
-					}if (strcmp(player->data.level, "Level_03") == 0)
+					}
+					if (strcmp(player->data.level, "Level_03") == 0)
 					{
 						player->data.isOrbUpgradeLevel03Collected = sfTrue;
 					}
@@ -1606,22 +1609,22 @@ void CollisionPlayerTrigger()
 					{
 						player->data.dashUnlocked = sfTrue;
 						player->data.horizontalDashUnlocked = sfTrue;
-						printf("You have unlocked HorizontalDash press SHIFT\n");
+						OpenTalkbox("You unlocked the horizontal dash !");
 					}
 					else if (player->data.upDashUnlocked == sfFalse)
 					{
 						player->data.upDashUnlocked = sfTrue;
-						printf("You have unlocked UpDash press SHIFT + Z\n");
+						OpenTalkbox("You unlocked the vertical dash !");
 					}
 					else if (player->data.diagonalDashUnlocked == sfFalse)
 					{
 						player->data.diagonalDashUnlocked = sfTrue;
-						printf("You have unlocked DiagonalDash press SHIFT + Z + D\n");
+						OpenTalkbox("You unlocked the diagonal dash !");
 					}
 				}
 				else
 				{
-					printf("You don't have enough come back to me when you collected %d more upgrade orbs\n", 3 - player->data.orbUpgradeCount);
+					OpenTalkbox("You need atleast 3 orbs to unlock an new movement type !");
 
 				}
 			}

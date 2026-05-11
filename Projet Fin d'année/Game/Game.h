@@ -16,7 +16,7 @@
 #include "Collectibles.h"
 #include "Boss.h"
 #include "Angel_Statue.h"
-
+#include "Talkbox.h"
 
 void LoadGame(void);
 void PollEventGame(sfRenderWindow* _renderWindow);
