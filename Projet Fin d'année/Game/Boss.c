@@ -16,7 +16,7 @@ void CheckAttackBossPlayer();
 
 void LoadBoss(void)
 {
-	if (strcmp(player->data.level, "Level_05") == 0)
+	if (strcmp(player->data.level, "Level_04") == 0)
 	{
 
 		boss.timer = (Timer){ 0 };
@@ -41,7 +41,7 @@ void LoadBoss(void)
 
 void LoadBossAnimation()
 {
-	if (strcmp(player->data.level, "Level_05") == 0)
+	if (strcmp(player->data.level, "Level_04") == 0)
 	{
 		sfIntRect firstFrame = { 0, 0, BOSS_SIZE, BOSS_SIZE };
 		boss.animationBoss[IDLE_1] = CreateAnimation(boss.sprite, 7, 11, sfTrue, sfTrue, firstFrame);
@@ -106,7 +106,7 @@ static void UpdateBossInfo()
 
 void UpdateBoss(float _dt)
 {
-	if (strcmp(player->data.level, "Level_05") == 0)
+	if (strcmp(player->data.level, "Level_04") == 0)
 	{
 		CheckCollisionBossPlat();
 		SetVelocityBoss(_dt);
