@@ -1,3 +1,8 @@
 ﻿  Boss.c
-C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(244,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(122,75): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(122,86): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(122,148): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(122,161): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(301,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(381,15): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe

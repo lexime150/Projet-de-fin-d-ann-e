@@ -4,6 +4,7 @@
 
 Boss boss;
 Player* player;
+float specialCount;
 
 void LoadBossAnimation();
 void SetBossAnimation(BossState _state);
@@ -11,7 +12,10 @@ void StateBossMachine(BossState _state);
 void SetVelocityBoss(float _dt);
 float GetDistanceBossPlayerX();
 void CheckCollisionBossPlat();
-void CheckAttackBossPlayer();
+void CheckAttackBossPlayer(float _dt);
+float GetDistanceObject(sfVector2f _obj1, sfVector2f _obj2);
+
+void CheckCollisionCirclePlayer(float _dt);
 
 
 void LoadBoss(void)
@@ -30,9 +34,16 @@ void LoadBoss(void)
 		sfSprite_setPosition(boss.sprite, GetPlayerSpawn());
 		boss.direction = 1;
 		boss.lastAttack = 0;
+		boss.special = 0;
+		boss.specialAttackEnable = sfFalse;
+		
+		specialCount = 1;
+		boss.specialAttackOpacity = 0.f;
 
 		boss.attackShape = CreateRectangle((sfVector2f) { 130.f, 128.f }, (sfVector2f){ 65.f, 128.f }, (sfVector2f){ GAME_SCALE, GAME_SCALE }, sfBlue);
 		boss.hurtShape = CreateRectangle((sfVector2f){100.f, 128.f}, (sfVector2f){50.f, 128.f}, (sfVector2f){GAME_SCALE, GAME_SCALE}, sfRed);
+
+		boss.specialAttackShape = CreateCircle(10.f, sfSprite_getPosition(boss.sprite), sfTransparent, sfGreen);
 
 		LoadBossAnimation();
 	}
@@ -102,13 +113,31 @@ static void UpdateBossInfo()
 	sfRectangleShape_setPosition(boss.attackShape, posPlayer);
 	sfRectangleShape_setPosition(boss.hurtShape, posPlayer);
 
+
+	if (boss.currentState == SPECIAL)
+	{
+		specialCount += 0.13f;
+		boss.specialAttackOpacity += (1.f + rand() % 6);
+		sfCircleShape_setScale(boss.specialAttackShape, (sfVector2f) { specialCount* GAME_SCALE, specialCount* GAME_SCALE });
+		sfCircleShape_setOutlineColor(boss.specialAttackShape, sfColor_fromRGBA(0.f, 255.f - boss.specialAttackOpacity * 1.5f, boss.specialAttackOpacity * 2.f, 255.f - boss.specialAttackOpacity));
+	}
+	else
+	{
+		specialCount = 1.f;
+		sfCircleShape_setScale(boss.specialAttackShape, (sfVector2f) { specialCount* GAME_SCALE, specialCount* GAME_SCALE });
+	}
+
+
 }
 
 void UpdateBoss(float _dt)
 {
 	if (strcmp(player->data.level, "Level_04") == 0)
 	{
+	
+
 		CheckCollisionBossPlat();
+		CheckAttackBossPlayer(_dt);
 		SetVelocityBoss(_dt);
 		UpdateBossInfo();
 		UpdateAnimation(boss.currentAnimation, _dt);
@@ -119,8 +148,18 @@ void DrawBoss(sfRenderWindow* _renderWindow)
 {
 	if (boss.sprite != NULL)
 	{
-		sfRenderWindow_drawRectangleShape(_renderWindow, boss.attackShape, NULL);
-		sfRenderWindow_drawRectangleShape(_renderWindow, boss.hurtShape, NULL);
+		//sfRenderWindow_drawRectangleShape(_renderWindow, boss.attackShape, NULL);
+		//sfRenderWindow_drawRectangleShape(_renderWindow, boss.hurtShape, NULL);
+		if (boss.currentState == SPECIAL)
+		{
+			sfRenderWindow_drawCircleShape(_renderWindow, boss.specialAttackShape, NULL);
+
+		}
+		else
+		{
+			specialCount = 1.f;
+		}
+
 		sfRenderWindow_drawSprite(_renderWindow, boss.sprite, NULL);
 	}
 }
@@ -157,6 +196,7 @@ void SetVelocityBoss(float _dt)
 		float distX = GetDistanceBossPlayerX();
 
 
+
 		if ((fabs(distX) < 500.f) && (fabs(distX) > 200.f))
 		{
 			if (distX > 0)
@@ -186,11 +226,11 @@ void SetVelocityBoss(float _dt)
 				boss.velocity.x = -150.f;
 			}
 
-			state = RUN_BOSS;
+			state = WALK;
 
 		}
 		//---ATTACK---//
-		else if ((fabs(distX) < 100.f) && (boss.timer.timerAttack > 2.f) && (boss.currentState != ATTACK_1 && boss.currentState != ATTACK_2 && boss.currentState != ATTACK_3))
+		else if ((fabs(distX) < 100.f) && (boss.timer.timerAttack > 2.f) && (boss.currentState != ATTACK_1 && boss.currentState != ATTACK_2 && boss.currentState != ATTACK_3 && boss.currentState != SPECIAL)) //&& boss.special < SPECIAL_NUMBER)
 		{
 			boss.timer.timerAttack = 0;
 
@@ -209,8 +249,9 @@ void SetVelocityBoss(float _dt)
 			{
 				boss.lastAttack = ATTACK_1;
 				state = ATTACK_1;
+				boss.special++;
 			}
-			else
+			else if(boss.special < SPECIAL_NUMBER)
 			{
 				if (boss.lastAttack == ATTACK_1)
 				{
@@ -227,6 +268,23 @@ void SetVelocityBoss(float _dt)
 					boss.lastAttack = ATTACK_1;
 					state = ATTACK_1;
 				}
+				boss.special++;
+			}
+			else if (boss.special >= SPECIAL_NUMBER)
+			{	
+				if (boss.currentState != SPECIAL)
+				{
+					state = IDLE_1;
+					boss.special = 0;
+				}
+
+
+				printf("%d\n", boss.special);
+				state = SPECIAL;
+				sfCircleShape_setPosition(boss.specialAttackShape, (sfVector2f) { sfSprite_getPosition(boss.sprite).x + 25.f, sfSprite_getPosition(boss.sprite).y - 150.f});
+				
+
+			
 			}
 		}
 		//---IDLE---//
@@ -239,7 +297,6 @@ void SetVelocityBoss(float _dt)
 	else
 	{
 		boss.velocity.y = GRAVITY;
-		//printf("llo");
 	}
 	sfSprite_setScale(boss.sprite, (sfVector2f) { boss.direction * GAME_SCALE, GAME_SCALE });
 	sfSprite_move(boss.sprite, (sfVector2f) { boss.velocity.x * _dt, boss.velocity.y * _dt });
@@ -313,6 +370,43 @@ void CheckCollisionBossPlat()
 	}
 }
 
+void CheckCollisionCirclePlayer(float _dt)
+{
+	boss.timer.specialAttackTimer += _dt;
+
+	sfVector2f posPlayer = sfSprite_getPosition(player->sprite);
+	sfVector2f posCircle = sfCircleShape_getPosition(boss.specialAttackShape);
+	float circleSize = sfCircleShape_getRadius(boss.specialAttackShape) * sfCircleShape_getScale(boss.specialAttackShape).x;
+
+	float dist = fabs(GetDistanceObject(posPlayer, posCircle));
+
+	if (dist < circleSize && boss.timer.specialAttackTimer > 1.f)
+	{
+		boss.specialAttackEnable = sfTrue;
+		boss.timer.specialAttackTimer = 0;
+
+		StateMachine(FALL);
+		//player->data.knockBackTimer += 0.75f;
+		player->action.isGrounded = sfFalse;
+		player->data.velocity.y = -650.f;
+		PlayerDamage(40);
+		if (posPlayer.x > posCircle.x)
+		{
+			player->data.velocity.x = 850.f;
+		}
+		else if(posPlayer.x < posCircle.x)
+		{
+			player->data.velocity.x = -850.f;
+		}
+
+
+	}
+	else if ((boss.timer.specialAttackTimer > 1.f) && (boss.currentState != SPECIAL))
+	{
+		boss.specialAttackEnable = sfFalse;
+	}
+}
+
 
 
 
@@ -323,26 +417,91 @@ float GetDistanceBossPlayerX()
 	return distX;
 }
 
-void CheckAttackBossPlayer()
+void CheckAttackBossPlayer(float _dt)
 {
 	sfFloatRect hitBoss = sfRectangleShape_getGlobalBounds(boss.attackShape);
 	sfFloatRect hitPlayer = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
 
 	if (sfFloatRect_intersects(&hitBoss, &hitPlayer, NULL))
 	{
-		if (boss.currentState == ATTACK_1)
+		float posPlayerX = sfSprite_getPosition(player->sprite).x;
+		float posBossX = sfSprite_getPosition(boss.sprite).x;
+		float scale = GAME_SCALE;
+		int hp = 0;
+		if ((boss.special < SPECIAL_NUMBER) || (boss.currentState != SPECIAL))
 		{
-			if (boss.currentAnimation->currentFrame == 10)
+			if (boss.currentState == ATTACK_1)
 			{
-				player->action.isGrounded;
+				if (boss.currentAnimation->currentFrame == 10)
+				{
 
+					player->action.isGrounded = sfFalse;
+					player->data.velocity.x = 250.f;
+					player->data.velocity.y = -1000.f;
+					//PlayerDamage(35 + rand() % 35);
+					hp = 16;
+					player->data.knockBackTimer += 0.4f;
+					StateMachine(FALL);
+				}
 
 			}
+			else if (boss.currentState == ATTACK_2)
+			{
+				if (boss.currentAnimation->currentFrame == 6)
+				{
+					player->action.isGrounded = sfFalse;
+					player->data.velocity.y = -200.f;
+					player->data.velocity.x = 750.f;
 
+					if (posPlayerX < posBossX)
+					{
+						scale *= -1.f;
+						player->data.velocity.x *= -1.f;
+					}
+
+					player->data.knockBackTimer += 0.06f;
+					hp = 21;
+					sfSprite_setScale(player->sprite, (sfVector2f) { scale, GAME_SCALE });
+					StateMachine(FALL);
+				}
+			}
+			else if (boss.currentState == ATTACK_3)
+			{
+				if (boss.currentAnimation->currentFrame == 7)
+				{
+					player->action.isGrounded = sfFalse;
+					player->data.velocity.y = -350.f;
+					player->data.velocity.x = 500.f;
+
+					if (posPlayerX < posBossX)
+					{
+						scale *= -1.f;
+						player->data.velocity.x *= -1.f;
+					}
+
+					player->data.knockBackTimer += 0.3f;
+					hp = 25;
+					sfSprite_setScale(player->sprite, (sfVector2f) { scale, GAME_SCALE });
+					StateMachine(FALL);
+				}
+			}
 		}
 
-
+		if (hp > 0)
+		{
+			PlayerDamage(hp + (rand() % hp));
+		}
 	}
 
+	CheckCollisionCirclePlayer(_dt);
 
+}
+
+
+float GetDistanceObject(sfVector2f _obj1, sfVector2f _obj2)
+{
+	float distX = _obj1.x - _obj2.x;
+	float distY = _obj1.y - _obj2.y;
+
+	return sqrtf((distX * distX) + (distY * distY));
 }

@@ -155,6 +155,12 @@ void CheckCollisionPlayerAttackMob(float _dt)
 		player->action.isInvincible = sfTrue;
 	}
 
+	if (player->data.knockBackTimer > 0)
+	{
+		player->data.knockBackTimer -= _dt;
+		return;
+	}
+
 
 	for (unsigned i = 0; i < GetMobCount(); i++)
 	{
@@ -196,12 +202,14 @@ void CheckCollisionPlayerAttackMob(float _dt)
 				{
 					if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound && !player->action.damageEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 					{
-						player->data.timerInvincible = 0;
+						//player->data.timerInvincible = 0;
 						player->action.damageEnable = sfTrue;
 
-						player->data.health -= mob[i].damage + rand() % mob[i].damage;
-
-
+						//player->data.health -= mob[i].damage + rand() % mob[i].damage;
+						//printf("%f\n", player->data.health);
+						
+						PlayerDamage(25);//mob[i].damage + (rand() % mob[i].damage));
+						//printf("%f\n", player->data.health);
 
 					}
 					else //if (player->data.timerInvincible )//!mob[i].currentMobAnimation->isPlaying)
@@ -303,8 +311,7 @@ void CheckCollisionPlayerMob(float _dt)
 				player->data.knockBackTimer += 0.2f;
 				player->action.isSlideJumping = sfFalse;
 				player->action.isTouchingWall = sfFalse;
-				player->action.isInvincible = sfTrue;
-				player->data.health -= 15;
+				PlayerDamage(mob[i].damage + rand() % mob[i].damage);
 
 				if (playerCenterX > (mobCenterX)+PLAYER_MOB_MARGE)
 				{
@@ -349,6 +356,8 @@ void CheckCollisionPlayerMob(float _dt)
 
 void ApplyPhysic(float _dt)
 {
+
+
 	if (!player->action.isGrounded)
 	{
 		if (player->action.isDashing && player->currentState == DASH_GROUND)
@@ -950,7 +959,7 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 		if (_dashDiagonal && player->data.diagonalDashUnlocked)
 		{
 			player->data.dashVelocityX = (playerScale < 0) ? -550.f : 550.f;
-			player->data.dashVelocityY = -550.f;
+			player->data.dashVelocityY = -DASH_Y;
 			state = DASH_DIAGONAL;
 			validDash = sfTrue;
 		}
@@ -1093,6 +1102,12 @@ void HandleAnimationState(float _dt, sfBool movingLeft, sfBool movingRight)
 
 void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 {
+	if (player->data.knockBackTimer > 0)
+	{
+		player->data.knockBackTimer -= _dt;
+		return;
+	}
+
 	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
 	sfBool movingRight = sfKeyboard_isKeyPressed(sfKeyD);
 	sfBool slideKey = sfKeyboard_isKeyPressed(sfKeyLControl) || sfKeyboard_isKeyPressed(sfKeyRControl);
@@ -1454,9 +1469,9 @@ void BasePlayer()
 
 	player->data = (Stats){ 0 };
 	player->action = (Action){ 0 };
-	player->texture = sfTexture_createFromFile("Assets/Sprites/Game/Player/playerUpD.png", NULL);
+	//player->texture = sfTexture_createFromFile("Assets/Sprites/Game/Player/playerUpD.png", NULL);
 
-	CreateSprite(player->texture, &player->sprite, ORIGIN_CENTER_X, GetPlayerSpawn());
+	player->sprite = CreateSprite("Assets/Sprites/Game/Player/playerUpD.png", GetPlayerSpawn());
 	sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
 	player->action.isTransitioning = sfTrue;
@@ -1663,4 +1678,14 @@ void StateMachine(PlayerState _state)
 float RandomFloat(float min, float max)
 {
 	return min + (float)rand() / (float)RAND_MAX * (max - min);
+}
+
+void PlayerDamage(int _hp)
+{
+	if (player->data.timerInvincible > TIMER_INVINCIBLE && (_hp > 0))
+	{
+		player->data.health -= _hp;
+		player->action.isInvincible = sfTrue;
+		player->data.timerInvincible = 0;
+	}
 }

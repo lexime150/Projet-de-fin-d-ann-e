@@ -19,9 +19,7 @@ void LoadKey(void)
 
 		sfTexture* texture = sfTexture_createFromFile("Assets/Sprites/Game/Key/Key.png", NULL);
 		sfTexture* textureExtraKey = sfTexture_createFromFile("Assets/Sprites/Game/Key/Keyboard Extras.png", NULL);
-		sfTexture* texturePlayer = sfTexture_createFromFile("Assets/Sprites/Game/Player/playerUpD.png", NULL);
-
-		CreateSprite(texturePlayer, &playerSprite, ORIGIN_VANILLA, (sfVector2f) { GetKeyTab(0).left, GetKeyTab(0).top + 100.f });
+		playerSprite = CreateSprite("Assets/Sprites/Game/Player/playerUpD.png", (sfVector2f) {GetKeyTab(0).left, GetKeyTab(0).top + 100.f});
 		sfSprite_setTextureRect(playerSprite, (sfIntRect) { 1 * 32.f, 1 * 32.f, 32.f, 32.f });
 		sfSprite_setScale(playerSprite, (sfVector2f) { 2.5f, 2.5f });
 
