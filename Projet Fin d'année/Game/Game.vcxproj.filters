@@ -81,6 +81,12 @@
     <ClCompile Include="Boss.c">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Angel_Statue.c">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Talkbox.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -133,6 +139,12 @@
     </ClInclude>
     <ClInclude Include="Boss.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Angel_Statue.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Talkbox.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
