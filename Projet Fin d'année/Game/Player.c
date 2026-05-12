@@ -122,7 +122,7 @@ void LoadAnimationPlayer(void)
 	player->animationPlayer[CROUCH_IDLE] = CreateAnimation(player->sprite, 2, 5, sfTrue, sfTrue, firstFrame);
 
 	firstFrame = (sfIntRect){ 0, (16 * PLAYER_HEIGHT), PLAYER_WIDTH, PLAYER_HEIGHT };
-	player->animationPlayer[CROUCH_WALK] = CreateAnimation(player->sprite, 6, 11, sfTrue, sfTrue, firstFrame);
+	player->animationPlayer[CROUCH_WALK] = CreateAnimation(player->sprite, 6, 8, sfTrue, sfTrue, firstFrame);
 	SetAnimation(IDLE);
 }
 
@@ -446,16 +446,17 @@ void ApplyHorizontalInput(sfRenderWindow* _renderWindow, sfBool movingLeft, sfBo
 	{
 		if (!player->action.isDashing)
 		{
+			float currentSpeed = player->action.isCrouching ? player->data.speed * 0.65f : player->data.speed;
 			if (movingRight)
 			{
-				player->data.velocity.x = player->data.speed;
+				player->data.velocity.x = currentSpeed;
 				player->data.lastDirection = 1;
 				player->action.isMoving = sfTrue;
 				sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 			}
 			else if (movingLeft)
 			{
-				player->data.velocity.x = -player->data.speed;
+				player->data.velocity.x = -currentSpeed;
 				player->data.lastDirection = -1;
 				player->action.isMoving = sfTrue;
 				sfSprite_setScale(player->sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
