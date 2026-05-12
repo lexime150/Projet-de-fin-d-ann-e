@@ -14,6 +14,7 @@ typedef struct AngelStatue
 
 void LoadAngelStatue(void);
 void UpdateAngelStatue(float _dt);
+void DrawAngelStatue(sfRenderWindow* _renderWindow);
 void CleanupAngelStatue(void);
 
 

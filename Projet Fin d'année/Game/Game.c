@@ -23,6 +23,7 @@ void LoadGame(void)
 	LoadBoss();
 	LoadAngelStatue();
 	LoadTalkbox();
+	LoadFlyMob();
 
 }
 
@@ -126,6 +127,8 @@ void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 		UpdateBoss(_dt);
 		UpdateAngelStatue(_dt);
 		UpdateTalkbox(_dt);
+		UpdateFlyMob(_dt);
+
 		for (int i = 0; i < GetItemCount(); i++)
 		{
 			GetItemDistance(i);
@@ -145,9 +148,12 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawAngelStatue(_renderWindow);
 	DrawPlayer(_renderWindow);
 	DrawBoss(_renderWindow);
+	DrawFlyMob(_renderWindow);
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);
 	DrawTalkbox(_renderWindow);
+
+
 	if (player->action.isTransitioning)
 	{
 		sfRenderWindow_drawRectangleShape(_renderWindow, transitionShape, NULL);

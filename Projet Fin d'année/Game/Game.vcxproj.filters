@@ -87,6 +87,9 @@
     <ClCompile Include="Talkbox.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="Flying mob.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="Talkbox.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Flying mob.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

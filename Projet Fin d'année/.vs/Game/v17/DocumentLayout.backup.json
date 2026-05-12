@@ -3,16 +3,52 @@
   "WorkspaceRootPath": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Boss.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Boss.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Flying mob.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Flying mob.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Flying mob.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Flying mob.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Tool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Tool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Animation.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Animation.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Angel_Statue.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Angel_Statue.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Angel_Statue.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Angel_Statue.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Common.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Common.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Boss.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Boss.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Boss.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Boss.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Key.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -27,16 +63,8 @@
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Talkbox.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Talkbox.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -47,20 +75,12 @@
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Talkbox.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Angel_Statue.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Angel_Statue.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Camera.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Camera.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Common.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Common.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -86,19 +106,47 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 18,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 12,
               "Title": "Key.c",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Key.c",
               "RelativeDocumentMoniker": "Game\\Key.c",
               "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Key.c",
               "RelativeToolTip": "Game\\Key.c",
-              "ViewState": "AgIAAIoAAAAAAAAAAAAAAJ0AAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-05-05T14:31:26.868Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Game.c",
+              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c",
+              "RelativeDocumentMoniker": "Game\\Game.c",
+              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c",
+              "RelativeToolTip": "Game\\Game.c",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAgwJYAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-05-11T07:16:51.942Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Angel_Statue.c",
+              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Angel_Statue.c",
+              "RelativeDocumentMoniker": "Game\\Angel_Statue.c",
+              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Angel_Statue.c",
+              "RelativeToolTip": "Game\\Angel_Statue.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-05-11T08:07:51.172Z",
               "IsPinned": true,
               "EditorCaption": ""
             },
@@ -112,20 +160,85 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
+              "Title": "Tool.h",
+              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Tool.h",
+              "RelativeDocumentMoniker": "Game\\Tool.h",
+              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Tool.h",
+              "RelativeToolTip": "Game\\Tool.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-05-12T14:01:52.817Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Animation.c",
+              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Animation.c",
+              "RelativeDocumentMoniker": "Game\\Animation.c",
+              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Animation.c",
+              "RelativeToolTip": "Game\\Animation.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-05-12T13:22:35.601Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Flying mob.h",
+              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Flying mob.h",
+              "RelativeDocumentMoniker": "Game\\Flying mob.h",
+              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Flying mob.h",
+              "RelativeToolTip": "Game\\Flying mob.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-05-12T13:07:07.24Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Flying mob.c",
+              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Flying mob.c",
+              "RelativeDocumentMoniker": "Game\\Flying mob.c",
+              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Flying mob.c",
+              "RelativeToolTip": "Game\\Flying mob.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-05-12T12:58:49.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Boss.h",
+              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Boss.h",
+              "RelativeDocumentMoniker": "Game\\Boss.h",
+              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Boss.h",
+              "RelativeToolTip": "Game\\Boss.h",
+              "ViewState": "AgIAAAMAAAAAAAAAAAApwEkAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-05-12T09:45:57.641Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "Boss.c",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Boss.c",
               "RelativeDocumentMoniker": "Game\\Boss.c",
               "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Boss.c",
               "RelativeToolTip": "Game\\Boss.c",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAAAC8AAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAALABAAAAAAAAAAAqwLwBAABUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-05-12T09:27:56.854Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 13,
               "Title": "Key.h",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Key.h",
               "RelativeDocumentMoniker": "Game\\Key.h",
@@ -137,7 +250,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 14,
               "Title": "Map.h",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Map.h",
               "RelativeDocumentMoniker": "Game\\Map.h",
@@ -149,7 +262,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 15,
               "Title": "Talkbox.c",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Talkbox.c",
               "RelativeDocumentMoniker": "Game\\Talkbox.c",
@@ -161,7 +274,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 16,
               "Title": "Player.h",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Player.h",
               "RelativeDocumentMoniker": "Game\\Player.h",
@@ -179,13 +292,14 @@
               "RelativeDocumentMoniker": "Game\\Game.h",
               "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.h",
               "RelativeToolTip": "Game\\Game.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-05-11T08:35:38.143Z"
+              "WhenOpened": "2026-05-11T08:35:38.143Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 23,
               "Title": "Menu.c",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Menu.c",
               "RelativeDocumentMoniker": "Game\\Menu.c",
@@ -197,57 +311,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 9,
               "Title": "Common.h",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Common.h",
               "RelativeDocumentMoniker": "Game\\Common.h",
               "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Common.h",
               "RelativeToolTip": "Game\\Common.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-05-11T08:08:39.107Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Angel_Statue.c",
-              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Angel_Statue.c",
-              "RelativeDocumentMoniker": "Game\\Angel_Statue.c",
-              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Angel_Statue.c",
-              "RelativeToolTip": "Game\\Angel_Statue.c",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-05-11T08:07:51.172Z",
+              "WhenOpened": "2026-05-11T08:08:39.107Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Game.c",
-              "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c",
-              "RelativeDocumentMoniker": "Game\\Game.c",
-              "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c",
-              "RelativeToolTip": "Game\\Game.c",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAAAGQAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-05-11T07:16:51.942Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "Player.c",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Player.c",
               "RelativeDocumentMoniker": "Game\\Player.c",
               "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Player.c",
               "RelativeToolTip": "Game\\Player.c",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADEGAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAIEFAAAAAAAAAAApwKYFAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-05-11T08:46:48.825Z"
+              "WhenOpened": "2026-05-11T08:46:48.825Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 22,
               "Title": "Save.c",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Save.c",
               "RelativeDocumentMoniker": "Game\\Save.c",
@@ -259,7 +349,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 17,
               "Title": "Talkbox.h",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Talkbox.h",
               "RelativeDocumentMoniker": "Game\\Talkbox.h",
@@ -271,19 +361,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 7,
               "Title": "Angel_Statue.h",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Angel_Statue.h",
               "RelativeDocumentMoniker": "Game\\Angel_Statue.h",
               "ToolTip": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Angel_Statue.h",
               "RelativeToolTip": "Game\\Angel_Statue.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAwwBQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-05-11T08:06:16.886Z"
+              "WhenOpened": "2026-05-11T08:06:16.886Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 21,
               "Title": "Collectibles.c",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Collectibles.c",
               "RelativeDocumentMoniker": "Game\\Collectibles.c",
@@ -295,7 +386,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 20,
               "Title": "main.c",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\main.c",
               "RelativeDocumentMoniker": "Game\\main.c",
@@ -307,7 +398,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 19,
               "Title": "Camera.h",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Camera.h",
               "RelativeDocumentMoniker": "Game\\Camera.h",
@@ -319,7 +410,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 18,
               "Title": "Camera.c",
               "DocumentMoniker": "C:\\Users\\Etudiant4\\Documents\\GitHub\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Camera.c",
               "RelativeDocumentMoniker": "Game\\Camera.c",
