@@ -12,7 +12,7 @@ sfBool loadKey = sfTrue;
 
 void LoadKey(void)
 {
-	if (strcmp(player->data.level, "Level_00") == 0 && loadKey)
+	if (strcmp(player->data.level, "Level_05") == 0 && loadKey)
 	{
 		int keyIndex = 0;
 		int extraKeyIndex = 0;
@@ -155,7 +155,7 @@ void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, ExtraKey _i)
 
 void UpdateKey(float _dt)
 {
-	if (strcmp(player->data.level, "Level_00") == 0)
+	if (strcmp(player->data.level, "Level_05") == 0)
 	{
 		UpdateNormalKey(_dt);
 		UpdateExtraKey(_dt);

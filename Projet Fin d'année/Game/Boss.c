@@ -20,7 +20,7 @@ void CheckCollisionCirclePlayer(float _dt);
 
 void LoadBoss(void)
 {
-	if (strcmp(player->data.level, "Level_04") == 0)
+	if (strcmp(player->data.level, "Level_05") == 0)
 	{
 
 		boss.timer = (Timer){ 0 };
@@ -40,7 +40,7 @@ void LoadBoss(void)
 		specialCount = 1;
 		boss.specialAttackOpacity = 0.f;
 
-		boss.attackShape = CreateRectangle((sfVector2f) { 130.f, 128.f }, (sfVector2f){ 65.f, 128.f }, (sfVector2f){ GAME_SCALE, GAME_SCALE }, sfBlue);
+		boss.attackShape = CreateRectangle((sfVector2f) { 100.f, 100.f }, (sfVector2f){ 50.f, 100.f }, (sfVector2f){ GAME_SCALE, GAME_SCALE }, sfBlue);
 		boss.hurtShape = CreateRectangle((sfVector2f){100.f, 128.f}, (sfVector2f){50.f, 128.f}, (sfVector2f){GAME_SCALE, GAME_SCALE}, sfRed);
 
 		boss.specialAttackShape = CreateCircle(10.f, sfSprite_getPosition(boss.sprite), sfTransparent, sfGreen);
@@ -52,7 +52,7 @@ void LoadBoss(void)
 
 void LoadBossAnimation()
 {
-	if (strcmp(player->data.level, "Level_04") == 0)
+	if (strcmp(player->data.level, "Level_05") == 0)
 	{
 		sfIntRect firstFrame = { 0, 0, BOSS_SIZE, BOSS_SIZE };
 		boss.animationBoss[IDLE_1] = CreateAnimation(boss.sprite, 7, 11, sfTrue, sfTrue, firstFrame);
@@ -132,7 +132,7 @@ static void UpdateBossInfo()
 
 void UpdateBoss(float _dt)
 {
-	if (strcmp(player->data.level, "Level_04") == 0)
+	if (strcmp(player->data.level, "Level_05") == 0)
 	{
 	
 
@@ -249,7 +249,7 @@ void SetVelocityBoss(float _dt)
 			{
 				boss.lastAttack = ATTACK_1;
 				state = ATTACK_1;
-				boss.special++;gj
+				boss.special++;
 			}
 			else if(boss.special < SPECIAL_NUMBER)
 			{
@@ -420,6 +420,8 @@ void CheckAttackBossPlayer(float _dt)
 {
 	sfFloatRect hitBoss = sfRectangleShape_getGlobalBounds(boss.attackShape);
 	sfFloatRect hitPlayer = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
+	
+
 
 	if (sfFloatRect_intersects(&hitBoss, &hitPlayer, NULL))
 	{
@@ -431,7 +433,7 @@ void CheckAttackBossPlayer(float _dt)
 		{
 			if (boss.currentState == ATTACK_1)
 			{
-				if (boss.currentAnimation->currentFrame == 10)
+				if (boss.currentAnimation->currentFrame == 10 )
 				{
 
 					player->action.isGrounded = sfFalse;
