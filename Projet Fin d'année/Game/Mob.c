@@ -4,7 +4,7 @@
 
 Mob* mob = { 0 };
 
-sfTexture* texture[MOB_NUMBER];
+char* adresse[MOB_NUMBER];
 sfSoundBuffer* mushroomHitBuffer;
 
 Player* player;
@@ -36,9 +36,10 @@ float RandomFloatMob(float min, float max)
 
 void LoadMob(void)
 {
-	texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/Champignon du Mordhor.png", NULL);
-	texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/skeleton.png", NULL);
-
+	//texture[MUSHROOM] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/Champignon du Mordhor.png", NULL);
+	//texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/skeleton.png", NULL);
+	adresse[MUSHROOM] = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";
+	adresse[SKELETON] = "Assets/Sprites/Game/Mob/skeleton.png";
 
 
 	mob = malloc(sizeof(Mob));
@@ -94,8 +95,8 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 	newMob.mobType = _type;
 
-	CreateSprite(texture[_type], &newMob.sprite, ORIGIN_CENTER_X, (sfVector2f) { _x, _y });
-
+	//CreateSprite(texture[_type], &newMob.sprite, ORIGIN_CENTER_X, (sfVector2f) { _x, _y });
+	newMob.sprite = CreateSprite(adresse[_type], (sfVector2f) { _x, _y });
 	
 	newMob.shape.attackRect = sfRectangleShape_create();
 
@@ -851,10 +852,10 @@ void DrawMob(sfRenderWindow* _renderWindow)
 
 void CleanupMob(void)
 {
-	sfTexture_destroy(texture[MUSHROOM]);
-	sfTexture_destroy(texture[SKELETON]);
-	texture[MUSHROOM] = NULL;
-	texture[SKELETON] = NULL;
+	//sfTexture_destroy(texture[MUSHROOM]);
+	//sfTexture_destroy(texture[SKELETON]);
+	//texture[MUSHROOM] = NULL;
+	//texture[SKELETON] = NULL;
 
 
 	for (unsigned i = 0; i < mobCount; i++)

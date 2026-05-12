@@ -1,36 +1,36 @@
-﻿  Angel_Statue.c
-  Animation.c
+﻿  Animation.c
   Boss.c
   Camera.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(244,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(122,75): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(122,86): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(122,148): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(122,161): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(301,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(381,15): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
   Collectibles.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Collectibles.c(23,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Collectibles.c(270,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Collectibles.c(23,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Collectibles.c(270,20): warning C4018: '<' : incompatibilité signed/unsigned
   Game.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Game.c(145,2): warning C4013: 'DrawAngelStatue' non défini(e) ; extern retournant int pris par défaut
   GameHUD.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\GameHUD.c(34,42): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\GameHUD.c(34,42): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
   GameOver.c
   GameState.c
   Key.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(25,57): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(25,67): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(25,75): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(25,81): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(48,21): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(149,72): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(149,79): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(149,102): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(149,121): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(23,57): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(23,67): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(23,75): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(23,81): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(46,21): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(149,72): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(149,79): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(149,102): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(149,121): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+  main.c
   Map.c
   Menu.c
   Mob.c
   Player.c
   Save.c
-  Talkbox.c
-  main.c
+  Tool.c
   Génération de code en cours...
-  LINK : C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe introuvable ou non généré par la dernière édition de liens incrémentielle ; édition de liens complète en cours
-  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
-  'pwsh.exe' n'est pas reconnu en tant que commande interne
-  ou externe, un programme exécutable ou un fichier de commandes.
+  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe

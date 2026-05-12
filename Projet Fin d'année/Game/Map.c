@@ -109,6 +109,7 @@ void LoadMap(char* _mapName)
 
 	sprintf_s(filename, FILENAME_MAX, "Assets/Map/Tilesets/%s", map->tilesets->image.ptr);
 	tileTexture = sfTexture_createFromFile(filename, NULL);
+	//sfTexture_setSmooth(tileTexture, sfFalse);
 
 
 	tileSprite = sfSprite_create();

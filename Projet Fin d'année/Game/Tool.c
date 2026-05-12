@@ -1,35 +1,14 @@
 #include "Tool.h"
 
 
-void CreateSprite(sfTexture* _texture, sfSprite** _sprite, OriginSprite _origin, sfVector2f _pos)
+sfSprite* CreateSprite(char* _texture,  sfVector2f _pos)
 {
 
-	//*_texture = sfTexture_createFromFile(_char, NULL);
-	*_sprite = sfSprite_create();
-
-	sfSprite_setTexture(*_sprite, _texture, sfTrue);
-	//sfSprite_setTextureRect(*_sprite, _textureRect);
-	
-	sfVector2f sizeSprite = { sfSprite_getGlobalBounds(*_sprite).width, sfSprite_getGlobalBounds(*_sprite).height};
-	switch (_origin)
-	{
-	case ORIGIN_VANILLA:
-		sizeSprite = (sfVector2f){ 0 };
-		break;
-	case ORIGIN_CENTER:
-		sizeSprite.x /= 2;
-		sizeSprite.y /= 2;
-		break;
-	case ORIGIN_CENTER_X:
-		sizeSprite.x /= 2;
-		break;
-	default:
-		break;
-	}
-
-	sfSprite_setOrigin(*_sprite, sizeSprite);
-	sfSprite_setPosition(*_sprite, _pos);
-
+	sfSprite* sprite = sfSprite_create();
+	sfTexture* texture = sfTexture_createFromFile(_texture, NULL);
+	sfSprite_setTexture(sprite, texture, sfTrue);
+	sfSprite_setPosition(sprite, _pos);
+	return sprite;
 }
 
 sfRectangleShape* CreateRectangle(sfVector2f _size, sfVector2f _origin, sfVector2f _scale, sfColor _color)
@@ -42,4 +21,17 @@ sfRectangleShape* CreateRectangle(sfVector2f _size, sfVector2f _origin, sfVector
 
 	return rect;
 
+}
+
+sfCircleShape* CreateCircle(float _radius, sfVector2f _pos, sfColor _fillColor, sfColor _outlineColor)
+{
+	sfCircleShape* circle = sfCircleShape_create();
+	sfCircleShape_setRadius(circle, _radius);
+	sfCircleShape_setOrigin(circle, (sfVector2f) { _radius, _radius });
+	sfCircleShape_setFillColor(circle, _fillColor);
+	sfCircleShape_setOutlineThickness(circle, 0.4f);
+	sfCircleShape_setOutlineColor(circle, _outlineColor);
+	sfCircleShape_setPosition(circle, _pos);
+
+	return circle;
 }

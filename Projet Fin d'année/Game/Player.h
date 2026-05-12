@@ -254,4 +254,6 @@ void CleanUpPlayer(void);
 
 void StateMachine(PlayerState _state);
 
+void PlayerDamage(int _hp);
+
 #endif
