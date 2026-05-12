@@ -108,6 +108,8 @@ typedef enum PlayerState
 	SWORD_DOWN,
 	AXE_UP,
 	AXE_DOWN,
+	CROUCH_IDLE,
+	CROUCH_WALK,
 	STATE_NUMBER
 
 }PlayerState;
@@ -125,12 +127,17 @@ typedef struct Action
 	sfBool isTouchingWall;
 	sfBool isWallJumping;
 
+	sfBool isCrouching;
+	sfBool forcedCrouch;
+
 	sfBool justWallJumped;
 
 	sfBool isTransitioning;
+	
 	sfBool isAttacking;
-	sfBool damageEnable;
 
+	sfBool damageEnable;
+	
 	sfBool isInvincible;
 
 	sfBool isAttackSide;

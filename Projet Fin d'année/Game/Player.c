@@ -35,7 +35,7 @@ void CheckPlayerHP(void);
 
 static void GetPlayerHitboxSize(float* outWidth, float* outHeight)
 {
-	if (player->action.isSliding)
+	if (player->action.isSliding || player->action.isCrouching)
 	{
 		*outWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
 		*outHeight = (PLAYER_HITBOX_HEIGHT * GAME_SCALE) * 0.5f;
@@ -118,6 +118,11 @@ void LoadAnimationPlayer(void)
 	firstFrame = (sfIntRect){ 0, (12 * PLAYER_HEIGHT) + 48, 32, 48 };
 	player->animationPlayer[AXE_DOWN] = CreateAnimation(player->sprite, 10, 12, sfTrue, sfFalse, firstFrame);
 
+	firstFrame = (sfIntRect){ 0, (15 * PLAYER_HEIGHT), PLAYER_WIDTH, PLAYER_HEIGHT };
+	player->animationPlayer[CROUCH_IDLE] = CreateAnimation(player->sprite, 2, 5, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, (16 * PLAYER_HEIGHT), PLAYER_WIDTH, PLAYER_HEIGHT };
+	player->animationPlayer[CROUCH_WALK] = CreateAnimation(player->sprite, 6, 11, sfTrue, sfTrue, firstFrame);
 	SetAnimation(IDLE);
 }
 
@@ -207,7 +212,7 @@ void CheckCollisionPlayerAttackMob(float _dt)
 
 						//player->data.health -= mob[i].damage + rand() % mob[i].damage;
 						//printf("%f\n", player->data.health);
-						
+
 						PlayerDamage(25);//mob[i].damage + (rand() % mob[i].damage));
 						//printf("%f\n", player->data.health);
 
@@ -392,11 +397,11 @@ void createCollisionSideAttack()
 
 	float y = p.top + (p.height / 2.f) - (height / 2.f);
 
-	if (player->data.lastDirection == -1) // gauche
+	if (player->data.lastDirection == -1) 
 	{
 		sfRectangleShape_setPosition(player->shape.collisionAttackShape, (sfVector2f) { p.left - width, y });
 	}
-	else // droite
+	else
 	{
 		sfRectangleShape_setPosition(player->shape.collisionAttackShape, (sfVector2f) { p.left + p.width, y });
 	}
@@ -828,7 +833,17 @@ void HandleSliding(float _dt, sfBool movingLeft, sfBool movingRight, sfBool slid
 		player->action.isSliding = sfFalse;
 		player->data.slideVelocityX = 0;
 		player->data.slideCooldownTimer = SLIDE_COOLDOWN;
-		StateMachine(player->action.isMoving ? RUN : IDLE);
+
+		if (HasCeilingAbove())
+		{
+			player->action.isCrouching = sfTrue;
+			player->action.forcedCrouch = sfTrue;
+			StateMachine(CROUCH_IDLE);
+		}
+		else
+		{
+			StateMachine(player->action.isMoving ? RUN : IDLE);
+		}
 	}
 }
 
@@ -867,7 +882,7 @@ static void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool 
 {
 	static sfBool jumpPressed = sfFalse;
 
-	if (jumpKey && !jumpPressed && !player->action.isDashing)
+	if (jumpKey && !jumpPressed && !player->action.isDashing && !player->action.forcedCrouch)
 	{
 		jumpPressed = sfTrue;
 		player->data.jumpStartPosition = player->data.position.y;
@@ -1084,14 +1099,25 @@ void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
 
 void HandleAnimationState(float _dt, sfBool movingLeft, sfBool movingRight)
 {
+	if (player->action.isCrouching && player->action.isGrounded && !player->action.isSliding)
+	{
+		StateMachine(player->action.isMoving ? CROUCH_WALK : CROUCH_IDLE);
+		return;
+	}
+
 	if (player->action.isGrounded && !player->action.isSliding && !player->action.isDashing)
 	{
 		if (player->currentState != TURN)
+		{
 			StateMachine(player->action.isMoving ? RUN : IDLE);
 
-		if (player->currentState == TURN &&
-			player->currentAnimation->currentFrame >= player->currentAnimation->frameCount - 1)
+		}
+
+		if (player->currentState == TURN && player->currentAnimation->currentFrame >= player->currentAnimation->frameCount - 1)
+		{
 			StateMachine(player->action.isMoving ? RUN : IDLE);
+
+		}
 	}
 	else if (!player->action.isGrounded)
 	{
@@ -1115,6 +1141,7 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 	sfBool dashGround = sfKeyboard_isKeyPressed(sfKeyLShift) && (movingLeft || movingRight);
 	sfBool dashUp = sfKeyboard_isKeyPressed(sfKeyZ) && sfKeyboard_isKeyPressed(sfKeyLShift);
 	sfBool dashDiagonal = dashUp && (movingLeft || movingRight);
+	sfBool crouchKey = sfKeyboard_isKeyPressed(sfKeyC);
 
 	HandleDash(_dt, dashGround, dashUp, dashDiagonal);
 
@@ -1123,8 +1150,39 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 		player->data.slideCooldownTimer -= _dt;
 
 	}
+
 	if (sfRenderWindow_hasFocus(_renderWindow))
 	{
+
+		if (player->action.isGrounded && !player->action.isSliding)
+		{
+			if (HasCeilingAbove())
+			{
+				player->action.forcedCrouch = sfTrue;
+				player->action.isCrouching = sfTrue;
+			}
+			else if (!crouchKey)
+			{
+				player->action.forcedCrouch = sfFalse;
+				if (!player->action.forcedCrouch)
+				{
+					player->action.isCrouching = sfFalse;
+
+				}
+			}
+
+			if (crouchKey && !player->action.forcedCrouch)
+			{
+				player->action.isCrouching = sfTrue;
+
+			}
+		}
+
+		if (!player->action.isGrounded)
+		{
+			player->action.isCrouching = sfFalse;
+			player->action.forcedCrouch = sfFalse;
+		}
 		HandleAttackInput(_renderWindow, _dt, movingLeft, movingRight);
 	}
 
@@ -1152,7 +1210,7 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 	}
 
 
-	//HandleDash(_dt, dashGround, dashUp, dashDiagonal);
+
 	HandleJump(_dt, movingLeft, movingRight, jumpKey);
 
 
@@ -1469,7 +1527,7 @@ void BasePlayer()
 
 	player->data = (Stats){ 0 };
 	player->action = (Action){ 0 };
-	//player->texture = sfTexture_createFromFile("Assets/Sprites/Game/Player/playerUpD.png", NULL);
+
 
 	player->sprite = CreateSprite("Assets/Sprites/Game/Player/playerUpD.png", GetPlayerSpawn());
 	sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
@@ -1499,7 +1557,7 @@ void BasePlayer()
 
 
 	snprintf(player->data.level, sizeof(player->data.level), "Level_00");
-	//	printf("player level: %s\n", player->data.level);
+
 	player->data.attackCooldownTimer = 0.5f;
 
 
@@ -1517,6 +1575,9 @@ void BasePlayer()
 	player->data.upDashUnlocked = sfFalse;
 	player->data.diagonalDashUnlocked = sfFalse;
 	player->data.horizontalDashUnlocked = sfFalse;
+
+	player->action.isCrouching = sfFalse;
+	player->action.forcedCrouch = sfFalse;
 
 	player->data.isOrbUpgradeLevel00Collected = sfFalse;
 	player->data.isOrbUpgradeLevel01Collected = sfFalse;
@@ -1569,7 +1630,7 @@ void SetSavedStat(PlayerSaveData* save)
 
 
 	snprintf(player->data.level, sizeof(player->data.level), "%s", save->level);
-	//printf("buffer: %s\n", player->data.level);
+
 }
 
 void CollisionPlayerTrigger()
@@ -1619,7 +1680,7 @@ void CollisionPlayerTrigger()
 				{
 					player->data.orbUpgradeCount -= 3;
 
-					
+
 					if (player->data.horizontalDashUnlocked == sfFalse)
 					{
 						player->data.dashUnlocked = sfTrue;
@@ -1721,4 +1782,26 @@ void PlayerDamage(int _hp)
 		player->action.isInvincible = sfTrue;
 		player->data.timerInvincible = 0;
 	}
+}
+
+static sfBool HasCeilingAbove(void)
+{
+	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
+	float fullHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
+	float crouchHeight = fullHeight * 0.5f;
+
+	sfFloatRect standHitbox = {
+		player->data.position.x - playerHalfWidth,
+		player->data.position.y - fullHeight,
+		PLAYER_HITBOX_WIDTH * GAME_SCALE,
+		fullHeight
+	};
+
+	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
+	{
+		sfFloatRect platform = GetMapCollision(i);
+		if (sfFloatRect_intersects(&standHitbox, &platform, NULL))
+			return sfTrue;
+	}
+	return sfFalse;
 }
