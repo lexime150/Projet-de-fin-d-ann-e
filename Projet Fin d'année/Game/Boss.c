@@ -249,7 +249,7 @@ void SetVelocityBoss(float _dt)
 			{
 				boss.lastAttack = ATTACK_1;
 				state = ATTACK_1;
-				boss.special++;
+				boss.special++;gj
 			}
 			else if(boss.special < SPECIAL_NUMBER)
 			{
@@ -386,7 +386,6 @@ void CheckCollisionCirclePlayer(float _dt)
 		boss.timer.specialAttackTimer = 0;
 
 		StateMachine(FALL);
-		//player->data.knockBackTimer += 0.75f;
 		player->action.isGrounded = sfFalse;
 		player->data.velocity.y = -650.f;
 		PlayerDamage(40);
