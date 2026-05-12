@@ -63,7 +63,10 @@ void LoadKey(void)
 			else if (strcmp(k.name, "sfKeyS") == 0)
 			{
 				KeyPosition(pos, keyIndex++, sfKeyS);
-
+			}
+			else if (strcmp(k.name, "sfKeyE") == 0)
+			{
+				KeyPosition(pos, keyIndex++, sfKeyE);
 			}
 			else if (strcmp(k.name, "sfKeyCtrl") == 0)
 			{
