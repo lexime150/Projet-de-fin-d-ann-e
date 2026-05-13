@@ -17,6 +17,7 @@
 #include "Boss.h"
 #include "Angel_Statue.h"
 #include "Talkbox.h"
+#include "Flying mob.h"
 
 void LoadGame(void);
 void PollEventGame(sfRenderWindow* _renderWindow);

@@ -71,7 +71,9 @@ typedef struct Boss
 	float specialAttackOpacity;
 
 	sfBool specialAttackEnable;
+	sfBool isHurt;
 
+	int health;
 
 }Boss;
 

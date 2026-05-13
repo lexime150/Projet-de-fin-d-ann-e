@@ -1446,7 +1446,7 @@ void CheckCollisionPlayerSpike(float _dt)
 
 		player->data.timerSpikeHeight = 0.f;
 		player->data.timerSpikeWidth = 0.f;
-		player->data.health -= 20;
+		player->data.health -= player->data.maxHealth;
 		player->spikeSide = NOTHING;
 	}
 
@@ -1495,7 +1495,7 @@ void CheckCollisionPlayerSpike(float _dt)
 
 		player->data.timerSpikeWidth = 0.f;
 		player->data.timerSpikeHeight = 0.f;
-		player->data.health -= 20;
+		player->data.health -= player->data.maxHealth;
 		player->spikeSide = NOTHING;
 		player->action.isMoving = sfTrue;
 
