@@ -8,6 +8,8 @@
 
 #define _I unsigned _i
 
+#define TIMER_SHOOT 1.6f
+
 
 typedef enum FlyingMobState
 {
@@ -40,6 +42,7 @@ typedef struct Projectile
 	Animation animation;
 
 	sfBool isTouching;
+	sfBool isShooting;
 
 }Projectile;
 
@@ -63,6 +66,16 @@ typedef struct FlyingMob
 	FlyingMobState currentState;
 	FlyingMobState lastState;
 
+	sfCircleShape* limitedZone;
+
+	float angle;
+
+
+	sfBool limitedZoneEnable;
+	sfVector2f distanceFlyMobLimited;
+
+	
+	int moveSteps;
 
 }FlyingMob;
 
