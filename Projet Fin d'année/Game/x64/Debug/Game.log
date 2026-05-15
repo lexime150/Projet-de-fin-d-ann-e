@@ -1,2 +1,11 @@
-﻿  Player.c
-  Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
+﻿  Boss.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(138,75): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(138,86): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(138,148): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(138,161): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(190,79): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(328,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(409,16): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.

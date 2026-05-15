@@ -45,6 +45,13 @@ typedef struct Boss
 	sfSprite* sprite;
 	sfTexture* texture;
 
+
+	sfSprite* healthBarSprite;
+	sfSprite* healthBarContainerSprite;
+
+	sfTexture* healthBarTexture;
+	sfIntRect healthBarContainerRect;
+
 	BossState lastState;
 	BossState currentState;
 
@@ -82,5 +89,5 @@ void UpdateBoss(float _dt);
 void DrawBoss(sfRenderWindow* _renderWindow);
 void CleanupBoss(void);
 
-
+void DrawUI(sfRenderWindow* _renderWindow);
 #endif 

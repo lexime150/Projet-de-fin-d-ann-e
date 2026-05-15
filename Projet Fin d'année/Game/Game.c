@@ -149,6 +149,7 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawPlayer(_renderWindow);
 	DrawBoss(_renderWindow);
 	DrawFlyMob(_renderWindow);
+	DrawUI(_renderWindow);
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);
 	DrawTalkbox(_renderWindow);
