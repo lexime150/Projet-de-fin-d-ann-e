@@ -13,7 +13,7 @@ void StateBoss(float _dt);
 float GetDistanceBossPlayerX();
 void CheckCollisionBossPlat();
 void CheckAttackBossPlayer(float _dt);
-float GetDistanceObject(sfVector2f _obj1, sfVector2f _obj2);
+
 
 void CheckCollisionCirclePlayer(float _dt);
 
@@ -581,13 +581,8 @@ void CheckAttackBossPlayer(float _dt)
 
 
 
-float GetDistanceObject(sfVector2f _obj1, sfVector2f _obj2)
-{
-	float distX = _obj1.x - _obj2.x;
-	float distY = _obj1.y - _obj2.y;
 
-	return sqrtf((distX * distX) + (distY * distY));
-}
+
 
 void BossDamage(unsigned _hpLost)
 {

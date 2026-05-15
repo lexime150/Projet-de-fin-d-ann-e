@@ -163,6 +163,7 @@ void DrawGame(sfRenderWindow* _renderWindow)
 void CleanupGame(void)
 {
 	CleanupMob();
+	CleanupFlyMob();
 	CleanupMap();
 	CleanUpPlayer();
 	CleanUpCamera();
@@ -198,6 +199,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadHUD();
 		LoadBoss();
 		LoadAngelStatue();
+		LoadFlyMob();
 	}
 	else
 	{
@@ -211,6 +213,7 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadBoss();
 		LoadHUD();
 		LoadAngelStatue();
+		LoadFlyMob();
 	}
 }
 
@@ -221,6 +224,7 @@ void ChangeLevel(const char* _level)
 
 
 	CleanupMob();
+	CleanupFlyMob();
 	CleanupMap();
 	CleanupKey();
 	CleanupHUD();
@@ -237,6 +241,7 @@ void ChangeLevel(const char* _level)
 	Loaditem();
 	LoadBoss();
 	LoadAngelStatue();
+	LoadFlyMob();
 
 	player->data.keyNumber = 0;
 	player->data.position = GetPlayerSpawn();

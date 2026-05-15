@@ -31,5 +31,4 @@ void ChangeLevel(const char* level);
 
 
 
-
 #endif // !GAME_H
