@@ -1,4 +1,24 @@
-﻿  Game.c
+﻿  Angel_Statue.c
+  Animation.c
+  Boss.c
+  Camera.c
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(125,75): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(125,86): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(125,148): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(125,161): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(307,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(395,16): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Camera.c(97,133): warning C4244: 'fonction' : conversion de 'unsigned int' en 'float', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Camera.c(98,134): warning C4244: 'fonction' : conversion de 'unsigned int' en 'float', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Camera.c(99,133): warning C4244: 'fonction' : conversion de 'unsigned int' en 'float', perte possible de données
+  Collectibles.c
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Collectibles.c(23,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Collectibles.c(270,20): warning C4018: '<' : incompatibilité signed/unsigned
+  Flying mob.c
+  Game.c
+  GameHUD.c
+  GameOver.c
+  GameState.c
   Key.c
 C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(23,57): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
 C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(23,67): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
@@ -9,5 +29,13 @@ C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game
 C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(152,79): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
 C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(152,102): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
 C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(152,121): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+  Map.c
+  Menu.c
+  Mob.c
+  Player.c
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(838,7): warning C4013: 'HasCeilingAbove' non défini(e) ; extern retournant int pris par défaut
+  Save.c
+  Talkbox.c
+  main.c
   Génération de code en cours...
   Game.vcxproj -> C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe

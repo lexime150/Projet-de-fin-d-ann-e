@@ -672,9 +672,31 @@
          "width":190,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":32,
+         "name":"Camera-Limit",
+         "objects":[
+                {
+                 "height":320,
+                 "id":42,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":3040,
+                 "x":0,
+                 "y":0
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":32,
- "nextobjectid":42,
+ "nextlayerid":33,
+ "nextobjectid":43,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

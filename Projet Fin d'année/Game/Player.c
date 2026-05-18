@@ -397,7 +397,7 @@ void createCollisionSideAttack()
 
 	float y = p.top + (p.height / 2.f) - (height / 2.f);
 
-	if (player->data.lastDirection == -1) 
+	if (player->data.lastDirection == -1)
 	{
 		sfRectangleShape_setPosition(player->shape.collisionAttackShape, (sfVector2f) { p.left - width, y });
 	}
@@ -1143,6 +1143,37 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 	sfBool dashUp = sfKeyboard_isKeyPressed(sfKeyZ) && sfKeyboard_isKeyPressed(sfKeyLShift);
 	sfBool dashDiagonal = dashUp && (movingLeft || movingRight);
 	sfBool crouchKey = sfKeyboard_isKeyPressed(sfKeyC);
+	sfBool upKey = sfKeyboard_isKeyPressed(sfKeyZ);
+
+	sfBool onLadder = sfFalse;
+
+	for (unsigned i = 0; i < GetLadderTabSize(); i++)
+	{
+		sfFloatRect ladder = GetLadderTab(i);
+		if (sfFloatRect_intersects(&player->shape.collisionPlayerRect, &ladder, NULL))
+		{
+			onLadder = sfTrue;
+			break;
+		}
+	}
+
+	if (onLadder && (upKey) && !player->action.isDashing)
+	{
+		player->action.isGrounded = sfFalse;
+		player->action.isWallJumping = sfFalse;
+		player->action.isSlideJumping = sfFalse;
+
+		float climbSpeed = 200.f;
+		if (upKey)
+		{
+			player->data.velocity.y = -climbSpeed;
+		}
+
+		player->data.velocity.x = 0;
+		StateMachine(LADDER);
+		UpdateAnimation(player->currentAnimation, _dt);
+		return;
+	}
 
 	HandleDash(_dt, dashGround, dashUp, dashDiagonal);
 
