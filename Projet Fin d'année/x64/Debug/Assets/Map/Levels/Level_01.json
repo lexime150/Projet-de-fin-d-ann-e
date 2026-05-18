@@ -363,6 +363,53 @@
         }, 
         {
          "draworder":"topdown",
+         "id":13,
+         "name":"FlyMobSpawn",
+         "objects":[
+                {
+                 "height":0,
+                 "id":167,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1584,
+                 "y":576
+                }, 
+                {
+                 "height":0,
+                 "id":168,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2048,
+                 "y":880
+                }, 
+                {
+                 "height":0,
+                 "id":169,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":3200,
+                 "y":832
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":4,
          "name":"Collision",
          "objects":[
@@ -979,8 +1026,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":13,
- "nextobjectid":159,
+ "nextlayerid":14,
+ "nextobjectid":170,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

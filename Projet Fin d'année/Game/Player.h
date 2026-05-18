@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "Game.h"
 #include "Collectibles.h"
+#include "Talkbox.h"
 
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
@@ -107,6 +108,8 @@ typedef enum PlayerState
 	SWORD_DOWN,
 	AXE_UP,
 	AXE_DOWN,
+	CROUCH_IDLE,
+	CROUCH_WALK,
 	STATE_NUMBER
 
 }PlayerState;
@@ -124,12 +127,17 @@ typedef struct Action
 	sfBool isTouchingWall;
 	sfBool isWallJumping;
 
+	sfBool isCrouching;
+	sfBool forcedCrouch;
+
 	sfBool justWallJumped;
 
 	sfBool isTransitioning;
+	
 	sfBool isAttacking;
-	sfBool damageEnable;
 
+	sfBool damageEnable;
+	
 	sfBool isInvincible;
 
 	sfBool isAttackSide;
@@ -252,5 +260,7 @@ void DrawPlayer(sfRenderWindow* _renderWindow);
 void CleanUpPlayer(void);
 
 void StateMachine(PlayerState _state);
+
+void PlayerDamage(int _hp);
 
 #endif

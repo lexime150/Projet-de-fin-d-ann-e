@@ -10,7 +10,7 @@ sfMusic* gameMusic;
 
 sfRectangleShape* transitionShape;
 Player* player;
-
+AngelStatue angelStatue;
 
 void LoadGame(void)
 {
@@ -21,6 +21,10 @@ void LoadGame(void)
 	LoadMusic();
 	LoadKey();
 	LoadBoss();
+	LoadAngelStatue();
+	LoadTalkbox();
+	LoadFlyMob();
+
 }
 
 void UpdateTransition(float _dt)
@@ -100,6 +104,9 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
 	case sfKeyNum6:
 		ChangeLevel("Level_05");
 		break;
+	case sfKeyNum7:
+		ChangeLevel("Level_06");
+		break;
 	default:
 		break;
 	}
@@ -121,6 +128,9 @@ void UpdateGame(sfRenderWindow* _renderWindow, float _dt)
 		UpdateTransition(_dt);
 		UpdateKey(_dt);
 		UpdateBoss(_dt);
+		UpdateAngelStatue(_dt);
+		UpdateTalkbox(_dt);
+		UpdateFlyMob(_dt);
 
 		for (int i = 0; i < GetItemCount(); i++)
 		{
@@ -138,11 +148,15 @@ void DrawGame(sfRenderWindow* _renderWindow)
 	DrawMob(_renderWindow);
 	DrawKey(_renderWindow);
 	Drawitem(_renderWindow);
+	DrawAngelStatue(_renderWindow);
 	DrawPlayer(_renderWindow);
 	DrawBoss(_renderWindow);
-
+	DrawFlyMob(_renderWindow);
 	sfRenderWindow_setView(_renderWindow, sfRenderWindow_getDefaultView(_renderWindow));
 	DrawHUD(_renderWindow);
+	DrawTalkbox(_renderWindow);
+
+
 	if (player->action.isTransitioning)
 	{
 		sfRenderWindow_drawRectangleShape(_renderWindow, transitionShape, NULL);
@@ -152,12 +166,16 @@ void DrawGame(sfRenderWindow* _renderWindow)
 void CleanupGame(void)
 {
 	CleanupMob();
+	CleanupFlyMob();
 	CleanupMap();
 	CleanUpPlayer();
 	CleanUpCamera();
 	Cleanupitem();
 	CleanupKey();
 	CleanupBoss();
+	CleanupAngelStatue();
+	CleanupTalkbox();
+	sfMusic_destroy(gameMusic);
 	SavePlayer(playerSaveData.save);
 }
 
@@ -183,6 +201,8 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadMob();
 		LoadHUD();
 		LoadBoss();
+		LoadAngelStatue();
+		LoadFlyMob();
 	}
 	else
 	{
@@ -195,6 +215,8 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadKey();
 		LoadBoss();
 		LoadHUD();
+		LoadAngelStatue();
+		LoadFlyMob();
 	}
 }
 
@@ -205,12 +227,14 @@ void ChangeLevel(const char* _level)
 
 
 	CleanupMob();
+	CleanupFlyMob();
 	CleanupMap();
 	CleanupKey();
 	CleanupHUD();
 	CleanUpCamera();
 	Cleanupitem();
 	CleanupBoss();
+	CleanupAngelStatue();
 
 	LoadMap(player->data.level);
 	LoadCamera();
@@ -219,6 +243,8 @@ void ChangeLevel(const char* _level)
 	LoadHUD();
 	Loaditem();
 	LoadBoss();
+	LoadAngelStatue();
+	LoadFlyMob();
 
 	player->data.keyNumber = 0;
 	player->data.position = GetPlayerSpawn();
@@ -230,6 +256,7 @@ void ChangeLevel(const char* _level)
 	player->action.isSliding = sfFalse;
 	player->action.isWallJumping = sfFalse;
 	player->action.isSlideJumping = sfFalse;
+	SnapCamera();
 }
 
 void LevelTransition()

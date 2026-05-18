@@ -124,7 +124,7 @@ PlayerSaveData* LoadSave(int slot)
 		player->data.isOrbUpgradeLevel03Collected = playerSaveData.isOrbUpgradeLevel03Collected;
 	}
 
-	printf("[Save] Slot %d chargé. (hp=%.0f)\n", slot, playerSaveData.health);
+	printf("[Save] Slot %d chargé.\n", slot);
 	return &playerSaveData;
 }
 

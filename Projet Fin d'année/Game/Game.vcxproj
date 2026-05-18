@@ -137,10 +137,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Angel_Statue.c" />
     <ClCompile Include="Animation.c" />
     <ClCompile Include="Boss.c" />
     <ClCompile Include="Camera.c" />
     <ClCompile Include="Collectibles.c" />
+    <ClCompile Include="Flying mob.c" />
     <ClCompile Include="Game.c" />
     <ClCompile Include="GameHUD.c" />
     <ClCompile Include="GameOver.c" />
@@ -152,15 +154,18 @@
     <ClCompile Include="Mob.c" />
     <ClCompile Include="Player.c" />
     <ClCompile Include="Save.c" />
+    <ClCompile Include="Talkbox.c" />
     <ClCompile Include="Tool.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Angel_Statue.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collectibles.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="cute_tiled.h" />
+    <ClInclude Include="Flying mob.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameHUD.h" />
     <ClInclude Include="GameOver.h" />
@@ -171,6 +176,7 @@
     <ClInclude Include="Mob.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Save.h" />
+    <ClInclude Include="Talkbox.h" />
     <ClInclude Include="Tool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

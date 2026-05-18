@@ -29,6 +29,9 @@ unsigned int mushroomSpawnTabSize;
 sfFloatRect* semiSolidCollisionTab;
 unsigned int semiSolidCollisionTabSize;
 
+
+sfVector2f* flyMobSpawnTab;
+unsigned int flyMobSpawnTabSize;
 sfVector2f playerSpawn;
 
 KeyStruct* keyTab;
@@ -60,7 +63,7 @@ void LoadAnimatedTiles(void)
 		a->frames = calloc(a->frameCount, sizeof(int));
 		a->durations = calloc(a->frameCount, sizeof(float));
 
-		if (!a->frameCount)
+		if (!a->frames || !a->durations)
 		{
 			return;
 		}
@@ -109,6 +112,7 @@ void LoadMap(char* _mapName)
 
 	sprintf_s(filename, FILENAME_MAX, "Assets/Map/Tilesets/%s", map->tilesets->image.ptr);
 	tileTexture = sfTexture_createFromFile(filename, NULL);
+	//sfTexture_setSmooth(tileTexture, sfFalse);
 
 
 	tileSprite = sfSprite_create();
@@ -214,6 +218,7 @@ void CleanupMap(void)
 		skeletonSpawnTabSize = 0;
 	}
 
+
 	if (mushroomSpawnTabSize > 0)
 	{
 		free(mushroomSpawnTab);
@@ -229,6 +234,12 @@ void CleanupMap(void)
 	animatedTileList = NULL;
 	animatedTileCount = 0;
 
+	if (flyMobSpawnTabSize > 0)
+	{
+		free(flyMobSpawnTab);
+		flyMobSpawnTab = NULL;
+		flyMobSpawnTabSize = 0;
+	}
 }
 
 void LoadCollisionAndTrigger(void)
@@ -289,6 +300,8 @@ void LoadCollisionAndTrigger(void)
 
 	playerSpawn = (sfVector2f){ 0, 0 };
 
+	flyMobSpawnTab = calloc(1, sizeof(sfVector2f));
+	flyMobSpawnTabSize = 0;
 
 	// Select the first layer
 	cute_tiled_layer_t* layer = map->layers;
@@ -454,6 +467,17 @@ void LoadCollisionAndTrigger(void)
 					};
 					mushroomSpawnTabSize++;
 				}
+				else if (strcmp(layer->name.ptr, "FlyMobSpawn") == 0)
+				{
+					sfVector2f* flyMobSpawnTemp = realloc(flyMobSpawnTab, (unsigned long long)(flyMobSpawnTabSize + 1) * sizeof(sfVector2f));
+					if (flyMobSpawnTemp == NULL) return;
+					flyMobSpawnTab = flyMobSpawnTemp;
+					flyMobSpawnTab[flyMobSpawnTabSize] = (sfVector2f){
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE
+					};
+					flyMobSpawnTabSize++;
+				}
 			}
 			// Next object
 			object = object->next;
@@ -482,6 +506,7 @@ void DrawTileLayer(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer)
 				int tileX = (tileId % map->tilesets->columns) * tileWidth;
 				int tileY = (tileId / map->tilesets->columns) * tileHeight;
 				sfSprite_setTextureRect(tileSprite, (sfIntRect) { tileX, tileY, tileWidth, tileHeight });
+				
 
 				sfSprite_setPosition(tileSprite, (sfVector2f) { (float)column* tileWidth* GAME_SCALE, (float)line* tileHeight* GAME_SCALE });
 				sfRenderWindow_drawSprite(_renderWindow, tileSprite, NULL);
@@ -663,4 +688,18 @@ unsigned int GetSkeletonSpawnTabSize()
 unsigned int GetMushroomSpawnTabSize()
 {
 	return mushroomSpawnTabSize;
+}
+
+
+unsigned int GetFlyMobSpawnTabSize()
+{
+	return flyMobSpawnTabSize;
+}
+
+sfVector2f GetFlyMobSpawn(unsigned int _index)
+{
+	if (_index < flyMobSpawnTabSize)
+		return flyMobSpawnTab[_index];
+	else
+		return (sfVector2f) { 0, 0 };
 }

@@ -35,7 +35,7 @@ void CheckPlayerHP(void);
 
 static void GetPlayerHitboxSize(float* outWidth, float* outHeight)
 {
-	if (player->action.isSliding)
+	if (player->action.isSliding || player->action.isCrouching)
 	{
 		*outWidth = PLAYER_HITBOX_WIDTH * GAME_SCALE;
 		*outHeight = (PLAYER_HITBOX_HEIGHT * GAME_SCALE) * 0.5f;
@@ -118,6 +118,11 @@ void LoadAnimationPlayer(void)
 	firstFrame = (sfIntRect){ 0, (12 * PLAYER_HEIGHT) + 48, 32, 48 };
 	player->animationPlayer[AXE_DOWN] = CreateAnimation(player->sprite, 10, 12, sfTrue, sfFalse, firstFrame);
 
+	firstFrame = (sfIntRect){ 0, (15 * PLAYER_HEIGHT), PLAYER_WIDTH, PLAYER_HEIGHT };
+	player->animationPlayer[CROUCH_IDLE] = CreateAnimation(player->sprite, 2, 5, sfTrue, sfTrue, firstFrame);
+
+	firstFrame = (sfIntRect){ 0, (16 * PLAYER_HEIGHT), PLAYER_WIDTH, PLAYER_HEIGHT };
+	player->animationPlayer[CROUCH_WALK] = CreateAnimation(player->sprite, 6, 8, sfTrue, sfTrue, firstFrame);
 	SetAnimation(IDLE);
 }
 
@@ -153,6 +158,12 @@ void CheckCollisionPlayerAttackMob(float _dt)
 	{
 		player->data.timerInvincible = -2.f;
 		player->action.isInvincible = sfTrue;
+	}
+
+	if (player->data.knockBackTimer > 0)
+	{
+		player->data.knockBackTimer -= _dt;
+		return;
 	}
 
 
@@ -196,12 +207,14 @@ void CheckCollisionPlayerAttackMob(float _dt)
 				{
 					if (mob[i].currentMobAnimation->currentFrame == mob[i].frameAttackSound && !player->action.damageEnable && sfFloatRect_intersects(&hitMob, &hitPlayer, &intersection))
 					{
-						player->data.timerInvincible = 0;
+						//player->data.timerInvincible = 0;
 						player->action.damageEnable = sfTrue;
 
-						player->data.health -= mob[i].damage + rand() % mob[i].damage;
+						//player->data.health -= mob[i].damage + rand() % mob[i].damage;
+						//printf("%f\n", player->data.health);
 
-
+						PlayerDamage(25);//mob[i].damage + (rand() % mob[i].damage));
+						//printf("%f\n", player->data.health);
 
 					}
 					else //if (player->data.timerInvincible )//!mob[i].currentMobAnimation->isPlaying)
@@ -303,8 +316,7 @@ void CheckCollisionPlayerMob(float _dt)
 				player->data.knockBackTimer += 0.2f;
 				player->action.isSlideJumping = sfFalse;
 				player->action.isTouchingWall = sfFalse;
-				player->action.isInvincible = sfTrue;
-				player->data.health -= 15;
+				PlayerDamage(mob[i].damage + rand() % mob[i].damage);
 
 				if (playerCenterX > (mobCenterX)+PLAYER_MOB_MARGE)
 				{
@@ -349,6 +361,8 @@ void CheckCollisionPlayerMob(float _dt)
 
 void ApplyPhysic(float _dt)
 {
+
+
 	if (!player->action.isGrounded)
 	{
 		if (player->action.isDashing && player->currentState == DASH_GROUND)
@@ -383,11 +397,11 @@ void createCollisionSideAttack()
 
 	float y = p.top + (p.height / 2.f) - (height / 2.f);
 
-	if (player->data.lastDirection == -1) // gauche
+	if (player->data.lastDirection == -1) 
 	{
 		sfRectangleShape_setPosition(player->shape.collisionAttackShape, (sfVector2f) { p.left - width, y });
 	}
-	else // droite
+	else
 	{
 		sfRectangleShape_setPosition(player->shape.collisionAttackShape, (sfVector2f) { p.left + p.width, y });
 	}
@@ -432,16 +446,17 @@ void ApplyHorizontalInput(sfRenderWindow* _renderWindow, sfBool movingLeft, sfBo
 	{
 		if (!player->action.isDashing)
 		{
+			float currentSpeed = player->action.isCrouching ? player->data.speed * 0.65f : player->data.speed;
 			if (movingRight)
 			{
-				player->data.velocity.x = player->data.speed;
+				player->data.velocity.x = currentSpeed;
 				player->data.lastDirection = 1;
 				player->action.isMoving = sfTrue;
 				sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 			}
 			else if (movingLeft)
 			{
-				player->data.velocity.x = -player->data.speed;
+				player->data.velocity.x = -currentSpeed;
 				player->data.lastDirection = -1;
 				player->action.isMoving = sfTrue;
 				sfSprite_setScale(player->sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
@@ -819,7 +834,17 @@ void HandleSliding(float _dt, sfBool movingLeft, sfBool movingRight, sfBool slid
 		player->action.isSliding = sfFalse;
 		player->data.slideVelocityX = 0;
 		player->data.slideCooldownTimer = SLIDE_COOLDOWN;
-		StateMachine(player->action.isMoving ? RUN : IDLE);
+
+		if (HasCeilingAbove())
+		{
+			player->action.isCrouching = sfTrue;
+			player->action.forcedCrouch = sfTrue;
+			StateMachine(CROUCH_IDLE);
+		}
+		else
+		{
+			StateMachine(player->action.isMoving ? RUN : IDLE);
+		}
 	}
 }
 
@@ -858,7 +883,7 @@ static void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool 
 {
 	static sfBool jumpPressed = sfFalse;
 
-	if (jumpKey && !jumpPressed && !player->action.isDashing)
+	if (jumpKey && !jumpPressed && !player->action.isDashing && !player->action.forcedCrouch)
 	{
 		jumpPressed = sfTrue;
 		player->data.jumpStartPosition = player->data.position.y;
@@ -950,7 +975,7 @@ static void HandleDash(float _dt, sfBool _dashHorizontal, sfBool _dashUp, sfBool
 		if (_dashDiagonal && player->data.diagonalDashUnlocked)
 		{
 			player->data.dashVelocityX = (playerScale < 0) ? -550.f : 550.f;
-			player->data.dashVelocityY = -550.f;
+			player->data.dashVelocityY = -DASH_Y;
 			state = DASH_DIAGONAL;
 			validDash = sfTrue;
 		}
@@ -1075,14 +1100,25 @@ void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
 
 void HandleAnimationState(float _dt, sfBool movingLeft, sfBool movingRight)
 {
+	if (player->action.isCrouching && player->action.isGrounded && !player->action.isSliding)
+	{
+		StateMachine(player->action.isMoving ? CROUCH_WALK : CROUCH_IDLE);
+		return;
+	}
+
 	if (player->action.isGrounded && !player->action.isSliding && !player->action.isDashing)
 	{
 		if (player->currentState != TURN)
+		{
 			StateMachine(player->action.isMoving ? RUN : IDLE);
 
-		if (player->currentState == TURN &&
-			player->currentAnimation->currentFrame >= player->currentAnimation->frameCount - 1)
+		}
+
+		if (player->currentState == TURN && player->currentAnimation->currentFrame >= player->currentAnimation->frameCount - 1)
+		{
 			StateMachine(player->action.isMoving ? RUN : IDLE);
+
+		}
 	}
 	else if (!player->action.isGrounded)
 	{
@@ -1093,6 +1129,12 @@ void HandleAnimationState(float _dt, sfBool movingLeft, sfBool movingRight)
 
 void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 {
+	if (player->data.knockBackTimer > 0)
+	{
+		player->data.knockBackTimer -= _dt;
+		return;
+	}
+
 	sfBool movingLeft = sfKeyboard_isKeyPressed(sfKeyQ);
 	sfBool movingRight = sfKeyboard_isKeyPressed(sfKeyD);
 	sfBool slideKey = sfKeyboard_isKeyPressed(sfKeyLControl) || sfKeyboard_isKeyPressed(sfKeyRControl);
@@ -1100,6 +1142,7 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 	sfBool dashGround = sfKeyboard_isKeyPressed(sfKeyLShift) && (movingLeft || movingRight);
 	sfBool dashUp = sfKeyboard_isKeyPressed(sfKeyZ) && sfKeyboard_isKeyPressed(sfKeyLShift);
 	sfBool dashDiagonal = dashUp && (movingLeft || movingRight);
+	sfBool crouchKey = sfKeyboard_isKeyPressed(sfKeyC);
 
 	HandleDash(_dt, dashGround, dashUp, dashDiagonal);
 
@@ -1108,8 +1151,39 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 		player->data.slideCooldownTimer -= _dt;
 
 	}
+
 	if (sfRenderWindow_hasFocus(_renderWindow))
 	{
+
+		if (player->action.isGrounded && !player->action.isSliding)
+		{
+			if (HasCeilingAbove())
+			{
+				player->action.forcedCrouch = sfTrue;
+				player->action.isCrouching = sfTrue;
+			}
+			else if (!crouchKey)
+			{
+				player->action.forcedCrouch = sfFalse;
+				if (!player->action.forcedCrouch)
+				{
+					player->action.isCrouching = sfFalse;
+
+				}
+			}
+
+			if (crouchKey && !player->action.forcedCrouch)
+			{
+				player->action.isCrouching = sfTrue;
+
+			}
+		}
+
+		if (!player->action.isGrounded)
+		{
+			player->action.isCrouching = sfFalse;
+			player->action.forcedCrouch = sfFalse;
+		}
 		HandleAttackInput(_renderWindow, _dt, movingLeft, movingRight);
 	}
 
@@ -1137,7 +1211,7 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 	}
 
 
-	//HandleDash(_dt, dashGround, dashUp, dashDiagonal);
+
 	HandleJump(_dt, movingLeft, movingRight, jumpKey);
 
 
@@ -1281,9 +1355,9 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	float playerWidth, playerHeight;
 	GetPlayerHitboxSize(&playerWidth, &playerHeight);
 
-	sfRectangleShape_setSize(player->shape.collisionPlayerShape,(sfVector2f) {playerWidth, playerHeight});
+	sfRectangleShape_setSize(player->shape.collisionPlayerShape, (sfVector2f) { playerWidth, playerHeight });
 
-	sfRectangleShape_setPosition(player->shape.collisionPlayerShape,(sfVector2f) {player->data.position.x - playerWidth / 2.f,player->data.position.y - playerHeight});
+	sfRectangleShape_setPosition(player->shape.collisionPlayerShape, (sfVector2f) { player->data.position.x - playerWidth / 2.f, player->data.position.y - playerHeight });
 
 	player->shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
 	player->shape.playerRect = sfSprite_getGlobalBounds(player->sprite);
@@ -1372,7 +1446,7 @@ void CheckCollisionPlayerSpike(float _dt)
 
 		player->data.timerSpikeHeight = 0.f;
 		player->data.timerSpikeWidth = 0.f;
-		player->data.health -= 20;
+		player->data.health -= player->data.maxHealth;
 		player->spikeSide = NOTHING;
 	}
 
@@ -1397,7 +1471,7 @@ void CheckCollisionPlayerSpike(float _dt)
 			else if (playerCenterY > spikeCenterY && (hitPlayer.left < (hitSpike.left + hitSpike.width)) && (hitPlayer.left + hitPlayer.width) > hitSpike.left)
 			{
 				player->spikeSide = HEIGHT;
-				
+
 			}
 		}
 	}
@@ -1421,7 +1495,7 @@ void CheckCollisionPlayerSpike(float _dt)
 
 		player->data.timerSpikeWidth = 0.f;
 		player->data.timerSpikeHeight = 0.f;
-		player->data.health -= 20;
+		player->data.health -= player->data.maxHealth;
 		player->spikeSide = NOTHING;
 		player->action.isMoving = sfTrue;
 
@@ -1454,9 +1528,9 @@ void BasePlayer()
 
 	player->data = (Stats){ 0 };
 	player->action = (Action){ 0 };
-	player->texture = sfTexture_createFromFile("Assets/Sprites/Game/Player/playerUpD.png", NULL);
 
-	CreateSprite(player->texture, &player->sprite, ORIGIN_CENTER_X, GetPlayerSpawn());
+
+	player->sprite = CreateSprite("Assets/Sprites/Game/Player/playerUpD.png", GetPlayerSpawn());
 	sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
 	player->action.isTransitioning = sfTrue;
@@ -1484,7 +1558,7 @@ void BasePlayer()
 
 
 	snprintf(player->data.level, sizeof(player->data.level), "Level_00");
-	//	printf("player level: %s\n", player->data.level);
+
 	player->data.attackCooldownTimer = 0.5f;
 
 
@@ -1502,6 +1576,9 @@ void BasePlayer()
 	player->data.upDashUnlocked = sfFalse;
 	player->data.diagonalDashUnlocked = sfFalse;
 	player->data.horizontalDashUnlocked = sfFalse;
+
+	player->action.isCrouching = sfFalse;
+	player->action.forcedCrouch = sfFalse;
 
 	player->data.isOrbUpgradeLevel00Collected = sfFalse;
 	player->data.isOrbUpgradeLevel01Collected = sfFalse;
@@ -1554,7 +1631,7 @@ void SetSavedStat(PlayerSaveData* save)
 
 
 	snprintf(player->data.level, sizeof(player->data.level), "%s", save->level);
-	//printf("buffer: %s\n", player->data.level);
+
 }
 
 void CollisionPlayerTrigger()
@@ -1582,17 +1659,50 @@ void CollisionPlayerTrigger()
 					if (strcmp(player->data.level, "Level_00") == 0)
 					{
 						player->data.isOrbUpgradeLevel00Collected = sfTrue;
-					}if (strcmp(player->data.level, "Level_01") == 0)
+					}
+					if (strcmp(player->data.level, "Level_01") == 0)
 					{
 						player->data.isOrbUpgradeLevel01Collected = sfTrue;
-					}if (strcmp(player->data.level, "Level_02") == 0)
+					}
+					if (strcmp(player->data.level, "Level_02") == 0)
 					{
 						player->data.isOrbUpgradeLevel02Collected = sfTrue;
-					}if (strcmp(player->data.level, "Level_03") == 0)
+					}
+					if (strcmp(player->data.level, "Level_03") == 0)
 					{
 						player->data.isOrbUpgradeLevel03Collected = sfTrue;
 					}
-					printf("%d\n",player->data.orbUpgradeCount);
+					printf("%d\n", player->data.orbUpgradeCount);
+				}
+			}
+			else if (strcmp(GetMapTrigger(i).name, "Angel_Statue") == 0 && keyIsPressed && !keyWasPressed)
+			{
+				if (player->data.orbUpgradeCount >= 3)
+				{
+					player->data.orbUpgradeCount -= 3;
+
+
+					if (player->data.horizontalDashUnlocked == sfFalse)
+					{
+						player->data.dashUnlocked = sfTrue;
+						player->data.horizontalDashUnlocked = sfTrue;
+						OpenTalkbox("You unlocked the horizontal dash !");
+					}
+					else if (player->data.upDashUnlocked == sfFalse)
+					{
+						player->data.upDashUnlocked = sfTrue;
+						OpenTalkbox("You unlocked the vertical dash !");
+					}
+					else if (player->data.diagonalDashUnlocked == sfFalse)
+					{
+						player->data.diagonalDashUnlocked = sfTrue;
+						OpenTalkbox("You unlocked the diagonal dash !");
+					}
+				}
+				else
+				{
+					OpenTalkbox("You need atleast 3 orbs to unlock an new movement type !");
+
 				}
 			}
 			else if (keyIsPressed && !keyWasPressed && player->data.keyNumber >= GetMobCount())
@@ -1636,7 +1746,7 @@ void DrawPlayer(sfRenderWindow* _renderWindow)
 	{
 		sfRenderWindow_drawRectangleShape(_renderWindow, player->shape.rectCollisionPlayerMob, NULL);
 		sfRenderWindow_drawRectangleShape(_renderWindow, player->shape.collisionPlayerShape, NULL);
-		//if (player->action.isAttacking)
+		if (player->action.isAttacking)
 		{
 			sfRenderWindow_drawRectangleShape(_renderWindow, player->shape.collisionAttackShape, NULL);
 		}
@@ -1663,4 +1773,36 @@ void StateMachine(PlayerState _state)
 float RandomFloat(float min, float max)
 {
 	return min + (float)rand() / (float)RAND_MAX * (max - min);
+}
+
+void PlayerDamage(int _hp)
+{
+	if (player->data.timerInvincible > TIMER_INVINCIBLE && (_hp > 0))
+	{
+		player->data.health -= _hp;
+		player->action.isInvincible = sfTrue;
+		player->data.timerInvincible = 0;
+	}
+}
+
+static sfBool HasCeilingAbove(void)
+{
+	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
+	float fullHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
+	float crouchHeight = fullHeight * 0.5f;
+
+	sfFloatRect standHitbox = {
+		player->data.position.x - playerHalfWidth,
+		player->data.position.y - fullHeight,
+		PLAYER_HITBOX_WIDTH * GAME_SCALE,
+		fullHeight
+	};
+
+	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
+	{
+		sfFloatRect platform = GetMapCollision(i);
+		if (sfFloatRect_intersects(&standHitbox, &platform, NULL))
+			return sfTrue;
+	}
+	return sfFalse;
 }

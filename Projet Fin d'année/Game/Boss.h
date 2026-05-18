@@ -6,6 +6,8 @@
 
 #define BOSS_SIZE 128
 
+#define SPECIAL_NUMBER 3
+
 typedef enum BossState
 {
 	IDLE_1,
@@ -26,7 +28,7 @@ typedef struct Timer
 	float knockBackTimer;
 	float timerAttack;
 	float timerHurt;
-
+	float specialAttackTimer;
 }Timer;
 
 typedef enum BossSide
@@ -63,6 +65,15 @@ typedef struct Boss
 	sfRectangleShape* attackShape;
 	sfRectangleShape* hurtShape;
 
+	unsigned special;
+
+	sfCircleShape* specialAttackShape;
+	float specialAttackOpacity;
+
+	sfBool specialAttackEnable;
+	sfBool isHurt;
+
+	int health;
 
 }Boss;
 

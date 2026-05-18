@@ -320,7 +320,7 @@ void Updateitem(float _dt)
 	if (sfKeyboard_isKeyPressed(sfKeyW))
 	{
 		Additem(ITEM_KEY, sfSprite_getPosition(player->sprite).x, sfSprite_getPosition(player->sprite).y, 0);
-		//itemCount--;
+		player->data.orbUpgradeCount++;
 	}
 
 	VacuumEffect();
