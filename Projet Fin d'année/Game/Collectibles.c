@@ -20,7 +20,7 @@ void Loaditem(void)
 	}
 	item = NULL;
 	itemCount = 0;
-	for (int i = 0; i < GetTriggerTabSize(); i++)
+	for (unsigned i = 0; i < GetTriggerTabSize(); i++)
 	{
 		if (strcmp(GetMapTrigger(i).name, "Upgrade-Orb") == 0)
 		{
@@ -267,7 +267,7 @@ sfBool CollisionitemY(unsigned i, float _dy)
 
 int GetItemIndexByTrigger(int _triggerIndex)
 {
-	for (int i = 0; i < itemCount; i++)
+	for (unsigned i = 0; i < itemCount; i++)
 	{
 		if (item[i].triggerIndex == _triggerIndex)
 		{
@@ -317,11 +317,14 @@ void Updateitem(float _dt)
 
 
 
-	if (sfKeyboard_isKeyPressed(sfKeyW))
+	static sfBool wWasPressed = sfFalse;
+	sfBool wIsPressed = sfKeyboard_isKeyPressed(sfKeyW);
+	if (wIsPressed && !wWasPressed)
 	{
 		Additem(ITEM_KEY, sfSprite_getPosition(player->sprite).x, sfSprite_getPosition(player->sprite).y, 0);
 		player->data.orbUpgradeCount++;
 	}
+	wWasPressed = wIsPressed;
 
 	VacuumEffect();
 }

@@ -20,7 +20,7 @@ void LoadKey(void)
 		sfTexture* texture = sfTexture_createFromFile("Assets/Sprites/Game/Key/Key.png", NULL);
 		sfTexture* textureExtraKey = sfTexture_createFromFile("Assets/Sprites/Game/Key/Keyboard Extras.png", NULL);
 		playerSprite = CreateSprite("Assets/Sprites/Game/Player/playerUpD.png", (sfVector2f) {GetKeyTab(0).left, GetKeyTab(0).top + 100.f});
-		sfSprite_setTextureRect(playerSprite, (sfIntRect) { 1 * 32.f, 1 * 32.f, 32.f, 32.f });
+		sfSprite_setTextureRect(playerSprite, (sfIntRect) { 1 * 32, 1 * 32, 32, 32 });
 		sfSprite_setScale(playerSprite, (sfVector2f) { 2.5f, 2.5f });
 
 		for (int i = 0; i < KEY_NUMBER; i++)
@@ -43,7 +43,7 @@ void LoadKey(void)
 
 		animPlayer = CreateAnimation(playerSprite, 5, 8, sfTrue, sfTrue, (sfIntRect) { 1 * PLAYER_WIDTH, 1 * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT });
 
-		for (int i = 0; i < GetKeyTabSize(); i++)
+		for (unsigned i = 0; i < GetKeyTabSize(); i++)
 		{
 			KeyStruct k = GetKeyTab(i);
 			sfVector2f pos = (sfVector2f){ k.left, k.top };
@@ -125,8 +125,8 @@ void KeyPosition(sfVector2f _pos, int _keyNumber, sfKeyCode _i)
 void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, ExtraKey _i)
 {
 	int mod = 4;
-	float width = (_i % mod) * EXTRAS_KEY_SIZE.x;
-	float height = 0;
+	int width = (_i % mod) * (int)EXTRAS_KEY_SIZE.x;
+	int height = 0;
 
 	if (_i >= mod)
 	{
@@ -134,22 +134,22 @@ void ExtraKeyPosition(sfVector2f _pos, int _keyNumber, ExtraKey _i)
 		{
 			if (_i >= mod * 3)
 			{
-				height = 3 * EXTRAS_KEY_SIZE.y;
+				height = 3 * (int)EXTRAS_KEY_SIZE.y;
 
 			}
 			else
 			{
-				height = 2 * EXTRAS_KEY_SIZE.y;
+				height = 2 * (int)EXTRAS_KEY_SIZE.y;
 
 			}
 		}
 		else
 		{
-			height = EXTRAS_KEY_SIZE.y;
+			height = (int)EXTRAS_KEY_SIZE.y;
 		}
 	}
 
-	sfSprite_setTextureRect(extraKey[_keyNumber].keySprite, (sfIntRect) { width, height, EXTRAS_KEY_SIZE.x, EXTRAS_KEY_SIZE.y });
+	sfSprite_setTextureRect(extraKey[_keyNumber].keySprite, (sfIntRect) { width, height, (int)EXTRAS_KEY_SIZE.x, (int)EXTRAS_KEY_SIZE.y });
 	sfSprite_setPosition(extraKey[_keyNumber].keySprite, _pos);
 }
 

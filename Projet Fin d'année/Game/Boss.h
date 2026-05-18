@@ -55,7 +55,7 @@ typedef struct Boss
 
 	sfVector2f distWalk;
 	sfVector2f distRun;
-	int direction;
+	float direction;
 	sfBool isGrounded;
 
 	Timer timer;

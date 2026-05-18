@@ -122,7 +122,7 @@ static void UpdateBossInfo()
 		specialCount += 0.13f;
 		boss.specialAttackOpacity += (1.f + rand() % 6);
 		sfCircleShape_setScale(boss.specialAttackShape, (sfVector2f) { specialCount* GAME_SCALE, specialCount* GAME_SCALE });
-		sfCircleShape_setOutlineColor(boss.specialAttackShape, sfColor_fromRGBA(0.f, 255.f - boss.specialAttackOpacity * 1.5f, boss.specialAttackOpacity * 2.f, 255.f - boss.specialAttackOpacity));
+		sfCircleShape_setOutlineColor(boss.specialAttackShape, sfColor_fromRGBA(0, 255 - ((int)boss.specialAttackOpacity * 3)/5, (int)boss.specialAttackOpacity * 2, 255 - (int)boss.specialAttackOpacity));
 	}
 	else
 	{
@@ -392,7 +392,7 @@ void CheckCollisionCirclePlayer(float _dt)
 		sfVector2f posCircle = sfCircleShape_getPosition(boss.specialAttackShape);
 		float circleSize = sfCircleShape_getRadius(boss.specialAttackShape) * sfCircleShape_getScale(boss.specialAttackShape).x;
 
-		float dist = fabs(GetDistanceObject(posPlayer, posCircle));
+		float dist = fabsf(GetDistanceObject(posPlayer, posCircle));
 
 		if (dist < circleSize && boss.timer.specialAttackTimer > 1.f)
 		{

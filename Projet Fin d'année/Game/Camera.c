@@ -94,9 +94,9 @@ void DrawBackgroundGame(sfRenderWindow* window)
 	sfVector2u s2 = sfTexture_getSize(camera.backgroundGame.texture2ndLayer);
 	sfVector2u s1 = sfTexture_getSize(camera.backgroundGame.texture1stLayer);
 
-	DrawParallaxLayer(window, camera.backgroundGame.sprite3rdLayer, camera.backgroundGame.texture3rdLayer, 0.1f, camera.layerWidth3, s3.y);
-	DrawParallaxLayer(window, camera.backgroundGame.sprite2ndLayer, camera.backgroundGame.texture2ndLayer, 0.15f, camera.layerWidth2, s2.y);
-	DrawParallaxLayer(window, camera.backgroundGame.sprite1stLayer, camera.backgroundGame.texture1stLayer, 0.2f, camera.layerWidth1, s1.y);
+	DrawParallaxLayer(window, camera.backgroundGame.sprite3rdLayer, camera.backgroundGame.texture3rdLayer, 0.1f, camera.layerWidth3, (float)s3.y);
+	DrawParallaxLayer(window, camera.backgroundGame.sprite2ndLayer, camera.backgroundGame.texture2ndLayer, 0.15f, camera.layerWidth2, (float)s2.y);
+	DrawParallaxLayer(window, camera.backgroundGame.sprite1stLayer, camera.backgroundGame.texture1stLayer, 0.2f, camera.layerWidth1, (float)s1.y);
 }
 void LoadCamera()
 {
