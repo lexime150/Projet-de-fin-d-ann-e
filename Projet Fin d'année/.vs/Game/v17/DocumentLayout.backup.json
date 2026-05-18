@@ -115,6 +115,10 @@
               "EditorCaption": ""
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "GameHUD.c",
@@ -126,10 +130,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-05-18T22:08:24.499Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
@@ -149,9 +149,9 @@
               "Title": "Game.c",
               "DocumentMoniker": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c",
               "RelativeDocumentMoniker": "Game\\Game.c",
-              "ToolTip": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c*",
-              "RelativeToolTip": "Game\\Game.c*",
-              "ViewState": "AgIAAFYAAAAAAAAAAAAuwHQAAAAaAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c",
+              "RelativeToolTip": "Game\\Game.c",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAuwG0AAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-05-11T07:16:51.942Z",
               "EditorCaption": ""

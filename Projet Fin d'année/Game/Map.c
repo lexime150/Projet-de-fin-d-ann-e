@@ -5,6 +5,9 @@ sfTexture* tileTexture;
 sfSprite* tileSprite;
 cute_tiled_map_t* map;
 
+sfFloatRect* ladderTab;
+unsigned int ladderTabSize;
+
 sfFloatRect* collisionTab;
 unsigned int collisionTabSize;
 
@@ -162,7 +165,12 @@ void CleanupMap(void)
 
 	cute_tiled_free_map(map);
 	map = NULL;
-
+	if (ladderTabSize > 0)
+	{
+		free(ladderTab);
+		ladderTab = NULL;
+		ladderTabSize = 0;
+	}
 	if (collisionTabSize > 0)
 	{
 		free(collisionTab);
@@ -249,6 +257,8 @@ void CleanupMap(void)
 
 void LoadCollisionAndTrigger(void)
 {
+	ladderTab = NULL;
+	ladderTabSize = 0;
 
 	cameraLimit = (sfFloatRect){ 0, 0, 0, 0 };
 	hasCameraLimit = sfFalse;
@@ -435,7 +445,22 @@ void LoadCollisionAndTrigger(void)
 						object->height * GAME_SCALE };
 					hasCameraLimit = sfTrue;
 				}
+				else if (strcmp(layer->name.ptr, "Ladder") == 0)
+				{
+					sfFloatRect* ladderTemp = realloc(ladderTab, (unsigned long long)(ladderTabSize + 1) * sizeof(sfFloatRect));
+					if (ladderTemp == NULL)
+					{
+						return; // Devrait idéalement gérer l'erreur plus proprement, mais reste raccord avec ton code
+					}
+					ladderTab = ladderTemp;
 
+					ladderTab[ladderTabSize] = (sfFloatRect){
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE,
+						object->width * GAME_SCALE,
+						object->height * GAME_SCALE };
+					ladderTabSize++;
+					}
 
 			}
 
@@ -730,4 +755,21 @@ sfBool HasCameraLimit(void)
 sfFloatRect GetCameraLimit(void)
 {
 	return cameraLimit;
+}
+
+unsigned int GetLadderTabSize(void)
+{
+	return ladderTabSize;
+}
+
+sfFloatRect GetLadderTab(unsigned int _index)
+{
+	if (_index < ladderTabSize)
+	{
+		return ladderTab[_index];
+	}
+	else
+	{
+		return (sfFloatRect) { 0, 0, 0, 0 };
+	}
 }

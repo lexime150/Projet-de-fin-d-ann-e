@@ -70,4 +70,7 @@ unsigned int GetFlyMobSpawnTabSize();
 
 sfFloatRect GetCameraLimit(void);
 sfBool HasCameraLimit(void);
+
+unsigned int GetLadderTabSize(void);
+sfFloatRect GetLadderTab(unsigned int _index);
 #endif
