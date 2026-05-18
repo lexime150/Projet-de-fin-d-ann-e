@@ -325,6 +325,39 @@
         }, 
         {
          "draworder":"topdown",
+         "id":14,
+         "name":"Ladder",
+         "objects":[
+                {
+                 "height":144,
+                 "id":93,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":2320,
+                 "y":48
+                }, 
+                {
+                 "height":128,
+                 "id":94,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2400,
+                 "y":192
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":11,
          "name":"Skeleton-Enemy-Spawn",
          "objects":[
@@ -752,8 +785,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":14,
- "nextobjectid":93,
+ "nextlayerid":15,
+ "nextobjectid":95,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

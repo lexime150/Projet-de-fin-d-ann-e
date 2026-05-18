@@ -113,6 +113,9 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _keyEvent)
 	case sfKeyNum9:
 		ChangeLevel("Level_08");
 		break;
+	case sfKeyNum0:
+		ChangeLevel("Level_09");
+		break;
 	default:
 		break;
 	}
