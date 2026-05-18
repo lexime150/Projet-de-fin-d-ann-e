@@ -72,6 +72,11 @@
 #define FLOOR_SECURITY_SIZE (sfVector2f){1.f, 5.f}
 
 
+
+
+#define ZOMBIE_SIZE 32
+
+
 typedef enum MobState
 {
 	IDLE_MOB,
@@ -86,7 +91,7 @@ typedef enum TypeMob
 {
 	MUSHROOM,
 	SKELETON,
-	GOBLIN,
+	ZOMBIE,
 	MOB_NUMBER
 
 }TypeMob;
@@ -109,6 +114,7 @@ typedef enum MobSide
 	HEIGHT_MOB,
 	NOTHING_MOB
 }MobSide;
+
 
 
 typedef struct Data

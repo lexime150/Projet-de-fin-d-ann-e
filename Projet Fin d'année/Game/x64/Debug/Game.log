@@ -1,2 +1,5 @@
-﻿  Flying mob.c
+﻿  Mob.c
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(904,22): warning C4047: 'fonction' : les niveaux d'indirection de 'sfTexture *' et de 'sfTexture **' sont différents
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(904,22): warning C4024: 'sfTexture_destroy' : types différents pour le paramètre formel et réel 1
+C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Mob.c(903,15): warning C4090: 'initialisation' : différents qualificateurs 'const'
   Game.vcxproj -> C:\Users\Etudiant4\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
