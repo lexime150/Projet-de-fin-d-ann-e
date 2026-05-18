@@ -1,2 +1,5 @@
-﻿  Animation.c
-  Game.vcxproj -> C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
+﻿  Camera.c
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Camera.c(88,133): warning C4244: 'fonction' : conversion de 'unsigned int' en 'float', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Camera.c(89,134): warning C4244: 'fonction' : conversion de 'unsigned int' en 'float', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Camera.c(90,133): warning C4244: 'fonction' : conversion de 'unsigned int' en 'float', perte possible de données
+  Game.vcxproj -> C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
