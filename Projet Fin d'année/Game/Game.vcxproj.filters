@@ -90,6 +90,9 @@
     <ClCompile Include="Flying mob.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="SAT.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -151,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Flying mob.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="SAT.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

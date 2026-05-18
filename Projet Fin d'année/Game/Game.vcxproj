@@ -153,6 +153,7 @@
     <ClCompile Include="Menu.c" />
     <ClCompile Include="Mob.c" />
     <ClCompile Include="Player.c" />
+    <ClCompile Include="SAT.c" />
     <ClCompile Include="Save.c" />
     <ClCompile Include="Talkbox.c" />
     <ClCompile Include="Tool.c" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mob.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="SAT.h" />
     <ClInclude Include="Save.h" />
     <ClInclude Include="Talkbox.h" />
     <ClInclude Include="Tool.h" />

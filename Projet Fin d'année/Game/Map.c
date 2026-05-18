@@ -37,6 +37,9 @@ unsigned keyTabSize;
 AnimatedTile* animatedTileList;
 unsigned int animatedTileCount;
 
+SATPolygon* polyCollisionTab = NULL;
+unsigned int polyCollisionTabSize = 0;
+
 void LoadCollisionAndTrigger(void);
 void DrawTileLayer(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer);
 void DrawObjectGroup(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer);
@@ -230,6 +233,24 @@ void CleanupMap(void)
 	animatedTileList = NULL;
 	animatedTileCount = 0;
 
+	if (polyCollisionTabSize > 0)
+	{
+		free(polyCollisionTab);
+		polyCollisionTab = NULL;
+		polyCollisionTabSize = 0;
+	}
+}
+SATPolygon GetPolyCollision(unsigned int _index)
+{
+	if (_index < polyCollisionTabSize)
+		return polyCollisionTab[_index];
+	SATPolygon empty = { 0 };
+	return empty;
+}
+
+unsigned int GetPolyCollisionTabSize(void)
+{
+	return polyCollisionTabSize;
 }
 
 void LoadCollisionAndTrigger(void)
@@ -288,6 +309,8 @@ void LoadCollisionAndTrigger(void)
 	enemySpawnTab = calloc(1, sizeof(sfVector2f));
 	enemySpawnTabSize = 0;
 
+	polyCollisionTab = calloc(1, sizeof(SATPolygon));
+	polyCollisionTabSize = 0;
 	playerSpawn = (sfVector2f){ 0, 0 };
 
 
@@ -454,6 +477,24 @@ void LoadCollisionAndTrigger(void)
 						object->y * GAME_SCALE
 					};
 					mushroomSpawnTabSize++;
+				}
+			}
+			else if (object->vertices != NULL && object->vert_count >= 3)
+			{
+				if (strcmp(layer->name.ptr, "Poly-Collision") == 0)
+				{
+					SATPolygon* temp = realloc(polyCollisionTab,
+						(polyCollisionTabSize + 1) * sizeof(SATPolygon));
+					if (!temp) return;
+					polyCollisionTab = temp;
+
+					polyCollisionTab[polyCollisionTabSize] = SAT_PolyFromTiled(
+						object->vertices,
+						object->vert_count,
+						object->x,
+						object->y
+					);
+					polyCollisionTabSize++;
 				}
 			}
 			// Next object

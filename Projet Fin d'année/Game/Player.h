@@ -6,7 +6,9 @@
 #include "Game.h"
 #include "Collectibles.h"
 #include "Talkbox.h"
+#include "SAT.h"
 
+#define GROUND_BUFFER 0.08f
 #define PLAYER_WIDTH 32
 #define PLAYER_HEIGHT 32
 #define JUMP_FORCE 620.f
@@ -208,6 +210,7 @@ typedef struct Stats
 	float dashVelocityX;
 	float dashVelocityY;
 
+	float groundTimer;
 
 	sfBool isOrbUpgradeLevel00Collected;
 	sfBool isOrbUpgradeLevel01Collected;

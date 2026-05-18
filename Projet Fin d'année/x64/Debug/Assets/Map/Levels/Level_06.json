@@ -186,28 +186,6 @@
          "name":"Collision",
          "objects":[
                 {
-                 "height":64,
-                 "id":1,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":352,
-                 "x":0,
-                 "y":256
-                }, 
-                {
-                 "height":32,
-                 "id":2,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":80,
-                 "x":272,
-                 "y":224
-                }, 
-                {
                  "height":48,
                  "id":3,
                  "name":"",
@@ -239,28 +217,6 @@
                  "width":1040,
                  "x":880,
                  "y":288
-                }, 
-                {
-                 "height":64,
-                 "id":6,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":192,
-                 "x":1968,
-                 "y":256
-                }, 
-                {
-                 "height":32,
-                 "id":7,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":112,
-                 "x":2048,
-                 "y":224
                 }, 
                 {
                  "height":80,
@@ -523,6 +479,129 @@
         }, 
         {
          "draworder":"topdown",
+         "id":10,
+         "name":"Poly-Collision",
+         "objects":[
+                {
+                 "height":0,
+                 "id":58,
+                 "name":"",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":352,
+                         "y":0
+                        }, 
+                        {
+                         "x":352,
+                         "y":64
+                        }, 
+                        {
+                         "x":0,
+                         "y":64
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":0,
+                 "y":256
+                }, 
+                {
+                 "height":0,
+                 "id":60,
+                 "name":"",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":104.125,
+                         "y":0.125
+                        }, 
+                        {
+                         "x":104.125,
+                         "y":-31.875
+                        }, 
+                        {
+                         "x":30.125,
+                         "y":-31.75
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":247.875,
+                 "y":255.875
+                }, 
+                {
+                 "height":0,
+                 "id":67,
+                 "name":"",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":192,
+                         "y":0
+                        }, 
+                        {
+                         "x":192,
+                         "y":64
+                        }, 
+                        {
+                         "x":0,
+                         "y":64
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1968,
+                 "y":256
+                }, 
+                {
+                 "height":0,
+                 "id":68,
+                 "name":"",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":30.75,
+                         "y":-31.5
+                        }, 
+                        {
+                         "x":135.5,
+                         "y":-31.5
+                        }, 
+                        {
+                         "x":135.5,
+                         "y":0.5
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2024.5,
+                 "y":255.5
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":9,
          "name":"Spike",
          "objects":[
@@ -587,8 +666,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":10,
- "nextobjectid":56,
+ "nextlayerid":11,
+ "nextobjectid":69,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

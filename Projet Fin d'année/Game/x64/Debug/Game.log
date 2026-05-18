@@ -1,42 +1,5 @@
-﻿  Angel_Statue.c
-  Animation.c
-  Boss.c
-  Camera.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(125,75): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(125,86): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(125,148): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(125,161): warning C4244: 'fonction' : conversion de 'float' en 'sfUint8', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(307,63): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Boss.c(395,16): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
-  Collectibles.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Collectibles.c(23,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Collectibles.c(270,20): warning C4018: '<' : incompatibilité signed/unsigned
-  Flying mob.c
-  Game.c
-  GameHUD.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\GameHUD.c(34,42): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-  GameOver.c
-  GameState.c
-  Key.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(23,57): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(23,67): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(23,75): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(23,81): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(46,21): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(152,72): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(152,79): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(152,102): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Key.c(152,121): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-  main.c
-  Map.c
-  Menu.c
-  Mob.c
-  Player.c
-C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(838,7): warning C4013: 'HasCeilingAbove' non défini(e) ; extern retournant int pris par défaut
-  Save.c
-  Talkbox.c
-  Tool.c
-  Génération de code en cours...
+﻿  Player.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(896,7): warning C4013: 'HasCeilingAbove' non défini(e) ; extern retournant int pris par défaut
   Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
   'pwsh.exe' n'est pas reconnu en tant que commande interne
   ou externe, un programme exécutable ou un fichier de commandes.

@@ -1,4 +1,6 @@
 ﻿#include "Player.h"
+#include "SAT.h"
+
 
 Player* player;
 Items* item;
@@ -46,8 +48,40 @@ static void GetPlayerHitboxSize(float* outWidth, float* outHeight)
 		*outHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
 	}
 }
+
+static SATPolygon BuildPlayerPoly(void)
+{
+	float pw, ph;
+	GetPlayerHitboxSize(&pw, &ph);
+	float px = player->data.position.x - pw * 0.5f;
+	float py = player->data.position.y - ph;
+	return SAT_PolyFromBox(px, py, pw, ph);
+}
+static void SyncPlayerShapes(void)
+{
+	float pw, ph;
+	GetPlayerHitboxSize(&pw, &ph);
+	float px = player->data.position.x - pw * 0.5f;
+	float py = player->data.position.y - ph;
+
+	sfSprite_setPosition(player->sprite, player->data.position);
+	sfRectangleShape_setSize(player->shape.collisionPlayerShape,
+		(sfVector2f) {
+		pw, ph
+	});
+	sfRectangleShape_setPosition(player->shape.collisionPlayerShape,
+		(sfVector2f) {
+		px, py
+	});
+	player->shape.collisionPlayerRect =
+		sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
+	player->shape.playerRect =
+		sfSprite_getGlobalBounds(player->sprite);
+}
+
 void LoadPlayer(PlayerSaveData* save)
 {
+
 	BasePlayer();
 	if (save != NULL)
 	{
@@ -125,7 +159,34 @@ void LoadAnimationPlayer(void)
 	player->animationPlayer[CROUCH_WALK] = CreateAnimation(player->sprite, 6, 8, sfTrue, sfTrue, firstFrame);
 	SetAnimation(IDLE);
 }
+static void GroundSnap(void)
+{
+	const float SNAP_DIST = 6.f;
 
+	SATPolygon playerPoly = BuildPlayerPoly();
+	playerPoly = SAT_Translate(playerPoly, 0.f, SNAP_DIST);
+
+	for (unsigned i = 0; i < GetPolyCollisionTabSize(); i++)
+	{
+		SATPolygon wallPoly = GetPolyCollision(i);
+		SATResult res = SAT_Test(&playerPoly, &wallPoly);
+
+		if (!res.colliding) continue;
+
+		// On ne snap QUE sur du sol
+		if (res.normal.y < -0.3f)
+		{
+			player->data.position.x += res.normal.x * res.depth;
+			player->data.position.y += res.normal.y * res.depth;
+
+			player->data.velocity.y = 0.f;
+			player->action.isGrounded = sfTrue;
+
+			SyncPlayerShapes();
+			return;
+		}
+	}
+}
 void SetAnimation(PlayerState _state)
 {
 	player->lastState = player->currentState;
@@ -361,18 +422,15 @@ void CheckCollisionPlayerMob(float _dt)
 
 void ApplyPhysic(float _dt)
 {
-
-
 	if (!player->action.isGrounded)
 	{
 		if (player->action.isDashing && player->currentState == DASH_GROUND)
 		{
+
 			player->data.velocity.y = 0;
 			return;
 		}
-
-
-
+		player->data.groundTimer += _dt;
 		player->data.velocity.y += GRAVITY * _dt;
 
 		if (player->data.velocity.y > MAX_FALL_SPEED)
@@ -380,9 +438,9 @@ void ApplyPhysic(float _dt)
 			player->data.velocity.y = MAX_FALL_SPEED;
 		}
 	}
-	else
+	if (player->action.isGrounded)
 	{
-		player->data.velocity.y = 50.f;
+		player->data.groundTimer = 0.f;
 	}
 }
 void createCollisionSideAttack()
@@ -397,7 +455,7 @@ void createCollisionSideAttack()
 
 	float y = p.top + (p.height / 2.f) - (height / 2.f);
 
-	if (player->data.lastDirection == -1) 
+	if (player->data.lastDirection == -1)
 	{
 		sfRectangleShape_setPosition(player->shape.collisionAttackShape, (sfVector2f) { p.left - width, y });
 	}
@@ -878,20 +936,27 @@ static void HandleDoubleJump(float _dt, sfBool _spaceTouching)
 	}
 
 }
-
 static void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool jumpKey)
 {
 	static sfBool jumpPressed = sfFalse;
+	const float COYOTE_TOLERANCE = 0.12f;
+	// Permet d'empêcher un enchaînement immédiat sol -> walljump sur la frame suivante
+	static float antiChainTimer = 0.f;
+
+	// On décrémente le timer de sécurité s'il est actif
+	if (antiChainTimer > 0.f) {
+		antiChainTimer -= _dt;
+	}
 
 	if (jumpKey && !jumpPressed && !player->action.isDashing && !player->action.forcedCrouch)
 	{
 		jumpPressed = sfTrue;
 		player->data.jumpStartPosition = player->data.position.y;
 
-		if (player->action.isGrounded)
+		/* ── 1. SAUT STANDARD AU SOL (AVEC COYOTE TIME) ── */
+		if (player->action.isGrounded || player->data.groundTimer < COYOTE_TOLERANCE)
 		{
 			player->action.justWallJumped = sfFalse;
-
 			if (player->action.isSliding)
 			{
 				player->action.isSlideJumping = sfTrue;
@@ -899,33 +964,39 @@ static void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool 
 				player->action.isSliding = sfFalse;
 				player->data.slideCooldownTimer = SLIDE_COOLDOWN;
 			}
-
 			player->data.velocity.y = -JUMP_FORCE;
 			player->action.isGrounded = sfFalse;
+			player->data.groundTimer = COYOTE_TOLERANCE;
+
+			// SÉCURITÉ : On active un délai de 0.15 seconde pendant lequel 
+			// le jeu ignore totalement les demandes de Wall Jump.
+			antiChainTimer = 0.15f;
+
 			if (!player->action.jumpOne && !player->action.jumpTwo && player->currentState != D_JUMP)
 			{
 				StateMachine(JUMP);
 			}
-
 			player->action.jumpOne = sfTrue;
 		}
-		else
+		/* ── 2. LOGIQUE DE WALL JUMP EN L'AIR ── */
+		// AJOUT : "antiChainTimer <= 0.f" s'assure qu'on a bien quitté le sol depuis un moment
+		else if (!player->action.isGrounded && player->data.groundTimer >= COYOTE_TOLERANCE && antiChainTimer <= 0.f)
 		{
 			float dx = player->data.velocity.x * _dt;
 			if (CheckCollisionPlayerPlatformsX(dx) && !player->action.isDashing)
 			{
 				player->data.currentWallTouched = player->action.isTouchingRightWall ? 1.f : -1.f;
-
 				float wallJumpHX = 550.f;
 
+				// Vos conditions de touches restent 100% identiques
 				if (player->action.isTouchingRightWall && movingRight)
 				{
 					player->action.isWallJumping = sfTrue;
 					player->action.justWallJumped = sfTrue;
 					player->data.wallJumpVelocityX = -wallJumpHX;
 					player->data.lastDirection = -1;
-					player->data.velocity.y = -JUMP_FORCE * 0.75f;
-					sfSprite_setScale(player->sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+					player->data.velocity.y = -JUMP_FORCE;
+					StateMachine(WALL_JUMP);
 				}
 				else if (player->action.isTouchingLeftWall && movingLeft)
 				{
@@ -933,28 +1004,30 @@ static void HandleJump(float _dt, sfBool movingLeft, sfBool movingRight, sfBool 
 					player->action.justWallJumped = sfTrue;
 					player->data.wallJumpVelocityX = wallJumpHX;
 					player->data.lastDirection = 1;
-					player->data.velocity.y = -JUMP_FORCE * 0.75f;
-					sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+					player->data.velocity.y = -JUMP_FORCE;
+					StateMachine(WALL_JUMP);
 				}
-
-				player->action.isGrounded = sfFalse;
-				player->action.isSlideJumping = sfFalse;
-				StateMachine(WALL_JUMP);
 			}
-			else if (player->action.jumpOne)
+			/* ── 3. DOUBLE SAUT ── */
+			else if (!player->action.jumpTwo && player->data.doubleJumpUnlocked)
 			{
-				HandleDoubleJump(_dt, jumpKey);
+				StateMachine(D_JUMP);
+				player->data.velocity.y = -550.f;
+				player->action.jumpOne = sfFalse;
+				player->action.jumpTwo = sfTrue;
 			}
 		}
-
-
-
 	}
 
 	if (!jumpKey)
 	{
 		jumpPressed = sfFalse;
+	}
 
+	if (player->action.jumpTwo && player->data.velocity.y > 0)
+	{
+		StateMachine(FALL);
+		player->action.jumpTwo = sfFalse;
 	}
 }
 
@@ -1046,28 +1119,41 @@ void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
 	float dx = player->data.velocity.x * _dt;
 	CheckCollisionPlayerPlatformsX(dx);
 
+	// 🔥 Si on est au sol → on ne fait RIEN
+	if (player->action.isGrounded)
+		return;
+
+	// 🔥 WALL GRIP LOGIQUE CONSERVÉE
 	if (player->data.velocity.y < 0 && !player->action.isDashing)
 	{
 		if (movingLeft && player->action.isTouchingLeftWall && player->currentState == JUMP)
 		{
 			float fallen = player->data.position.y - player->data.jumpStartPosition;
+
 			if (-fallen > MIN_WALL_GRIP_DISTANCE)
 			{
 				player->data.velocity.y = 0;
 				StateMachine(WALL_GRIP_FALL);
+				return;
 			}
 		}
 		else if (movingRight && player->action.isTouchingRightWall && player->currentState == JUMP)
 		{
 			float fallen = player->data.position.y - player->data.jumpStartPosition;
+
 			if (-fallen > MIN_WALL_GRIP_DISTANCE)
 			{
 				player->data.velocity.y = 0;
 				StateMachine(WALL_GRIP_FALL);
+				return;
 			}
 		}
 
-		if (player->currentState != JUMP && player->currentState != WALL_JUMP && player->currentState != D_JUMP)
+		// 🔥 JUMP uniquement si vraiment en l'air
+		if (!player->action.isGrounded &&
+			player->currentState != JUMP &&
+			player->currentState != WALL_JUMP &&
+			player->currentState != D_JUMP)
 		{
 			StateMachine(JUMP);
 		}
@@ -1079,20 +1165,30 @@ void HandleAirAnimation(float _dt, sfBool movingLeft, sfBool movingRight)
 			if (movingLeft && player->action.isTouchingLeftWall)
 			{
 				player->data.velocity.y -= 600.f * _dt;
+
 				if (player->data.velocity.y >= MAX_GRIP_WALL_SPEED)
 					player->data.velocity.y = MAX_GRIP_WALL_SPEED;
+
 				StateMachine(WALL_GRIP_FALL);
+				return;
 			}
 			else if (movingRight && player->action.isTouchingRightWall)
 			{
 				player->data.velocity.y -= 600.f * _dt;
+
 				if (player->data.velocity.y >= MAX_GRIP_WALL_SPEED)
 					player->data.velocity.y = MAX_GRIP_WALL_SPEED;
+
 				StateMachine(WALL_GRIP_FALL);
+				return;
 			}
-			else if (!player->action.isDashing)
+			else
 			{
-				StateMachine(FALL);
+				// 🔥 FALL uniquement si vraiment en l'air
+				if (player->data.velocity.y > 50.f && !player->action.isGrounded) {
+					// Ne passer en FALL que si le joueur a une vraie vitesse de chute positive
+					StateMachine(FALL);
+				}
 			}
 		}
 	}
@@ -1222,7 +1318,6 @@ void MovePlayer(sfRenderWindow* _renderWindow, float _dt)
 
 void CollisionPlayerPlatformsX(float _dx)
 {
-	sfBool sKey = sfKeyboard_isKeyPressed(sfKeyS);
 	player->action.isTouchingLeftWall = sfFalse;
 	player->action.isTouchingRightWall = sfFalse;
 
@@ -1230,7 +1325,13 @@ void CollisionPlayerPlatformsX(float _dx)
 	float playerWidth, playerHeight;
 	GetPlayerHitboxSize(&playerWidth, &playerHeight);
 
-	sfFloatRect hitbox = { player->data.position.x - playerHalfWidth + _dx, player->data.position.y - playerHeight, playerWidth, playerHeight };
+	/* ── AABB – identique à l'original ── */
+	sfFloatRect hitbox = {
+		player->data.position.x - playerHalfWidth + _dx,
+		player->data.position.y - playerHeight,
+		playerWidth,
+		playerHeight
+	};
 
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
@@ -1238,13 +1339,9 @@ void CollisionPlayerPlatformsX(float _dx)
 		if (sfFloatRect_intersects(&hitbox, &platform, NULL))
 		{
 			if (player->data.velocity.x > 0)
-			{
 				hitbox.left = platform.left - hitbox.width;
-			}
 			else if (player->data.velocity.x < 0)
-			{
 				hitbox.left = platform.left + platform.width;
-			}
 
 			if (!player->action.justWallJumped)
 			{
@@ -1253,20 +1350,59 @@ void CollisionPlayerPlatformsX(float _dx)
 			}
 
 			sfSprite_setPosition(player->sprite, player->data.position);
-			sfRectangleShape_setPosition(player->shape.collisionPlayerShape, (sfVector2f) { hitbox.left, hitbox.top });
-			player->shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
-			player->shape.playerRect = sfSprite_getGlobalBounds(player->sprite);
+			sfRectangleShape_setPosition(player->shape.collisionPlayerShape,
+				(sfVector2f) {
+				hitbox.left, hitbox.top
+			});
+			player->shape.collisionPlayerRect =
+				sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
+			player->shape.playerRect =
+				sfSprite_getGlobalBounds(player->sprite);
 			return;
 		}
 	}
 
-
+	/* ── Déplacement horizontal effectif ── */
 	player->action.justWallJumped = sfFalse;
 	player->data.position.x += _dx;
-	sfSprite_setPosition(player->sprite, player->data.position);
-	sfRectangleShape_setPosition(player->shape.collisionPlayerShape, (sfVector2f) { player->data.position.x - playerHalfWidth, player->data.position.y - playerHeight });
-	player->shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
-	player->shape.playerRect = sfSprite_getGlobalBounds(player->sprite);
+	SyncPlayerShapes();
+
+	/* ── SAT – polygones inclinés ── */
+	for (unsigned i = 0; i < GetPolyCollisionTabSize(); i++)
+	{
+		SATPolygon wallPoly = GetPolyCollision(i);
+		SATPolygon playerPoly = BuildPlayerPoly();
+
+		SATResult res = SAT_Test(&playerPoly, &wallPoly);
+		if (!res.colliding) continue;
+
+		/* On ne traite que les collisions à dominante horizontale :
+		   évite que cette passe marque isGrounded ou bloque le saut. */
+		float absNx = res.normal.x < 0 ? -res.normal.x : res.normal.x;
+		float absNy = res.normal.y < 0 ? -res.normal.y : res.normal.y;
+		if (absNy >= absNx) continue;
+
+		/* Résolution */
+		player->data.position.x += res.normal.x * res.depth;
+		player->data.position.y += res.normal.y * res.depth;
+
+		/* Annule la composante de vitesse qui entre dans le mur */
+		float vDotN = player->data.velocity.x * res.normal.x
+			+ player->data.velocity.y * res.normal.y;
+		if (vDotN < 0.f)
+		{
+			player->data.velocity.x -= vDotN * res.normal.x;
+			player->data.velocity.y -= vDotN * res.normal.y;
+		}
+
+		/* Détection mur gauche / droit */
+		if (res.normal.x > 0.5f)
+			player->action.isTouchingLeftWall = sfTrue;
+		else if (res.normal.x < -0.5f)
+			player->action.isTouchingRightWall = sfTrue;
+
+		SyncPlayerShapes();
+	}
 }
 void CollisionPlayerPlatformsY(float _dy)
 {
@@ -1277,9 +1413,15 @@ void CollisionPlayerPlatformsY(float _dy)
 
 	float previousBottom = player->data.position.y;
 
-	sfFloatRect hitbox = { player->data.position.x - playerHalfWidth, player->data.position.y - playerHeight + _dy,playerWidth,playerHeight };
+	sfFloatRect hitbox = {
+		player->data.position.x - playerHalfWidth,
+		player->data.position.y - playerHeight + _dy,
+		playerWidth,
+		playerHeight
+	};
 	player->action.isGrounded = sfFalse;
 
+	/* ── AABB rectangulaires ── */
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		sfFloatRect platform = GetMapCollision(i);
@@ -1289,7 +1431,6 @@ void CollisionPlayerPlatformsY(float _dy)
 			{
 				hitbox.top = platform.top - hitbox.height;
 				player->action.isGrounded = sfTrue;
-
 				player->action.justWallJumped = sfFalse;
 			}
 			else if (player->data.velocity.y < 0)
@@ -1299,22 +1440,16 @@ void CollisionPlayerPlatformsY(float _dy)
 
 			player->data.velocity.y = 0;
 			player->data.position.y = hitbox.top + hitbox.height;
-			sfSprite_setPosition(player->sprite, player->data.position);
-			sfRectangleShape_setPosition(player->shape.collisionPlayerShape, (sfVector2f) { hitbox.left, hitbox.top });
-			player->shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
-			player->shape.playerRect = sfSprite_getGlobalBounds(player->sprite);
+			SyncPlayerShapes();
 			return;
 		}
 	}
 
+	/* ── Semi-solides ── */
 	for (unsigned i = 0; i < GetSemiSolidCollisionTabSize(); i++)
 	{
 		sfFloatRect semi = GetSemiSolidCollisionTab(i);
-
-		if (!sfFloatRect_intersects(&hitbox, &semi, NULL))
-		{
-			continue;
-		}
+		if (!sfFloatRect_intersects(&hitbox, &semi, NULL)) continue;
 
 		sfBool wasAbove = previousBottom <= semi.top;
 		sfBool isFalling = player->data.velocity.y > 0;
@@ -1323,25 +1458,100 @@ void CollisionPlayerPlatformsY(float _dy)
 		{
 			hitbox.top = semi.top - hitbox.height;
 			player->action.isGrounded = sfTrue;
-
 			player->action.justWallJumped = sfFalse;
-
 
 			player->data.velocity.y = 0;
 			player->data.position.y = hitbox.top + hitbox.height;
-			sfSprite_setPosition(player->sprite, player->data.position);
-			sfRectangleShape_setPosition(player->shape.collisionPlayerShape, (sfVector2f) { hitbox.left, hitbox.top });
-			player->shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
-			player->shape.playerRect = sfSprite_getGlobalBounds(player->sprite);
+			SyncPlayerShapes();
 			return;
 		}
 	}
 
+	/* ── Déplacement vertical effectif ── */
 	player->data.position.y += _dy;
-	sfSprite_setPosition(player->sprite, player->data.position);
-	sfRectangleShape_setPosition(player->shape.collisionPlayerShape, (sfVector2f) { player->data.position.x - playerHalfWidth, player->data.position.y - playerHeight });
-	player->shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
-	player->shape.playerRect = sfSprite_getGlobalBounds(player->sprite);
+	SyncPlayerShapes();
+
+	/* ── SAT – polygones inclinés ── */
+	for (unsigned i = 0; i < GetPolyCollisionTabSize(); i++)
+	{
+		SATPolygon wallPoly = GetPolyCollision(i);
+		SATPolygon playerPoly = BuildPlayerPoly();
+
+		SATResult res = SAT_Test(&playerPoly, &wallPoly);
+		if (!res.colliding) continue;
+
+		player->data.position.x += res.normal.x * res.depth;
+		player->data.position.y += res.normal.y * res.depth;
+
+		if (res.normal.y < -0.3f) // sol
+		{
+			player->action.isGrounded = sfTrue;
+			player->action.justWallJumped = sfFalse;
+
+			if (player->data.velocity.y > 0)
+				player->data.velocity.y = 0;
+		}
+		else if (res.normal.y > 0.3f) // plafond
+		{
+			if (player->data.velocity.y < 0)
+				player->data.velocity.y = 0;
+		}
+		else                               /* mur raide via passe Y  */
+		{
+			float vDotN = player->data.velocity.x * res.normal.x
+				+ player->data.velocity.y * res.normal.y;
+			if (vDotN < 0.f)
+			{
+				player->data.velocity.x -= vDotN * res.normal.x;
+				player->data.velocity.y -= vDotN * res.normal.y;
+			}
+		}
+
+		SyncPlayerShapes();
+	}
+
+	/* ── Probe : confirme qu'on est toujours au sol la frame suivante ── */
+	if (player->action.isGrounded)
+	{
+		sfBool stillGrounded = sfFalse;
+
+		/* Probe SAT : poly décalé 2px vers le bas */
+		SATPolygon probe = BuildPlayerPoly();
+		probe = SAT_Translate(probe, 0.f, 6.f);
+
+		for (unsigned i = 0; i < GetPolyCollisionTabSize(); i++)
+		{
+			SATPolygon wallPoly = GetPolyCollision(i);
+			SATResult  res = SAT_Test(&probe, &wallPoly);
+			if (res.colliding && res.normal.y < -0.1f)
+			{
+				stillGrounded = sfTrue;
+				break;
+			}
+		}
+
+		/* Probe AABB : rectangle 2px sous les pieds */
+		if (!stillGrounded)
+		{
+			sfFloatRect underFeet = {
+				player->data.position.x - playerWidth * 0.5f,
+				player->data.position.y,   /* juste sous les pieds  */
+				playerWidth,
+				6.f
+			};
+			for (unsigned i = 0; i < GetCollisionTabSize(); i++)
+			{
+				sfFloatRect plat = GetMapCollision(i);
+				if (sfFloatRect_intersects(&underFeet, &plat, NULL))
+				{
+					stillGrounded = sfTrue;
+					break;
+				}
+			}
+		}
+
+		player->action.isGrounded = stillGrounded;
+	}
 }
 void CheckCollisionPlayerPlatforms(float _dt)
 {
@@ -1351,16 +1561,32 @@ void CheckCollisionPlayerPlatforms(float _dt)
 	float dy = player->data.velocity.y * _dt;
 	CollisionPlayerPlatformsY(dy);
 
+	// 🔥 AJOUT IMPORTANT
+	if (!player->action.isGrounded)
+	{
+		GroundSnap();
+	}
 
+	// Resync
 	float playerWidth, playerHeight;
 	GetPlayerHitboxSize(&playerWidth, &playerHeight);
 
-	sfRectangleShape_setSize(player->shape.collisionPlayerShape, (sfVector2f) { playerWidth, playerHeight });
+	sfRectangleShape_setSize(player->shape.collisionPlayerShape,
+		(sfVector2f) {
+		playerWidth, playerHeight
+	});
 
-	sfRectangleShape_setPosition(player->shape.collisionPlayerShape, (sfVector2f) { player->data.position.x - playerWidth / 2.f, player->data.position.y - playerHeight });
+	sfRectangleShape_setPosition(player->shape.collisionPlayerShape,
+		(sfVector2f) {
+		player->data.position.x - playerWidth / 2.f,
+			player->data.position.y - playerHeight
+	});
 
-	player->shape.collisionPlayerRect = sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
-	player->shape.playerRect = sfSprite_getGlobalBounds(player->sprite);
+	player->shape.collisionPlayerRect =
+		sfRectangleShape_getGlobalBounds(player->shape.collisionPlayerShape);
+
+	player->shape.playerRect =
+		sfSprite_getGlobalBounds(player->sprite);
 }
 sfBool CheckCollisionPlayerPlatformsX(float _dx)
 {
@@ -1371,8 +1597,14 @@ sfBool CheckCollisionPlayerPlatformsX(float _dx)
 	float playerWidth, playerHeight;
 	GetPlayerHitboxSize(&playerWidth, &playerHeight);
 
-	sfFloatRect hitbox = { player->data.position.x - playerHalfWidth + _dx, player->data.position.y - playerHeight, playerWidth, playerHeight };
+	sfFloatRect hitbox = {
+		player->data.position.x - playerHalfWidth + _dx,
+		player->data.position.y - playerHeight,
+		playerWidth,
+		playerHeight
+	};
 
+	/* ── AABB ── */
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		sfFloatRect platform = GetMapCollision(i);
@@ -1384,15 +1616,51 @@ sfBool CheckCollisionPlayerPlatformsX(float _dx)
 			if (playerCenterX < platformCenterX)
 			{
 				player->action.isTouchingRightWall = sfTrue;
+
 			}
 			else
 			{
 				player->action.isTouchingLeftWall = sfTrue;
+
 			}
 
 			return sfTrue;
 		}
 	}
+
+	SATPolygon playerPoly = BuildPlayerPoly();
+	playerPoly = SAT_Translate(playerPoly, _dx, 0.f);
+
+	for (unsigned i = 0; i < GetPolyCollisionTabSize(); i++)
+	{
+		SATPolygon wallPoly = GetPolyCollision(i);
+		SATResult  res = SAT_Test(&playerPoly, &wallPoly);
+		if (!res.colliding)
+		{
+			continue;
+		}
+
+		float absNx = res.normal.x < 0 ? -res.normal.x : res.normal.x;
+		float absNy = res.normal.y < 0 ? -res.normal.y : res.normal.y;
+		if (absNy >= absNx)
+		{
+			continue;
+		}
+
+		if (res.normal.x > 0.f)
+		{
+			player->action.isTouchingLeftWall = sfTrue;
+
+		}
+		else
+		{
+			player->action.isTouchingRightWall = sfTrue;
+
+		}
+
+		return sfTrue;
+	}
+
 	return sfFalse;
 }
 
@@ -1528,7 +1796,7 @@ void BasePlayer()
 
 	player->data = (Stats){ 0 };
 	player->action = (Action){ 0 };
-
+	player->data.groundTimer = 0.f;
 
 	player->sprite = CreateSprite("Assets/Sprites/Game/Player/playerUpD.png", GetPlayerSpawn());
 	sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
@@ -1789,20 +2057,26 @@ static sfBool HasCeilingAbove(void)
 {
 	float playerHalfWidth = (PLAYER_HITBOX_WIDTH * GAME_SCALE) / 2.f;
 	float fullHeight = PLAYER_HITBOX_HEIGHT * GAME_SCALE;
-	float crouchHeight = fullHeight * 0.5f;
 
-	sfFloatRect standHitbox = {
-		player->data.position.x - playerHalfWidth,
-		player->data.position.y - fullHeight,
-		PLAYER_HITBOX_WIDTH * GAME_SCALE,
-		fullHeight
-	};
+	sfFloatRect standHitbox = { player->data.position.x - playerHalfWidth,player->data.position.y - fullHeight,PLAYER_HITBOX_WIDTH * GAME_SCALE,fullHeight };
 
+	/* AABB */
 	for (unsigned i = 0; i < GetCollisionTabSize(); i++)
 	{
 		sfFloatRect platform = GetMapCollision(i);
 		if (sfFloatRect_intersects(&standHitbox, &platform, NULL))
 			return sfTrue;
 	}
+
+	/* SAT */
+	SATPolygon standPoly = SAT_PolyFromRect(standHitbox);
+	for (unsigned i = 0; i < GetPolyCollisionTabSize(); i++)
+	{
+		SATPolygon wallPoly = GetPolyCollision(i);
+		SATResult  res = SAT_Test(&standPoly, &wallPoly);
+		if (res.colliding && res.normal.y > 0.3f)
+			return sfTrue;
+	}
+
 	return sfFalse;
 }

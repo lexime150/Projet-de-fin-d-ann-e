@@ -3,6 +3,8 @@
 
 #include "Common.h"
 #include "cute_tiled.h"
+#include "SAT.h"
+
 typedef struct AnimatedTile
 {
 	int tileId;
@@ -64,4 +66,12 @@ sfFloatRect GetSemiSolidCollisionTab(unsigned int _index);
 void ChangeLevel(const char* level);
 unsigned int GetKeyTabSize();
 KeyStruct GetKeyTab(unsigned _index);
+
+
+extern SATPolygon* polyCollisionTab;
+extern unsigned int polyCollisionTabSize;
+
+SATPolygon  GetPolyCollision(unsigned int _index);
+unsigned int GetPolyCollisionTabSize(void);
+
 #endif
