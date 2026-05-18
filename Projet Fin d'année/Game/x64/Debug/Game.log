@@ -1,5 +1,5 @@
-﻿  Camera.c
-C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Camera.c(88,133): warning C4244: 'fonction' : conversion de 'unsigned int' en 'float', perte possible de données
-C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Camera.c(89,134): warning C4244: 'fonction' : conversion de 'unsigned int' en 'float', perte possible de données
-C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Camera.c(90,133): warning C4244: 'fonction' : conversion de 'unsigned int' en 'float', perte possible de données
+﻿  Game.c
+  Player.c
+  Génération de code en cours...
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(838,7): warning C4013: 'HasCeilingAbove' non défini(e) ; extern retournant int pris par défaut
   Game.vcxproj -> C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe

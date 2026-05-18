@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -13,10 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -86,7 +86,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
@@ -119,13 +119,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Player.c",
               "DocumentMoniker": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Player.c",
               "RelativeDocumentMoniker": "Game\\Player.c",
               "ToolTip": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Player.c",
               "RelativeToolTip": "Game\\Player.c",
-              "ViewState": "AgIAACMBAAAAAAAAAAAAADoBAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAOoAAAAAAAAAAAAAAPwAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-05-11T08:46:48.825Z",
               "EditorCaption": ""
@@ -156,15 +156,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Game.c",
               "DocumentMoniker": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c",
               "RelativeDocumentMoniker": "Game\\Game.c",
               "ToolTip": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Game.c",
               "RelativeToolTip": "Game\\Game.c",
-              "ViewState": "AgIAAFYAAAAAAAAAAAAuwG4AAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAuwHIAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-05-11T07:16:51.942Z"
+              "WhenOpened": "2026-05-11T07:16:51.942Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -216,7 +217,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "main.c",
               "DocumentMoniker": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\main.c",
               "RelativeDocumentMoniker": "Game\\main.c",
@@ -240,7 +241,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Camera.c",
               "DocumentMoniker": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Camera.c",
               "RelativeDocumentMoniker": "Game\\Camera.c",
@@ -248,8 +249,7 @@
               "RelativeToolTip": "Game\\Camera.c",
               "ViewState": "AgIAACoAAAAAAAAAAAAqwDAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-05-11T07:17:26.897Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-11T07:17:26.897Z"
             },
             {
               "$type": "Document",
