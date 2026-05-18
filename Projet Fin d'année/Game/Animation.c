@@ -58,7 +58,8 @@ void UpdateAnimation(Animation* _animation, float _dt)
     sfIntRect frame = _animation->firstFrame;
     frame.left = frame.left + _animation->currentFrame * frame.width;
     sfSprite_setTextureRect(_animation->sprite, frame);
-    sfSprite_setOrigin(player->sprite, (sfVector2f) { (float)player->currentAnimation->firstFrame.width / 2, (float)player->currentAnimation->firstFrame.height });
+    sfSprite_setOrigin(_animation->sprite, (sfVector2f) { (float)_animation->firstFrame.width / 2, (float)_animation->firstFrame.height });
+    
 
 
 }

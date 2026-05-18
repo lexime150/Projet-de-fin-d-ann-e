@@ -211,11 +211,12 @@ void AddMob(TypeMob _type, float _x, float _y)
 	sfRectangleShape_setOrigin(newMob.shape.floorSecurity, (sfVector2f) { FLOOR_SECURITY_SIZE.x / 2, 0 });
 	sfRectangleShape_setScale(newMob.shape.floorSecurity, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
-
-	sfSound_setBuffer(newMob.soundMob.soundTakeHit, newMob.soundMob.soundBufferTakeHit);
-	sfSound_setBuffer(newMob.soundMob.soundAttack, newMob.soundMob.soundBufferAttack);
-	sfSound_setBuffer(newMob.soundMob.soundDead, newMob.soundMob.soundBufferDead);
-
+	if (newMob.soundMob.soundAttack && newMob.soundMob.soundTakeHit && newMob.soundMob.soundDead)
+	{
+		sfSound_setBuffer(newMob.soundMob.soundTakeHit, newMob.soundMob.soundBufferTakeHit);
+		sfSound_setBuffer(newMob.soundMob.soundAttack, newMob.soundMob.soundBufferAttack);
+		sfSound_setBuffer(newMob.soundMob.soundDead, newMob.soundMob.soundBufferDead);
+	}
 
 	newMob.act = IS_IDLE;
 
@@ -394,7 +395,12 @@ void UpdateMob(sfRenderWindow* _renderWindow, float _dt)
 		StateMob(_dt, i);
 		CheckCollisionMobEntities(_dt, i);
 		UpdateMobInfo(_dt, i);
-		UpdateAnimation(mob[i].currentMobAnimation, _dt);
+
+		if (mob[i].currentMobAnimation)
+		{
+			UpdateAnimation(mob[i].currentMobAnimation, _dt);
+		}
+
 		DeleteMob(&i);
 
 	}
@@ -739,7 +745,12 @@ void StateMob(float _dt, unsigned _i)
 		}
 		Additem(ITEM_KEY, mobPos.x, mobPos.y - 5, 0);
 		StateMobMachine(DEATH, _i);
-		sfSound_play(mob[_i].soundMob.soundDead);
+
+		if (mob[_i].soundMob.soundDead)
+		{
+			sfSound_play(mob[_i].soundMob.soundDead);
+		}
+		
 		mob[_i].data.velocity.x = 0.f;
 	}
 
@@ -777,8 +788,11 @@ void StateMob(float _dt, unsigned _i)
 			sfSound_setPitch(mob[_i].soundMob.soundTakeHit, RandomFloatMob(0.80f, 1.2f));
 			sfTime offset = sfSeconds(0.4f);
 			sfSound_setPlayingOffset(mob[_i].soundMob.soundTakeHit, offset);
-			sfSound_play(mob[_i].soundMob.soundTakeHit);
 
+			if (mob[_i].soundMob.soundTakeHit)
+			{
+				sfSound_play(mob[_i].soundMob.soundTakeHit);
+			}
 
 			if (posMobX > posAttackPlayerX)
 			{

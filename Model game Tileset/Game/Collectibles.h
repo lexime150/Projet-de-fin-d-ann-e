@@ -1,0 +1,36 @@
+#ifndef COLLECTIBLES_H
+#define COLLECTIBLES_H
+
+#include "Common.h"
+#include "Player.h"
+#include "Mob.h"
+#include "Map.h"
+
+#define HEALTH_NUMBER 50
+
+typedef enum ItemType
+{
+	ITEM_HEALTH,
+	ITEM_KEY,
+	ITEM_COUNT
+}ItemType;
+
+typedef struct Items
+{
+	sfSprite* itemSprite;
+	sfTexture* itemTexture;
+
+	sfVector2f itemPosition;
+	sfVector2f velocity;
+	ItemType type;
+	sfBool isGrounded;
+}Items;
+
+void Loaditem(void);
+void Additem(ItemType _itemType, float _x, float _y);
+void Updateitem( float _dt);
+void Drawitem(sfRenderWindow* _renderWindow);
+void Cleanupitem(void);
+int GetItemCount(void);
+sfVector2f GetItemDistance(unsigned _index);
+#endif // !COLLECTIBLES_H
