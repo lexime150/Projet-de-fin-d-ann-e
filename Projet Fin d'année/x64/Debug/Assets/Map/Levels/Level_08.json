@@ -279,6 +279,17 @@
                  "width":16,
                  "x":0,
                  "y":48
+                }, 
+                {
+                 "height":160,
+                 "id":69,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":3024,
+                 "y":112
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -889,7 +900,7 @@
          "name":"Ladder",
          "objects":[
                 {
-                 "height":80,
+                 "height":88.3636363636364,
                  "id":68,
                  "name":"",
                  "rotation":0,
@@ -897,7 +908,7 @@
                  "visible":true,
                  "width":16,
                  "x":96,
-                 "y":48
+                 "y":39.6363636363636
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -906,7 +917,7 @@
          "y":0
         }],
  "nextlayerid":26,
- "nextobjectid":69,
+ "nextobjectid":70,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

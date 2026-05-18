@@ -329,7 +329,7 @@
          "name":"Ladder",
          "objects":[
                 {
-                 "height":144,
+                 "height":152.727272727273,
                  "id":93,
                  "name":"",
                  "rotation":0,
@@ -337,7 +337,7 @@
                  "visible":true,
                  "width":16,
                  "x":2320,
-                 "y":48
+                 "y":39.2727272727273
                 }, 
                 {
                  "height":128,
@@ -346,7 +346,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":0,
+                 "width":16,
                  "x":2400,
                  "y":192
                 }],
@@ -632,7 +632,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":128,
+                 "width":124.181818181818,
                  "x":2192,
                  "y":144
                 }, 
@@ -643,7 +643,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":128,
+                 "width":125.272727272727,
                  "x":2192,
                  "y":224
                 }, 
@@ -778,6 +778,39 @@
                  "width":16,
                  "x":2720,
                  "y":224
+                }, 
+                {
+                 "height":16,
+                 "id":95,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":2416,
+                 "y":304
+                }, 
+                {
+                 "height":16,
+                 "id":96,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":2160,
+                 "y":304
+                }, 
+                {
+                 "height":16,
+                 "id":97,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":352,
+                 "y":304
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -786,7 +819,7 @@
          "y":0
         }],
  "nextlayerid":15,
- "nextobjectid":95,
+ "nextobjectid":98,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
