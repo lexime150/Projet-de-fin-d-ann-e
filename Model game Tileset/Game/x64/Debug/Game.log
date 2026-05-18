@@ -1,1 +1,23 @@
-﻿  Game.vcxproj -> C:\Users\delom\OneDrive\Documents\GitHub\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
+﻿  Animation.c
+  Camera.c
+  Collectibles.c
+  Game.c
+  GameHUD.c
+  GameOver.c
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Model game Tileset\Game\GameHUD.c(28,42): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+  GameState.c
+  Key.c
+  main.c
+  Map.c
+  Menu.c
+  Mob.c
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Model game Tileset\Game\Mob.c(370,20): warning C4018: '<' : incompatibilité signed/unsigned
+  Player.c
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(125,95): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(125,136): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(228,21): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Model game Tileset\Game\Player.c(547,15): warning C4101: 'aRect' : variable locale non référencée
+  Save.c
+  Génération de code en cours...
+  LINK : C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe introuvable ou non généré par la dernière édition de liens incrémentielle ; édition de liens complète en cours
+  Game.vcxproj -> C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Model game Tileset\x64\Debug\Game.exe
