@@ -40,6 +40,7 @@ typedef struct Projectile
 	sfVector2f velocity;
 	float timerShoot;
 	Animation animation;
+	Animation* currentAnimation;
 
 	sfBool isTouching;
 	sfBool isShooting;
@@ -61,21 +62,25 @@ typedef struct FlyingMob
 	Animation animation[STATE_FLYING_MOB_NUMBER];
 	Animation* currentAnimation;
 
-	Projectile projectile;
+	//Projectile projectile;
 
 	FlyingMobState currentState;
 	FlyingMobState lastState;
+
+	FlyingMobState lastAttack;
+	FlyingMobState currentAttack;
 
 	sfCircleShape* limitedZone;
 
 	float angle;
 
-
 	sfBool limitedZoneEnable;
 	sfVector2f distanceFlyMobLimited;
-
 	
 	int moveSteps;
+
+	int health;
+
 
 }FlyingMob;
 

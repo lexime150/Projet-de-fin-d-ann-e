@@ -21,26 +21,31 @@ Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _fra
 void UpdateAnimation(Animation* _animation, float _dt)
 {
     // _animation->isPlaying = sfTrue;
-    if (_animation->isPlaying)
+    if (_animation != NULL)
     {
-        _animation->timer += _dt;
-
-        if (_animation->timer > 1.f / _animation->frameSpeed)
+        if (_animation->isPlaying)
         {
-            _animation->timer -= 1.f / _animation->frameSpeed;
-            _animation->currentFrame++;
+            _animation->timer += _dt;
 
-            if (_animation->currentFrame == _animation->frameCount)
+            if (_animation->timer > 1.f / _animation->frameSpeed)
             {
-                if (_animation->isLooping)
+                _animation->timer -= 1.f / _animation->frameSpeed;
+                _animation->currentFrame++;
+
+                if (_animation->currentFrame == _animation->frameCount)
                 {
-                    _animation->currentFrame = 0;
-                    //  _animation->firstFrame.left = 0;
-                }
-                else
-                {
-                    _animation->currentFrame--;
-                    _animation->isPlaying = sfFalse;
+                    if (_animation->isLooping)
+                    {
+                        _animation->currentFrame = 0;
+                        //  _animation->firstFrame.left = 0;
+                    }
+                    else
+                    {
+                        _animation->currentFrame--;
+                        _animation->isPlaying = sfFalse;
+                    }
+
+
                 }
 
 
@@ -48,8 +53,6 @@ void UpdateAnimation(Animation* _animation, float _dt)
 
 
         }
-
-
     }
 
     sfIntRect frame = _animation->firstFrame;

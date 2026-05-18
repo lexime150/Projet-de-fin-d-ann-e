@@ -11,9 +11,7 @@ void StateFlyingMobAnimation(FlyingMobState _state, _I);
 void StateFlyMob(float _dt, _I);
 void LoadFlyMobAnimation(_I);
 void AddFlyMob(sfVector2f _pos);
-void CheckFlyMobLimitedZone(float _dt, _I);
-void Projectiles(float _dt, _I);
-
+void CheckCollisionFlyMobPlat(float _dt, _I);
 void LoadFlyMob(void)
 {
 	for (unsigned i = 0; i < GetFlyMobSpawnTabSize(); i++)
@@ -40,12 +38,12 @@ void AddFlyMob(sfVector2f _pos)
 	sfSprite_setOrigin(newMob.sprite, (sfVector2f) { FLY_MOB_SIZE / 2.f, FLY_MOB_SIZE / 2.f });
 	sfSprite_setScale(newMob.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
-	newMob.projectile.timerShoot = 0;
-	newMob.projectile.sprite = CreateSprite("Assets/Sprites/Game/Mob/Flying mob.png", _pos);
-	sfSprite_setScale(newMob.projectile.sprite, (sfVector2f){GAME_SCALE, GAME_SCALE});
+
 
 	newMob.limitedZone = CreateCircle(600.f, _pos, sfTransparent, sfColor_fromRGB(125, 147, 12));
 	newMob.moveSteps = 0;
+	newMob.lastAttack = 0;
+	newMob.health = 150;
 
 	flyMob[flyMobCount] = newMob;
 	LoadFlyMobAnimation(flyMobCount);
@@ -62,10 +60,10 @@ void LoadFlyMobAnimation(_I)
 	flyMob[_i].animation[HURT_FLY_MOB] = CreateAnimation(flyMob[_i].sprite, 4, 7, sfTrue, sfFalse, firstFrame);
 
 	firstFrame.top += FLY_MOB_SIZE;
-	flyMob[_i].animation[DEATH_FLY_MOB] = CreateAnimation(flyMob[_i].sprite, 4, 7, sfTrue, sfFalse, firstFrame);
+	flyMob[_i].animation[DEATH_FLY_MOB] = CreateAnimation(flyMob[_i].sprite, 2, 7, sfTrue, sfFalse, firstFrame);
 
 	firstFrame.top += FLY_MOB_SIZE;
-	flyMob[_i].animation[ATTACK_1_FLY_MOB] = CreateAnimation(flyMob[_i].sprite, 8, 11, sfTrue, sfFalse, firstFrame);
+	flyMob[_i].animation[ATTACK_1_FLY_MOB] = CreateAnimation(flyMob[_i].sprite, 8, 24, sfTrue, sfFalse, firstFrame);
 
 	firstFrame.top += FLY_MOB_SIZE;
 	flyMob[_i].animation[ATTACK_2_FLY_MOB] = CreateAnimation(flyMob[_i].sprite, 8, 13, sfTrue, sfFalse, firstFrame);
@@ -74,8 +72,6 @@ void LoadFlyMobAnimation(_I)
 	flyMob[_i].animation[ATTACK_PROJECTILES] = CreateAnimation(flyMob[_i].sprite, 6, 9, sfTrue, sfFalse, firstFrame);
 
 	firstFrame.top += FLY_MOB_SIZE; firstFrame.width = 48; firstFrame.height = 48;
-	flyMob[_i].projectile.animation = CreateAnimation(flyMob[_i].projectile.sprite, 8, 10, sfTrue, sfTrue, firstFrame);
-
 
 	SetFlyingMobAnimation(FLIGHT, _i);
 
@@ -87,16 +83,10 @@ void UpdateFlyMob(float _dt)
 	{
 		if (flyMob[i].sprite != NULL)
 		{
-			CheckFlyMobLimitedZone(_dt, i);
 			StateFlyMob(_dt, i);
 
-			Projectiles(_dt, i);
 			UpdateAnimation(flyMob[i].currentAnimation, _dt);
 
-			if (flyMob[i].projectile.isShooting)
-			{
-				UpdateAnimation(&flyMob[i].projectile.animation, _dt);
-			}
 		}
 	}
 
@@ -108,10 +98,6 @@ void DrawFlyMob(sfRenderWindow* _renderWindow)
 	{
 		if (flyMob[i].sprite != NULL)
 		{
-			if (flyMob[i].projectile.isShooting)
-			{
-				sfRenderWindow_drawSprite(_renderWindow, flyMob[i].projectile.sprite, NULL);
-			}
 
 			sfRenderWindow_drawSprite(_renderWindow, flyMob[i].sprite, NULL);
 			sfRenderWindow_drawCircleShape(_renderWindow, flyMob[i].limitedZone, NULL);
@@ -152,8 +138,9 @@ void StateFlyingMobAnimation(FlyingMobState _state, _I)
 
 void StateFlyMob(float _dt, _I)
 {
-	flyMob[_i].projectile.timerShoot += _dt;
+	//flyMob[_i].projectile.timerShoot += _dt;
 	flyMob[_i].timer.timerMoveY += _dt;
+	flyMob[_i].timer.timerHurt += _dt;
 
 	if (flyMob[_i].timer.knockBackTimer > 0)
 	{
@@ -161,129 +148,146 @@ void StateFlyMob(float _dt, _I)
 		return;
 
 	}
-	if (flyMob[_i].limitedZoneEnable)
-	{
-		return;
-	}
 
 	if (flyMob[_i].currentState != DEATH_FLY_MOB)
 	{
 		sfVector2f posPlayer = player->data.position;
 		sfVector2f posFlyMob = sfSprite_getPosition(flyMob[_i].sprite);
+		sfVector2f posCircle = sfCircleShape_getPosition(flyMob[_i].limitedZone);
 		sfVector2f dist = GetDistanceObjectVector(posPlayer, posFlyMob);
+		float distFlyMobLimited = GetDistanceObject(posFlyMob, posCircle);
+		float distPlayerLimitedZone = GetDistanceObject(posPlayer, posCircle);
+		float scale = GAME_SCALE;
+		flyMob[_i].velocity = (sfVector2f){ 0 };
 
-		if (dist.x < 700.f && dist.x > 250.f)
+
+		if ((distFlyMobLimited > (sfCircleShape_getRadius(flyMob[_i].limitedZone) - 80.f)))
 		{
-			if (posPlayer.x < posFlyMob.x)
-			{
-				sfSprite_setScale(flyMob[_i].sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
-				flyMob[_i].velocity.x = -200.f;
-			}
-			else
-			{
-				sfSprite_setScale(flyMob[_i].sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-				flyMob[_i].velocity.x = 200.f;
-			}
-		}
-		else if (dist.x < 250.f && dist.y < 650.f)
-		{
-			if (flyMob[_i].projectile.timerShoot > TIMER_SHOOT && !flyMob[_i].projectile.isShooting)
-			{
-				StateFlyingMobAnimation(ATTACK_PROJECTILES, _i);
-				flyMob[_i].projectile.isShooting = sfTrue;
-				flyMob[_i].velocity.x = 0;
-				flyMob[_i].projectile.timerShoot = 0;
-			}
-			else if(!flyMob[_i].projectile.animation.isPlaying && flyMob[_i].currentState == ATTACK_PROJECTILES)
-			{
-				StateFlyingMobAnimation(FLIGHT, _i);
-				flyMob[_i].projectile.isShooting = sfFalse;
-			}
-			
+			flyMob[_i].limitedZoneEnable = sfTrue;
 		}
 
-		if (!flyMob[_i].limitedZoneEnable)
+		if (posPlayer.x < posFlyMob.x)
 		{
-			sfSprite_setPosition(flyMob[_i].sprite, (sfVector2f) { posFlyMob.x, posFlyMob.y + sinf(flyMob[_i].timer.timerMoveY * 4.f) });
-			sfSprite_move(flyMob[_i].sprite, (sfVector2f) { flyMob[_i].velocity.x* _dt, flyMob[_i].velocity.y* _dt });
-		}
-	}
-}
-
-void CheckFlyMobLimitedZone(float _dt, _I)
-{
-	sfVector2f posMob = sfSprite_getPosition(flyMob[_i].sprite);
-	sfVector2f posCircle = sfCircleShape_getPosition(flyMob[_i].limitedZone);
-	float dist = GetDistanceObject(posMob, posCircle);
-
-	if (dist > sfCircleShape_getRadius(flyMob[_i].limitedZone))
-	{
-		flyMob[_i].limitedZoneEnable = sfTrue;
-	}
-
-	if (flyMob[_i].limitedZoneEnable)
-	{
-		// Vecteur vers le centre du cercle
-		sfVector2f dir = { posCircle.x - posMob.x, posCircle.y - posMob.y };
-		float speed = 150.f; // pixels/sec, ajuste à ton goût
-
-		// Normalise dir
-		float len = sqrtf(dir.x * dir.x + dir.y * dir.y);
-		if (len > 1.f)
-		{
-			dir.x = (dir.x / len) * speed * _dt;
-			dir.y = (dir.y / len) * speed * _dt;
-			sfSprite_move(flyMob[_i].sprite, dir);
-		}
-
-		// Désactive une fois rentré dans la zone
-		if (dist <= sfCircleShape_getRadius(flyMob[_i].limitedZone))
-		{
-			flyMob[_i].limitedZoneEnable = sfFalse;
-		}
-	}
-}
-
-void Projectiles(float _dt, _I)
-{
-	if (flyMob[_i].projectile.isShooting) //&& !flyMob[_i].projectile.isTouching)
-	{
-		sfVector2f posProjectile = sfSprite_getPosition(flyMob[_i].projectile.sprite);
-		sfVector2f posPlayer = sfSprite_getPosition(player->sprite);
-		float scale = sfSprite_getScale(flyMob[_i].sprite).x;
-
-		flyMob[_i].projectile.velocity.y = 235.f;
-		float angle = atan2f(posProjectile.y - posPlayer.y, posProjectile.x - posPlayer.x);
-
-		sfSprite_setRotation(flyMob[_i].sprite, angle);
-		if (scale < 0)
-		{
-			flyMob[_i].projectile.velocity.x = -480.f;
+			scale = -GAME_SCALE;
+			//flyMob[_i].velocity.x = -200.f;
 		}
 		else
 		{
-			flyMob[_i].projectile.velocity.x = 480.f;
+			scale = GAME_SCALE;
 		}
 
-		sfSprite_move(flyMob[_i].projectile.sprite, (sfVector2f){flyMob[_i].projectile.velocity.x * _dt, flyMob[_i].projectile.velocity.y * _dt });
-
-		sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player->sprite);
-		sfFloatRect hitProjectile = sfSprite_getGlobalBounds(flyMob[_i].projectile.sprite);
-
-		if (sfFloatRect_intersects(&hitPlayer, &hitProjectile, NULL))
+		if ((distFlyMobLimited < (sfCircleShape_getRadius(flyMob[_i].limitedZone))) && (distPlayerLimitedZone < sfCircleShape_getRadius(flyMob[_i].limitedZone)) && !flyMob[_i].limitedZoneEnable)
 		{
-			flyMob[_i].projectile.isShooting = sfFalse;
-			PlayerDamage(25);
-		}
-	}
-	
-	if(!flyMob[_i].projectile.isShooting || flyMob[_i].projectile.timerShoot > TIMER_SHOOT)
-	{
-		flyMob[_i].projectile.velocity = (sfVector2f){ 0 };
-		sfSprite_setPosition(flyMob[_i].projectile.sprite, sfSprite_getPosition(flyMob[_i].sprite));
-		sfSprite_setRotation(flyMob[_i].sprite, 0);
+			if (dist.x > 100.f)
+			{
+				StateFlyingMobAnimation(FLIGHT, _i);
+				flyMob[_i].velocity.x = 200.f;
 
-		flyMob[_i].projectile.animation.currentFrame = 0;
-		flyMob[_i].projectile.animation.timer = 0;
+				if (scale < 0)
+				{
+					flyMob[_i].velocity.x = -200.f;
+				}
+
+
+				if (dist.y > 35.f && (((posPlayer.y - 80.f) > posFlyMob.y) || (posPlayer.y + 25.f) < posFlyMob.y))
+				{
+					if (posPlayer.y > posFlyMob.y)
+					{
+						flyMob[_i].velocity.y = 200.f;
+
+					}
+					else
+					{
+						flyMob[_i].velocity.y = -200.f;
+					}
+				}
+			}
+			else
+			{
+				
+				sfFloatRect hitPlayer = sfSprite_getGlobalBounds(player->sprite);
+				sfFloatRect hitFlyMob = sfSprite_getGlobalBounds(flyMob[_i].sprite);
+
+				if (sfFloatRect_intersects(&hitPlayer, &hitFlyMob, NULL))
+				{
+					flyMob[_i].timer.knockBackTimer += 0.5f;
+					sfBool attackEnable = flyMob[_i].currentAnimation->currentFrame == 4;
+					if (flyMob[_i].lastAttack == 0)
+					{
+						StateFlyingMobAnimation(ATTACK_1_FLY_MOB, _i);
+						PlayerDamage(32);
+						flyMob[_i].lastAttack = ATTACK_1_FLY_MOB;
+					}
+
+					if (flyMob[_i].lastAttack == ATTACK_1_FLY_MOB)
+					{
+						StateFlyingMobAnimation(ATTACK_2_FLY_MOB, _i);
+						PlayerDamage(43);
+						flyMob[_i].lastAttack = ATTACK_2_FLY_MOB;
+					}
+					else if (flyMob[_i].lastAttack == ATTACK_2_FLY_MOB)
+					{
+						StateFlyingMobAnimation(ATTACK_1_FLY_MOB, _i);
+						PlayerDamage(32);
+						flyMob[_i].lastAttack = ATTACK_1_FLY_MOB;
+					}
+				}
+			}
+		}
+		else if (flyMob[_i].limitedZoneEnable)
+		{
+			if (distFlyMobLimited > 20.f)
+			{
+				if (posFlyMob.x < posCircle.x)
+				{
+					flyMob[_i].velocity.x = 250.f;
+					scale = GAME_SCALE;
+				}
+				else
+				{
+					flyMob[_i].velocity.x = -250.f;
+					scale = -GAME_SCALE;
+				}
+
+				if (posFlyMob.y < posCircle.y)
+				{
+					printf("TOP\n");
+					flyMob[_i].velocity.y = 250.f;
+				}
+				else
+				{
+					printf("HEIGHT\n");
+					flyMob[_i].velocity.y = -250.f;
+				}
+			}
+			else
+			{
+				flyMob[_i].limitedZoneEnable = sfFalse;
+			}
+		}
+		
+		sfFloatRect hitFlyMob = sfSprite_getGlobalBounds(flyMob[_i].sprite);
+		sfFloatRect hitPlayer = sfRectangleShape_getGlobalBounds(player->shape.collisionAttackShape);
+
+		if (sfFloatRect_intersects(&hitFlyMob, &hitPlayer, NULL) && flyMob[_i].timer.timerHurt > 1.f)
+		{
+			flyMob[_i].timer.timerHurt = 0;
+			flyMob[_i].health -= 35;
+			flyMob[_i].timer.knockBackTimer += 0.5f;
+			StateFlyingMobAnimation(HURT_FLY_MOB, _i);
+		}
+
+
+		if (flyMob[_i].health <= 0)
+		{
+			StateFlyingMobAnimation(DEATH_FLY_MOB, _i);
+			flyMob[_i].velocity.x = 0; flyMob[_i].velocity.y = 325.f;
+		}
+
+		sfSprite_setScale(flyMob[_i].sprite, (sfVector2f) { scale, GAME_SCALE });
+
 	}
+
+	sfSprite_move(flyMob[_i].sprite, (sfVector2f) { flyMob[_i].velocity.x* _dt, flyMob[_i].velocity.y* _dt });
+
 }
