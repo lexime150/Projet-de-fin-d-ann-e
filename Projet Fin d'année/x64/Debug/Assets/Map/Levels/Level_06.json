@@ -457,6 +457,28 @@
         }, 
         {
          "draworder":"topdown",
+         "id":12,
+         "name":"Camera-Limit",
+         "objects":[
+                {
+                 "height":320,
+                 "id":90,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":2880,
+                 "x":0,
+                 "y":0
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":false,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":8,
          "name":"Semi-Solid-Collision",
          "objects":[
@@ -752,8 +774,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":12,
- "nextobjectid":89,
+ "nextlayerid":13,
+ "nextobjectid":91,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

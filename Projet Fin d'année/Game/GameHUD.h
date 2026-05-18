@@ -8,7 +8,13 @@ typedef struct HUD
 {
 	sfSprite* healthBarContainerSprite;
 	sfSprite* healthBarSprite;
+	sfSprite* healthbarBackgroundSprite;
+	sfSprite* playerIconSprite;
+
+	sfTexture* healthBarContainerTexture;
 	sfTexture* healthBarTexture;
+	sfTexture* healthbarBackgroundTexture;
+	sfTexture* playerIconTexture;
 
 	sfSprite* keyFragmentSprite;
 	sfTexture* keyFragmentTexture;
