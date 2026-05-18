@@ -89,6 +89,10 @@
           "SelectedChildIndex": 13,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "Key.c",
@@ -100,10 +104,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-05-05T14:31:26.868Z",
               "IsPinned": true
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
@@ -223,8 +223,7 @@
               "RelativeToolTip": "Game\\main.c",
               "ViewState": "AgIAAG4AAAAAAAAAAAAiwJMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2026-05-11T07:19:13.902Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-11T07:19:13.902Z"
             },
             {
               "$type": "Document",
@@ -244,9 +243,9 @@
               "Title": "Camera.c",
               "DocumentMoniker": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Camera.c",
               "RelativeDocumentMoniker": "Game\\Camera.c",
-              "ToolTip": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Camera.c*",
-              "RelativeToolTip": "Game\\Camera.c*",
-              "ViewState": "AgIAACQAAAAAAAAAAAAqwDwAAAAWAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\kilia\\OneDrive\\Documents\\Projet-de-fin-d-ann-e\\Projet Fin d\u0027ann\u00E9e\\Game\\Camera.c",
+              "RelativeToolTip": "Game\\Camera.c",
+              "ViewState": "AgIAACoAAAAAAAAAAAAqwDAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2026-05-11T07:17:26.897Z",
               "EditorCaption": ""
