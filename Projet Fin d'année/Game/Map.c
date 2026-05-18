@@ -8,6 +8,9 @@ cute_tiled_map_t* map;
 sfFloatRect* collisionTab;
 unsigned int collisionTabSize;
 
+sfFloatRect cameraLimit;
+sfBool hasCameraLimit;
+
 Trigger* triggerTab;
 unsigned int triggerTabSize;
 
@@ -227,6 +230,8 @@ void CleanupMap(void)
 	}
 
 	for (unsigned int i = 0; i < animatedTileCount; i++) {
+
+
 		free(animatedTileList[i].frames);
 		free(animatedTileList[i].durations);
 	}
@@ -244,6 +249,10 @@ void CleanupMap(void)
 
 void LoadCollisionAndTrigger(void)
 {
+
+	cameraLimit = (sfFloatRect){ 0, 0, 0, 0 };
+	hasCameraLimit = sfFalse;
+
 	// Create the array of collisions
 	collisionTab = calloc(1, sizeof(sfFloatRect));
 	collisionTabSize = 0;
@@ -417,6 +426,15 @@ void LoadCollisionAndTrigger(void)
 					keyTab[keyTabSize].height = object->height * GAME_SCALE;
 					keyTabSize++;
 				}
+				else if (strcmp(layer->name.ptr, "Camera-Limit") == 0)
+				{
+					cameraLimit = (sfFloatRect){
+						object->x * GAME_SCALE,
+						object->y * GAME_SCALE,
+						object->width * GAME_SCALE,
+						object->height * GAME_SCALE };
+					hasCameraLimit = sfTrue;
+				}
 
 
 			}
@@ -506,7 +524,7 @@ void DrawTileLayer(sfRenderWindow* _renderWindow, cute_tiled_layer_t* _layer)
 				int tileX = (tileId % map->tilesets->columns) * tileWidth;
 				int tileY = (tileId / map->tilesets->columns) * tileHeight;
 				sfSprite_setTextureRect(tileSprite, (sfIntRect) { tileX, tileY, tileWidth, tileHeight });
-				
+
 
 				sfSprite_setPosition(tileSprite, (sfVector2f) { (float)column* tileWidth* GAME_SCALE, (float)line* tileHeight* GAME_SCALE });
 				sfRenderWindow_drawSprite(_renderWindow, tileSprite, NULL);
@@ -671,7 +689,7 @@ KeyStruct GetKeyTab(unsigned _index)
 	}
 	else
 	{
-		return (KeyStruct) {"No Name", 0, 0, 0, 0 };
+		return (KeyStruct) { "No Name", 0, 0, 0, 0 };
 	}
 }
 
@@ -702,4 +720,14 @@ sfVector2f GetFlyMobSpawn(unsigned int _index)
 		return flyMobSpawnTab[_index];
 	else
 		return (sfVector2f) { 0, 0 };
+}
+
+sfBool HasCameraLimit(void)
+{
+	return hasCameraLimit;
+}
+
+sfFloatRect GetCameraLimit(void)
+{
+	return cameraLimit;
 }

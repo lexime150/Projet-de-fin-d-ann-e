@@ -68,4 +68,6 @@ KeyStruct GetKeyTab(unsigned _index);
 sfVector2f GetFlyMobSpawn(unsigned int _index);
 unsigned int GetFlyMobSpawnTabSize();
 
+sfFloatRect GetCameraLimit(void);
+sfBool HasCameraLimit(void);
 #endif

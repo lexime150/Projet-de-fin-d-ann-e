@@ -490,6 +490,28 @@
         }, 
         {
          "draworder":"topdown",
+         "id":13,
+         "name":"Trigger",
+         "objects":[
+                {
+                 "height":32,
+                 "id":92,
+                 "name":"Level_07",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":2832,
+                 "y":208
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":8,
          "name":"Semi-Solid-Collision",
          "objects":[
@@ -626,28 +648,6 @@
                  "y":151
                 }, 
                 {
-                 "height":16,
-                 "id":40,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":896,
-                 "y":272
-                }, 
-                {
-                 "height":16,
-                 "id":41,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":912,
-                 "y":256
-                }, 
-                {
                  "height":32,
                  "id":47,
                  "name":"",
@@ -670,28 +670,6 @@
                  "y":208
                 }, 
                 {
-                 "height":16,
-                 "id":51,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":1600,
-                 "y":272
-                }, 
-                {
-                 "height":16,
-                 "id":52,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1616,
-                 "y":256
-                }, 
-                {
                  "height":18.5,
                  "id":53,
                  "name":"",
@@ -701,17 +679,6 @@
                  "width":223.5,
                  "x":2192,
                  "y":39.5
-                }, 
-                {
-                 "height":16,
-                 "id":55,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":304,
-                 "y":208
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -785,8 +752,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":13,
- "nextobjectid":92,
+ "nextlayerid":14,
+ "nextobjectid":93,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

@@ -51,14 +51,23 @@ void DrawParallaxLayer(sfRenderWindow* window, sfSprite* sprite, sfTexture* text
 {
 	sfVector2f camCenter = sfView_getCenter(camera.cameraView);
 
-	float scrollX = -camCenter.x * factor;
+	float limitLeft = 0.0f;
+	float limitTop = 0.0f;
+	if (HasCameraLimit())
+	{
+		sfFloatRect limit = GetCameraLimit();
+		limitLeft = limit.left;
+		limitTop = limit.top;
+	}
+
+	float scrollX = -(camCenter.x - limitLeft) * factor;
 
 	float baseX = fmodf(scrollX, width);
 	if (baseX > 0) baseX -= width;
 
 	float leftEdge = camCenter.x - SCREEN_WIDTH / 2.0f;
 
-	float posY = 320 - 80 * GAME_SCALE;
+	float posY = limitTop;
 
 	for (int i = 0; i <= 2; i++)
 	{
@@ -110,7 +119,7 @@ void DrawCamera(sfRenderWindow* _renderWindow)
 {
 
 	sfRenderWindow_setView(_renderWindow, camera.cameraView);
-	if (strcmp(player->data.level, "Level_06") == 0)
+	if (HasCameraLimit())
 	{
 		DrawBackgroundGame(_renderWindow);
 
@@ -132,20 +141,20 @@ void CenterCamera(float _dt)
 	camPos.x += (player->data.position.x - camPos.x) * t;
 	camPos.y += (player->data.position.y - camPos.y) * t;
 
-	if (strcmp(player->data.level, "Level_06") == 0)
+	if (HasCameraLimit())
 	{
+		sfFloatRect limit = GetCameraLimit();
 		float halfW = SCREEN_WIDTH / 2.0f;
 		float halfH = SCREEN_HEIGHT / 2.0f;
 
-		float minX = 0 + halfW;
-		float maxX = 2880 * GAME_SCALE - halfW;
+		float minX = limit.left + halfW;
+		float maxX = limit.left + limit.width - halfW;
 
-		float minY = 0 + halfH;
-		float maxY = 320 * GAME_SCALE - halfH;
+		float minY = limit.top + halfH;
+		float maxY = limit.top + limit.height - halfH;
 
 		camPos.x = ClampFloat(camPos.x, minX, maxX);
 		camPos.y = ClampFloat(camPos.y, minY, maxY);
-
 	}
 
 	sfView_setCenter(camera.cameraView, camPos);

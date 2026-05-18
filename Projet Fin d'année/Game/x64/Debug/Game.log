@@ -1,5 +1,2 @@
-﻿  Game.c
-  Player.c
-  Génération de code en cours...
-C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(838,7): warning C4013: 'HasCeilingAbove' non défini(e) ; extern retournant int pris par défaut
+﻿  Animation.c
   Game.vcxproj -> C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
