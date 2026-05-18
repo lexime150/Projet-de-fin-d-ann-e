@@ -43,21 +43,25 @@ void LoadBackgroundGame()
 	sfVector2u s2 = sfTexture_getSize(camera.backgroundGame.texture2ndLayer);
 	sfVector2u s1 = sfTexture_getSize(camera.backgroundGame.texture1stLayer);
 
-	camera.layerWidth3 = s3.x * GAME_SCALE;
-	camera.layerWidth2 = s2.x * GAME_SCALE;
-	camera.layerWidth1 = s1.x * GAME_SCALE;
+	camera.layerWidth3 = s3.x * 1.5f * GAME_SCALE;
+	camera.layerWidth2 = s2.x * 1.5f * GAME_SCALE;
+	camera.layerWidth1 = s1.x * 1.5f * GAME_SCALE;
 }
 void DrawParallaxLayer(sfRenderWindow* window, sfSprite* sprite, float factor, float width)
 {
 	sfVector2f camCenter = sfView_getCenter(camera.cameraView);
 
-	float x = camCenter.x * factor;
+	float parallaxOffset = camCenter.x * (1.0f - factor);
 
-	float startX = floorf(x / width) * width;
+	float startX = floorf(camCenter.x / width) * width + parallaxOffset;
 
-	for (int i = -2; i <= 2; i++)
+	for (int i = -1; i <= 1; i++)
 	{
-		sfSprite_setPosition(sprite, (sfVector2f) { startX + i * width, GetPlayerSpawn().y - sfTexture_getSize(camera.backgroundGame.texture3rdLayer).y * GAME_SCALE - 320 });
+		float posX = startX + (i * width);
+
+		float posY = GetPlayerSpawn().y - sfTexture_getSize(camera.backgroundGame.texture3rdLayer).y * GAME_SCALE - 320;
+
+		sfSprite_setPosition(sprite, (sfVector2f) { posX, posY });
 		sfRenderWindow_drawSprite(window, sprite, NULL);
 	}
 }
