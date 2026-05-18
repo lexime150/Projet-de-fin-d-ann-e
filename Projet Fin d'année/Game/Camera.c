@@ -47,20 +47,22 @@ void LoadBackgroundGame()
 	camera.layerWidth2 = s2.x * 1.5f * GAME_SCALE;
 	camera.layerWidth1 = s1.x * 1.5f * GAME_SCALE;
 }
-void DrawParallaxLayer(sfRenderWindow* window, sfSprite* sprite, float factor, float width)
+void DrawParallaxLayer(sfRenderWindow* window, sfSprite* sprite, sfTexture* texture, float factor, float width, float layerHeight)
 {
 	sfVector2f camCenter = sfView_getCenter(camera.cameraView);
 
-	float parallaxOffset = camCenter.x * (1.0f - factor);
+	float scrollX = -camCenter.x * factor;
 
-	float startX = floorf(camCenter.x / width) * width + parallaxOffset;
+	float baseX = fmodf(scrollX, width);
+	if (baseX > 0) baseX -= width;
 
-	for (int i = -1; i <= 1; i++)
+	float leftEdge = camCenter.x - SCREEN_WIDTH / 2.0f;
+
+	float posY = 320 - 80 * GAME_SCALE;
+
+	for (int i = 0; i <= 2; i++)
 	{
-		float posX = startX + (i * width);
-
-		float posY = GetPlayerSpawn().y - sfTexture_getSize(camera.backgroundGame.texture3rdLayer).y * GAME_SCALE - 320;
-
+		float posX = leftEdge + baseX + i * width;
 		sfSprite_setPosition(sprite, (sfVector2f) { posX, posY });
 		sfRenderWindow_drawSprite(window, sprite, NULL);
 	}
@@ -79,20 +81,13 @@ float ClampFloat(float v, float min, float max)
 }
 void DrawBackgroundGame(sfRenderWindow* window)
 {
-	DrawParallaxLayer(window,
-		camera.backgroundGame.sprite3rdLayer,
-		0.4f,
-		camera.layerWidth3);
+	sfVector2u s3 = sfTexture_getSize(camera.backgroundGame.texture3rdLayer);
+	sfVector2u s2 = sfTexture_getSize(camera.backgroundGame.texture2ndLayer);
+	sfVector2u s1 = sfTexture_getSize(camera.backgroundGame.texture1stLayer);
 
-	DrawParallaxLayer(window,
-		camera.backgroundGame.sprite2ndLayer,
-		0.6f,
-		camera.layerWidth2);
-
-	DrawParallaxLayer(window,
-		camera.backgroundGame.sprite1stLayer,
-		0.8f,
-		camera.layerWidth1);
+	DrawParallaxLayer(window, camera.backgroundGame.sprite3rdLayer, camera.backgroundGame.texture3rdLayer, 0.1f, camera.layerWidth3, s3.y);
+	DrawParallaxLayer(window, camera.backgroundGame.sprite2ndLayer, camera.backgroundGame.texture2ndLayer, 0.15f, camera.layerWidth2, s2.y);
+	DrawParallaxLayer(window, camera.backgroundGame.sprite1stLayer, camera.backgroundGame.texture1stLayer, 0.2f, camera.layerWidth1, s1.y);
 }
 void LoadCamera()
 {
