@@ -12,7 +12,6 @@ Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _fra
 	createAnim.isPlaying = _isPlaying;
 	createAnim.isLooping = _isLooping;
 	createAnim.firstFrame = _firstFrame;
-
 	return createAnim;
 }
 
@@ -21,6 +20,10 @@ Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _fra
 void UpdateAnimation(Animation* _animation, float _dt)
 {
 	// _animation->isPlaying = sfTrue;
+	if (_animation == NULL)
+	{
+		return;
+	}
 	if (_animation != NULL)
 	{
 		if (_animation->isPlaying)
@@ -56,7 +59,9 @@ void UpdateAnimation(Animation* _animation, float _dt)
 	}
 
 	sfIntRect frame = _animation->firstFrame;
-	frame.left = frame.left + _animation->currentFrame * frame.width;    sfSprite_setTextureRect(_animation->sprite, frame);
+
+	frame.left = frame.left + _animation->currentFrame * frame.width;
+	sfSprite_setTextureRect(_animation->sprite, frame);
 	sfSprite_setOrigin(player->sprite, (sfVector2f) { (float)player->currentAnimation->firstFrame.width / 2, (float)player->currentAnimation->firstFrame.height });
 
 

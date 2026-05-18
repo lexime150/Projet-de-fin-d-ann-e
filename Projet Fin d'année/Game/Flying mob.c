@@ -11,7 +11,6 @@ void StateFlyingMobAnimation(FlyingMobState _state, _I);
 void StateFlyMob(float _dt, _I);
 void LoadFlyMobAnimation(_I);
 void AddFlyMob(sfVector2f _pos);
-void CheckCollisionFlyMobPlat(float _dt, _I);
 void LoadFlyMob(void)
 {
 	for (unsigned i = 0; i < GetFlyMobSpawnTabSize(); i++)
