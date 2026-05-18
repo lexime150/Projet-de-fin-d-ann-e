@@ -1,7 +1,7 @@
 #include "Tool.h"
 
 
-sfSprite* CreateSprite(char* _texture,  sfVector2f _pos)
+sfSprite* CreateSprite(char* _texture, sfVector2f _pos)
 {
 
 	sfSprite* sprite = sfSprite_create();
@@ -34,4 +34,22 @@ sfCircleShape* CreateCircle(float _radius, sfVector2f _pos, sfColor _fillColor, 
 	sfCircleShape_setPosition(circle, _pos);
 
 	return circle;
+}
+
+
+float GetDistanceObject(sfVector2f _obj1, sfVector2f _obj2)
+{
+	float distX = _obj1.x - _obj2.x;
+	float distY = _obj1.y - _obj2.y;
+
+	return sqrtf((distX * distX) + (distY * distY));
+}
+
+sfVector2f GetDistanceObjectVector(sfVector2f _obj1, sfVector2f _obj2)
+{
+
+	float distX = _obj1.x - _obj2.x;
+	float distY = _obj1.y - _obj2.y;
+
+	return (sfVector2f) { fabsf(distX), fabsf(distY) };
 }

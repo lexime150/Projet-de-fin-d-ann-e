@@ -6,6 +6,10 @@
 
 #define FLY_MOB_SIZE 150
 
+#define _I unsigned _i
+
+#define TIMER_SHOOT 1.6f
+
 
 typedef enum FlyingMobState
 {
@@ -25,7 +29,7 @@ typedef struct TimerFlyingMob
 	float timerDamage;
 	float timerHurt;
 	float knockBackTimer;
-
+	float timerMoveY;
 
 }TimerFlyingMob;
 
@@ -34,10 +38,12 @@ typedef struct Projectile
 	sfSprite* sprite;
 	float speed;
 	sfVector2f velocity;
-	float cooldownRespawn;
+	float timerShoot;
 	Animation animation;
+	Animation* currentAnimation;
 
 	sfBool isTouching;
+	sfBool isShooting;
 
 }Projectile;
 
@@ -56,10 +62,24 @@ typedef struct FlyingMob
 	Animation animation[STATE_FLYING_MOB_NUMBER];
 	Animation* currentAnimation;
 
-	Projectile projectile;
+	//Projectile projectile;
 
 	FlyingMobState currentState;
 	FlyingMobState lastState;
+
+	FlyingMobState lastAttack;
+	FlyingMobState currentAttack;
+
+	sfCircleShape* limitedZone;
+
+	float angle;
+
+	sfBool limitedZoneEnable;
+	sfVector2f distanceFlyMobLimited;
+	
+	int moveSteps;
+
+	int health;
 
 
 }FlyingMob;

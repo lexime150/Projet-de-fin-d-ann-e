@@ -202,6 +202,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 	mob[mobCount] = newMob;
 	mobCount++;
 
+
 	LoadMobAnimation(mobCount - 1);
 }
 
