@@ -1,0 +1,28 @@
+#ifndef GAMEHUD_H
+#define GAMEHUD_H
+
+#include "Common.h"
+#include "Player.h"
+#include "Mob.h"
+typedef struct HUD
+{
+	sfSprite* healthBarContainerSprite;
+	sfSprite* healthBarSprite;
+	sfTexture* healthBarTexture;
+
+	sfSprite* keyFragmentSprite;
+	sfTexture* keyFragmentTexture;
+	sfText* keyFragmentText;
+	sfFont* font;
+
+	char buffer[16];
+
+}HUD;
+
+void LoadHUD();
+void DrawHUD(sfRenderWindow* _renderWindow);
+void UpdateHUD();
+void CleanupHUD();
+
+
+#endif
