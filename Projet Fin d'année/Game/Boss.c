@@ -20,11 +20,26 @@ void CheckCollisionCirclePlayer(float _dt);
 void BossDamage(unsigned _hpLost);
 
 
+void LoadBossHealthBar()
+{
+	boss.healthBarContainerSprite = sfSprite_create();
+
+	boss.healthBarTexture = sfTexture_createFromFile("Assets/Sprites/Game/Boss/HP-BAR.png", NULL);
+
+	sfSprite_setTexture(boss.healthBarContainerSprite, boss.healthBarTexture, sfTrue);
+	sfSprite_setTextureRect(boss.healthBarContainerSprite, (sfIntRect) { 0, 0, 32, 4 });
+	sfSprite_setScale(boss.healthBarContainerSprite, (sfVector2f) { 3 * GAME_SCALE, 3 * GAME_SCALE });
+
+	boss.healthBarSprite = sfSprite_create();
+	sfSprite_setTexture(boss.healthBarSprite, boss.healthBarTexture, sfTrue);
+	sfSprite_setTextureRect(boss.healthBarSprite, (sfIntRect) { 1, 4, 20, 2 });
+	sfSprite_setScale(boss.healthBarSprite, (sfVector2f) { 3 * GAME_SCALE, 3 * GAME_SCALE });
+}
+
 void LoadBoss(void)
 {
 	if (strcmp(player->data.level, "Level_05") == 0)
 	{
-
 		boss.sprite = CreateSprite("Assets/Sprites/Game/Boss/Boss.png", GetPlayerSpawn());
 		boss.timer = (Timer){ 0 };
 		boss.isGrounded = sfTrue;
@@ -47,10 +62,9 @@ void LoadBoss(void)
 		boss.hurtShape = CreateRectangle((sfVector2f) { 100.f, 128.f }, (sfVector2f) { 50.f, 128.f }, (sfVector2f) { GAME_SCALE, GAME_SCALE }, sfRed);
 
 		boss.specialAttackShape = CreateCircle(10.f, sfSprite_getPosition(boss.sprite), sfTransparent, sfGreen);
-
+		LoadBossHealthBar();
 		LoadBossAnimation();
 	}
-
 }
 
 void LoadBossAnimation()
@@ -111,11 +125,10 @@ void StateBossMachine(BossState _state)
 
 static void UpdateBossInfo()
 {
-	sfVector2f posPlayer = sfSprite_getPosition(boss.sprite);
+	sfVector2f posBoss = sfSprite_getPosition(boss.sprite);
 
-	sfRectangleShape_setPosition(boss.attackShape, posPlayer);
-	sfRectangleShape_setPosition(boss.hurtShape, posPlayer);
-
+	sfRectangleShape_setPosition(boss.attackShape, posBoss);
+	sfRectangleShape_setPosition(boss.hurtShape, posBoss);
 
 	if (boss.currentState == SPECIAL)
 	{
@@ -129,16 +142,12 @@ static void UpdateBossInfo()
 		specialCount = 1.f;
 		sfCircleShape_setScale(boss.specialAttackShape, (sfVector2f) { specialCount* GAME_SCALE, specialCount* GAME_SCALE });
 	}
-
-
 }
 
 void UpdateBoss(float _dt)
 {
 	if (strcmp(player->data.level, "Level_05") == 0)
 	{
-
-
 		CheckCollisionBossPlat();
 		CheckAttackBossPlayer(_dt);
 		StateBoss(_dt);
@@ -156,7 +165,6 @@ void DrawBoss(sfRenderWindow* _renderWindow)
 		if (boss.currentState == SPECIAL)
 		{
 			sfRenderWindow_drawCircleShape(_renderWindow, boss.specialAttackShape, NULL);
-
 		}
 		else
 		{
@@ -167,23 +175,41 @@ void DrawBoss(sfRenderWindow* _renderWindow)
 	}
 }
 
+void DrawUI(sfRenderWindow* _renderWindow)
+{
+	if (boss.health > 0)
+	{
+		float ratio = (float)boss.health / 900.f;
+
+		sfIntRect updatedHealthBar = { 1, 4, (int)(30 * ratio), 2 };
+		sfSprite_setTextureRect(boss.healthBarSprite, updatedHealthBar);
+
+		sfVector2f bossPos = sfSprite_getPosition(boss.sprite);
+
+		sfFloatRect containerBounds = sfSprite_getGlobalBounds(boss.healthBarContainerSprite);
+		sfSprite_setPosition(boss.healthBarContainerSprite, (sfVector2f) {bossPos.x - containerBounds.width / 1.7 ,bossPos.y - sfSprite_getGlobalBounds(boss.sprite).height / 2 - containerBounds.height * 3 });
+
+		sfFloatRect updatedContainerBounds = sfSprite_getGlobalBounds(boss.healthBarContainerSprite);
+		sfSprite_setPosition(boss.healthBarSprite, (sfVector2f) {updatedContainerBounds.left + 12 ,updatedContainerBounds.top + 12});
+
+		sfRenderWindow_drawSprite(_renderWindow, boss.healthBarContainerSprite, NULL);
+		sfRenderWindow_drawSprite(_renderWindow, boss.healthBarSprite, NULL);
+	}
+}
+
 void CleanupBoss(void)
 {
 	sfSprite_destroy(boss.sprite);
+	sfSprite_destroy(boss.healthBarSprite);
+	sfSprite_destroy(boss.healthBarContainerSprite);
+	sfTexture_destroy(boss.healthBarTexture);
 	sfRectangleShape_destroy(boss.attackShape);
 	sfRectangleShape_destroy(boss.hurtShape);
 	boss = (Boss){ NULL };
-
-
 }
-
-
-
 
 void StateBoss(float _dt)
 {
-	//------Move-------//
-
 	if (boss.health > 0)
 	{
 		boss.timer.timerAttack += _dt;
@@ -199,8 +225,6 @@ void StateBoss(float _dt)
 		if (boss.isGrounded)
 		{
 			float distX = GetDistanceBossPlayerX();
-
-
 
 			if ((fabs(distX) < 500.f) && (fabs(distX) > 200.f))
 			{
@@ -219,7 +243,6 @@ void StateBoss(float _dt)
 			//---RUN---//
 			else if (fabs(distX) < 200.f && fabs(distX) > 100.f)
 			{
-
 				if (distX > 0)
 				{
 					boss.direction = 1;
@@ -230,9 +253,7 @@ void StateBoss(float _dt)
 					boss.direction = -1;
 					boss.velocity.x = -150.f;
 				}
-
 				state = WALK;
-
 			}
 			//---ATTACK---//
 			else if ((fabs(distX) < 100.f) && (boss.timer.timerAttack > 2.f) && (boss.currentState != ATTACK_1 &&
@@ -243,11 +264,14 @@ void StateBoss(float _dt)
 				if (distX > 0)
 				{
 					boss.direction = 1;
+
 				}
 				else
 				{
 					boss.direction = -1;
+
 				}
+
 				boss.velocity.x = 0;
 				boss.timer.knockBackTimer += 1.f;
 
@@ -284,13 +308,9 @@ void StateBoss(float _dt)
 						boss.special = 0;
 					}
 
-
 					printf("%d\n", boss.special);
 					state = SPECIAL;
 					sfCircleShape_setPosition(boss.specialAttackShape, (sfVector2f) { sfSprite_getPosition(boss.sprite).x + 25.f, sfSprite_getPosition(boss.sprite).y - 150.f });
-
-
-
 				}
 			}
 			//---IDLE---//
@@ -304,6 +324,7 @@ void StateBoss(float _dt)
 		{
 			boss.velocity.y = GRAVITY;
 		}
+
 		sfSprite_setScale(boss.sprite, (sfVector2f) { boss.direction* GAME_SCALE, GAME_SCALE });
 		sfSprite_move(boss.sprite, (sfVector2f) { boss.velocity.x* _dt, boss.velocity.y* _dt });
 		StateBossMachine(state);
@@ -312,24 +333,16 @@ void StateBoss(float _dt)
 	{
 		StateBossMachine(DEATH_BOSS);
 	}
-
 }
-
-
-
 
 void CheckCollisionBossPlat()
 {
 	unsigned short tabSize = GetCollisionTabSize();
 
-	//---Plat---//
-
-	//--X--//
 	sfFloatRect hitPlat = { 0 };
 	sfFloatRect hitBoss = sfSprite_getGlobalBounds(boss.sprite);
 	sfVector2f posBoss = sfSprite_getPosition(boss.sprite);
 	sfFloatRect intersection = { 0 };
-
 
 	for (int i = 0; i < tabSize; i++)
 	{
@@ -373,6 +386,7 @@ void CheckCollisionBossPlat()
 				else
 				{
 					posBoss.x += intersection.width;
+
 				}
 
 				sfSprite_setPosition(boss.sprite, posBoss);
@@ -403,6 +417,7 @@ void CheckCollisionCirclePlayer(float _dt)
 			player->action.isGrounded = sfFalse;
 			player->data.velocity.y = -650.f;
 			PlayerDamage(40);
+
 			if (posPlayer.x > posCircle.x)
 			{
 				player->data.velocity.x = 850.f;
@@ -419,13 +434,9 @@ void CheckCollisionCirclePlayer(float _dt)
 	}
 }
 
-
-
-
 float GetDistanceBossPlayerX()
 {
 	float distX = sfSprite_getPosition(player->sprite).x - sfSprite_getPosition(boss.sprite).x;
-
 	return distX;
 }
 
@@ -436,7 +447,6 @@ static void CheckCollisionHurtBossPlayer(float _dt, sfFloatRect* _hitBoss, sfFlo
 	if (boss.timer.knockBackTimer > 0)
 	{
 		return;
-
 	}
 
 	sfBool attackSword = player->currentState == SWORD || player->currentState == SWORD_DOWN || player->currentState == SWORD_UP;
@@ -461,7 +471,6 @@ static void CheckCollisionHurtBossPlayer(float _dt, sfFloatRect* _hitBoss, sfFlo
 			{
 				BossDamage(43);
 			}
-
 		}
 		else if (attackAxe)
 		{
@@ -476,25 +485,17 @@ static void CheckCollisionHurtBossPlayer(float _dt, sfFloatRect* _hitBoss, sfFlo
 			else if (player->currentState == AXE_UP)
 			{
 				BossDamage(52);
-			}
 
+			}
 		}
 
 		printf("%d\n", boss.health);
 		sfSprite_setColor(boss.sprite, sfWhite);
-		//boss.isHurt = sfTrue;
 	}
-
-
-
-
-
 }
-
 
 void CheckAttackBossPlayer(float _dt)
 {
-
 	if (boss.currentState != DEATH_BOSS)
 	{
 		sfFloatRect hitBoss = sfRectangleShape_getGlobalBounds(boss.attackShape);
@@ -508,22 +509,20 @@ void CheckAttackBossPlayer(float _dt)
 			float posBossX = sfSprite_getPosition(boss.sprite).x;
 			float scale = GAME_SCALE;
 			int hp = 0;
+
 			if ((boss.special < SPECIAL_NUMBER) || (boss.currentState != SPECIAL))
 			{
 				if (boss.currentState == ATTACK_1)
 				{
 					if (boss.currentAnimation->currentFrame == 10)
 					{
-
 						player->action.isGrounded = sfFalse;
 						player->data.velocity.x = 250.f;
 						player->data.velocity.y = -1000.f;
-						//PlayerDamage(35 + rand() % 35);
 						hp = 16;
 						player->data.knockBackTimer += 0.4f;
 						StateMachine(FALL);
 					}
-
 				}
 				else if (boss.currentState == ATTACK_2)
 				{
@@ -570,6 +569,7 @@ void CheckAttackBossPlayer(float _dt)
 			if (hp > 0)
 			{
 				PlayerDamage(hp + (rand() % hp));
+
 			}
 		}
 
@@ -578,23 +578,24 @@ void CheckAttackBossPlayer(float _dt)
 	}
 }
 
-
-
-
-
+float GetDistanceObject(sfVector2f _obj1, sfVector2f _obj2)
+{
+	float distX = _obj1.x - _obj2.x;
+	float distY = _obj1.y - _obj2.y;
+	return sqrtf((distX * distX) + (distY * distY));
+}
 
 
 void BossDamage(unsigned _hpLost)
 {
 	if (boss.health > 0)
 	{
+
 		boss.health -= _hpLost;
 	}
-
-
 	if (boss.health <= 0)
 	{
 		StateBossMachine(DEATH_BOSS);
-	}
 
+	}
 }
