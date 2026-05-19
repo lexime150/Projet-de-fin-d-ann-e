@@ -4,6 +4,7 @@ void ChangeLevel(const char* _level);
 void LevelTransition();
 void UpdateTransition(float _dt);
 void LoadMusic();
+
 float transitionAlpha = 255;
 
 sfMusic* gameMusic;
@@ -23,6 +24,7 @@ void LoadGame(void)
 	LoadBoss();
 	LoadAngelStatue();
 	LoadTalkbox();
+
 	LoadFlyMob();
 
 }
@@ -226,6 +228,9 @@ void CheckSaveAndLoadLevel(int _slot)
 		LoadHUD();
 		LoadAngelStatue();
 		LoadFlyMob();
+
+
+
 	}
 }
 

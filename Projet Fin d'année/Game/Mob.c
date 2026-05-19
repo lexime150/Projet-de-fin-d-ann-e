@@ -40,7 +40,7 @@ void LoadMob(void)
 	//texture[SKELETON] = sfTexture_createFromFile("Assets/Sprites/Game/Mob/skeleton.png", NULL);
 	adresse[MUSHROOM] = "Assets/Sprites/Game/Mob/Champignon du Mordhor.png";
 	adresse[SKELETON] = "Assets/Sprites/Game/Mob/skeleton.png";
-
+	adresse[ZOMBIE] = "Assets/Sprites/Game/Mob/Zombie-pj.png";
 
 	mob = malloc(sizeof(Mob));
 	if (!mob)
@@ -65,7 +65,15 @@ void LoadMob(void)
 
 	for (unsigned i = 0; i < GetSkeletonSpawnTabSize(); i++)
 	{
-		AddMob(SKELETON, GetSkeletonSpawn(i).x, GetSkeletonSpawn(i).y);
+		if (HasCameraLimit())
+		{
+			AddMob(ZOMBIE, GetSkeletonSpawn(i).x, GetSkeletonSpawn(i).y);
+		}
+		else
+		{
+
+			AddMob(SKELETON, GetSkeletonSpawn(i).x, GetSkeletonSpawn(i).y);
+		}
 	}
 
 	for (unsigned i = 0; i < GetEnemySpawnTabSize(); i++)
@@ -97,7 +105,7 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 	//CreateSprite(texture[_type], &newMob.sprite, ORIGIN_CENTER_X, (sfVector2f) { _x, _y });
 	newMob.sprite = CreateSprite(adresse[_type], (sfVector2f) { _x, _y });
-	
+
 	newMob.shape.attackRect = sfRectangleShape_create();
 
 	newMob.soundMob.soundAttack = sfSound_create();
@@ -112,9 +120,9 @@ void AddMob(TypeMob _type, float _x, float _y)
 	case MUSHROOM:
 		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { MUSHROOM_SIZE_SPRITE / 2, MUSHROOM_SIZE_SPRITE });
 
-		newMob.shape.rect = CreateRectangle((sfVector2f) { HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT }, (sfVector2f){ HITBOX_MUSHROOM_WIDTH / 2.f, HITBOX_MUSHROOM_HEIGHT }, (sfVector2f) { GAME_SCALE, GAME_SCALE }, sfYellow);
-		newMob.shape.collisionRect = CreateRectangle((sfVector2f) { COLLISION_MUSHROOM_WIDTH, COLLISION_MUSHROOM_HEIGHT }, (sfVector2f){ COLLISION_MUSHROOM_WIDTH / 2.f, COLLISION_MUSHROOM_HEIGHT }, (sfVector2f){GAME_SCALE}, sfMagenta);
-	
+		newMob.shape.rect = CreateRectangle((sfVector2f) { HITBOX_MUSHROOM_WIDTH, HITBOX_MUSHROOM_HEIGHT }, (sfVector2f) { HITBOX_MUSHROOM_WIDTH / 2.f, HITBOX_MUSHROOM_HEIGHT }, (sfVector2f) { GAME_SCALE, GAME_SCALE }, sfYellow);
+		newMob.shape.collisionRect = CreateRectangle((sfVector2f) { COLLISION_MUSHROOM_WIDTH, COLLISION_MUSHROOM_HEIGHT }, (sfVector2f) { COLLISION_MUSHROOM_WIDTH / 2.f, COLLISION_MUSHROOM_HEIGHT }, (sfVector2f) { GAME_SCALE }, sfMagenta);
+
 
 		newMob.rangeMove = DIST_RUN_MUSHROOM;
 		newMob.rangeAttack = DIST_ATTACK_MUSHROOM;
@@ -137,8 +145,8 @@ void AddMob(TypeMob _type, float _x, float _y)
 		break;
 	case SKELETON:
 
-		newMob.shape.rect = CreateRectangle((sfVector2f){ HITBOX_SKELETON_WIDTH - 10.f, HITBOX_SKELETON_HEIGHT }, (sfVector2f){ (HITBOX_SKELETON_WIDTH - 10.f) / 2.f, HITBOX_SKELETON_HEIGHT }, (sfVector2f) { GAME_SCALE, GAME_SCALE }, sfYellow);
-		newMob.shape.collisionRect = CreateRectangle((sfVector2f){ HITBOX_SKELETON_WIDTH, HITBOX_SKELETON_WIDTH }, (sfVector2f){ HITBOX_SKELETON_WIDTH / 2.f, HITBOX_SKELETON_WIDTH }, (sfVector2f){GAME_SCALE}, sfColor_fromRGBA(24, 72, 185, 125));
+		newMob.shape.rect = CreateRectangle((sfVector2f) { HITBOX_SKELETON_WIDTH - 10.f, HITBOX_SKELETON_HEIGHT }, (sfVector2f) { (HITBOX_SKELETON_WIDTH - 10.f) / 2.f, HITBOX_SKELETON_HEIGHT }, (sfVector2f) { GAME_SCALE, GAME_SCALE }, sfYellow);
+		newMob.shape.collisionRect = CreateRectangle((sfVector2f) { HITBOX_SKELETON_WIDTH, HITBOX_SKELETON_WIDTH }, (sfVector2f) { HITBOX_SKELETON_WIDTH / 2.f, HITBOX_SKELETON_WIDTH }, (sfVector2f) { GAME_SCALE }, sfColor_fromRGBA(24, 72, 185, 125));
 
 		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { HITBOX_SKELETON_WIDTH / 2.f, HITBOX_SKELETON_WIDTH });
 		sfSprite_setTextureRect(newMob.sprite, (sfIntRect) { 0, 0, 32, 32 });
@@ -165,6 +173,35 @@ void AddMob(TypeMob _type, float _x, float _y)
 		newMob.frameAttackSound = SKELETON_ATTACK_SOUND;
 
 		break;
+
+	case ZOMBIE:
+
+		newMob.shape.rect = CreateRectangle((sfVector2f) { ZOMBIE_SIZE - 10, ZOMBIE_SIZE }, (sfVector2f) { (ZOMBIE_SIZE - 10) / 2, ZOMBIE_SIZE }, (sfVector2f) { GAME_SCALE, GAME_SCALE }, sfBlue);
+		newMob.shape.collisionRect = CreateRectangle((sfVector2f) { 10.f, 32.f }, (sfVector2f) { 5.f, 32.f }, (sfVector2f) { GAME_SCALE }, sfGreen);
+
+		sfSprite_setOrigin(newMob.sprite, (sfVector2f) { 16.f, 32.f });
+		sfSprite_setTextureRect(newMob.sprite, (sfIntRect) { 0, 0, 32, 32 });
+
+
+		newMob.rangeMove = 450.f;
+		newMob.rangeAttack = 90.f;
+		newMob.data.timerAttackLimit = 0.53f;
+		newMob.data.hp = 190;
+		newMob.damage = 26;
+
+		newMob.isGrounded = sfFalse;
+
+
+		//---Attack Rect
+
+		sfRectangleShape_setSize(newMob.shape.attackRect, (sfVector2f) { 34, 28 });
+		sfRectangleShape_setOrigin(newMob.shape.attackRect, (sfVector2f) { 17, 28 });
+		newMob.mobType = ZOMBIE;
+
+
+
+		break;
+
 	default:
 		break;
 	}
@@ -180,7 +217,14 @@ void AddMob(TypeMob _type, float _x, float _y)
 
 
 	sfSprite_setScale(newMob.sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
-//	sfRectangleShape_setScale(newMob.shape.rect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+
+	if (newMob.mobType == ZOMBIE)
+	{
+		sfSprite_setScale(newMob.sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+	}
+
+
+	//	sfRectangleShape_setScale(newMob.shape.rect, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 	sfSprite_setPosition(newMob.sprite, (sfVector2f) { _x, _y });
 	sfRectangleShape_setPosition(newMob.shape.rect, sfSprite_getPosition(newMob.sprite));
 
@@ -192,10 +236,12 @@ void AddMob(TypeMob _type, float _x, float _y)
 	sfRectangleShape_setScale(newMob.shape.floorSecurity, (sfVector2f) { GAME_SCALE, GAME_SCALE });
 
 
-	sfSound_setBuffer(newMob.soundMob.soundTakeHit, newMob.soundMob.soundBufferTakeHit);
-	sfSound_setBuffer(newMob.soundMob.soundAttack, newMob.soundMob.soundBufferAttack);
-	sfSound_setBuffer(newMob.soundMob.soundDead, newMob.soundMob.soundBufferDead);
-
+	if (newMob.soundMob.soundAttack && newMob.soundMob.soundDead && newMob.soundMob.soundTakeHit)
+	{
+		sfSound_setBuffer(newMob.soundMob.soundTakeHit, newMob.soundMob.soundBufferTakeHit);
+		sfSound_setBuffer(newMob.soundMob.soundAttack, newMob.soundMob.soundBufferAttack);
+		sfSound_setBuffer(newMob.soundMob.soundDead, newMob.soundMob.soundBufferDead);
+	}
 
 	newMob.act = IS_IDLE;
 
@@ -270,6 +316,25 @@ void LoadMobAnimation(unsigned _i)
 		firstFrame.top += HITBOX_SKELETON_WIDTH;
 		mob[_i].mobAnimation[DEATH] = CreateAnimation(mob[_i].sprite, 4, 6, sfTrue, sfFalse, firstFrame);
 		break;
+	case ZOMBIE:
+
+		firstFrame = (sfIntRect){ 0, 0 , ZOMBIE_SIZE, ZOMBIE_SIZE };
+		mob[_i].mobAnimation[IDLE_MOB] = CreateAnimation(mob[_i].sprite, 4, 5, sfTrue, sfTrue, firstFrame);
+
+		firstFrame.top += ZOMBIE_SIZE;
+		mob[_i].mobAnimation[RUN_MOB] = CreateAnimation(mob[_i].sprite, 4, 9, sfTrue, sfTrue, firstFrame);
+
+		firstFrame.top += ZOMBIE_SIZE;
+		mob[_i].mobAnimation[TAKE_HIT] = CreateAnimation(mob[_i].sprite, 3, 7, sfTrue, sfFalse, firstFrame);
+
+		firstFrame.top += ZOMBIE_SIZE;
+		mob[_i].mobAnimation[DEATH] = CreateAnimation(mob[_i].sprite, 4, 9, sfTrue, sfFalse, firstFrame);
+
+		firstFrame.top += ZOMBIE_SIZE;
+		mob[_i].mobAnimation[ATTACK_MOB] = CreateAnimation(mob[_i].sprite, 4, 8, sfTrue, sfFalse, firstFrame);
+
+		break;
+
 	default:
 		break;
 	}
@@ -523,7 +588,7 @@ void CheckCollisionMobEntities(float _dt, unsigned _i)
 			}
 			else
 			{
-				posMob.x += intersection.width;
+				//posMob.x += intersection.width;
 			}
 
 			sfSprite_setPosition(mob[_i].sprite, posMob);
@@ -588,7 +653,7 @@ void StateMob(float _dt, unsigned _i)
 {
 	//-------MOVE MOB---------//
 
-	
+
 
 	mob[_i].data.timerTakeHit += _dt;
 	mob[_i].data.timerAttack += _dt;
@@ -616,11 +681,23 @@ void StateMob(float _dt, unsigned _i)
 		{
 
 			sfSprite_setScale(mob[_i].sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+
+			if (mob[_i].mobType == ZOMBIE)
+			{
+				sfSprite_setScale(mob[_i].sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+			}
+
 		}
 		else
 		{
-
 			sfSprite_setScale(mob[_i].sprite, (sfVector2f) { -GAME_SCALE, GAME_SCALE });
+
+			if (mob[_i].mobType == ZOMBIE)
+			{
+				sfSprite_setScale(mob[_i].sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+			}
+
+
 		}
 
 
@@ -643,39 +720,39 @@ void StateMob(float _dt, unsigned _i)
 			float distPlayerMobY = GetDistancePlayerMobY(_i);
 			float distPlayerMob = GetDistancePlayerMobVector(_i);
 
-				if (distPlayerMobX < mob[_i].rangeMove && distPlayerMobY < (player->shape.collisionPlayerRect.height * 2))
+			if (distPlayerMobX < mob[_i].rangeMove && distPlayerMobY < (player->shape.collisionPlayerRect.height * 2))
+			{
+
+				if (mob[_i].currentState == ATTACK_MOB && !sfFloatRect_intersects(&mob[_i].shape.hitRect, &player->shape.collisionAttackRect, NULL))
 				{
+					SetVelocity(_i, _dt);
+					return;
+				}
 
-					if (mob[_i].currentState == ATTACK_MOB && !sfFloatRect_intersects(&mob[_i].shape.hitRect, &player->shape.collisionAttackRect, NULL))
+				if (distPlayerMobX > (player->shape.collisionPlayerRect.width))
+				{
+					if (!blockedBySpike && mob[_i].data.timerAttack > mob[_i].data.timerAttackLimit || mob[_i].act != IS_ATTACK)
 					{
-						SetVelocity(_i, _dt);
-						return;
-					}
-
-					if (distPlayerMobX > (player->shape.collisionPlayerRect.width))
-					{
-						if (!blockedBySpike && mob[_i].data.timerAttack > mob[_i].data.timerAttackLimit || mob[_i].act != IS_ATTACK)
-						{
-							StateMobMachine(RUN_MOB, _i);
-							mob[_i].act = IS_MOVING;
-						}
-						else
-						{
-							mob[_i].act = IS_IDLE;
-							//StateMobMachine(IDLE_MOB, _i);
-						}
+						StateMobMachine(RUN_MOB, _i);
+						mob[_i].act = IS_MOVING;
 					}
 					else
 					{
-						mob[_i].act = IS_ATTACK;
+						mob[_i].act = IS_IDLE;
+						//StateMobMachine(IDLE_MOB, _i);
 					}
 				}
-				else if (distPlayerMobY > (player->shape.collisionPlayerRect.height * 2) && mob[_i].act != IS_ATTACK)
+				else
 				{
-					//StateMobMachine(IDLE_MOB, _i);
-					mob[_i].act = IS_IDLE;
+					mob[_i].act = IS_ATTACK;
 				}
-			
+			}
+			else if (distPlayerMobY > (player->shape.collisionPlayerRect.height * 2) && mob[_i].act != IS_ATTACK)
+			{
+				//StateMobMachine(IDLE_MOB, _i);
+				mob[_i].act = IS_IDLE;
+			}
+
 			//---------TAKE IT---------//
 
 		}
@@ -794,8 +871,8 @@ float GetDistancePlayerMobX(unsigned _i)
 		float distX = player->data.position.x - sfSprite_getPosition(mob[_i].sprite).x;
 
 		return (float)fabs(distX);
-		
-		
+
+
 	}
 	return 0;
 }
@@ -809,8 +886,8 @@ float GetDistancePlayerMobY(unsigned _i)
 		float distY = player->data.position.y - sfSprite_getPosition(mob[_i].sprite).y;
 
 		return (float)fabs(distY);
-		
-	
+
+
 	}
 	return 0;
 }
