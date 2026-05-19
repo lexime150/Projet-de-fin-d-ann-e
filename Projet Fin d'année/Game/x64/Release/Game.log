@@ -1,28 +1,13 @@
-﻿  Angel_Statue.c
-  Animation.c
-  Boss.c
-  Camera.c
-  Collectibles.c
-  Flying mob.c
-  Game.c
-  GameHUD.c
-  GameOver.c
-  GameState.c
-  Key.c
-  main.c
-  Map.c
-  Menu.c
-  Mob.c
-  Player.c
-C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(838,7): warning C4013: 'HasCeilingAbove' non défini(e) ; extern retournant int pris par défaut
-  Save.c
-  Talkbox.c
-  Tool.c
-LINK : warning C4742: 'save' a un alignement différent dans 'c:\users\kilia\onedrive\documents\projet-de-fin-d-ann-e\projet fin d'ann�e\game\player.c' et 'c:\users\kilia\onedrive\documents\projet-de-fin-d-ann-e\projet fin d'ann�e\game\menu.c' : 4 et 8
-LINK : warning C4743: 'save' a une taille différente dans 'c:\users\kilia\onedrive\documents\projet-de-fin-d-ann-e\projet fin d'ann�e\game\player.c' et 'c:\users\kilia\onedrive\documents\projet-de-fin-d-ann-e\projet fin d'ann�e\game\menu.c' : 80 et 8 octets
-LINK : warning C4744: 'save' a un type différent dans 'c:\users\kilia\onedrive\documents\projet-de-fin-d-ann-e\projet fin d'ann�e\game\player.c' et 'c:\users\kilia\onedrive\documents\projet-de-fin-d-ann-e\projet fin d'ann�e\game\menu.c' : 'struct (80 bytes)' et 'pointer'
+﻿  GameHUD.c
+LINK : warning C4742: 'save' a un alignement différent dans 'c:\users\etudiant1\documents\github\projet-de-fin-d-ann-e\projet fin d'ann�e\game\player.c' et 'c:\users\etudiant1\documents\github\projet-de-fin-d-ann-e\projet fin d'ann�e\game\menu.c' : 4 et 8
+LINK : warning C4743: 'save' a une taille différente dans 'c:\users\etudiant1\documents\github\projet-de-fin-d-ann-e\projet fin d'ann�e\game\player.c' et 'c:\users\etudiant1\documents\github\projet-de-fin-d-ann-e\projet fin d'ann�e\game\menu.c' : 80 et 8 octets
+LINK : warning C4744: 'save' a un type différent dans 'c:\users\etudiant1\documents\github\projet-de-fin-d-ann-e\projet fin d'ann�e\game\player.c' et 'c:\users\etudiant1\documents\github\projet-de-fin-d-ann-e\projet fin d'ann�e\game\menu.c' : 'struct (80 bytes)' et 'pointer'
+MSVCRT.lib(initializers.obj) : warning LNK4098: conflit entre la bibliothèque par défaut 'libcmt.lib' et les autres bibliothèques ; utilisez /NODEFAULTLIB:library
   Génération de code en cours
-  Previous IPDB not found, fall back to full compilation.
-  All 283 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  2 of 279 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
   Fin de la génération du code
-  Game.vcxproj -> C:\Users\kilia\OneDrive\Documents\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Release\Game.exe
+  Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Release\Game.exe
+  'pwsh.exe' n'est pas reconnu en tant que commande interne
+  ou externe, un programme exécutable ou un fichier de commandes.

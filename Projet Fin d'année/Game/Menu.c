@@ -8,9 +8,6 @@ void UpdateSlotText();
 
 void InitButton(Button* _btn, sfFont* _font, const char* _str, float _y)
 {
-
-
-
 	_btn->text = sfText_create();
 	sfText_setFont(_btn->text, _font);
 	sfText_setCharacterSize(_btn->text, 48);
@@ -25,24 +22,6 @@ void InitButton(Button* _btn, sfFont* _font, const char* _str, float _y)
 	_btn->bounds = sfText_getGlobalBounds(_btn->text);
 }
 
-void InitMainButton(Button* _btn, const char* _texturePath, float _y)
-{
-	_btn->sprite = sfSprite_create();
-	_btn->texture = sfTexture_createFromFile(_texturePath, NULL);
-	sfSprite_setTexture(_btn->sprite, _btn->texture, sfTrue);
-	_btn->scale = GAME_SCALE;
-	sfSprite_setScale(_btn->sprite, (sfVector2f) { _btn->scale, _btn->scale });
-	_btn->bounds = sfSprite_getGlobalBounds(_btn->sprite);
-	sfSprite_setPosition(_btn->sprite, (sfVector2f) { (SCREEN_WIDTH - _btn->bounds.width) - 20, _y });
-	_btn->bounds = sfSprite_getGlobalBounds(_btn->sprite);
-
-	if (_texturePath == "Assets/Sprites/Menu/Title.png")
-	{
-		sfSprite_setPosition(_btn->sprite, (sfVector2f) { (SCREEN_WIDTH - _btn->bounds.width) / 2, _y });
-	}
-
-}
-
 
 void LoadMenu(void)
 {
@@ -51,19 +30,27 @@ void LoadMenu(void)
 	menu.hoveredIndex = -1;
 
 	menu.font = sfFont_createFromFile("Assets/Fonts/Arcade.ttf");
+
 	menu.backgroundSprite = sfSprite_create();
-	menu.backgroundTexture = sfTexture_createFromFile("Assets/Sprites/Menu/background.png", NULL);
+	menu.backgroundTexture = sfTexture_createFromFile("Assets/Sprites/Menu/newBackground.png", NULL);
 	sfSprite_setTexture(menu.backgroundSprite, menu.backgroundTexture, sfTrue);
-	//sfSprite_setScale(menu.backgroundSprite, (sfVector2f) { 5.6f, 5.6f });
+	sfSprite_setScale(menu.backgroundSprite, (sfVector2f) { GAME_SCALE * 1.41f, GAME_SCALE * 1.3f });
+	sfSprite_setPosition(menu.backgroundSprite, (sfVector2f) { 0, 0 });
 
+	menu.mainButtons[0].sprite = sfSprite_create();
+	menu.mainButtons[0].texture = sfTexture_createFromFile("Assets/Sprites/Menu/Buttons.png", NULL);
+	sfSprite_setTexture(menu.mainButtons[0].sprite, menu.mainButtons[0].texture, sfTrue);
+	menu.mainButtons[0].scale = GAME_SCALE;
+	sfSprite_setScale(menu.mainButtons[0].sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+	menu.mainButtons[0].bounds = sfSprite_getGlobalBounds(menu.mainButtons[0].sprite);
+	sfSprite_setPosition(menu.mainButtons[0].sprite, (sfVector2f) { 435, 80 });
+	menu.mainButtons[0].bounds = sfSprite_getGlobalBounds(menu.mainButtons[0].sprite);
 
-	sfSprite_setPosition(menu.backgroundSprite, (sfVector2f) { 0 });
+	sfVector2f spritePos = sfSprite_getPosition(menu.mainButtons[0].sprite);
 
-	InitMainButton(&menu.mainButtons[0], "Assets/Sprites/Menu/Play.png", (SCREEN_HEIGHT / 2) - 25);
-	InitMainButton(&menu.mainButtons[1], "Assets/Sprites/Menu/Settings.png", SCREEN_HEIGHT / 2 + 132);
-	InitMainButton(&menu.mainButtons[2], "Assets/Sprites/Menu/Quit.png", SCREEN_HEIGHT / 2 + 295);
-	InitMainButton(&menu.mainButtons[3], "Assets/Sprites/Menu/Title.png", 20);
-
+	menu.fightBounds = (sfFloatRect){ spritePos.x + 240 * GAME_SCALE, spritePos.y + 71 * GAME_SCALE, 81 * GAME_SCALE, 42 * GAME_SCALE };
+	menu.settingsBounds = (sfFloatRect){ spritePos.x + 230 * GAME_SCALE, spritePos.y + 114 * GAME_SCALE, 89 * GAME_SCALE, 35 * GAME_SCALE };
+	menu.exitBounds = (sfFloatRect){ spritePos.x + 219 * GAME_SCALE, spritePos.y + 150 * GAME_SCALE, 96 * GAME_SCALE, 31 * GAME_SCALE };
 
 	InitButton(&menu.saveButtons[0], menu.font, "SAVE 1 (EMPTY)", SCREEN_HEIGHT / 2 - 100);
 	InitButton(&menu.saveButtons[1], menu.font, "SAVE 2 (EMPTY)", SCREEN_HEIGHT / 2 + 000);
@@ -89,104 +76,51 @@ void UpdateHover(sfRenderWindow* window, float _dt)
 	menu.hoverActive = sfFalse;
 	menu.hoveredIndex = -1;
 
-	Button* buttons = NULL;
-	int count = 0;
-
 	if (menu.state == MENU_PLAY)
 	{
-		buttons = menu.saveButtons;
-		count = 4;
-	}
-	if (menu.state == MENU_MAIN)
-	{
-		buttons = menu.mainButtons;
-		count = 3;
-	}
-
-	for (int i = 0; i < count; i++)
-	{
-		if (sfFloatRect_contains(&buttons[i].bounds, (float)mouse.x, (float)mouse.y))
+		for (int i = 0; i < 4; i++)
 		{
-			menu.hoveredIndex = i;
-
-			if (menu.state == MENU_PLAY)
+			if (sfFloatRect_contains(&menu.saveButtons[i].bounds, (float)mouse.x, (float)mouse.y))
 			{
+				menu.hoveredIndex = i;
+				menu.hoverActive = sfTrue;
 
-				sfVector2f pos = sfText_getPosition(buttons[i].text);
-
+				sfVector2f pos = sfText_getPosition(menu.saveButtons[i].text);
 				sfText_setPosition(menu.hoverLeft, (sfVector2f) { pos.x - 40, pos.y });
-				sfText_setPosition(menu.hoverRight, (sfVector2f) { pos.x + buttons[i].bounds.width + 10, pos.y });
-
-			}
-			float targetScale;
-			float speed = 10.0f;
-
-			for (int i = 0; i < count; i++)
-			{
-				sfBool isHovered = sfFloatRect_contains(&buttons[i].bounds, (float)mouse.x, (float)mouse.y);
-
-				if (menu.state == MENU_MAIN)
-				{
-					targetScale = isHovered ? GAME_SCALE * 1.1f : GAME_SCALE;
-
-					buttons[i].scale += (targetScale - buttons[i].scale) * speed * _dt;
-
-					sfSprite_setScale(buttons[i].sprite,(sfVector2f) {buttons[i].scale, buttons[i].scale});
-				}
-
-				if (isHovered)
-				{
-					menu.hoveredIndex = i;
-					menu.hoverActive = sfTrue;
-				}
+				sfText_setPosition(menu.hoverRight, (sfVector2f) { pos.x + menu.saveButtons[i].bounds.width + 10, pos.y });
 			}
 		}
-
 	}
 }
 
 
 void HandleClick(sfRenderWindow* window)
 {
-	if (!menu.hoverActive)
-	{
-		return;
-	}
+	sfVector2i mouse = sfMouse_getPositionRenderWindow(window);
 
 	if (menu.state == MENU_MAIN)
 	{
-		switch (menu.hoveredIndex)
+		if (sfFloatRect_contains(&menu.fightBounds, (float)mouse.x, (float)mouse.y))
 		{
-		case 0: // PLAY
-
-
-
-
 			menu.state = MENU_PLAY;
-
-			UpdateSlotText(window);
-
-
-
-
-
-			break;
-
-		case 1: // SETTING
-			printf("Settings\n");
-
-
-			break;
-
-		case 2: // QUIT
-			sfRenderWindow_close(window);
-
-
-			break;
+			UpdateSlotText();
 		}
+		else if (sfFloatRect_contains(&menu.settingsBounds, (float)mouse.x, (float)mouse.y))
+		{
+			printf("Settings\n");
+		}
+		else if (sfFloatRect_contains(&menu.exitBounds, (float)mouse.x, (float)mouse.y))
+		{
+			sfRenderWindow_close(window);
+		}
+		return;
 	}
-	else if (menu.state == MENU_PLAY)
+
+	if (menu.state == MENU_PLAY)
 	{
+		if (!menu.hoverActive)
+			return;
+
 		switch (menu.hoveredIndex)
 		{
 		case 0:
@@ -199,10 +133,10 @@ void HandleClick(sfRenderWindow* window)
 		case 3: // BACK
 			menu.state = MENU_MAIN;
 			break;
+
 		default:
 			break;
 		}
-
 	}
 }
 
@@ -238,6 +172,7 @@ void PollEventMenu(sfRenderWindow* window)
 void UpdateMenu(sfRenderWindow* window, float _dt)
 {
 	UpdateHover(window, _dt);
+
 	for (int i = 0; i < 3; i++)
 	{
 		menu.saveButtons[i].bounds = sfText_getGlobalBounds(menu.saveButtons[i].text);
@@ -249,26 +184,16 @@ void DrawMenu(sfRenderWindow* window)
 {
 	sfRenderWindow_setView(window, sfRenderWindow_getDefaultView(window));
 
-	Button* buttons = NULL;
-	int count = 0;
-
 	if (menu.state == MENU_MAIN)
 	{
-		buttons = menu.mainButtons;
-		count = 4;
 		sfRenderWindow_drawSprite(window, menu.backgroundSprite, NULL);
-		for (int i = 0; i < count; i++)
-		{
-			sfRenderWindow_drawSprite(window, buttons[i].sprite, NULL);
-		}
+		sfRenderWindow_drawSprite(window, menu.mainButtons[0].sprite, NULL);
 	}
 	else if (menu.state == MENU_PLAY)
 	{
-		buttons = menu.saveButtons;
-		count = 4;
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < 4; i++)
 		{
-			sfRenderWindow_drawText(window, buttons[i].text, NULL);
+			sfRenderWindow_drawText(window, menu.saveButtons[i].text, NULL);
 		}
 
 		if (menu.hoverActive)
@@ -276,25 +201,27 @@ void DrawMenu(sfRenderWindow* window)
 			sfRenderWindow_drawText(window, menu.hoverLeft, NULL);
 			sfRenderWindow_drawText(window, menu.hoverRight, NULL);
 		}
-
 	}
 }
 
 
 void CleanupMenu(void)
 {
+	sfSprite_destroy(menu.mainButtons[0].sprite);
+	sfTexture_destroy(menu.mainButtons[0].texture);
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		sfText_destroy(menu.saveButtons[i].text);
-		sfSprite_destroy(menu.mainButtons[i].sprite);
-		sfTexture_destroy(menu.mainButtons[i].texture);
 	}
 
 	sfText_destroy(menu.hoverLeft);
 	sfText_destroy(menu.hoverRight);
 	sfFont_destroy(menu.font);
+	sfSprite_destroy(menu.backgroundSprite);
+	sfTexture_destroy(menu.backgroundTexture);
 }
+
 
 void UpdateSlotText()
 {
@@ -304,15 +231,12 @@ void UpdateSlotText()
 		if (SaveExists(i + 1))
 		{
 			save = LoadSave(i + 1);
-
 			snprintf(menu.buffer, sizeof(menu.buffer), "SAVE %d (%s)", i + 1, save->level);
-
 			sfText_setString(menu.saveButtons[i].text, menu.buffer);
 		}
 		else
 		{
 			snprintf(menu.buffer, sizeof(menu.buffer), "SAVE %d (EMPTY)", i + 1);
-
 			sfText_setString(menu.saveButtons[i].text, menu.buffer);
 		}
 	}

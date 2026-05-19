@@ -1,4 +1,23 @@
-﻿  Flying mob.c
+﻿  Angel_Statue.c
+  Animation.c
+  Boss.c
+  Camera.c
+  Collectibles.c
+  Flying mob.c
+  Game.c
+  GameHUD.c
+  GameOver.c
+  GameState.c
+  Key.c
+  Map.c
+  Menu.c
+  Mob.c
+  Player.c
+C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\Game\Player.c(838,7): warning C4013: 'HasCeilingAbove' non défini(e) ; extern retournant int pris par défaut
+  Save.c
+  Talkbox.c
+  main.c
+  Génération de code en cours...
   Game.vcxproj -> C:\Users\Etudiant1\Documents\GitHub\Projet-de-fin-d-ann-e\Projet Fin d'année\x64\Debug\Game.exe
   'pwsh.exe' n'est pas reconnu en tant que commande interne
   ou externe, un programme exécutable ou un fichier de commandes.

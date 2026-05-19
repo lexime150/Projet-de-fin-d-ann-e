@@ -43,6 +43,10 @@ typedef struct Menu
 
     MenuState state;
     char buffer[20];
+
+    sfFloatRect fightBounds;
+    sfFloatRect settingsBounds;
+    sfFloatRect exitBounds;
 } Menu;
 
 
