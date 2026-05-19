@@ -7,6 +7,8 @@ sfBool keyWasPressed = sfFalse;
 unsigned mobCount;
 Mob* mob;
 
+
+
 void LoadAnimationPlayer(void);
 void SetAnimation(PlayerState _state);
 void createCollisionSideAttack();
@@ -48,11 +50,13 @@ static void GetPlayerHitboxSize(float* outWidth, float* outHeight)
 }
 void LoadPlayer(PlayerSaveData* save)
 {
+	
 	BasePlayer();
 	if (save != NULL)
 	{
 		SetSavedStat(save);
 	}
+
 	LoadAnimationPlayer();
 }
 
@@ -148,6 +152,7 @@ void UpdatePlayer(sfRenderWindow* _renderWindow, float _dt)
 	CollisionPlayerDeathZone();
 
 	CheckPlayerHP();
+
 	UpdateAnimation(player->currentAnimation, _dt);
 }
 
@@ -213,8 +218,8 @@ void CheckCollisionPlayerAttackMob(float _dt)
 						//player->data.health -= mob[i].damage + rand() % mob[i].damage;
 						//printf("%f\n", player->data.health);
 
-						PlayerDamage(25);//mob[i].damage + (rand() % mob[i].damage));
-						//printf("%f\n", player->data.health);
+						PlayerDamage(mob[i].damage);//mob[i].damage + (rand() % mob[i].damage));
+						printf("%f\n", player->data.health);
 
 					}
 					else //if (player->data.timerInvincible )//!mob[i].currentMobAnimation->isPlaying)
@@ -1560,9 +1565,21 @@ void BasePlayer()
 	player->data = (Stats){ 0 };
 	player->action = (Action){ 0 };
 
+	
 
-	player->sprite = CreateSprite("Assets/Sprites/Game/Player/playerUpD.png", GetPlayerSpawn());
+	player->sprite = CreateSprite("Assets/Sprites/Game/Player/player----.png", GetPlayerSpawn());
+	
+
+	
+	sfSprite_setTexture(player->sprite, player->texture, sfTrue);
+
+
 	sfSprite_setScale(player->sprite, (sfVector2f) { GAME_SCALE, GAME_SCALE });
+
+
+
+
+
 
 	player->action.isTransitioning = sfTrue;
 

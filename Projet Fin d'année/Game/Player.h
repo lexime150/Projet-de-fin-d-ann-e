@@ -250,6 +250,8 @@ typedef struct Player
 	SpikeSide spikeSide;
 	PlayerSide side;
 
+	sfTexture* test;
+
 }Player;
 
 
