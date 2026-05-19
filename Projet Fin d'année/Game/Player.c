@@ -5,7 +5,7 @@ Items* item;
 PlayerSaveData save;
 sfBool keyWasPressed = sfFalse;
 unsigned mobCount;
-Mob* mob;
+extern Mob* mob;
 
 void LoadAnimationPlayer(void);
 void SetAnimation(PlayerState _state);

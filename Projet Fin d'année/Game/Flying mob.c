@@ -3,7 +3,7 @@
 #include "Player.h"
 
 FlyingMob* flyMob = { NULL };
-Player* player;
+extern Player* player;
 unsigned flyMobCount = 0;
 
 void SetFlyingMobAnimation(FlyingMobState _state, _I);
@@ -11,11 +11,13 @@ void StateFlyingMobAnimation(FlyingMobState _state, _I);
 void StateFlyMob(float _dt, _I);
 void LoadFlyMobAnimation(_I);
 void AddFlyMob(sfVector2f _pos);
+
+
 void LoadFlyMob(void)
 {
 	for (unsigned i = 0; i < GetFlyMobSpawnTabSize(); i++)
 	{
-		AddFlyMob(GetFlyMobSpawn(i));
+		//AddFlyMob(GetFlyMobSpawn(i));
 	}
 }
 
@@ -70,7 +72,6 @@ void LoadFlyMobAnimation(_I)
 	firstFrame.top += FLY_MOB_SIZE;
 	flyMob[_i].animation[ATTACK_PROJECTILES] = CreateAnimation(flyMob[_i].sprite, 6, 9, sfTrue, sfFalse, firstFrame);
 
-	firstFrame.top += FLY_MOB_SIZE; firstFrame.width = 48; firstFrame.height = 48;
 
 	SetFlyingMobAnimation(FLIGHT, _i);
 
@@ -110,6 +111,7 @@ void CleanupFlyMob(void)
 	for (unsigned i = 0; i < flyMobCount; i++)
 	{
 		sfSprite_destroy(flyMob[i].sprite);
+		sfCircleShape_destroy(flyMob[i].limitedZone);
 	}
 
 	free(flyMob);

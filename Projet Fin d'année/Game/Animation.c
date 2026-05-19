@@ -1,7 +1,6 @@
 #include "Animation.h"
-#include "Player.h"
 
-Player* player;
+
 Animation CreateAnimation(sfSprite* _sprite, unsigned _frameCount, unsigned _frameSpeed, sfBool _isPlaying, sfBool _isLooping, sfIntRect _firstFrame)
 {
     Animation createAnim = { 0 };

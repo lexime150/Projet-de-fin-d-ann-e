@@ -7,7 +7,7 @@ Mob* mob = { NULL };
 char* adresse[MOB_NUMBER];
 sfSoundBuffer* mushroomHitBuffer;
 
-Player* player;
+extern Player* player;
 unsigned mobCount;
 //char* adresse[MOB_NUMBER];
 
