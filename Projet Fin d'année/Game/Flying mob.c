@@ -15,7 +15,7 @@ void LoadFlyMob(void)
 {
 	for (unsigned i = 0; i < GetFlyMobSpawnTabSize(); i++)
 	{
-		AddFlyMob(GetFlyMobSpawn(i));
+		//AddFlyMob(GetFlyMobSpawn(i));
 	}
 }
 
